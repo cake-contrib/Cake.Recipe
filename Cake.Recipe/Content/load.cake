@@ -1,4 +1,6 @@
 #l .\addins.cake
+#l .\tools.cake
+
 #l .\appveyor.cake
 #l .\chocolatey.cake
 #l .\coveralls.cake
