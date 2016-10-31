@@ -30,13 +30,6 @@ var sendMessageToSlackChannel = true;
 var sendMessageToTwitter = true;
 
 ///////////////////////////////////////////////////////////////////////////////
-// GLOBAL VARIABLES
-///////////////////////////////////////////////////////////////////////////////
-
-var parameters = BuildParameters.GetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
-var publishingError = false;
-
-///////////////////////////////////////////////////////////////////////////////
 // PROJECT SPECIFIC VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -49,13 +42,20 @@ var appVeyorAccountName       = "cakecontrib";
 var appVeyorProjectSlug       = "cake-recipe";
 
 ///////////////////////////////////////////////////////////////////////////////
+// GLOBAL VARIABLES
+///////////////////////////////////////////////////////////////////////////////
+
+var parameters = BuildParameters.GetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
+var publishingError = false;
+
+///////////////////////////////////////////////////////////////////////////////
 // ADDINS
 ///////////////////////////////////////////////////////////////////////////////
 
-#addin nuget:?package=Cake.AppVeyor&version=1.1.0.6
-#addin nuget:?package=Cake.Gitter&version=0.2.0
-#addin nuget:?package=Cake.Slack&version=0.4.0
-#addin nuget:?package=Cake.Twitter&version=0.1.0
+//#addin nuget:?package=Cake.AppVeyor&version=1.1.0.6
+//#addin nuget:?package=Cake.Gitter&version=0.2.0
+//#addin nuget:?package=Cake.Slack&version=0.4.0
+//#addin nuget:?package=Cake.Twitter&version=0.1.0
 
 ///////////////////////////////////////////////////////////////////////////////
 // TOOLS
@@ -68,17 +68,17 @@ var appVeyorProjectSlug       = "cake-recipe";
 // LOAD
 ///////////////////////////////////////////////////////////////////////////////
 
-#load .\Cake.Recipe\Content\appveyor.cake
+//#load .\Cake.Recipe\Content\appveyor.cake
 #load .\Cake.Recipe\Content\credentials.cake
 #load .\Cake.Recipe\Content\gitreleasemanager.cake
-#load .\Cake.Recipe\Content\gitter.cake
+//#load .\Cake.Recipe\Content\gitter.cake
 #load .\Cake.Recipe\Content\gitversion.cake
 #load .\Cake.Recipe\Content\nuget.cake
 #load .\Cake.Recipe\Content\packages.cake
 #load .\Cake.Recipe\Content\parameters.cake
 #load .\Cake.Recipe\Content\paths.cake
-#load .\Cake.Recipe\Content\slack.cake
-#load .\Cake.Recipe\Content\twitter.cake
+//#load .\Cake.Recipe\Content\slack.cake
+//#load .\Cake.Recipe\Content\twitter.cake
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -120,12 +120,12 @@ Teardown(context =>
         {
             if(sendMessageToTwitter)
             {
-                SendMessageToTwitter("Version " + parameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
+                //SendMessageToTwitter("Version " + parameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
             }
 
             if(sendMessageToGitterRoom)
             {
-                SendMessageToGitterRoom("@/all Version " + parameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
+                //SendMessageToGitterRoom("@/all Version " + parameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
             }
         }
     }
@@ -135,7 +135,7 @@ Teardown(context =>
         {
             if(sendMessageToSlackChannel)
             {
-                SendMessageToSlackChannel("Continuous Integration Build of " + title + " just failed :-(");
+                //SendMessageToSlackChannel("Continuous Integration Build of " + title + " just failed :-(");
             }
         }
     }
@@ -187,7 +187,7 @@ Task("Build");
 
 Task("Package")
     .IsDependentOn("Show-Info")
-    .IsDependentOn("Print-AppVeyor-Environment-Variables")
+    //.IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
     .IsDependentOn("Create-NuGet-Package");
 
@@ -195,7 +195,7 @@ Task("Default")
     .IsDependentOn("Package");
 
 Task("AppVeyor")
-    .IsDependentOn("Upload-AppVeyor-Artifacts")
+    //.IsDependentOn("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Publish-MyGet-Packages")
     .IsDependentOn("Publish-Nuget-Packages")
     .IsDependentOn("Publish-GitHub-Release")
@@ -210,8 +210,8 @@ Task("AppVeyor")
 Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
-Task("ClearCache")
-  .IsDependentOn("Clear-AppVeyor-Cache");
+//Task("ClearCache")
+//  .IsDependentOn("Clear-AppVeyor-Cache");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTION
