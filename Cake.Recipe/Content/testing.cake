@@ -71,10 +71,39 @@ Task("Test-MSTest")
     });
 });
 
+Task("Test-VSTest")
+    .WithCriteria(() => DirectoryExists(parameters.Paths.Directories.PublishedVSTestTests))
+    .Does(() =>
+{
+    EnsureDirectoryExists(parameters.Paths.Directories.VSTestTestResults);
+
+    var vsTestSettings = new VSTestSettings()
+    {
+        NoIsolation = false
+    };
+    if (AppVeyor.IsRunningOnAppVeyor) vsTestSettings.ArgumentCustomization = args => arg.Add("/logger:Appveyor"); // This is for Cake v0.16, remove this line when Cake v0.17 is released
+    //if (AppVeyor.IsRunningOnAppVeyor) vsTestSettings.WithAppVeyorLogger(); // This is for Cake v0.17+, uncomment this line when Cakev0.17 is released
+
+    OpenCover(
+		tool => { tool.VSTest(GetFiles(parameters.Paths.Directories.PublishedVSTestTests + "/**/*.Tests.dll"), vsTestSettings); },
+        parameters.Paths.Files.TestCoverageOutputFilePath,
+        new OpenCoverSettings() { ReturnTargetCodeOffset = 0 }
+            .WithFilter(testCoverageFilter)
+            .ExcludeByAttribute(testCoverageExcludeByAttribute)
+            .ExcludeByFile(testCoverageExcludeByFile));
+
+    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+    ReportUnit(parameters.Paths.Directories.VSTestTestResults, parameters.Paths.Directories.VSTestTestResults, new ReportUnitSettings());
+
+    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+    ReportGenerator(parameters.Paths.Files.TestCoverageOutputFilePath, parameters.Paths.Directories.TestCoverage);
+});
+
 Task("Test")
     .IsDependentOn("Test-NUnit")
     .IsDependentOn("Test-xUnit")
     .IsDependentOn("Test-MSTest")
+    .IsDependentOn("Test-VSTest")
     .Does(() =>
 {
 });

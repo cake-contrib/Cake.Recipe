@@ -18,6 +18,7 @@ public class BuildPaths
         var publishedNUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedNUnitTests";
         var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";
         var publishedMSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedMSTestTests";
+        var publishedVSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedVSTestTests";
         var publishedWebsitesDirectory     = tempBuildDirectoryPath + "/_PublishedWebsites";
         var publishedApplicationsDirectory = tempBuildDirectoryPath + "/_PublishedApplications";
         var publishedLibrariesDirectory    = tempBuildDirectoryPath + "/_PublishedLibraries";
@@ -31,6 +32,7 @@ public class BuildPaths
         var NUnitTestResultsDirectory = testResultsDirectory + "/NUnit";
         var xUnitTestResultsDirectory = testResultsDirectory + "/xUnit";
         var MSTestTestResultsDirectory = testResultsDirectory + "/MSTest";
+        var VSTestTestResultsDirectory = testResultsDirectory + "/VSTest";
 
         var testCoverageDirectory = buildDirectoryPath + "/TestCoverage";
 
@@ -53,6 +55,7 @@ public class BuildPaths
             publishedNUnitTestsDirectory,
             publishedxUnitTestsDirectory,
             publishedMSTestTestsDirectory,
+            publishedVSTestTestsDirectory,
             publishedWebsitesDirectory,
             publishedApplicationsDirectory,
             publishedLibrariesDirectory,
@@ -64,6 +67,7 @@ public class BuildPaths
             NUnitTestResultsDirectory,
             xUnitTestResultsDirectory,
             MSTestTestResultsDirectory,
+            VSTestTestResultsDirectory,
             testCoverageDirectory,
             nuGetPackagesOutputDirectory,
             chocolateyPackagesOutputDirectory
@@ -126,6 +130,7 @@ public class BuildDirectories
     public DirectoryPath PublishedNUnitTests { get; private set; }
     public DirectoryPath PublishedxUnitTests { get; private set; }
     public DirectoryPath PublishedMSTestTests { get; private set; }
+    public DirectoryPath PublishedVSTestTests { get; private set; }
     public DirectoryPath PublishedWebsites { get; private set; }
     public DirectoryPath PublishedApplications { get; private set; }
     public DirectoryPath PublishedLibraries { get; private set; }
@@ -137,6 +142,7 @@ public class BuildDirectories
     public DirectoryPath NUnitTestResults { get; private set; }
     public DirectoryPath xUnitTestResults { get; private set; }
     public DirectoryPath MSTestTestResults { get; private set; }
+    public DirectoryPath VSTestTestResults { get; private set; }
     public DirectoryPath TestCoverage { get; private set; }
     public DirectoryPath NuGetPackages { get; private set; }
     public DirectoryPath ChocolateyPackages { get; private set; }
@@ -149,6 +155,7 @@ public class BuildDirectories
         DirectoryPath publishedNUnitTests,
         DirectoryPath publishedxUnitTests,
         DirectoryPath publishedMSTestTests,
+        DirectoryPath publishedVSTestTests,
         DirectoryPath publishedWebsites,
         DirectoryPath publishedApplications,
         DirectoryPath publishedLibraries,
@@ -160,6 +167,7 @@ public class BuildDirectories
         DirectoryPath nunitTestResults,
         DirectoryPath xunitTestResults,
         DirectoryPath msTestTestResults,
+        DirectoryPath vsTestTestResults,
         DirectoryPath testCoverage,
         DirectoryPath nuGetPackages,
         DirectoryPath chocolateyPackages
@@ -171,6 +179,7 @@ public class BuildDirectories
         PublishedNUnitTests = publishedNUnitTests;
         PublishedxUnitTests = publishedxUnitTests;
         PublishedMSTestTests = publishedMSTestTests;
+        PublishedVSTestTests = publishedVSTestTests;
         PublishedWebsites = publishedWebsites;
         PublishedApplications = publishedApplications;
         PublishedLibraries = publishedLibraries;
@@ -182,6 +191,7 @@ public class BuildDirectories
         NUnitTestResults = nunitTestResults;
         xUnitTestResults = xunitTestResults;
         MSTestTestResults = msTestTestResults;
+        VSTestTestResults = vsTestTestResults;
         TestCoverage = testCoverage;
         NuGetPackages = nuGetPackages;
         ChocolateyPackages = chocolateyPackages;
