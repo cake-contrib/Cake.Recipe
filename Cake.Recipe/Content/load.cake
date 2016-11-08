@@ -13,6 +13,7 @@
 #l .\parameters.cake
 #l .\paths.cake
 #l .\resharper.cake
+#l .\microsoftteams.cake
 #l .\slack.cake
 #l .\testing.cake
 #l .\twitter.cake
