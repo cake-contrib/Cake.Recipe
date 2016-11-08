@@ -13,6 +13,7 @@ public class BuildParameters
     public bool IsPublishBuild { get; private set; }
     public bool IsReleaseBuild { get; private set; }
     public GitHubCredentials GitHub { get; private set; }
+    public MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public GitterCredentials Gitter { get; private set; }
     public SlackCredentials Slack { get; private set; }
     public TwitterCredentials Twitter { get; private set; }
@@ -63,6 +64,7 @@ public class BuildParameters
                 !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name)
             ),
             GitHub = GetGitHubCredentials(context),
+            MicrosoftTeams = GetMicrosoftTeamsCredentials(context),
             Gitter = GetGitterCredentials(context),
             Slack = GetSlackCredentials(context),
             Twitter = GetTwitterCredentials(context),

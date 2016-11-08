@@ -43,14 +43,21 @@ Teardown(context =>
     {
         if(!parameters.IsLocalBuild && !parameters.IsPullRequest && parameters.IsMainRepository && parameters.IsMasterBranch && parameters.IsTagged)
         {
+            var message = "Version " + parameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".";
+
             if(sendMessageToTwitter)
             {
-                SendMessageToTwitter("Version " + parameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
+                SendMessageToTwitter(message);
             }
 
             if(sendMessageToGitterRoom)
             {
                 SendMessageToGitterRoom("@/all Version " + parameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
+            }
+
+            if(sendMessageToMicrosoftTeams)
+            {
+                SendMessageToMicrosoftTeams(message);
             }
         }
     }

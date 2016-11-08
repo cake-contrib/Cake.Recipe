@@ -10,6 +10,16 @@ public class GitHubCredentials
     }
 }
 
+public class MicrosoftTeamsCredentials
+{
+    public string WebHookUrl { get; private set;}
+
+    public MicrosoftTeamsCredentials(string webHookUrl)
+    {
+        WebHookUrl = webHookUrl;
+    }
+}
+
 public class GitterCredentials
 {
     public string Token { get; private set; }
@@ -111,6 +121,13 @@ public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
     return new GitHubCredentials(
         context.EnvironmentVariable(githubUserNameVariable),
         context.EnvironmentVariable(githubPasswordVariable));
+}
+
+public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
+{
+    return new MicrosoftTeamsCredentials(
+        context.EnvironmentVariable(microsoftTeamsWebHookUrl));
+    )
 }
 
 public static GitterCredentials GetGitterCredentials(ICakeContext context)
