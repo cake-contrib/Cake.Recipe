@@ -127,7 +127,6 @@ public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContex
 {
     return new MicrosoftTeamsCredentials(
         context.EnvironmentVariable(microsoftTeamsWebHookUrl));
-    )
 }
 
 public static GitterCredentials GetGitterCredentials(ICakeContext context)
