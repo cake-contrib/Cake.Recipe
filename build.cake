@@ -20,6 +20,7 @@ private static string twitterAccessTokenVariable = "TWITTER_ACCESS_TOKEN";
 private static string twitterAccessTokenSecretVariable = "TWITTER_ACCESS_TOKEN_SECRET";
 private static string appVeyorApiTokenVariable = "APPVEYOR_API_TOKEN";
 private static string coverallsRepoTokenVariable = "COVERALLS_REPO_TOKEN";
+private static string microsoftTeamsWebHookUrl ="MICROSOFTTEAMS_WEBHOOKURL";
 
 ///////////////////////////////////////////////////////////////////////////////
 // BUILD ACTIONS
