@@ -119,68 +119,68 @@ public class CoverallsCredentials
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
     return new GitHubCredentials(
-        context.EnvironmentVariable(githubUserNameVariable),
-        context.EnvironmentVariable(githubPasswordVariable));
+        context.EnvironmentVariable(Environment.GithubUserNameVariable),
+        context.EnvironmentVariable(Environment.GithubPasswordVariable));
 }
 
 public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
 {
     return new MicrosoftTeamsCredentials(
-        context.EnvironmentVariable(microsoftTeamsWebHookUrl));
+        context.EnvironmentVariable(Environment.MicrosoftTeamsWebHookUrl));
 }
 
 public static GitterCredentials GetGitterCredentials(ICakeContext context)
 {
     return new GitterCredentials(
-        context.EnvironmentVariable(gitterTokenVariable),
-        context.EnvironmentVariable(gitterRoomIdVariable));
+        context.EnvironmentVariable(Environment.GitterTokenVariable),
+        context.EnvironmentVariable(Environment.GitterRoomIdVariable));
 }
 
 public static SlackCredentials GetSlackCredentials(ICakeContext context)
 {
     return new SlackCredentials(
-        context.EnvironmentVariable(slackTokenVariable),
-        context.EnvironmentVariable(slackChannelVariable));
+        context.EnvironmentVariable(Environment.SlackTokenVariable),
+        context.EnvironmentVariable(Environment.SlackChannelVariable));
 }
 
 public static TwitterCredentials GetTwitterCredentials(ICakeContext context)
 {
     return new TwitterCredentials(
-        context.EnvironmentVariable(twitterConsumerKeyVariable),
-        context.EnvironmentVariable(twitterConsumerSecretVariable),
-        context.EnvironmentVariable(twitterAccessTokenVariable),
-        context.EnvironmentVariable(twitterAccessTokenSecretVariable));
+        context.EnvironmentVariable(Environment.TwitterConsumerKeyVariable),
+        context.EnvironmentVariable(Environment.TwitterConsumerSecretVariable),
+        context.EnvironmentVariable(Environment.TwitterAccessTokenVariable),
+        context.EnvironmentVariable(Environment.TwitterAccessTokenSecretVariable));
 }
 
 public static MyGetCredentials GetMyGetCredentials(ICakeContext context)
 {
     return new MyGetCredentials(
-        context.EnvironmentVariable(myGetApiKeyVariable),
-        context.EnvironmentVariable(myGetSourceUrlVariable));
+        context.EnvironmentVariable(Environment.MyGetApiKeyVariable),
+        context.EnvironmentVariable(Environment.MyGetSourceUrlVariable));
 }
 
 public static NuGetCredentials GetNuGetCredentials(ICakeContext context)
 {
     return new NuGetCredentials(
-        context.EnvironmentVariable(nuGetApiKeyVariable),
-        context.EnvironmentVariable(nuGetSourceUrlVariable));
+        context.EnvironmentVariable(Environment.NuGetApiKeyVariable),
+        context.EnvironmentVariable(Environment.NuGetSourceUrlVariable));
 }
 
 public static ChocolateyCredentials GetChocolateyCredentials(ICakeContext context)
 {
     return new ChocolateyCredentials(
-        context.EnvironmentVariable(chocolateyApiKeyVariable),
-        context.EnvironmentVariable(chocolateySourceUrlVariable));
+        context.EnvironmentVariable(Environment.ChocolateyApiKeyVariable),
+        context.EnvironmentVariable(Environment.ChocolateySourceUrlVariable));
 }
 
 public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)
 {
     return new AppVeyorCredentials(
-        context.EnvironmentVariable(appVeyorApiTokenVariable));
+        context.EnvironmentVariable(Environment.AppVeyorApiTokenVariable));
 }
 
 public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)
 {
     return new CoverallsCredentials(
-        context.EnvironmentVariable(coverallsRepoTokenVariable));
+        context.EnvironmentVariable(Environment.CoverallsRepoTokenVariable));
 }

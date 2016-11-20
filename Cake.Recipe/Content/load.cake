@@ -5,6 +5,7 @@
 #l .\chocolatey.cake
 #l .\coveralls.cake
 #l .\credentials.cake
+#l .\environment.cake
 #l .\gitreleasemanager.cake
 #l .\gitter.cake
 #l .\gitversion.cake
