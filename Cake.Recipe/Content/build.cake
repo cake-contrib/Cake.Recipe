@@ -2,6 +2,7 @@
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 
+Environment.SetVariableNames();
 var parameters = BuildParameters.GetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
 var publishingError = false;
 
@@ -11,6 +12,8 @@ var publishingError = false;
 
 Setup(context =>
 {
+    Information("Starting Setup...");
+
     if(parameters.IsMasterBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
         Information("Increasing verbosity to diagnostic.");
         context.Log.Verbosity = Verbosity.Diagnostic;
@@ -39,6 +42,8 @@ Setup(context =>
 
 Teardown(context =>
 {
+    Information("Starting Teardown...");
+
     if(context.Successful)
     {
         if(!parameters.IsLocalBuild && !parameters.IsPullRequest && parameters.IsMainRepository && parameters.IsMasterBranch && parameters.IsTagged)
