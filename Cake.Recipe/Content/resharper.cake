@@ -13,9 +13,9 @@ Task("DupFinder")
         ThrowExceptionOnFindingDuplicates = true
     };
 
-    if(dupFinderExcludePattern != null)
+    if(ToolSettings.DupFinderExcludePattern != null)
     {
-        settings.ExcludePattern = dupFinderExcludePattern;
+        settings.ExcludePattern = ToolSettings.DupFinderExcludePattern;
     }
 
     DupFinder(solutionFilePath, settings);

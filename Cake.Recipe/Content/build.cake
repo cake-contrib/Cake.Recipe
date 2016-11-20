@@ -4,6 +4,8 @@
 
 Environment.SetVariableNames();
 BuildParameters.SetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
+ToolSettings.SetToolSettings(Context);
+
 var publishingError = false;
 
 ///////////////////////////////////////////////////////////////////////////////
