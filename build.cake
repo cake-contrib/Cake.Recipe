@@ -46,6 +46,7 @@ var appVeyorProjectSlug       = "cake-recipe";
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 
+Environment.SetVariableNames();
 var parameters = BuildParameters.GetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
 var publishingError = false;
 
@@ -62,7 +63,7 @@ var publishingError = false;
 // TOOLS
 ///////////////////////////////////////////////////////////////////////////////
 
-#tool "nuget:?package=gitreleasemanager&version=0.5.0"
+#tool nuget:?package=gitreleasemanager&version=0.5.0
 #tool nuget:?package=GitVersion.CommandLine&version=3.6.2
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,6 +72,7 @@ var publishingError = false;
 
 #load .\Cake.Recipe\Content\appveyor.cake
 #load .\Cake.Recipe\Content\credentials.cake
+#load .\Cake.Recipe\Content\environment.cake
 #load .\Cake.Recipe\Content\gitreleasemanager.cake
 #load .\Cake.Recipe\Content\gitter.cake
 #load .\Cake.Recipe\Content\gitversion.cake
