@@ -9,7 +9,7 @@ Task("DupFinder")
     var settings = new DupFinderSettings() {
         ShowStats = true,
         ShowText = true,
-        OutputFile = parameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
+        OutputFile = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
         ThrowExceptionOnFindingDuplicates = true
     };
 
@@ -24,8 +24,8 @@ Task("DupFinder")
 {
     Information("Duplicates were found in your codebase, creating HTML report...");
     ReSharperReports(
-        parameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
-        parameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.html"));
+        BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
+        BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.html"));
 });
 
 Task("InspectCode")
@@ -35,8 +35,8 @@ Task("InspectCode")
 {
     InspectCode(solutionFilePath, new InspectCodeSettings() {
         SolutionWideAnalysis = true,
-        Profile = parameters.Paths.Directories.Source.CombineWithFilePath(resharperSettingsFileName),
-        OutputFile = parameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
+        Profile = BuildParameters.Paths.Directories.Source.CombineWithFilePath(resharperSettingsFileName),
+        OutputFile = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
         ThrowExceptionOnFindingViolations = true
     });
 })
@@ -44,8 +44,8 @@ Task("InspectCode")
 {
     Information("Violations were found in your codebase, creating HTML report...");
     ReSharperReports(
-        parameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
-        parameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.html"));
+        BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
+        BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.html"));
 });
 
 Task("Analyze")

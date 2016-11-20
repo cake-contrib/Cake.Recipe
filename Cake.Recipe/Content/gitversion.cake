@@ -6,9 +6,7 @@ public class BuildVersion
     public string CakeVersion { get; private set; }
 
     public static BuildVersion CalculatingSemanticVersion(
-        ICakeContext context,
-        BuildParameters parameters
-        )
+        ICakeContext context)
     {
         if (context == null)
         {
@@ -22,10 +20,10 @@ public class BuildVersion
         if (context.IsRunningOnWindows())
         {
             context.Information("Calculating Semantic Version...");
-            if (!parameters.IsLocalBuild || parameters.IsPublishBuild || parameters.IsReleaseBuild)
+            if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild)
             {
                 context.GitVersion(new GitVersionSettings{
-                    UpdateAssemblyInfoFilePath = parameters.Paths.Files.SolutionInfoFilePath,
+                    UpdateAssemblyInfoFilePath = BuildParameters.Paths.Files.SolutionInfoFilePath,
                     UpdateAssemblyInfo = true,
                     OutputType = GitVersionOutput.BuildServer
                 });
@@ -50,7 +48,7 @@ public class BuildVersion
         if (string.IsNullOrEmpty(version) || string.IsNullOrEmpty(semVersion))
         {
             context.Information("Fetching version from SolutionInfo...");
-            var assemblyInfo = context.ParseAssemblyInfo(parameters.Paths.Files.SolutionInfoFilePath);
+            var assemblyInfo = context.ParseAssemblyInfo(BuildParameters.Paths.Files.SolutionInfoFilePath);
             version = assemblyInfo.AssemblyVersion;
             semVersion = assemblyInfo.AssemblyInformationalVersion;
             milestone = string.Concat(version);

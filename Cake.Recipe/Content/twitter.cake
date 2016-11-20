@@ -8,23 +8,23 @@ public void SendMessageToTwitter(string message)
     {
         Information("Sending message to Twitter...");
 
-        if(string.IsNullOrEmpty(parameters.Twitter.ConsumerKey)) {
+        if(string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerKey)) {
             throw new InvalidOperationException("Could not resolve Twitter ConsumerKey.");
         }
 
-        if(string.IsNullOrEmpty(parameters.Twitter.ConsumerSecret)) {
+        if(string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerSecret)) {
             throw new InvalidOperationException("Could not resolve Twitter ConsumerSecret.");
         }
 
-        if(string.IsNullOrEmpty(parameters.Twitter.AccessToken)) {
+        if(string.IsNullOrEmpty(BuildParameters.Twitter.AccessToken)) {
             throw new InvalidOperationException("Could not resolve Twitter AccessToken.");
         }
 
-        if(string.IsNullOrEmpty(parameters.Twitter.AccessTokenSecret)) {
+        if(string.IsNullOrEmpty(BuildParameters.Twitter.AccessTokenSecret)) {
             throw new InvalidOperationException("Could not resolve Twitter AccessTokenSecret.");
         }
 
-        TwitterSendTweet(parameters.Twitter.ConsumerKey, parameters.Twitter.ConsumerSecret, parameters.Twitter.AccessToken, parameters.Twitter.AccessTokenSecret, message);
+        TwitterSendTweet(BuildParameters.Twitter.ConsumerKey, BuildParameters.Twitter.ConsumerSecret, BuildParameters.Twitter.AccessToken, BuildParameters.Twitter.AccessTokenSecret, message);
 
         Information("Message succcessfully sent.");
     }

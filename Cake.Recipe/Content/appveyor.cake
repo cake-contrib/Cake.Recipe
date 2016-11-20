@@ -36,16 +36,16 @@ Task("Print-AppVeyor-Environment-Variables")
 
 Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
-    .WithCriteria(() => parameters.IsRunningOnAppVeyor)
-    .WithCriteria(() => DirectoryExists(parameters.Paths.Directories.NuGetPackages) || DirectoryExists(parameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
-    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetPackages + "/*"))
+    foreach(var package in GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
 
-    foreach(var package in GetFiles(parameters.Paths.Directories.ChocolateyPackages + "/*"))
+    foreach(var package in GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
@@ -54,5 +54,5 @@ Task("Upload-AppVeyor-Artifacts")
 Task("Clear-AppVeyor-Cache")
     .Does(() =>
 {
-    AppVeyorClearCache(new AppVeyorSettings() { ApiToken = parameters.AppVeyor.ApiToken }, appVeyorAccountName, appVeyorProjectSlug);
+    AppVeyorClearCache(new AppVeyorSettings() { ApiToken = BuildParameters.AppVeyor.ApiToken }, appVeyorAccountName, appVeyorProjectSlug);
 });
