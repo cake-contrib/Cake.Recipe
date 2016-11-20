@@ -3,15 +3,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Upload-Coverage-Report")
-    .WithCriteria(() => FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
-    .WithCriteria(() => !parameters.IsLocalBuild)
-    .WithCriteria(() => !parameters.IsPullRequest)
-    .WithCriteria(() => parameters.IsMainRepository)
+    .WithCriteria(() => FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
+    .WithCriteria(() => !BuildParameters.IsLocalBuild)
+    .WithCriteria(() => !BuildParameters.IsPullRequest)
+    .WithCriteria(() => BuildParameters.IsMainRepository)
     .IsDependentOn("Test")
     .Does(() =>
 {
-    CoverallsIo(parameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+    CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
     {
-        RepoToken = parameters.Coveralls.RepoToken
+        RepoToken = BuildParameters.Coveralls.RepoToken
     });
 });

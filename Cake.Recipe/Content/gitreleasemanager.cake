@@ -5,9 +5,9 @@
 Task("Create-Release-Notes")
     .Does(() =>
 {
-    GitReleaseManagerCreate(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, new GitReleaseManagerCreateSettings {
-        Milestone         = parameters.Version.Milestone,
-        Name              = parameters.Version.Milestone,
+    GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, new GitReleaseManagerCreateSettings {
+        Milestone         = BuildParameters.Version.Milestone,
+        Name              = BuildParameters.Version.Milestone,
         Prerelease        = true,
         TargetCommitish   = "master"
     });
@@ -15,30 +15,30 @@ Task("Create-Release-Notes")
 
 Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
-    .WithCriteria(() => !parameters.IsLocalBuild)
-    .WithCriteria(() => !parameters.IsPullRequest)
-    .WithCriteria(() => parameters.IsMainRepository)
-    .WithCriteria(() => parameters.IsMasterBranch)
-    .WithCriteria(() => parameters.IsTagged)
+    .WithCriteria(() => !BuildParameters.IsLocalBuild)
+    .WithCriteria(() => !BuildParameters.IsPullRequest)
+    .WithCriteria(() => BuildParameters.IsMainRepository)
+    .WithCriteria(() => BuildParameters.IsMasterBranch)
+    .WithCriteria(() => BuildParameters.IsTagged)
     .Does(() =>
 {
-    if(DirectoryExists(parameters.Paths.Directories.NuGetPackages))
+    if(DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
     {
-        foreach(var package in GetFiles(parameters.Paths.Directories.NuGetPackages + "/*"))
+        foreach(var package in GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
         {
-            GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, parameters.Version.Milestone, package.ToString());
+            GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, BuildParameters.Version.Milestone, package.ToString());
         }
     }
 
-    if(DirectoryExists(parameters.Paths.Directories.ChocolateyPackages))
+    if(DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     {
-        foreach(var package in GetFiles(parameters.Paths.Directories.ChocolateyPackages + "/*"))
+        foreach(var package in GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
         {
-            GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, parameters.Version.Milestone, package.ToString());
+            GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, BuildParameters.Version.Milestone, package.ToString());
         }
     }
 
-    GitReleaseManagerClose(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, parameters.Version.Milestone);
+    GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, BuildParameters.Version.Milestone);
 })
 .OnError(exception =>
 {

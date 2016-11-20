@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 Environment.SetVariableNames();
-var parameters = BuildParameters.GetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
+BuildParameters.SetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
 var publishingError = false;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -14,30 +14,29 @@ Setup(context =>
 {
     Information("Starting Setup...");
 
-    if(parameters.IsMasterBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
+    if(BuildParameters.IsMasterBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
         Information("Increasing verbosity to diagnostic.");
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    parameters.SetBuildPaths(
+    BuildParameters.SetBuildPaths(
         BuildPaths.GetPaths(sourceDirectoryPath,
             context: Context
         )
     );
 
-    parameters.SetBuildVersion(
+    BuildParameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
-            context: Context,
-            parameters: parameters
+            context: Context
         )
     );
 
     Information("Building version {0} of " + title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
-        parameters.Version.SemVersion,
-        parameters.Configuration,
-        parameters.Target,
-        parameters.Version.CakeVersion,
-        parameters.IsTagged);
+        BuildParameters.Version.SemVersion,
+        BuildParameters.Configuration,
+        BuildParameters.Target,
+        BuildParameters.Version.CakeVersion,
+        BuildParameters.IsTagged);
 });
 
 Teardown(context =>
@@ -46,9 +45,9 @@ Teardown(context =>
 
     if(context.Successful)
     {
-        if(!parameters.IsLocalBuild && !parameters.IsPullRequest && parameters.IsMainRepository && parameters.IsMasterBranch && parameters.IsTagged)
+        if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && BuildParameters.IsMasterBranch && BuildParameters.IsTagged)
         {
-            var message = "Version " + parameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".";
+            var message = "Version " + BuildParameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".";
 
             if(sendMessageToTwitter)
             {
@@ -57,7 +56,7 @@ Teardown(context =>
 
             if(sendMessageToGitterRoom)
             {
-                SendMessageToGitterRoom("@/all Version " + parameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
+                SendMessageToGitterRoom("@/all Version " + BuildParameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
             }
 
             if(sendMessageToMicrosoftTeams)
@@ -68,7 +67,7 @@ Teardown(context =>
     }
     else
     {
-        if(!parameters.IsLocalBuild && parameters.IsMainRepository)
+        if(!BuildParameters.IsLocalBuild && BuildParameters.IsMainRepository)
         {
             if(sendMessageToSlackChannel)
             {
@@ -87,13 +86,13 @@ Teardown(context =>
 Task("Show-Info")
     .Does(() =>
 {
-    Information("Target: {0}", parameters.Target);
-    Information("Configuration: {0}", parameters.Configuration);
+    Information("Target: {0}", BuildParameters.Target);
+    Information("Configuration: {0}", BuildParameters.Configuration);
 
     Information("Solution FilePath: {0}", MakeAbsolute((FilePath)solutionFilePath));
     Information("Solution DirectoryPath: {0}", MakeAbsolute((DirectoryPath)solutionDirectoryPath));
-    Information("Source DirectoryPath: {0}", MakeAbsolute(parameters.Paths.Directories.Source));
-    Information("Build DirectoryPath: {0}", MakeAbsolute(parameters.Paths.Directories.Build));
+    Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Source));
+    Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 
 Task("Clean")
@@ -101,7 +100,7 @@ Task("Clean")
 {
     Information("Cleaning...");
 
-    CleanDirectories(parameters.Paths.Directories.ToClean);
+    CleanDirectories(BuildParameters.Paths.Directories.ToClean);
 });
 
 Task("Restore")
@@ -125,9 +124,9 @@ Task("Build")
     MSBuild(solutionFilePath, settings =>
         settings.SetPlatformTarget(PlatformTarget.MSIL)
             .WithProperty("TreatWarningsAsErrors","true")
-            .WithProperty("OutDir", MakeAbsolute(parameters.Paths.Directories.TempBuild).FullPath)
+            .WithProperty("OutDir", MakeAbsolute(BuildParameters.Paths.Directories.TempBuild).FullPath)
             .WithTarget("Build")
-            .SetConfiguration(parameters.Configuration));
+            .SetConfiguration(BuildParameters.Configuration));
 });
 
 Task("Package")
@@ -164,4 +163,4 @@ Task("ClearCache")
 // EXECUTION
 ///////////////////////////////////////////////////////////////////////////////
 
-RunTarget(parameters.Target);
+RunTarget(BuildParameters.Target);
