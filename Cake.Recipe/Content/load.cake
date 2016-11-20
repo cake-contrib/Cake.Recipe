@@ -17,6 +17,7 @@
 #l .\microsoftteams.cake
 #l .\slack.cake
 #l .\testing.cake
+#l .\toolsettings.cake
 #l .\twitter.cake
 
 // Leave this one as the last one.  My OCD wants it to be in alphabetical order, but not possible

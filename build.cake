@@ -48,6 +48,8 @@ var appVeyorProjectSlug       = "cake-recipe";
 
 Environment.SetVariableNames();
 BuildParameters.SetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
+ToolSettings.SetToolSettings(Context);
+
 var publishingError = false;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,6 +83,7 @@ var publishingError = false;
 #load .\Cake.Recipe\Content\parameters.cake
 #load .\Cake.Recipe\Content\paths.cake
 #load .\Cake.Recipe\Content\slack.cake
+#load .\Cake.Recipe\Content\toolsettings.cake
 #load .\Cake.Recipe\Content\twitter.cake
 
 ///////////////////////////////////////////////////////////////////////////////

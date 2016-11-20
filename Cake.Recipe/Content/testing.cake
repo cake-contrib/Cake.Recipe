@@ -25,9 +25,9 @@ Task("Test-NUnit")
     },
     BuildParameters.Paths.Files.TestCoverageOutputFilePath,
     new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
-        .WithFilter(testCoverageFilter)
-        .ExcludeByAttribute(testCoverageExcludeByAttribute)
-        .ExcludeByFile(testCoverageExcludeByFile));
+        .WithFilter(ToolSettings.TestCoverageFilter)
+        .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+        .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
     // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
     ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
@@ -48,9 +48,9 @@ Task("Test-xUnit")
     },
     BuildParameters.Paths.Files.TestCoverageOutputFilePath,
     new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
-        .WithFilter(testCoverageFilter)
-        .ExcludeByAttribute(testCoverageExcludeByAttribute)
-        .ExcludeByFile(testCoverageExcludeByFile));
+        .WithFilter(ToolSettings.TestCoverageFilter)
+        .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+        .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
     // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
     ReportUnit(BuildParameters.Paths.Directories.xUnitTestResults, BuildParameters.Paths.Directories.xUnitTestResults, new ReportUnitSettings());
@@ -91,9 +91,9 @@ Task("Test-VSTest")
 		tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + "/**/*.Tests.dll"), vsTestSettings); },
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
         new OpenCoverSettings() { ReturnTargetCodeOffset = 0 }
-            .WithFilter(testCoverageFilter)
-            .ExcludeByAttribute(testCoverageExcludeByAttribute)
-            .ExcludeByFile(testCoverageExcludeByFile));
+            .WithFilter(ToolSettings.TestCoverageFilter)
+            .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+            .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
     // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
     ReportUnit(BuildParameters.Paths.Directories.VSTestTestResults, BuildParameters.Paths.Directories.VSTestTestResults, new ReportUnitSettings());
