@@ -79,7 +79,7 @@ Task("Test-VSTest")
 
     var vsTestSettings = new VSTestSettings()
     {
-        NoIsolation = false
+        InIsolation = true
     };
 
     if (AppVeyor.IsRunningOnAppVeyor)
