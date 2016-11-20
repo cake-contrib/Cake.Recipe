@@ -81,8 +81,11 @@ Task("Test-VSTest")
     {
         NoIsolation = false
     };
-    if (AppVeyor.IsRunningOnAppVeyor) vsTestSettings.ArgumentCustomization = args => arg.Add("/logger:Appveyor"); // This is for Cake v0.16, remove this line when Cake v0.17 is released
-    //if (AppVeyor.IsRunningOnAppVeyor) vsTestSettings.WithAppVeyorLogger(); // This is for Cake v0.17+, uncomment this line when Cakev0.17 is released
+
+    if (AppVeyor.IsRunningOnAppVeyor)
+    {
+        vsTestSettings.WithAppVeyorLogger();
+    } 
 
     OpenCover(
 		tool => { tool.VSTest(GetFiles(parameters.Paths.Directories.PublishedVSTestTests + "/**/*.Tests.dll"), vsTestSettings); },
