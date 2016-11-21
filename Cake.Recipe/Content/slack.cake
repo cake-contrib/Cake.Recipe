@@ -8,14 +8,6 @@ public void SendMessageToSlackChannel(string message)
     {
         Information("Sending message to Slack...");
 
-        if(string.IsNullOrEmpty(BuildParameters.Slack.Token)) {
-            throw new InvalidOperationException("Could not resolve Slack Token.");
-        }
-
-        if(string.IsNullOrEmpty(BuildParameters.Slack.Channel)) {
-            throw new InvalidOperationException("Could not resolve Slack Channel.");
-        }
-
         var postMessageResult = Slack.Chat.PostMessage(
                     token: BuildParameters.Slack.Token,
                     channel: BuildParameters.Slack.Channel,

@@ -51,17 +51,17 @@ Teardown(context =>
         {
             var message = "Version " + BuildParameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".";
 
-            if(sendMessageToTwitter)
+            if(BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
                 SendMessageToTwitter(message);
             }
 
-            if(sendMessageToGitterRoom)
+            if(BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
                 SendMessageToGitterRoom("@/all Version " + BuildParameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
             }
 
-            if(sendMessageToMicrosoftTeams)
+            if(BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
                 SendMessageToMicrosoftTeams(message);
             }
@@ -71,7 +71,7 @@ Teardown(context =>
     {
         if(!BuildParameters.IsLocalBuild && BuildParameters.IsMainRepository)
         {
-            if(sendMessageToSlackChannel)
+            if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
                 SendMessageToSlackChannel("Continuous Integration Build of " + title + " just failed :-(");
             }

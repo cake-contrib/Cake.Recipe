@@ -24,6 +24,47 @@ public static class BuildParameters
     public static CoverallsCredentials Coveralls { get; private set; }
     public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
+    public static bool ShouldPostToGitter { get; private set; }
+    public static bool ShouldPostToSlack { get; private set; }
+    public static bool ShouldPostToTwitter { get; private set; }
+    public static bool ShouldPostToMicrosoftTeams { get; private set; }
+
+    public static bool CanPostToGitter
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Gitter.Token) &&
+                !string.IsNullOrEmpty(BuildParameters.Gitter.RoomId);
+        }
+    }
+
+    public static bool CanPostToSlack
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Slack.Token) &&
+                !string.IsNullOrEmpty(BuildParameters.Slack.Channel);
+        }
+    }
+
+    public static bool CanPostToTwitter
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerKey) &&
+                !string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerSecret) &&
+                !string.IsNullOrEmpty(BuildParameters.Twitter.AccessToken) &&
+                !string.IsNullOrEmpty(BuildParameters.Twitter.AccessTokenSecret);
+        }
+    }
+
+    public static bool CanPostToMicrosoftTeams
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.MicrosoftTeams.WebHookUrl);
+        }
+    }
 
     public static void SetBuildVersion(BuildVersion version)
     {
@@ -39,13 +80,21 @@ public static class BuildParameters
         ICakeContext context,
         BuildSystem buildSystem,
         string repositoryOwner,
-        string repositoryName
-        )
+        string repositoryName,
+        bool shouldPostToGitter = true,
+        bool shouldPostToSlack = true,
+        bool shouldPostToTwitter = true,
+        bool shouldPostToMicrosoftTeams = false)
     {
         if (context == null)
         {
             throw new ArgumentNullException("context");
         }
+
+        ShouldPostToGitter = shouldPostToGitter;
+        ShouldPostToSlack = shouldPostToSlack;
+        ShouldPostToTwitter = shouldPostToTwitter;
+        ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
