@@ -8,14 +8,6 @@ public void SendMessageToGitterRoom(string message)
     {
         Information("Sending message to Gitter...");
 
-        if(string.IsNullOrEmpty(BuildParameters.Gitter.Token)) {
-            throw new InvalidOperationException("Could not resolve Gitter Token.");
-        }
-
-        if(string.IsNullOrEmpty(BuildParameters.Gitter.RoomId)) {
-            throw new InvalidOperationException("Could not resolve Gitter Room Id.");
-        }
-
         var postMessageResult = Gitter.Chat.PostMessage(
                     message: message,
                     messageSettings: new GitterChatMessageSettings { Token = BuildParameters.Gitter.Token, RoomId = BuildParameters.Gitter.RoomId}
