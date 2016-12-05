@@ -18,7 +18,7 @@ Task("DupFinder")
         settings.ExcludePattern = ToolSettings.DupFinderExcludePattern;
     }
 
-    DupFinder(solutionFilePath, settings);
+    DupFinder(BuildParameters.SolutionFilePath, settings);
 })
 .ReportError(exception =>
 {
@@ -33,9 +33,9 @@ Task("InspectCode")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    InspectCode(solutionFilePath, new InspectCodeSettings() {
+    InspectCode(BuildParameters.SolutionFilePath, new InspectCodeSettings() {
         SolutionWideAnalysis = true,
-        Profile = BuildParameters.Paths.Directories.Source.CombineWithFilePath(resharperSettingsFileName),
+        Profile = BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName),
         OutputFile = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
         ThrowExceptionOnFindingViolations = true
     });

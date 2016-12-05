@@ -5,7 +5,7 @@
 Task("Create-Release-Notes")
     .Does(() =>
 {
-    GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, new GitReleaseManagerCreateSettings {
+    GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, new GitReleaseManagerCreateSettings {
         Milestone         = BuildParameters.Version.Milestone,
         Name              = BuildParameters.Version.Milestone,
         Prerelease        = true,
@@ -26,7 +26,7 @@ Task("Publish-GitHub-Release")
     {
         foreach(var package in GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
         {
-            GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, BuildParameters.Version.Milestone, package.ToString());
+            GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
         }
     }
 
@@ -34,11 +34,11 @@ Task("Publish-GitHub-Release")
     {
         foreach(var package in GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
         {
-            GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, BuildParameters.Version.Milestone, package.ToString());
+            GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
         }
     }
 
-    GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, repositoryOwner, repositoryName, BuildParameters.Version.Milestone);
+    GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone);
 })
 .OnError(exception =>
 {
