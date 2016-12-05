@@ -97,11 +97,7 @@ Setup(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    BuildParameters.SetBuildPaths(
-        BuildPaths.GetPaths(sourceDirectoryPath,
-            context: Context
-        )
-    );
+    BuildParameters.SetBuildPaths(BuildPaths.GetPaths(Context));
 
     BuildParameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
