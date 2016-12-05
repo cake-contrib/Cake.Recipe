@@ -158,7 +158,7 @@ Task("Show-Info")
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
 
-    Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Source));
+    Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.SourceDirectoryPath));
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 

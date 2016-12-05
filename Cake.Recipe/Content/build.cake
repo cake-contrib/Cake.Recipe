@@ -2,10 +2,6 @@
 // GLOBAL VARIABLES
 ///////////////////////////////////////////////////////////////////////////////
 
-Environment.SetVariableNames();
-BuildParameters.SetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
-ToolSettings.SetToolSettings(Context);
-
 var publishingError = false;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,11 +17,7 @@ Setup(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    BuildParameters.SetBuildPaths(
-        BuildPaths.GetPaths(sourceDirectoryPath,
-            context: Context
-        )
-    );
+    BuildParameters.SetBuildPaths(BuildPaths.GetPaths(Context));
 
     BuildParameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
@@ -33,7 +25,7 @@ Setup(context =>
         )
     );
 
-    Information("Building version {0} of " + title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
+    Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
         BuildParameters.Version.SemVersion,
         BuildParameters.Configuration,
         BuildParameters.Target,
@@ -49,7 +41,7 @@ Teardown(context =>
     {
         if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && BuildParameters.IsMasterBranch && BuildParameters.IsTagged)
         {
-            var message = "Version " + BuildParameters.Version.SemVersion + " of " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".";
+            var message = "Version " + BuildParameters.Version.SemVersion + " of " + BuildParameters.Title + " Addin has just been released, https://www.nuget.org/packages/" + BuildParameters.Title + ".";
 
             if(BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
@@ -58,7 +50,7 @@ Teardown(context =>
 
             if(BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
-                SendMessageToGitterRoom("@/all Version " + BuildParameters.Version.SemVersion + " of the " + title + " Addin has just been released, https://www.nuget.org/packages/" + title + ".");
+                SendMessageToGitterRoom("@/all Version " + BuildParameters.Version.SemVersion + " of the " + BuildParameters.Title + " Addin has just been released, https://www.nuget.org/packages/" + BuildParameters.Title + ".");
             }
 
             if(BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
@@ -73,7 +65,7 @@ Teardown(context =>
         {
             if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
-                SendMessageToSlackChannel("Continuous Integration Build of " + title + " just failed :-(");
+                SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
             }
         }
     }
@@ -91,9 +83,9 @@ Task("Show-Info")
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
 
-    Information("Solution FilePath: {0}", MakeAbsolute((FilePath)solutionFilePath));
-    Information("Solution DirectoryPath: {0}", MakeAbsolute((DirectoryPath)solutionDirectoryPath));
-    Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Source));
+    Information("Solution FilePath: {0}", MakeAbsolute((FilePath)BuildParameters.SolutionFilePath));
+    Information("Solution DirectoryPath: {0}", MakeAbsolute((DirectoryPath)BuildParameters.SolutionDirectoryPath));
+    Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.SourceDirectoryPath));
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 
@@ -108,9 +100,9 @@ Task("Clean")
 Task("Restore")
     .Does(() =>
 {
-    Information("Restoring {0}...", solutionFilePath);
+    Information("Restoring {0}...", BuildParameters.SolutionFilePath);
 
-    NuGetRestore(solutionFilePath, new NuGetRestoreSettings { Source = new List<string> { "https://www.nuget.org/api/v2", "https://www.myget.org/F/gep13/api/v2" }});
+    NuGetRestore(BuildParameters.SolutionFilePath, new NuGetRestoreSettings { Source = new List<string> { "https://www.nuget.org/api/v2", "https://www.myget.org/F/gep13/api/v2" }});
 });
 
 Task("Build")
@@ -120,10 +112,10 @@ Task("Build")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    Information("Building {0}", solutionFilePath);
+    Information("Building {0}", BuildParameters.SolutionFilePath);
 
     // TODO: Need to have an XBuild step here as well
-    MSBuild(solutionFilePath, settings =>
+    MSBuild(BuildParameters.SolutionFilePath, settings =>
         settings.SetPlatformTarget(PlatformTarget.MSIL)
             .WithProperty("TreatWarningsAsErrors","true")
             .WithProperty("OutDir", MakeAbsolute(BuildParameters.Paths.Directories.TempBuild).FullPath)
@@ -151,7 +143,7 @@ Task("AppVeyor")
 {
     if(publishingError)
     {
-        throw new Exception("An error occurred during the publishing of " + title + ".  All publishing tasks have been attempted.");
+        throw new Exception("An error occurred during the publishing of " + BuildParameters.Title + ".  All publishing tasks have been attempted.");
     }
 });
 

@@ -3,9 +3,7 @@ public class BuildPaths
     public BuildFiles Files { get; private set; }
     public BuildDirectories Directories { get; private set; }
 
-    public static BuildPaths GetPaths(DirectoryPath sourceDirectoryPath,
-        ICakeContext context
-        )
+    public static BuildPaths GetPaths(ICakeContext context)
     {
         if (context == null)
         {
@@ -41,7 +39,7 @@ public class BuildPaths
 
         // Files
         var testCoverageOutputFilePath = ((DirectoryPath)testCoverageDirectory).CombineWithFilePath("OpenCover.xml");
-        var solutionInfoFilePath = ((DirectoryPath)sourceDirectoryPath).CombineWithFilePath("SolutionInfo.cs");
+        var solutionInfoFilePath = ((DirectoryPath)BuildParameters.SourceDirectoryPath).CombineWithFilePath("SolutionInfo.cs");
 
         var repoFilesPaths = new FilePath[] {
             "LICENSE",
@@ -49,7 +47,6 @@ public class BuildPaths
         };
 
         var buildDirectories = new BuildDirectories(
-            sourceDirectoryPath,
             buildDirectoryPath,
             tempBuildDirectoryPath,
             publishedNUnitTestsDirectory,
@@ -124,7 +121,6 @@ public class BuildFiles
 
 public class BuildDirectories
 {
-    public DirectoryPath Source { get; private set; }
     public DirectoryPath Build { get; private set; }
     public DirectoryPath TempBuild { get; private set; }
     public DirectoryPath PublishedNUnitTests { get; private set; }
@@ -149,7 +145,6 @@ public class BuildDirectories
     public ICollection<DirectoryPath> ToClean { get; private set; }
 
     public BuildDirectories(
-        DirectoryPath source,
         DirectoryPath build,
         DirectoryPath tempBuild,
         DirectoryPath publishedNUnitTests,
@@ -173,7 +168,6 @@ public class BuildDirectories
         DirectoryPath chocolateyPackages
         )
     {
-        Source = source;
         Build = build;
         TempBuild = tempBuild;
         PublishedNUnitTests = publishedNUnitTests;

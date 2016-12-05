@@ -54,5 +54,5 @@ Task("Upload-AppVeyor-Artifacts")
 Task("Clear-AppVeyor-Cache")
     .Does(() =>
 {
-    AppVeyorClearCache(new AppVeyorSettings() { ApiToken = BuildParameters.AppVeyor.ApiToken }, appVeyorAccountName, appVeyorProjectSlug);
+    AppVeyorClearCache(new AppVeyorSettings() { ApiToken = BuildParameters.AppVeyor.ApiToken }, BuildParameters.AppVeyorAccountName, BuildParameters.AppVeyorProjectSlug);
 });
