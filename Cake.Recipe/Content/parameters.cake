@@ -24,6 +24,18 @@ public static class BuildParameters
     public static CoverallsCredentials Coveralls { get; private set; }
     public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
+    
+    public static DirectoryPath RootDirectoryPath { get; private set; }
+    public static FilePath SolutionFilePath { get; private set; }
+    public static DirectoryPath SourceDirectoryPath { get; private set; }
+    public static DirectoryPath SolutionDirectoryPath { get; private set; }
+    public static string Title { get; private set; }
+    public static string ResharperSettingsFileName { get; private set; }
+    public static string RepositoryOwner { get; private set; }
+    public static string RepositoryName { get; private set; }
+    public static string AppVeyorAccountName { get; private set; }
+    public static string AppVeyorProjectSlug { get; private set; }
+    
     public static bool ShouldPostToGitter { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToTwitter { get; private set; }
@@ -79,8 +91,16 @@ public static class BuildParameters
     public static void SetParameters(
         ICakeContext context,
         BuildSystem buildSystem,
-        string repositoryOwner,
-        string repositoryName,
+        DirectoryPath sourceDirectoryPath,
+        string title,
+        FilePath solutionFilePath = null,
+        DirectoryPath solutionDirectoryPath = null,
+        DirectoryPath rootDirectoryPath = null,
+        string resharperSettingsFileName = null,
+        string repositoryOwner = null,
+        string repositoryName = null,
+        string appVeyorAccountName = null,
+        string appVeyorProjectSlug = null,
         bool shouldPostToGitter = true,
         bool shouldPostToSlack = true,
         bool shouldPostToTwitter = true,
@@ -90,6 +110,17 @@ public static class BuildParameters
         {
             throw new ArgumentNullException("context");
         }
+        
+        SourceDirectoryPath = sourceDirectoryPath;
+        Title = title;
+        SolutionFilePath = solutionFilePath ?? SourceDirectoryPath.CombineWithFilePath(Title + ".sln");
+        SolutionDirectoryPath = solutionDirectoryPath ?? SourceDirectoryPath.Combine(Title);
+        RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
+        ResharperSettingsFileName = resharperSettingsFileName ?? string.Format("{0}.sln.DotSettings", Title);
+        RepositoryOwner = repositoryOwner ?? string.Empty;
+        RepositoryName = repositoryName ?? Title;
+        AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
+        AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
