@@ -157,4 +157,25 @@ Task("ClearCache")
 // EXECUTION
 ///////////////////////////////////////////////////////////////////////////////
 
-RunTarget(BuildParameters.Target);
+public Builder Build
+{
+    get
+    {
+        return new Builder(target => RunTarget(target));
+    }
+}
+
+public class Builder
+{
+    private Action<string> _action;
+
+    public Builder(Action<string> action)
+    {
+        _action = action;
+    }
+
+    public void Run()
+    {
+        _action(BuildParameters.Target);       
+    }
+}
