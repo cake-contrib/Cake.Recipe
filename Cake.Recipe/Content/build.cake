@@ -128,6 +128,7 @@ Task("Build")
 });
 
 Task("Package")
+    .IsDependentOn("Export-Release-Notes")
     .IsDependentOn("Create-NuGet-Packages")
     .IsDependentOn("Create-Chocolatey-Packages")
     .IsDependentOn("Test")

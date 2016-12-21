@@ -40,6 +40,20 @@ public static class BuildParameters
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToTwitter { get; private set; }
     public static bool ShouldPostToMicrosoftTeams { get; private set; }
+    public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
+    public static bool ShouldDownloadFullReleaseNotes { get; private set;}
+
+    public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
+    public static FilePath FullReleaseNotesFilePath { get; private set; }
+
+    public static bool CanUseGitReleaseManager
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.GitHub.UserName) &&
+                !string.IsNullOrEmpty(BuildParameters.GitHub.Password);
+        }
+    }
 
     public static bool CanPostToGitter
     {
@@ -104,7 +118,11 @@ public static class BuildParameters
         bool shouldPostToGitter = true,
         bool shouldPostToSlack = true,
         bool shouldPostToTwitter = true,
-        bool shouldPostToMicrosoftTeams = false)
+        bool shouldPostToMicrosoftTeams = false,
+        bool shouldDownloadMilestoneReleaseNotes = false,
+        bool shouldDownloadFullReleaseNotes = false,
+        FilePath milestoneReleaseNotesFilePath = null,
+        FilePath fullReleaseNotesFilePath = null)
     {
         if (context == null)
         {
@@ -126,6 +144,11 @@ public static class BuildParameters
         ShouldPostToSlack = shouldPostToSlack;
         ShouldPostToTwitter = shouldPostToTwitter;
         ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
+        ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
+        ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
+
+        MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
+        FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
