@@ -22,6 +22,11 @@ Task("Create-Release-Notes")
 
 Task("Export-Release-Notes")
     .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes)
+    .WithCriteria(() => !BuildParameters.IsLocalBuild)
+    .WithCriteria(() => !BuildParameters.IsPullRequest)
+    .WithCriteria(() => BuildParameters.IsMainRepository)
+    .WithCriteria(() => BuildParameters.IsMasterBranch)
+    .WithCriteria(() => BuildParameters.IsTagged)
     .Does(() =>
 {
     if(BuildParameters.CanUseGitReleaseManager)
