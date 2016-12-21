@@ -13,7 +13,7 @@ public static class ToolSettings
         string testCoverageFilter = null,
         string testCoverageExcludeByAttribute = null,
         string testCoverageExcludeByFile = null,
-        PlatformTarget buildPlatformTarget = PlatformTarget.MSIL,
+        PlatformTarget? buildPlatformTarget = null,
         DirectoryPath outputDirectory = null
     )
     {
@@ -24,7 +24,7 @@ public static class ToolSettings
         TestCoverageFilter = testCoverageFilter ?? "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]*";
         TestCoverageExcludeByAttribute = testCoverageExcludeByAttribute ?? "*.ExcludeFromCodeCoverage*";
         TestCoverageExcludeByFile = testCoverageExcludeByFile ?? "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs";
-        BuildPlatformTarget = buildPlatformTarget;
+        BuildPlatformTarget = buildPlatformTarget ?? PlatformTarget.MSIL;
         OutputDirectory = outputDirectory;
     }
 }
