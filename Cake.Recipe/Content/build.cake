@@ -17,8 +17,6 @@ Setup(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    BuildParameters.SetBuildPaths(BuildPaths.GetPaths(Context));
-
     BuildParameters.SetBuildVersion(
         BuildVersion.CalculatingSemanticVersion(
             context: Context
@@ -114,13 +112,19 @@ Task("Build")
 {
     Information("Building {0}", BuildParameters.SolutionFilePath);
 
-    // TODO: Need to have an XBuild step here as well
-    MSBuild(BuildParameters.SolutionFilePath, settings =>
-        settings.SetPlatformTarget(PlatformTarget.MSIL)
+    var msbuildSettings = new MSBuildSettings().
+            SetPlatformTarget(ToolSettings.BuildPlatformTarget)
             .WithProperty("TreatWarningsAsErrors","true")
-            .WithProperty("OutDir", MakeAbsolute(BuildParameters.Paths.Directories.TempBuild).FullPath)
             .WithTarget("Build")
-            .SetConfiguration(BuildParameters.Configuration));
+            .SetConfiguration(BuildParameters.Configuration);
+
+    if(ToolSettings.OutputDirectory != null)
+    {
+        msbuildSettings.WithProperty("OutDir", MakeAbsolute(ToolSettings.OutputDirectory).FullPath);
+    }
+
+    // TODO: Need to have an XBuild step here as well
+    MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
 });
 
 Task("Package")

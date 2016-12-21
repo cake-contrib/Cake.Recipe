@@ -162,5 +162,7 @@ public static class BuildParameters
         }.Any(
             publishTarget => StringComparer.OrdinalIgnoreCase.Equals(publishTarget, Target)
         );
+
+        SetBuildPaths(BuildPaths.GetPaths(context));
     }
 }
