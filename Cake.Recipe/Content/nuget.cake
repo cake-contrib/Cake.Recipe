@@ -53,6 +53,7 @@ Task("Create-NuGet-Packages")
 Task("Publish-MyGet-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishMyGet)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
     if(string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey)) {
@@ -94,6 +95,7 @@ Task("Publish-MyGet-Packages")
 Task("Publish-Nuget-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishNuGet)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
     .Does(() =>
 {
     if(string.IsNullOrEmpty(BuildParameters.NuGet.ApiKey)) {

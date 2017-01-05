@@ -120,8 +120,6 @@ public static class BuildParameters
         context.Information("IsMainRepository: {0}", IsMainRepository);
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("IsMasterBranch: {0}", IsMasterBranch);
-        context.Information("NuGetPackages Folder Exists: {0}", context.DirectoryExists(Paths.Directories.NuGetPackages));
-        context.Information("ChocolateyPackages Folder Exists: {0}", context.DirectoryExists(Paths.Directories.ChocolateyPackages));
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
@@ -226,33 +224,30 @@ public static class BuildParameters
         SetBuildPaths(BuildPaths.GetPaths(context));
 
         ShouldPublishMyGet = (!IsLocalBuild &&
-                        !IsPullRequest &&
-                        IsMainRepository &&
-                        (IsTagged || !IsMasterBranch) &&
-                        (context.DirectoryExists(Paths.Directories.NuGetPackages) || context.DirectoryExists(Paths.Directories.ChocolateyPackages)) &&
-                        shouldPublishMyGet);
+                                !IsPullRequest &&
+                                IsMainRepository &&
+                                (IsTagged || !IsMasterBranch) &&
+                                shouldPublishMyGet);
 
         ShouldPublishNuGet = (!IsLocalBuild &&
-                              !IsPullRequest &&
-                              IsMainRepository &&
-                              IsMasterBranch &&
-                              IsTagged &&
-                              context.DirectoryExists(Paths.Directories.NuGetPackages) &&
-                              shouldPublishNuGet);
+                                !IsPullRequest &&
+                                IsMainRepository &&
+                                IsMasterBranch &&
+                                IsTagged &&
+                                shouldPublishNuGet);
         
         ShouldPublishChocolatey = (!IsLocalBuild &&
-                                  !IsPullRequest &&
-                                  IsMainRepository &&
-                                  IsMasterBranch &&
-                                  IsTagged &&
-                                  context.DirectoryExists(Paths.Directories.ChocolateyPackages) &&
-                                  shouldPublishChocolatey);
+                                    !IsPullRequest &&
+                                    IsMainRepository &&
+                                    IsMasterBranch &&
+                                    IsTagged &&
+                                    shouldPublishChocolatey);
 
         ShouldPublishGitHub = (!IsLocalBuild &&
-                               !IsPullRequest &&
-                               IsMainRepository &&
-                               IsMasterBranch &&
-                               IsTagged &&
-                               shouldPublishGitHub);
+                                !IsPullRequest &&
+                                IsMainRepository &&
+                                IsMasterBranch &&
+                                IsTagged &&
+                                shouldPublishGitHub);
     }
 }

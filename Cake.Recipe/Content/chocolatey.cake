@@ -24,6 +24,7 @@ Task("Create-Chocolatey-Packages")
 Task("Publish-Chocolatey-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishChocolatey)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
     if(string.IsNullOrEmpty(BuildParameters.Chocolatey.ApiKey)) {
