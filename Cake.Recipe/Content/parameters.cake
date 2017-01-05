@@ -107,6 +107,34 @@ public static class BuildParameters
         Paths  = paths;
     }
 
+    public static void PrintParamters(ICakeContext context)
+    {
+        if (context == null)
+        {
+            throw new ArgumentNullException("context");
+        }
+
+        context.Information("Printing Build Parameters...");
+        context.Information("IsLocalBuild: {0}", IsLocalBuild);
+        context.Information("IsPullRequest: {0}", IsPullRequest);
+        context.Information("IsMainRepository: {0}", IsMainRepository);
+        context.Information("IsTagged: {0}", IsTagged);
+        context.Information("IsMasterBranch: {0}", IsMasterBranch);
+        context.Information("NuGetPackages Folder Exists: {0}", context.DirectoryExists(Paths.Directories.NuGetPackages));
+        context.Information("ChocolateyPackages Folder Exists: {0}", context.DirectoryExists(Paths.Directories.ChocolateyPackages));
+        context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
+        context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
+        context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
+        context.Information("ShouldPostToMicrosoftTeams: {0}", ShouldPostToMicrosoftTeams);
+        context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
+        context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
+        context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
+        context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
+        context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
+        context.Information("RepositoryOwner: {0}", RepositoryOwner);
+        context.Information("RepositoryName: {0}", RepositoryName);
+    }
+
     public static void SetParameters(
         ICakeContext context,
         BuildSystem buildSystem,

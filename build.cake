@@ -47,7 +47,16 @@ var appVeyorProjectSlug       = "cake-recipe";
 ///////////////////////////////////////////////////////////////////////////////
 
 Environment.SetVariableNames();
-BuildParameters.SetParameters(Context, BuildSystem, repositoryOwner, repositoryName);
+BuildParameters.SetParameters(Context, 
+                            BuildSystem, 
+                            sourceDirectoryPath, 
+                            title, 
+                            repositoryOwner: repositoryOwner, 
+                            repositoryName: repositoryName,
+                            appVeyorAccountName: appVeyorAccountName,
+                            appVeyorProjectSlug: appVeyorProjectSlug);
+
+BuildParameters.PrintParamters(Context);
 ToolSettings.SetToolSettings(Context);
 
 var publishingError = false;
