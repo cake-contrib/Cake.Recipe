@@ -201,7 +201,7 @@ public static class BuildParameters
                         !IsPullRequest &&
                         IsMainRepository &&
                         (IsTagged || !IsMasterBranch) &&
-                        context.DirectoryExists(Paths.Directories.NuGetPackages) || context.DirectoryExists(Paths.Directories.ChocolateyPackages) &&
+                        (context.DirectoryExists(Paths.Directories.NuGetPackages) || context.DirectoryExists(Paths.Directories.ChocolateyPackages)) &&
                         shouldPublishMyGet);
 
         ShouldPublishNuGet = (!IsLocalBuild &&
