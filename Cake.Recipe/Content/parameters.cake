@@ -201,7 +201,7 @@ public static class BuildParameters
                         !IsPullRequest &&
                         IsMainRepository &&
                         (IsTagged || !IsMasterBranch) &&
-                        DirectoryExists(Paths.Directories.NuGetPackages) || DirectoryExists(Paths.Directories.ChocolateyPackages) &&
+                        context.DirectoryExists(Paths.Directories.NuGetPackages) || context.DirectoryExists(Paths.Directories.ChocolateyPackages) &&
                         shouldPublishMyGet);
 
         ShouldPublishNuGet = (!IsLocalBuild &&
@@ -209,7 +209,7 @@ public static class BuildParameters
                               IsMainRepository &&
                               IsMasterBranch &&
                               IsTagged &&
-                              DirectoryExists(Paths.Directories.NuGetPackages) &&
+                              context.DirectoryExists(Paths.Directories.NuGetPackages) &&
                               shouldPublishNuGet);
         
         ShouldPublishChocolatey = (!IsLocalBuild &&
@@ -217,7 +217,7 @@ public static class BuildParameters
                                   IsMainRepository &&
                                   IsMasterBranch &&
                                   IsTagged &&
-                                  DirectoryExists(Paths.Directories.ChocolateyPackages) &&
+                                  context.DirectoryExists(Paths.Directories.ChocolateyPackages) &&
                                   shouldPublishChocolatey);
 
         ShouldPublishGitHub = (!IsLocalBuild &&
