@@ -52,11 +52,7 @@ Task("Create-NuGet-Packages")
 
 Task("Publish-MyGet-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(() => !BuildParameters.IsLocalBuild)
-    .WithCriteria(() => !BuildParameters.IsPullRequest)
-    .WithCriteria(() => BuildParameters.IsMainRepository)
-    .WithCriteria(() => BuildParameters.IsTagged || !BuildParameters.IsMasterBranch)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => BuildParameters.ShouldPublishMyGet)
     .Does(() =>
 {
     if(string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey)) {
@@ -97,12 +93,7 @@ Task("Publish-MyGet-Packages")
 
 Task("Publish-Nuget-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(() => !BuildParameters.IsLocalBuild)
-    .WithCriteria(() => !BuildParameters.IsPullRequest)
-    .WithCriteria(() => BuildParameters.IsMainRepository)
-    .WithCriteria(() => BuildParameters.IsMasterBranch)
-    .WithCriteria(() => BuildParameters.IsTagged)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
+    .WithCriteria(() => BuildParameters.ShouldPublishNuGet)
     .Does(() =>
 {
     if(string.IsNullOrEmpty(BuildParameters.NuGet.ApiKey)) {

@@ -23,12 +23,7 @@ Task("Create-Chocolatey-Packages")
 
 Task("Publish-Chocolatey-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(() => !BuildParameters.IsLocalBuild)
-    .WithCriteria(() => !BuildParameters.IsPullRequest)
-    .WithCriteria(() => BuildParameters.IsMainRepository)
-    .WithCriteria(() => BuildParameters.IsMasterBranch)
-    .WithCriteria(() => BuildParameters.IsTagged)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => BuildParameters.ShouldPublishChocolatey)
     .Does(() =>
 {
     if(string.IsNullOrEmpty(BuildParameters.Chocolatey.ApiKey)) {

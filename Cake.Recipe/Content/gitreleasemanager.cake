@@ -51,11 +51,7 @@ Task("Export-Release-Notes")
 
 Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
-    .WithCriteria(() => !BuildParameters.IsLocalBuild)
-    .WithCriteria(() => !BuildParameters.IsPullRequest)
-    .WithCriteria(() => BuildParameters.IsMainRepository)
-    .WithCriteria(() => BuildParameters.IsMasterBranch)
-    .WithCriteria(() => BuildParameters.IsTagged)
+    .WithCriteria(() => BuildParameters.ShouldPublishGitHub)
     .Does(() =>
 {
     if(BuildParameters.CanUseGitReleaseManager)

@@ -46,6 +46,11 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
+    public static bool ShouldPublishMyGet { get; private set;}
+    public static bool ShouldPublishChocolatey { get; private set;}
+    public static bool ShouldPublishNuGet { get; private set;}
+    public static bool ShouldPublishGitHub { get; private set;}
+
     public static bool CanUseGitReleaseManager
     {
         get
@@ -122,7 +127,11 @@ public static class BuildParameters
         bool shouldDownloadMilestoneReleaseNotes = false,
         bool shouldDownloadFullReleaseNotes = false,
         FilePath milestoneReleaseNotesFilePath = null,
-        FilePath fullReleaseNotesFilePath = null)
+        FilePath fullReleaseNotesFilePath = null,
+        bool shouldPublishMyGet = true,
+        bool shouldPublishChocolatey = true,
+        bool shouldPublishNuGet = true,
+        bool shouldPublishGitHub = true)
     {
         if (context == null)
         {
@@ -187,5 +196,35 @@ public static class BuildParameters
         );
 
         SetBuildPaths(BuildPaths.GetPaths(context));
+
+        ShouldPublishMyGet = (!IsLocalBuild &&
+                        !IsPullRequest &&
+                        IsMainRepository &&
+                        (IsTagged || !IsMasterBranch) &&
+                        DirectoryExists(Paths.Directories.NuGetPackages) || DirectoryExists(Paths.Directories.ChocolateyPackages) &&
+                        shouldPublishMyGet);
+
+        ShouldPublishNuGet = (!IsLocalBuild &&
+                              !IsPullRequest &&
+                              IsMainRepository &&
+                              IsMasterBranch &&
+                              IsTagged &&
+                              DirectoryExists(Paths.Directories.NuGetPackages) &&
+                              shouldPublishNuGet);
+        
+        ShouldPublishChocolatey = (!IsLocalBuild &&
+                                  !IsPullRequest &&
+                                  IsMainRepository &&
+                                  IsMasterBranch &&
+                                  IsTagged &&
+                                  DirectoryExists(Paths.Directories.ChocolateyPackages) &&
+                                  shouldPublishChocolatey);
+
+        ShouldPublishGitHub = (!IsLocalBuild &&
+                               !IsPullRequest &&
+                               IsMainRepository &&
+                               IsMasterBranch &&
+                               IsTagged &&
+                               shouldPublishGitHub);
     }
 }
