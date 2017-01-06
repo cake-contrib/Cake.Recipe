@@ -22,10 +22,17 @@ Task("DupFinder")
 })
 .ReportError(exception =>
 {
+    var outputHtmlFile = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.html");
+
     Information("Duplicates were found in your codebase, creating HTML report...");
     ReSharperReports(
         BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
-        BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.html"));
+        outputHtmlFile);
+
+    if(BuildParameters.IsRunningOnAppVeyor && FileExists(outputHtmlFile))
+    {
+        AppVeyor.UploadArtifact(outputHtmlFile);
+    }
 });
 
 Task("InspectCode")
@@ -42,10 +49,17 @@ Task("InspectCode")
 })
 .ReportError(exception =>
 {
+    var outputHtmlFile = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.html");
+
     Information("Violations were found in your codebase, creating HTML report...");
     ReSharperReports(
         BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
-        BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.html"));
+        outputHtmlFile);
+
+    if(BuildParameters.IsRunningOnAppVeyor && FileExists(outputHtmlFile))
+    {
+        AppVeyor.UploadArtifact(outputHtmlFile);
+    }
 });
 
 Task("Analyze")
