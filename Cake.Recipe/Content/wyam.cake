@@ -12,6 +12,7 @@ Task("Clean-Documentation")
 
 Task("Build-Documentation")
     .IsDependentOn("Clean-Documentation")
+    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
     .Does(() =>
 {
     Wyam(new WyamSettings
