@@ -20,7 +20,7 @@ private static string twitterAccessTokenVariable = "TWITTER_ACCESS_TOKEN";
 private static string twitterAccessTokenSecretVariable = "TWITTER_ACCESS_TOKEN_SECRET";
 private static string appVeyorApiTokenVariable = "APPVEYOR_API_TOKEN";
 private static string coverallsRepoTokenVariable = "COVERALLS_REPO_TOKEN";
-private static string microsoftTeamsWebHookUrl ="MICROSOFTTEAMS_WEBHOOKURL";
+private static string microsoftTeamsWebHookUrlVariable ="MICROSOFTTEAMS_WEBHOOKURL";
 
 ///////////////////////////////////////////////////////////////////////////////
 // BUILD ACTIONS
@@ -69,6 +69,9 @@ var publishingError = false;
 #addin nuget:?package=Cake.Gitter&version=0.2.0
 #addin nuget:?package=Cake.Slack&version=0.4.0
 #addin nuget:?package=Cake.Twitter&version=0.1.0
+#addin nuget:?package=Cake.Wyam&version=0.15.8-beta&prerelease
+#addin nuget:?package=Cake.Git&version=0.12.0
+#addin nuget:?package=Cake.Kudu&version=0.4.0
 
 ///////////////////////////////////////////////////////////////////////////////
 // TOOLS
@@ -76,6 +79,8 @@ var publishingError = false;
 
 #tool nuget:?package=gitreleasemanager&version=0.5.0
 #tool nuget:?package=GitVersion.CommandLine&version=3.6.2
+#tool nuget:?package=KuduSync.NET&version=1.3.1
+#tool nuget:?package=Wyam&version=0.15.8-beta&prerelease
 
 ///////////////////////////////////////////////////////////////////////////////
 // LOAD
@@ -94,6 +99,7 @@ var publishingError = false;
 #load .\Cake.Recipe\Content\slack.cake
 #load .\Cake.Recipe\Content\toolsettings.cake
 #load .\Cake.Recipe\Content\twitter.cake
+#load .\Cake.Recipe\Content\wyam.cake
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -209,6 +215,7 @@ Task("AppVeyor")
     .IsDependentOn("Publish-MyGet-Packages")
     .IsDependentOn("Publish-Nuget-Packages")
     .IsDependentOn("Publish-GitHub-Release")
+    .IsDependentOn("Publish-Documentation")
     .Finally(() =>
 {
     if(publishingError)
@@ -222,6 +229,9 @@ Task("ReleaseNotes")
 
 Task("ClearCache")
   .IsDependentOn("Clear-AppVeyor-Cache");
+
+Task("Preview")
+  .IsDependentOn("Preview-Documentation");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTION

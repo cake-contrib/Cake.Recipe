@@ -18,7 +18,10 @@ public static class Environment
     public static string TwitterAccessTokenSecretVariable { get; private set; }
     public static string AppVeyorApiTokenVariable { get; private set; }
     public static string CoverallsRepoTokenVariable { get; private set; }
-    public static string MicrosoftTeamsWebHookUrl { get; private set; }
+    public static string MicrosoftTeamsWebHookUrlVariable { get; private set; }
+    public static string WyamAccessTokenVariable { get; private set; }
+    public static string WyamDeployRemoteVariable { get; private set; }
+    public static string WyamDeployBranchVariable { get; private set; }
 
     public static void SetVariableNames(
         string githubUserNameVariable = null,
@@ -39,7 +42,10 @@ public static class Environment
         string twitterAccessTokenSecretVariable = null,
         string appVeyorApiTokenVariable = null,
         string coverallsRepoTokenVariable = null,
-        string microsoftTeamsWebHookUrl = null)
+        string microsoftTeamsWebHookUrlVariable = null,
+        string wyamAccessTokenVariable = null,
+        string wyamDeployRemoteVariable = null,
+        string wyamDeployBranchVariable = null)
     {
         GithubUserNameVariable = githubUserNameVariable ?? "GITHUB_USERNAME";
         GithubPasswordVariable = githubPasswordVariable ?? "GITHUB_PASSWORD";
@@ -59,6 +65,9 @@ public static class Environment
         TwitterAccessTokenSecretVariable = twitterAccessTokenSecretVariable ?? "TWITTER_ACCESS_TOKEN_SECRET";
         AppVeyorApiTokenVariable = appVeyorApiTokenVariable ?? "APPVEYOR_API_TOKEN";
         CoverallsRepoTokenVariable = coverallsRepoTokenVariable ?? "COVERALLS_REPO_TOKEN";
-        MicrosoftTeamsWebHookUrl = microsoftTeamsWebHookUrl ?? "MICROSOFTTEAMS_WEBHOOKURL";
+        MicrosoftTeamsWebHookUrlVariable = microsoftTeamsWebHookUrlVariable ?? "MICROSOFTTEAMS_WEBHOOKURL";
+        WyamAccessTokenVariable = wyamAccessTokenVariable ?? "WYAM_ACCESS_TOKEN";
+        WyamDeployRemoteVariable = wyamDeployRemoteVariable ?? "WYAM_DEPLOY_REMOTE";
+        WyamDeployBranchVariable = wyamDeployBranchVariable ?? "WYAM_DEPLOY_BRANCH";
     }
 }
