@@ -144,6 +144,7 @@ Task("AppVeyor")
     .IsDependentOn("Publish-Chocolatey-Packages")
     .IsDependentOn("Publish-Nuget-Packages")
     .IsDependentOn("Publish-GitHub-Release")
+    .IsDependentOn("Publish-Documentation")
     .Finally(() =>
 {
     if(publishingError)
@@ -158,6 +159,9 @@ Task("ReleaseNotes")
 Task("ClearCache")
   .IsDependentOn("Clear-AppVeyor-Cache");
 
+Task("Preview")
+  .IsDependentOn("Preview-Documentation");
+  
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTION
 ///////////////////////////////////////////////////////////////////////////////

@@ -7,3 +7,5 @@
 #tool nuget:?package=GitVersion.CommandLine&version=3.6.2
 #tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2016.3.20161223.160402
 #tool nuget:?package=ReSharperReports&version=0.2.0
+#tool nuget:?package=KuduSync.NET&version=1.3.1
+#tool nuget:?package=Wyam&version=0.15.8-beta&prerelease

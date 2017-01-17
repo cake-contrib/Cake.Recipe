@@ -22,6 +22,7 @@ public static class BuildParameters
     public static ChocolateyCredentials Chocolatey { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
+    public static WyamCredentials Wyam { get; private set; }
     public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
     
@@ -46,10 +47,16 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
-    public static bool ShouldPublishMyGet { get; private set;}
-    public static bool ShouldPublishChocolatey { get; private set;}
-    public static bool ShouldPublishNuGet { get; private set;}
-    public static bool ShouldPublishGitHub { get; private set;}
+    public static bool ShouldPublishMyGet { get; private set; }
+    public static bool ShouldPublishChocolatey { get; private set; }
+    public static bool ShouldPublishNuGet { get; private set; }
+    public static bool ShouldPublishGitHub { get; private set; }
+    public static bool ShouldGenerateDocumentation { get; private set; }
+
+    public static DirectoryPath WyamOutputDirectoryPath { get; private set; }
+    public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
+    public static string WyamRecipe { get; private set; }
+    public static string WyamTheme { get; private set; }
 
     public static bool CanUseGitReleaseManager
     {
@@ -97,6 +104,16 @@ public static class BuildParameters
         }
     }
 
+    public static bool CanUseWyam
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Wyam.AccessToken) &&
+                !string.IsNullOrEmpty(BuildParameters.Wyam.DeployRemote) &&
+                !string.IsNullOrEmpty(BuildParameters.Wyam.DeployBranch);
+        }
+    }
+
     public static void SetBuildVersion(BuildVersion version)
     {
         Version  = version;
@@ -126,6 +143,7 @@ public static class BuildParameters
         context.Information("ShouldPostToMicrosoftTeams: {0}", ShouldPostToMicrosoftTeams);
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
+        context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
         context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
@@ -157,7 +175,12 @@ public static class BuildParameters
         bool shouldPublishMyGet = true,
         bool shouldPublishChocolatey = true,
         bool shouldPublishNuGet = true,
-        bool shouldPublishGitHub = true)
+        bool shouldPublishGitHub = true,
+        bool shouldGenerateDocumentation = true,
+        DirectoryPath wyamOutputDirectoryPath = null,
+        DirectoryPath wyamPublishDirectoryPath = null,
+        string wyamRecipe = null,
+        string wyamTheme = null)
     {
         if (context == null)
         {
@@ -174,6 +197,11 @@ public static class BuildParameters
         RepositoryName = repositoryName ?? Title;
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
+
+        WyamOutputDirectoryPath = wyamOutputDirectoryPath ?? context.MakeAbsolute(context.Directory("output"));
+        WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("publish"));
+        WyamRecipe = wyamRecipe ?? "Docs";
+        WyamTheme = wyamTheme ?? "Samson";
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
@@ -208,6 +236,7 @@ public static class BuildParameters
         Chocolatey = GetChocolateyCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
+        Wyam = GetWyamCredentials(context);
         IsPublishBuild = new [] {
             "Create-Release-Notes"
         }.Any(
@@ -249,5 +278,12 @@ public static class BuildParameters
                                 IsMasterBranch &&
                                 IsTagged &&
                                 shouldPublishGitHub);
+
+        ShouldGenerateDocumentation = (!IsLocalBuild &&
+                                !IsPullRequest &&
+                                IsMainRepository &&
+                                IsMasterBranch &&
+                                IsTagged &&
+                                shouldGenerateDocumentation);
     }
 }

@@ -116,6 +116,20 @@ public class CoverallsCredentials
     }
 }
 
+public class WyamCredentials
+{
+    public string AccessToken { get; private set; }
+    public string DeployRemote { get; private set; }
+    public string DeployBranch { get; private set; }
+
+    public WyamCredentials(string accessToken, string deployRemote, string deployBranch)
+    {
+        AccessToken = accessToken;
+        DeployRemote = deployRemote;
+        DeployBranch = deployBranch;
+    }
+}
+
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
     return new GitHubCredentials(
@@ -126,7 +140,7 @@ public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
 {
     return new MicrosoftTeamsCredentials(
-        context.EnvironmentVariable(Environment.MicrosoftTeamsWebHookUrl));
+        context.EnvironmentVariable(Environment.MicrosoftTeamsWebHookUrlVariable));
 }
 
 public static GitterCredentials GetGitterCredentials(ICakeContext context)
@@ -183,4 +197,12 @@ public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)
 {
     return new CoverallsCredentials(
         context.EnvironmentVariable(Environment.CoverallsRepoTokenVariable));
+}
+
+public static WyamCredentials GetWyamCredentials(ICakeContext context)
+{
+    return new WyamCredentials(
+        context.EnvironmentVariable(Environment.WyamAccessTokenVariable),
+        context.EnvironmentVariable(Environment.WyamDeployRemoteVariable),
+        context.EnvironmentVariable(Environment.WyamDeployBranchVariable));
 }
