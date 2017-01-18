@@ -205,7 +205,8 @@ Task("Package")
     .IsDependentOn("Show-Info")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
-    .IsDependentOn("Create-NuGet-Package");
+    .IsDependentOn("Create-NuGet-Package")
+    .IsDependentOn("Publish-Documentation");
 
 Task("Default")
     .IsDependentOn("Package");
