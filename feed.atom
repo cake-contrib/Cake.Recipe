@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-	<link rel="self" href="/" />
-	<id>/</id>
+	<link rel="self" href="http://cake-contrib.github.io/Cake.Recipe" />
+	<id>http://cake-contrib.github.io/Cake.Recipe</id>
 	<title />
 	<rights>2017</rights>
-	<updated>2017-01-18T21:47:30Z</updated>
+	<updated>2017-01-18T22:25:14Z</updated>
 	<entry>
 		<author>
 			<name>me</name>
 		</author>
-		<link href="/blog/new-release" />
-		<id>/blog/new-release</id>
+		<link href="http://cake-contrib.github.io/Cake.Recipe/blog/new-release" />
+		<id>http://cake-contrib.github.io/Cake.Recipe/blog/new-release</id>
 		<title>New Release</title>
 		<updated>2016-01-01T00:00:00Z</updated>
 		<summary>&lt;p&gt;There is a new release out, go get it now.&lt;/p&gt;</summary>

@@ -1,3 +1,0 @@
-System.Globalization.CultureInfo.DefaultThreadCurrentCulture = System.Globalization.CultureInfo.CreateSpecificCulture("en-GB");
-Settings.Host = "cake-contrib.github.io/Cake.Recipe";
-GlobalMetaData["BaseEditUrl"] = https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input

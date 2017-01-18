@@ -2,17 +2,17 @@
 <rss version="2.0">
 	<channel>
 		<title />
-		<link>/</link>
+		<link>http://cake-contrib.github.io/Cake.Recipe</link>
 		<description />
 		<copyright>2017</copyright>
-		<pubDate>Wed, 18 Jan 2017 21:47:30 GMT</pubDate>
-		<lastBuildDate>Wed, 18 Jan 2017 21:47:30 GMT</lastBuildDate>
+		<pubDate>Wed, 18 Jan 2017 22:25:14 GMT</pubDate>
+		<lastBuildDate>Wed, 18 Jan 2017 22:25:14 GMT</lastBuildDate>
 		<item>
 			<title>New Release</title>
-			<link>/blog/new-release</link>
+			<link>http://cake-contrib.github.io/Cake.Recipe/blog/new-release</link>
 			<description>&lt;p&gt;There is a new release out, go get it now.&lt;/p&gt;</description>
 			<author>me</author>
-			<guid isPermaLink="false">/blog/new-release</guid>
+			<guid>http://cake-contrib.github.io/Cake.Recipe/blog/new-release</guid>
 			<pubDate>Fri, 01 Jan 2016 00:00:00 GMT</pubDate>
 		</item>
 	</channel>
