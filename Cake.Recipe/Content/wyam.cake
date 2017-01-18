@@ -22,12 +22,15 @@ Task("Publish-Documentation")
 {
     // Check to see if any documentation has changed
     var sourceCommit = GitLogTip("./");
+    Information("Source Commit Sha: {0}", sourceCommit.Sha);
     var filesChanged = GitDiff("./", sourceCommit.Sha);
+    Information("Number of changed files: {0}", filesChanged.Count);
     var docFileChanged = false;
 
     foreach(var file in filesChanged)
     {
-        if(file.OldPath.Contains("docs/input") || file.Path.Contains("docs/input"))
+        Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
+        if(file.OldPath.Contains(@"docs\input") || file.Path.Contains(@"docs\input"))
         {
            docFileChanged = true;
            break; 
@@ -36,6 +39,8 @@ Task("Publish-Documentation")
 
     if(docFileChanged)
     {
+        Information("Detected that documentation files have changed, so running Wyam...");
+        
         Wyam(new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
