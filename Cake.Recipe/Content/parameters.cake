@@ -53,6 +53,7 @@ public static class BuildParameters
     public static bool ShouldPublishGitHub { get; private set; }
     public static bool ShouldGenerateDocumentation { get; private set; }
 
+    public static ICollection<DirectoryPath> WyamInputDirectoryPaths { get; private set; }
     public static DirectoryPath WyamOutputDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
     public static string WyamRecipe { get; private set; }
@@ -177,6 +178,7 @@ public static class BuildParameters
         bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
+        ICollection<DirectoryPath> wyamInputDirectoryPaths = null,
         DirectoryPath wyamOutputDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         string wyamRecipe = null,
@@ -198,6 +200,7 @@ public static class BuildParameters
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
 
+        WyamInputDirectoryPaths = wyamInputDirectoryPaths ?? new [] { context.MakeAbsolute(context.Directory("docs")) };
         WyamOutputDirectoryPath = wyamOutputDirectoryPath ?? context.MakeAbsolute(context.Directory("output"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("publish"));
         WyamRecipe = wyamRecipe ?? "Docs";

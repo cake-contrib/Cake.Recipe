@@ -19,7 +19,8 @@ Task("Build-Documentation")
     {
         Recipe = BuildParameters.WyamRecipe,
         Theme = BuildParameters.WyamTheme,
-        OutputPath = BuildParameters.WyamOutputDirectoryPath
+        OutputPath = BuildParameters.WyamOutputDirectoryPath,
+        InputPaths = BuildParameters.WyamInputDirectoryPaths
     });        
 });
 
@@ -30,6 +31,7 @@ Task("Preview-Documentation")
     {
         Recipe = BuildParameters.WyamRecipe,
         Theme = BuildParameters.WyamTheme,
+        InputPaths = BuildParameters.WyamInputDirectoryPaths,
         Preview = true,
         Watch = true
     });        
