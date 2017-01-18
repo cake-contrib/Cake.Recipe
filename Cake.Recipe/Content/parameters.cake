@@ -9,6 +9,7 @@ public static class BuildParameters
     public static bool IsPullRequest { get; private set; }
     public static bool IsMainRepository { get; private set; }
     public static bool IsMasterBranch { get; private set; }
+    public static bool IsDevelopBranch { get; private set; }
     public static bool IsTagged { get; private set; }
     public static bool IsPublishBuild { get; private set; }
     public static bool IsReleaseBuild { get; private set; }
@@ -137,6 +138,7 @@ public static class BuildParameters
         context.Information("IsMainRepository: {0}", IsMainRepository);
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("IsMasterBranch: {0}", IsMasterBranch);
+        context.Information("IsDevelopBranch: {0}", IsDevelopBranch);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
@@ -222,6 +224,7 @@ public static class BuildParameters
         IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), buildSystem.AppVeyor.Environment.Repository.Name);
         IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
         IsTagged = (
             buildSystem.AppVeyor.Environment.Repository.Tag.IsTag &&
             !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name)
@@ -282,8 +285,7 @@ public static class BuildParameters
         ShouldGenerateDocumentation = (!IsLocalBuild &&
                                 !IsPullRequest &&
                                 IsMainRepository &&
-                                IsMasterBranch &&
-                                IsTagged &&
+                                (IsMasterBranch || IsDevelopBranch) &&
                                 shouldGenerateDocumentation);
     }
 }

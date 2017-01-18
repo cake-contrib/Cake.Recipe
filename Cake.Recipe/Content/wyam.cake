@@ -1,4 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
+// VARIABLES 
+///////////////////////////////////////////////////////////////////////////////
+
+var shouldPublishDocumentation = false;
+
+///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -9,18 +15,46 @@ Task("Clean-Documentation")
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
 });
 
-Task("Build-Documentation")
+Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
     .Does(() =>
 {
-    Wyam(new WyamSettings
+    // Check to see if any documentation has changed
+    var sourceCommit = GitLogTip("./");
+    var filesChanged = GitDiff("./", sourceCommit.Sha);
+    var docFileChanged = false;
+
+    foreach(var file in filesChanged)
     {
-        Recipe = BuildParameters.WyamRecipe,
-        Theme = BuildParameters.WyamTheme,
-        OutputPath = MakeAbsolute(BuildParameters.Paths.Directories.PublishedDocumentation),
-        RootPath = BuildParameters.WyamRootDirectoryPath
-    });        
+        if(file.OldPath.Contains("docs/input") || file.Path.Contains("docs/input"))
+        {
+           docFileChanged = true;
+           break; 
+        }
+    }
+
+    if(docFileChanged)
+    {
+        Wyam(new WyamSettings
+        {
+            Recipe = BuildParameters.WyamRecipe,
+            Theme = BuildParameters.WyamTheme,
+            OutputPath = MakeAbsolute(BuildParameters.Paths.Directories.PublishedDocumentation),
+            RootPath = BuildParameters.WyamRootDirectoryPath
+        });
+
+        PublishDocumentation();
+    }
+    else
+    {
+        Information("No documentation has changed, so no need to generate documentation");
+    }
+})
+.OnError(exception =>
+{
+    Information("Publish-Documentation Task failed, but continuing with next Task...");
+    publishingError = true;
 });
 
 Task("Preview-Documentation")
@@ -37,37 +71,37 @@ Task("Preview-Documentation")
     });        
 });
 
-Task("Publish-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
-    .IsDependentOn("Build-Documentation")
-    .Does(() =>
+public void PublishDocumentation()
 {
-    var sourceCommit = GitLogTip("./");
-    var publishFolder = BuildParameters.WyamPublishDirectoryPath.Combine(DateTime.Now.ToString("yyyyMMdd_HHmmss"));
-    Information("Getting publish branch...");
-    GitClone(BuildParameters.Wyam.DeployRemote, publishFolder, new GitCloneSettings{ BranchName = BuildParameters.Wyam.DeployBranch });
+    if(BuildParameters.CanUseWyam)
+    {
+        var sourceCommit = GitLogTip("./");
 
-    Information("Sync output files...");
-    Kudu.Sync(BuildParameters.Paths.Directories.PublishedDocumentation, publishFolder, new KuduSyncSettings { 
-        ArgumentCustomization = args=>args.Append("--ignore").AppendQuoted(".git;CNAME")
-    });
+        var publishFolder = BuildParameters.WyamPublishDirectoryPath.Combine(DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+        Information("Getting publish branch...");
+        GitClone(BuildParameters.Wyam.DeployRemote, publishFolder, new GitCloneSettings{ BranchName = BuildParameters.Wyam.DeployBranch });
 
-    Information("Stage all changes...");
-    GitAddAll(publishFolder);
+        Information("Sync output files...");
+        Kudu.Sync(BuildParameters.Paths.Directories.PublishedDocumentation, publishFolder, new KuduSyncSettings { 
+            ArgumentCustomization = args=>args.Append("--ignore").AppendQuoted(".git;CNAME")
+        });
 
-    Information("Commit all changes...");
-    GitCommit(
-        publishFolder,
-        sourceCommit.Committer.Name,
-        sourceCommit.Committer.Email,
-        string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
-        );
+        Information("Stage all changes...");
+        GitAddAll(publishFolder);
 
-    Information("Pushing all changes...");
-    GitPush(publishFolder, BuildParameters.Wyam.AccessToken, "x-oauth-basic", BuildParameters.Wyam.DeployBranch);
-})
-.OnError(exception =>
-{
-    Information("Publish-Documentation Task failed, but continuing with next Task...");
-    publishingError = true;
-});
+        Information("Commit all changes...");
+        GitCommit(
+            publishFolder,
+            sourceCommit.Committer.Name,
+            sourceCommit.Committer.Email,
+            string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
+            );
+
+        Information("Pushing all changes...");
+        GitPush(publishFolder, BuildParameters.Wyam.AccessToken, "x-oauth-basic", BuildParameters.Wyam.DeployBranch);
+    }
+    else
+    {
+        Warning("Unable to publish documentation, as not all Wyam Configuration is present");
+    }
+}
