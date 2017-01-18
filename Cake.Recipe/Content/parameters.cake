@@ -198,7 +198,7 @@ public static class BuildParameters
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
 
-        WyamInputDirectoryPaths = wyamInputDirectoryPaths ?? new [] { context.MakeAbsolute(context.Directory("docs")) };
+        WyamInputDirectoryPaths = wyamInputDirectoryPaths ?? new [] { context.MakeAbsolute(context.Directory("docs/input")) };
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("publish"));
         WyamRecipe = wyamRecipe ?? "Docs";
         WyamTheme = wyamTheme ?? "Samson";

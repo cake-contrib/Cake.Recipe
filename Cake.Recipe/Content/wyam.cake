@@ -30,6 +30,7 @@ Task("Preview-Documentation")
     {
         Recipe = BuildParameters.WyamRecipe,
         Theme = BuildParameters.WyamTheme,
+        OutputPath = BuildParameters.Paths.Directories.PublishedDocumentation,
         InputPaths = BuildParameters.WyamInputDirectoryPaths,
         Preview = true,
         Watch = true
