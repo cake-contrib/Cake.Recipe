@@ -6,7 +6,6 @@ Task("Clean-Documentation")
     .WithCriteria(BuildParameters.IsRunningOnAppVeyor)
     .Does(() =>
 {
-    EnsureDirectoryExists(BuildParameters.WyamOutputDirectoryPath);
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
 });
 
@@ -19,7 +18,7 @@ Task("Build-Documentation")
     {
         Recipe = BuildParameters.WyamRecipe,
         Theme = BuildParameters.WyamTheme,
-        OutputPath = BuildParameters.WyamOutputDirectoryPath,
+        OutputPath = BuildParameters.Paths.Directories.PublishedDocumentation,
         InputPaths = BuildParameters.WyamInputDirectoryPaths
     });        
 });
@@ -48,7 +47,7 @@ Task("Publish-Documentation")
     GitClone(BuildParameters.Wyam.DeployRemote, publishFolder, new GitCloneSettings{ BranchName = BuildParameters.Wyam.DeployBranch });
 
     Information("Sync output files...");
-    Kudu.Sync(BuildParameters.WyamOutputDirectoryPath, publishFolder, new KuduSyncSettings { 
+    Kudu.Sync(BuildParameters.Paths.Directories.PublishedDocumentation, publishFolder, new KuduSyncSettings { 
         ArgumentCustomization = args=>args.Append("--ignore").AppendQuoted(".git;CNAME")
     });
 

@@ -20,6 +20,7 @@ public class BuildPaths
         var publishedWebsitesDirectory     = tempBuildDirectoryPath + "/_PublishedWebsites";
         var publishedApplicationsDirectory = tempBuildDirectoryPath + "/_PublishedApplications";
         var publishedLibrariesDirectory    = tempBuildDirectoryPath + "/_PublishedLibraries";
+        var publishedDocumentationDirectory= buildDirectoryPath + "/Documentation";
 
         var nugetNuspecDirectory = "./nuspec/nuget";
         var chocolateyNuspecDirectory = "./nuspec/chocolatey";
@@ -56,6 +57,7 @@ public class BuildPaths
             publishedWebsitesDirectory,
             publishedApplicationsDirectory,
             publishedLibrariesDirectory,
+            publishedDocumentationDirectory,
             nugetNuspecDirectory,
             chocolateyNuspecDirectory,
             testResultsDirectory,
@@ -130,6 +132,7 @@ public class BuildDirectories
     public DirectoryPath PublishedWebsites { get; private set; }
     public DirectoryPath PublishedApplications { get; private set; }
     public DirectoryPath PublishedLibraries { get; private set; }
+    public DirectoryPath PublishedDocumentation { get; private set; }
     public DirectoryPath NugetNuspecDirectory { get; private set; }
     public DirectoryPath ChocolateyNuspecDirectory { get; private set; }
     public DirectoryPath TestResults { get; private set; }
@@ -154,6 +157,7 @@ public class BuildDirectories
         DirectoryPath publishedWebsites,
         DirectoryPath publishedApplications,
         DirectoryPath publishedLibraries,
+        DirectoryPath publishedDocumentation,
         DirectoryPath nugetNuspecDirectory,
         DirectoryPath chocolateyNuspecDirectory,
         DirectoryPath testResults,
@@ -177,6 +181,7 @@ public class BuildDirectories
         PublishedWebsites = publishedWebsites;
         PublishedApplications = publishedApplications;
         PublishedLibraries = publishedLibraries;
+        PublishedDocumentation = publishedDocumentation;
         NugetNuspecDirectory = nugetNuspecDirectory;
         ChocolateyNuspecDirectory = chocolateyNuspecDirectory;
         TestResults = testResults;
