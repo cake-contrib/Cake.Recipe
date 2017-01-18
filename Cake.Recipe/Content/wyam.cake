@@ -30,7 +30,7 @@ Task("Publish-Documentation")
     foreach(var file in filesChanged)
     {
         Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-        if(file.OldPath.Contains(@"docs") || file.Path.Contains(@"docs"))
+        if(file.OldPath.Contains(@"docs\") || file.Path.Contains(@"docs\"))
         {
            docFileChanged = true;
            break; 
