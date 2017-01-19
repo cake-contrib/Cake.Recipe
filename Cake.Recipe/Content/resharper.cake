@@ -33,6 +33,11 @@ Task("DupFinder")
     {
         AppVeyor.UploadArtifact(outputHtmlFile);
     }
+
+    if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
+    {
+        StartProcess("explorer.exe", outputHtmlFile);
+    }
 });
 
 Task("InspectCode")
@@ -59,6 +64,11 @@ Task("InspectCode")
     if(BuildParameters.IsRunningOnAppVeyor && FileExists(outputHtmlFile))
     {
         AppVeyor.UploadArtifact(outputHtmlFile);
+    }
+    
+    if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
+    {
+        StartProcess("explorer.exe", outputHtmlFile);
     }
 });
 
