@@ -36,7 +36,7 @@ Task("DupFinder")
 
     if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
     {
-        StartProcess("explorer.exe", outputHtmlFile);
+        StartProcess("explorer.exe", outputHtmlFile.FullPath);
     }
 });
 
@@ -68,7 +68,7 @@ Task("InspectCode")
     
     if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
     {
-        StartProcess("explorer.exe", outputHtmlFile);
+        StartProcess("explorer.exe", outputHtmlFile.FullPath);
     }
 });
 
