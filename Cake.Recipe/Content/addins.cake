@@ -12,3 +12,4 @@
 #addin nuget:?package=Cake.Wyam&version=0.15.8-beta&prerelease
 #addin nuget:?package=Cake.Git&version=0.12.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
+#addin nuget:?package=Cake.Incubator&version=1.0.38

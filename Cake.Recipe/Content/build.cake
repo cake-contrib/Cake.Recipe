@@ -118,14 +118,88 @@ Task("Build")
             .WithTarget("Build")
             .SetConfiguration(BuildParameters.Configuration);
 
-    if(ToolSettings.OutputDirectory != null)
-    {
-        msbuildSettings.WithProperty("OutDir", MakeAbsolute(ToolSettings.OutputDirectory).FullPath);
-    }
-
     // TODO: Need to have an XBuild step here as well
     MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
+
+    CopyBuildOutput();
 });
+
+public void CopyBuildOutput()
+{
+    foreach(var project in ParseSolution(BuildParameters.SolutionFilePath).Projects)
+    {
+        // There is quite a bit of duplication in this function, that really needs to be tidied Upload
+
+        // If the project is a solution folder, move along, as there is nothing to be done here
+        if(project.IsSolutionFolder())
+        {
+            continue;
+        }
+
+        var parsedProject = ParseProject(project.Path, BuildParameters.Configuration);
+
+        // If the project is an exe, then simply copy all of the contents to the correct output folder
+        if(parsedProject.OutputType.ToLower() == "exe") 
+        {
+            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
+            EnsureDirectoryExists(outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder);
+            continue;
+        }
+
+        var isWebProject = false;
+
+        // Next up, we need to check if this is a web project.  Easiest way to check this is to see if there is a web.config file
+        // If there is, simply copy the output files to the correct folder
+        foreach(var file in parsedProject.Files)
+        {
+            Verbose("FilePath: {0}", file.FilePath.Path);
+            if(file.FilePath.Path.ToLower().Contains("web.config"))
+            {
+                isWebProject = true;
+                break;
+            }
+        }
+
+        if(parsedProject.OutputType.ToLower() == "library" && isWebProject)
+        {
+            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
+            EnsureDirectoryExists(outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            continue;
+        }
+
+        var isUnitTestProject = false;
+
+        // Now we need to test for whether this is a unit test project.  Currently, this is only testing for XUnit Projects.
+        // It needs to be extended to include others, i.e. NUnit, MSTest, and VSTest
+        // If this is found, move the output to the unit test folder, otherwise, simply copy to normal output folder
+        foreach(var reference in parsedProject.References)
+        {
+            Verbose("Reference Include: {0}", reference.Include);
+            if(reference.Include.ToLower().Contains("xunit.core"))
+            {
+                isUnitTestProject = true;
+                break;
+            }
+        }
+
+        if(parsedProject.OutputType.ToLower() == "library" && isUnitTestProject)
+        {
+            var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
+            EnsureDirectoryExists(outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            continue;
+        }
+        else
+        {
+            var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
+            EnsureDirectoryExists(outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            continue;
+        }
+    }
+}
 
 Task("Package")
     .IsDependentOn("Export-Release-Notes")
