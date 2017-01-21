@@ -21,10 +21,12 @@ Task("Publish-Documentation")
     Information("Number of changed files: {0}", filesChanged.Count);
     var docFileChanged = false;
 
+    var wyamDocsFolderDirectoryName = BuildParameters.WyamRootDirectoryPath.GetDirectoryName();
+    
     foreach(var file in filesChanged)
     {
         Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-        if(file.OldPath.Contains(@"docs\") || file.Path.Contains(@"docs\"))
+        if(file.OldPath.Contains(wyamDocsFolderDirectoryName + @"\") || file.Path.Contains(wyamDocsFolderDirectoryName + @"\"))
         {
            docFileChanged = true;
            break; 

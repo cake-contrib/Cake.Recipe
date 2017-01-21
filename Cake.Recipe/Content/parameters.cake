@@ -151,6 +151,8 @@ public static class BuildParameters
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
         context.Information("RepositoryOwner: {0}", RepositoryOwner);
         context.Information("RepositoryName: {0}", RepositoryName);
+        context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
+        context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
     }
 
     public static void SetParameters(
