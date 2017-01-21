@@ -56,6 +56,7 @@ public static class BuildParameters
 
     public static DirectoryPath WyamRootDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
+    public static FilePath WyamConfigurationFile { get; private set; }
     public static string WyamRecipe { get; private set; }
     public static string WyamTheme { get; private set; }
 
@@ -153,6 +154,7 @@ public static class BuildParameters
         context.Information("RepositoryName: {0}", RepositoryName);
         context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
         context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
+        context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
     }
 
     public static void SetParameters(
@@ -183,6 +185,7 @@ public static class BuildParameters
         bool shouldGenerateDocumentation = true,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
+        FilePath wyamConfigurationFile = null,
         string wyamRecipe = null,
         string wyamTheme = null)
     {
@@ -204,6 +207,7 @@ public static class BuildParameters
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("publish"));
+        WyamConfigurationFile = wyamConfigurationFile ?? context.MakeAbsolute((FilePath)"config.wyam");
         WyamRecipe = wyamRecipe ?? "Docs";
         WyamTheme = wyamTheme ?? "Samson";
 
