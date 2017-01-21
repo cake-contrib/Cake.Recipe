@@ -12,6 +12,7 @@ Task("Clean-Documentation")
 Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() =>
 {
     // Check to see if any documentation has changed
@@ -60,6 +61,7 @@ Task("Publish-Documentation")
 });
 
 Task("Preview-Documentation")
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() =>
 {
     Wyam(new WyamSettings
