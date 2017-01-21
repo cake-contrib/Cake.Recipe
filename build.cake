@@ -226,13 +226,16 @@ Task("AppVeyor")
 });
 
 Task("ReleaseNotes")
-  .IsDependentOn("Create-Release-Notes");
+    .IsDependentOn("Create-Release-Notes");
 
 Task("ClearCache")
-  .IsDependentOn("Clear-AppVeyor-Cache");
+    .IsDependentOn("Clear-AppVeyor-Cache");
 
 Task("Preview")
-  .IsDependentOn("Preview-Documentation");
+    .IsDependentOn("Preview-Documentation");
+
+Task("PublishDocs")
+    .IsDependentOn("Force-Publish-Documentation");
 
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTION

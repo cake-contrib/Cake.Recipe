@@ -76,6 +76,14 @@ Task("Preview-Documentation")
     });        
 });
 
+Task("Force-Publish-Documentation")
+    .IsDependentOn("Clean-Documentation")
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
+    .Does(() =>
+{
+    PublishDocumentation();
+});
+
 public void PublishDocumentation()
 {
     if(BuildParameters.CanUseWyam)
