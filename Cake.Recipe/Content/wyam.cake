@@ -3,7 +3,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 Task("Clean-Documentation")
-    .WithCriteria(BuildParameters.IsRunningOnAppVeyor)
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
