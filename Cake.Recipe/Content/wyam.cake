@@ -26,7 +26,9 @@ Task("Publish-Documentation")
     foreach(var file in filesChanged)
     {
         Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-        if(file.OldPath.Contains(wyamDocsFolderDirectoryName + @"\") || file.Path.Contains(wyamDocsFolderDirectoryName + @"\"))
+        if(file.OldPath.Contains(wyamDocsFolderDirectoryName + @"\") || 
+            file.Path.Contains(wyamDocsFolderDirectoryName + @"\") ||
+            file.Path.Contains("config.wyam"))
         {
            docFileChanged = true;
            break; 
