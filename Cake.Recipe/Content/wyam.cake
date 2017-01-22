@@ -91,6 +91,7 @@ public void PublishDocumentation()
         var sourceCommit = GitLogTip("./");
 
         var publishFolder = BuildParameters.WyamPublishDirectoryPath.Combine(DateTime.Now.ToString("yyyyMMdd_HHmmss"));
+        Information("Publishing Folder: {0}", publishFolder);
         Information("Getting publish branch...");
         GitClone(BuildParameters.Wyam.DeployRemote, publishFolder, new GitCloneSettings{ BranchName = BuildParameters.Wyam.DeployBranch });
 
