@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Cake.Recipe</id>
+    <version>0.3.0-unstable0069</version>
+    <authors>gep13</authors>
+    <owners>gep13</owners>
+    <description>Re-usable build script for Cake that can be used for numerous projects.</description>
+    <tags>Default Build Cake</tags>
+    <developmentDependency>false</developmentDependency>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  </metadata>
+</package>

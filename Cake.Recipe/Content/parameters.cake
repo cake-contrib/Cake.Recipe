@@ -155,6 +155,10 @@ public static class BuildParameters
         context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
         context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
         context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
+        context.Information("WyamRecipe: {0}", WyamRecipe);
+        context.Information("WyamTheme: {0}", WyamTheme);
+        context.Information("Wyam Deploy Branch: {0}", Wyam.DeployBranch);
+        context.Information("Wyam Deploy Remote: {0}", Wyam.DeployRemote);
     }
 
     public static void SetParameters(
