@@ -82,6 +82,15 @@ Task("Force-Publish-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() =>
 {
+    Wyam(new WyamSettings
+    {
+        Recipe = BuildParameters.WyamRecipe,
+        Theme = BuildParameters.WyamTheme,
+        OutputPath = MakeAbsolute(BuildParameters.Paths.Directories.PublishedDocumentation),
+        RootPath = BuildParameters.WyamRootDirectoryPath,
+        ConfigurationFile = BuildParameters.WyamConfigurationFile
+    });
+
     PublishDocumentation();
 });
 
