@@ -48,6 +48,7 @@ Task("Publish-Chocolatey-Packages")
 })
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-Chocolatey-Packages Task failed, but continuing with next Task...");
     publishingError = true;
 });

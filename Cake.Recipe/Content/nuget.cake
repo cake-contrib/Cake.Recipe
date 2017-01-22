@@ -88,6 +88,7 @@ Task("Publish-MyGet-Packages")
 })
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-MyGet-Packages Task failed, but continuing with next Task...");
     publishingError = true;
 });
@@ -119,6 +120,7 @@ Task("Publish-Nuget-Packages")
 })
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-Nuget-Packages Task failed, but continuing with next Task...");
     publishingError = true;
 });

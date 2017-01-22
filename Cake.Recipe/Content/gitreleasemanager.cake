@@ -81,6 +81,7 @@ Task("Publish-GitHub-Release")
 })
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-GitHub-Release Task failed, but continuing with next Task...");
     publishingError = true;
 });
