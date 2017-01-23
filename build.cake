@@ -54,7 +54,10 @@ BuildParameters.SetParameters(Context,
                             repositoryOwner: repositoryOwner, 
                             repositoryName: repositoryName,
                             appVeyorAccountName: appVeyorAccountName,
-                            appVeyorProjectSlug: appVeyorProjectSlug);
+                            appVeyorProjectSlug: appVeyorProjectSlug,
+                            webHost: "cake-contrib.github.io",
+                            webLinkRoot: "Cake.Recipe",
+                            webBaseEditUrl: "https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/");
 
 BuildParameters.PrintParamters(Context);
 ToolSettings.SetToolSettings(Context);
