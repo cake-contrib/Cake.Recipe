@@ -45,7 +45,15 @@ Task("Publish-Documentation")
             Theme = BuildParameters.WyamTheme,
             OutputPath = MakeAbsolute(BuildParameters.Paths.Directories.PublishedDocumentation),
             RootPath = BuildParameters.WyamRootDirectoryPath,
-            ConfigurationFile = BuildParameters.WyamConfigurationFile
+            ConfigurationFile = BuildParameters.WyamConfigurationFile,
+            PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
+            GlobalMetadata = new Dictionary<string, object>
+            {
+                { "Host",  BuildParameters.WebHost },
+                { "LinkRoot",  BuildParameters.WebLinkRoot },
+                { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+                { "SourceFiles", BuildParameters.WyamSourceFiles }
+            }
         });
 
         PublishDocumentation();
@@ -74,7 +82,15 @@ Task("Preview-Documentation")
         RootPath = BuildParameters.WyamRootDirectoryPath,
         Preview = true,
         Watch = true,
-        ConfigurationFile = BuildParameters.WyamConfigurationFile
+        ConfigurationFile = BuildParameters.WyamConfigurationFile,
+        PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
+        GlobalMetadata = new Dictionary<string, object>
+        {
+            { "Host",  BuildParameters.WebHost },
+            { "LinkRoot",  BuildParameters.WebLinkRoot },
+            { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+            { "SourceFiles", BuildParameters.WyamSourceFiles }
+        }
     });        
 });
 

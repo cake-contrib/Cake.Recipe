@@ -59,6 +59,10 @@ public static class BuildParameters
     public static FilePath WyamConfigurationFile { get; private set; }
     public static string WyamRecipe { get; private set; }
     public static string WyamTheme { get; private set; }
+    public static string WyamSourceFiles { get; private set; }
+    public static string WebHost { get; private set; }
+    public static string WebLinkRoot { get; private set; }
+    public static string WebBaseEditUrl { get; private set; }
 
     public static bool CanUseGitReleaseManager
     {
@@ -157,8 +161,12 @@ public static class BuildParameters
         context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
         context.Information("WyamRecipe: {0}", WyamRecipe);
         context.Information("WyamTheme: {0}", WyamTheme);
+        context.Information("WyamSourceFiles: {0}", WyamSourceFiles);
         context.Information("Wyam Deploy Branch: {0}", Wyam.DeployBranch);
         context.Information("Wyam Deploy Remote: {0}", Wyam.DeployRemote);
+        context.Information("WebHost: {0}", WebHost);
+        context.Information("WebLinkRoot: {0}", WebLinkRoot);
+        context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
     }
 
     public static void SetParameters(
@@ -191,7 +199,11 @@ public static class BuildParameters
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
         string wyamRecipe = null,
-        string wyamTheme = null)
+        string wyamTheme = null,
+        string wyamSourceFiles = null,
+        string webHost = null,
+        string webLinkRoot = null,
+        string webBaseEditUrl = null)
     {
         if (context == null)
         {
@@ -214,6 +226,10 @@ public static class BuildParameters
         WyamConfigurationFile = wyamConfigurationFile ?? context.MakeAbsolute((FilePath)"config.wyam");
         WyamRecipe = wyamRecipe ?? "Docs";
         WyamTheme = wyamTheme ?? "Samson";
+        WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
+        WebHost = webHost;
+        WebLinkRoot = webLinkRoot;
+        WebBaseEditUrl = webBaseEditUrl;
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
