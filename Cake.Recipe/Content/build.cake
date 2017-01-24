@@ -126,6 +126,8 @@ Task("Build")
 
 public void CopyBuildOutput()
 {
+    Information("Copying build output...");
+
     foreach(var project in ParseSolution(BuildParameters.SolutionFilePath).Projects)
     {
         // There is quite a bit of duplication in this function, that really needs to be tidied Upload
@@ -133,14 +135,27 @@ public void CopyBuildOutput()
         // If the project is a solution folder, move along, as there is nothing to be done here
         if(project.IsSolutionFolder())
         {
+            Information("Project is Solution Folder, so nothing to do here.");
             continue;
         }
 
         var parsedProject = ParseProject(project.Path, BuildParameters.Configuration);
 
-        // If the project is an exe, then simply copy all of the contents to the correct output folder
-        if(parsedProject.OutputType.ToLower() == "exe") 
+        if(project.Path.FullPath.ToLower().Contains("wixproj"))
         {
+            Warning("Skipping wix project");
+            continue;
+        }
+
+        if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
+        {
+            throw new Exception(string.Format("Unable to parse project file correctly: {0}", project.Path));
+        }
+
+        // If the project is an exe, then simply copy all of the contents to the correct output folder
+        if(parsedProject.OutputType.ToLower() == "exe" || parsedProject.OutputType.ToLower() == "winexe") 
+        {
+            Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder);
@@ -163,6 +178,7 @@ public void CopyBuildOutput()
 
         if(parsedProject.OutputType.ToLower() == "library" && isWebProject)
         {
+            Information("Project has an output type of library and is a Web Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
@@ -186,6 +202,7 @@ public void CopyBuildOutput()
 
         if(parsedProject.OutputType.ToLower() == "library" && isUnitTestProject)
         {
+            Information("Project has an output type of library and is a Unit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
@@ -193,6 +210,7 @@ public void CopyBuildOutput()
         }
         else
         {
+            Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
