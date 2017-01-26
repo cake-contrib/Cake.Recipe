@@ -103,6 +103,7 @@ var publishingError = false;
 #load .\Cake.Recipe\Content\toolsettings.cake
 #load .\Cake.Recipe\Content\twitter.cake
 #load .\Cake.Recipe\Content\wyam.cake
+#load .\Cake.Recipe\Content\gitlink.cake
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN

@@ -121,6 +121,11 @@ Task("Build")
     // TODO: Need to have an XBuild step here as well
     MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
 
+    if(BuildParameters.ShouldExecuteGitLink)
+    {
+        ExecuteGitLink();
+    }
+
     CopyBuildOutput();
 });
 
