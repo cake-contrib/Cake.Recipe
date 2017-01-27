@@ -47,7 +47,7 @@ Task("Publish-Documentation")
             RootPath = BuildParameters.WyamRootDirectoryPath,
             ConfigurationFile = BuildParameters.WyamConfigurationFile,
             PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
-            GlobalMetadata = new Dictionary<string, object>
+            Settings = new Dictionary<string, object>
             {
                 { "Host",  BuildParameters.WebHost },
                 { "LinkRoot",  BuildParameters.WebLinkRoot },
@@ -84,7 +84,7 @@ Task("Preview-Documentation")
         Watch = true,
         ConfigurationFile = BuildParameters.WyamConfigurationFile,
         PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
-        GlobalMetadata = new Dictionary<string, object>
+        Settings = new Dictionary<string, object>
         {
             { "Host",  BuildParameters.WebHost },
             { "LinkRoot",  BuildParameters.WebLinkRoot },
