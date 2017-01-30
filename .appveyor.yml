@@ -24,10 +24,3 @@ branches:
 cache:
 - Source\packages -> Source\**\packages.config
 - Tools -> build.ps1
-
-#---------------------------------#
-#  Skip builds for doc changes    #
-#---------------------------------#
-skip_commits:
-  # Regex for matching commit message
-  message: /\(doc\).*/
