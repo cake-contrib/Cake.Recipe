@@ -317,6 +317,10 @@ public static class BuildParameters
                                 (IsMasterBranch || IsDevelopBranch) &&
                                 shouldGenerateDocumentation);
 
-        ShouldExecuteGitLink = shouldExecuteGitLink;
+        ShouldExecuteGitLink = (!IsLocalBuild && 
+                            !IsPullRequest &&
+                            IsMainRepository &&
+                            (IsMasterBranch || IsDevelopBranch) &&
+                            shouldExecuteGitLink);
     }
 }
