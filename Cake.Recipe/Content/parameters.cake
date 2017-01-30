@@ -230,9 +230,9 @@ public static class BuildParameters
         WyamRecipe = wyamRecipe ?? "Docs";
         WyamTheme = wyamTheme ?? "Samson";
         WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
-        WebHost = webHost;
-        WebLinkRoot = webLinkRoot;
-        WebBaseEditUrl = webBaseEditUrl;
+        WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
+        WebLinkRoot = webLinkRoot ?? title;
+        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/develop/docs/input/", repositoryOwner, title);
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
