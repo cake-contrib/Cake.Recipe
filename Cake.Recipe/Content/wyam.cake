@@ -106,6 +106,14 @@ Task("Force-Publish-Documentation")
         OutputPath = MakeAbsolute(BuildParameters.Paths.Directories.PublishedDocumentation),
         RootPath = BuildParameters.WyamRootDirectoryPath,
         ConfigurationFile = BuildParameters.WyamConfigurationFile
+        PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
+        Settings = new Dictionary<string, object>
+        {
+            { "Host",  BuildParameters.WebHost },
+            { "LinkRoot",  BuildParameters.WebLinkRoot },
+            { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+            { "SourceFiles", BuildParameters.WyamSourceFiles }
+        }
     });
 
     PublishDocumentation();
