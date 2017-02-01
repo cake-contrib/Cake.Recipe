@@ -190,7 +190,8 @@ public void CopyBuildOutput()
             continue;
         }
 
-        var isUnitTestProject = false;
+        var isxUnitTestProject = false;
+        var ismsTestProject = false;
 
         // Now we need to test for whether this is a unit test project.  Currently, this is only testing for XUnit Projects.
         // It needs to be extended to include others, i.e. NUnit, MSTest, and VSTest
@@ -200,15 +201,28 @@ public void CopyBuildOutput()
             Verbose("Reference Include: {0}", reference.Include);
             if(reference.Include.ToLower().Contains("xunit.core"))
             {
-                isUnitTestProject = true;
+                isxUnitTestProject = true;
+                break;
+            }
+            else if(reference.Include.ToLower().Contains("unittestframework"))
+            {
+                ismsTestProject = true;
                 break;
             }
         }
 
-        if(parsedProject.OutputType.ToLower() == "library" && isUnitTestProject)
+        if(parsedProject.OutputType.ToLower() == "library" && isxUnitTestProject)
         {
-            Information("Project has an output type of library and is a Unit Test Project: {0}", parsedProject.RootNameSpace);
+            Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
+            EnsureDirectoryExists(outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            continue;
+        }
+        else if(parsedProject.OutputType.ToLower() == "library" && ismsTestProject)
+        {
+            Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedMSTestTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
             continue;
