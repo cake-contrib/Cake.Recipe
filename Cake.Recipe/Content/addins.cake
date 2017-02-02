@@ -13,3 +13,4 @@
 #addin nuget:?package=Cake.Git&version=0.12.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
 #addin nuget:?package=Cake.Incubator&version=1.0.38
+#addin nuget:?package=Cake.Figlet&version=0.3.1

@@ -10,6 +10,8 @@ var publishingError = false;
 
 Setup(context =>
 {
+    Information(Figlet(BuildParameters.Title);
+
     Information("Starting Setup...");
 
     if(BuildParameters.IsMasterBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
