@@ -118,6 +118,7 @@ Task("Build")
             SetPlatformTarget(ToolSettings.BuildPlatformTarget)
             .WithProperty("TreatWarningsAsErrors","true")
             .WithTarget("Build")
+            .SetMaxCpuCount(0)
             .SetConfiguration(BuildParameters.Configuration);
 
     // TODO: Need to have an XBuild step here as well
