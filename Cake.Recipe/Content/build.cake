@@ -166,7 +166,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
 
@@ -189,7 +189,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is a Web Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
             continue;
         }
 
@@ -219,7 +219,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
             continue;
         }
         else if(parsedProject.OutputType.ToLower() == "library" && ismsTestProject)
@@ -227,7 +227,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedMSTestTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
             continue;
         }
         else
@@ -235,7 +235,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/*"), outputFolder); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
             continue;
         }
     }
