@@ -9,4 +9,4 @@
 #tool nuget:?package=ReSharperReports&version=0.2.0
 #tool nuget:?package=KuduSync.NET&version=1.3.1
 #tool nuget:?package=Wyam&version=0.16.1
-#tool nuget:?package=GitLink&version=2.4.1
+#tool nuget:?package=gitlink&version=2.4.1
