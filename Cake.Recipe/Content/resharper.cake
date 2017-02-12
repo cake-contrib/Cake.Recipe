@@ -45,12 +45,18 @@ Task("InspectCode")
     .IsDependentOn("Restore")
     .Does(() =>
 {
-    InspectCode(BuildParameters.SolutionFilePath, new InspectCodeSettings() {
+    var settings = new InspectCodeSettings() {
         SolutionWideAnalysis = true,
-        Profile = BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName),
         OutputFile = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
         ThrowExceptionOnFindingViolations = true
-    });
+    };
+
+    if(FileExists(BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName)))
+    {
+        settings.Profile = BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName);
+    }
+
+    InspectCode(BuildParameters.SolutionFilePath, settings);
 })
 .ReportError(exception =>
 {
