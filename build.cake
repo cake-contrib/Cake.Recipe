@@ -59,7 +59,7 @@ BuildParameters.SetParameters(Context,
                             webLinkRoot: "Cake.Recipe",
                             webBaseEditUrl: "https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/");
 
-BuildParameters.PrintParamters(Context);
+BuildParameters.PrintParameters(Context);
 ToolSettings.SetToolSettings(Context);
 
 var publishingError = false;
