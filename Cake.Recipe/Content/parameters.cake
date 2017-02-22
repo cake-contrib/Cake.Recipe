@@ -131,7 +131,7 @@ public static class BuildParameters
         Paths  = paths;
     }
 
-    public static void PrintParamters(ICakeContext context)
+    public static void PrintParameters(ICakeContext context)
     {
         if (context == null)
         {
