@@ -10,6 +10,7 @@ Task("DupFinder")
         ShowStats = true,
         ShowText = true,
         OutputFile = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
+        ExcludeCodeRegionsByNameSubstring = new string [] { "DupFinder Exclusion" },
         ThrowExceptionOnFindingDuplicates = true
     };
 
