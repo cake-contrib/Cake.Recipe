@@ -119,7 +119,15 @@ Task("Build")
             .WithProperty("TreatWarningsAsErrors","true")
             .WithTarget("Build")
             .SetMaxCpuCount(0)
-            .SetConfiguration(BuildParameters.Configuration);
+            .SetConfiguration(BuildParameters.Configuration)
+            .WithLogger(
+                Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
+                "XmlFileLogger",
+                string.Format(
+                    "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
+                    BuildParameters.Paths.Files.BuildLogFilePath)
+            );
+
 
     // TODO: Need to have an XBuild step here as well
     MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;

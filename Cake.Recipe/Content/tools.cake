@@ -10,3 +10,4 @@
 #tool nuget:?package=KuduSync.NET&version=1.3.1
 #tool nuget:?package=Wyam&version=0.16.1
 #tool nuget:?package=gitlink&version=2.4.1
+#tool nuget:?package=MSBuild.Extension.Pack&version=1.9.0
