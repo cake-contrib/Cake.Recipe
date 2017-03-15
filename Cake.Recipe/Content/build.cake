@@ -232,8 +232,9 @@ public void CopyBuildOutput()
         }
         else if(parsedProject.OutputType.ToLower() == "library" && ismsTestProject)
         {
+            // We will use vstest.console.exe by default for MSTest Projects
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedMSTestTests.Combine(parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
             continue;
