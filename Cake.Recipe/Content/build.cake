@@ -102,7 +102,17 @@ Task("Restore")
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
 
-    NuGetRestore(BuildParameters.SolutionFilePath, new NuGetRestoreSettings { Source = new List<string> { "https://www.nuget.org/api/v2", "https://www.myget.org/F/gep13/api/v2" }});
+    NuGetRestore(
+        BuildParameters.SolutionFilePath,
+        new NuGetRestoreSettings 
+        { 
+            Source = new List<string> 
+            { 
+                "https://www.nuget.org/api/v2",
+                "https://www.myget.org/F/gep13/api/v2",
+                BuildParameters.MyGet.SourceUrl 
+            }
+        });
 });
 
 Task("Build")
