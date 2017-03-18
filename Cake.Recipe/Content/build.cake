@@ -102,6 +102,7 @@ Task("Restore")
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
 
+    // TODO Use parameter for Cake Contrib feed from environment variable, similar to BuildParameters.MyGet.SourceUrl
     NuGetRestore(
         BuildParameters.SolutionFilePath,
         new NuGetRestoreSettings 
@@ -109,7 +110,7 @@ Task("Restore")
             Source = new List<string> 
             { 
                 "https://www.nuget.org/api/v2",
-                BuildParameters.MyGet.SourceUrl 
+                "https://www.myget.org/F/cake-contrib/api/v2" 
             }
         });
 });
