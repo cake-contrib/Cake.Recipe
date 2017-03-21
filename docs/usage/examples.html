@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html>
-    <head>
+<!DOCTYPE html><html><head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-        <meta name="description" />
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Docs - New Release</title>
+        <title>Docs - Examples</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
-        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
-        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet">
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet">
         <script src="/Cake.Recipe/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/Cake.Recipe/assets/js/bootstrap.min.js"></script>        
         <script src="/Cake.Recipe/assets/js/app.min.js"></script>         
@@ -58,8 +56,8 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">                            
-                                    <li><a href="/Cake.Recipe/docs">Documentation</a></li>
-        <li class="active"><a href="/Cake.Recipe/blog">Blog</a></li>
+                                    <li class="active"><a href="/Cake.Recipe/docs">Documentation</a></li>
+        <li><a href="/Cake.Recipe/blog">Blog</a></li>
  
                         </ul>       
                     </div>
@@ -73,8 +71,10 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/blog/new-release.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/examples.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#build-script">Build Script</a></p>
+<hr class="infobar-hidden">
+</div>
 
                 </section>
                 <section class="sidebar">                    
@@ -82,15 +82,20 @@
 
                     <ul class="sidebar-menu">
                         
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                                        <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
 
-    <li class="header"><i class="fa fa-bookmark"></i> Categories</li>    
-        <li><a href="/blog/release">Release</a></li>
-    
-    <li class="header"><i class="fa fa-calendar"></i> Archive</li>    
-        <li><a href="/blog/archive/2016/01">January, 2016</a></li>
-    
-    <li class="header"><i class="fa fa-user"></i> Authors</li>    
-        <li><a href="/blog/author/me">me</a></li>
+                    </ul>
+                </li>
+                <li class="treeview active">
+                    <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                                        <li class="selected"><a href="/Cake.Recipe/docs/usage/examples">Examples</a></li>
+
+                    </ul>
+                </li>
 
                     </ul>
                 </section>                
@@ -103,23 +108,27 @@
 
 
 	<section class="content-header">
-		<h1>New Release</h1>
+		<h1>Examples</h1>
 	</section>
 	<section class="content">
-		
+		<h1 id="build-script">Build Script</h1>
+<p>You can reference Cake.Grunt in your build script as a cake addin:</p>
+<pre><code class="language-cake">#addin "Cake.Grunt"
+</code></pre>
+<p>or nuget reference:</p>
+<pre><code class="language-cake">#addin "nuget:https://www.nuget.org/api/v2?package=Cake.Grunt"
+</code></pre>
+<p>Then some examples:</p>
+<pre><code class="language-cake">Task("Default")
+    .Does(() =&gt; 
+    {
+        // Executes gulp from a global installation (npm install -g gulp)
+        Grunt.Global.Execute();
 
-
-<dl class="dl-horizontal">
-    <dt><i class="fa fa-calendar"></i> Published</dt>
-    <dd>01 January 2016</dd>
-        <dt><i class="fa fa-bookmark"></i> Category</dt>
-        <dd><a href="/blog/release">Release</a></dd>
-            <dt><i class="fa fa-user"></i> Author</dt>
-        <dd><a href="/blog/author/me">me</a></dd>
-</dl>
-
-<p>There is a new release out, go get it now.</p>
-
+        // Executes gulp from a local installation (npm install gulp)
+        Grunt.Local.Execute();
+    });
+</code></pre>
 
 	</section>
                 
@@ -175,5 +184,5 @@
                 }, 500);
             });
         </script>
-    </body>
-</html>
+    
+</body></html>
