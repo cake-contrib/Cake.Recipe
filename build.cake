@@ -72,7 +72,7 @@ var publishingError = false;
 #addin nuget:?package=Cake.Gitter&version=0.2.0
 #addin nuget:?package=Cake.Slack&version=0.4.0
 #addin nuget:?package=Cake.Twitter&version=0.1.0
-#addin nuget:?package=Cake.Wyam&version=0.16.1
+#addin nuget:?package=Cake.Wyam&version=0.17.1
 #addin nuget:?package=Cake.Git&version=0.12.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
 
@@ -83,7 +83,7 @@ var publishingError = false;
 #tool nuget:?package=gitreleasemanager&version=0.5.0
 #tool nuget:?package=GitVersion.CommandLine&version=3.6.2
 #tool nuget:?package=KuduSync.NET&version=1.3.1
-#tool nuget:?package=Wyam&version=0.16.1
+#tool nuget:?package=Wyam&version=0.17.1
 
 ///////////////////////////////////////////////////////////////////////////////
 // LOAD
