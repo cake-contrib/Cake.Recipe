@@ -1,4 +1,0 @@
----
-Title: About
----
-Cake.Recipe

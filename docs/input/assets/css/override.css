@@ -1,0 +1,20 @@
+/* Control the margin for bootstrap alert boxes */
+.alert > p {
+    margin-top: 0px;
+}
+
+/* Control the look and feel of the copy box applied to code sections */
+.btn-copy[disabled] .clippy {
+    opacity: .3;
+}
+pre .btn-copy {
+    -webkit-transition: opacity 0.3s ease-in-out;
+    -o-transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
+    opacity: 0;
+    padding: 2px 6px;
+    float: right;
+}
+pre:hover .btn-copy {
+    opacity: 1;
+}
