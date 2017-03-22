@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Docs - Cake.Grunt</title>
+        <title>Docs - Cake.Recipe</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -89,14 +89,17 @@
 
 
 	<section class="content-header">
-		<h1>Cake.Grunt</h1>
+		<h1>Cake.Recipe</h1>
 	</section>
 	<section class="content">
 		
 <div class="container">				
 	<h1>What is it?</h1>
     <p>
-        Cake.Grunt is a set of aliases for Cake to help with running Grunt scripts as part of a build.
+        Cake.Recipe is a set of convention based build scripts, which are delivered as a NuGet Package, which can then be consumed by Cake.
+    </p>
+    <p>
+        The thought process behind this is that I was creating the same build script several times, with minor tweaks, which meant when something changed, I had to update it in several places.  This isn't good for a number of reasons, but mostly due to the fact that it is a lot of effort to keep those up to date when things change.  By making a NuGet package of the common tasks, with the ability to configure the different options means that Cake.Recipe can be used on many projects, and updated in a single place.'
     </p>
 </div>
 	</section>
