@@ -14,9 +14,10 @@ public class BuildPaths
         var buildDirectoryPath             = "./BuildArtifacts";
         var tempBuildDirectoryPath         = buildDirectoryPath + "/temp";
         var publishedNUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedNUnitTests";
-        var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";
+        var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";        
         var publishedMSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedMSTestTests";
         var publishedVSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedVSTestTests";
+        var publishedFixieTestsDirectory   = tempBuildDirectoryPath + "/_PublishedFixieTests";
         var publishedWebsitesDirectory     = tempBuildDirectoryPath + "/_PublishedWebsites";
         var publishedApplicationsDirectory = tempBuildDirectoryPath + "/_PublishedApplications";
         var publishedLibrariesDirectory    = tempBuildDirectoryPath + "/_PublishedLibraries";
@@ -32,6 +33,7 @@ public class BuildPaths
         var xUnitTestResultsDirectory = testResultsDirectory + "/xUnit";
         var MSTestTestResultsDirectory = testResultsDirectory + "/MSTest";
         var VSTestTestResultsDirectory = testResultsDirectory + "/VSTest";
+        var FixieTestResultsDirectory = testResultsDirectory + "/Fixie";
 
         var testCoverageDirectory = buildDirectoryPath + "/TestCoverage";
 
@@ -55,6 +57,7 @@ public class BuildPaths
             publishedxUnitTestsDirectory,
             publishedMSTestTestsDirectory,
             publishedVSTestTestsDirectory,
+            publishedFixieTestsDirectory,
             publishedWebsitesDirectory,
             publishedApplicationsDirectory,
             publishedLibrariesDirectory,
@@ -68,6 +71,7 @@ public class BuildPaths
             xUnitTestResultsDirectory,
             MSTestTestResultsDirectory,
             VSTestTestResultsDirectory,
+            FixieTestResultsDirectory,
             testCoverageDirectory,
             nuGetPackagesOutputDirectory,
             chocolateyPackagesOutputDirectory
@@ -135,6 +139,7 @@ public class BuildDirectories
     public DirectoryPath PublishedxUnitTests { get; private set; }
     public DirectoryPath PublishedMSTestTests { get; private set; }
     public DirectoryPath PublishedVSTestTests { get; private set; }
+    public DirectoryPath PublishedFixieTests { get; private set; }
     public DirectoryPath PublishedWebsites { get; private set; }
     public DirectoryPath PublishedApplications { get; private set; }
     public DirectoryPath PublishedLibraries { get; private set; }
@@ -148,6 +153,7 @@ public class BuildDirectories
     public DirectoryPath xUnitTestResults { get; private set; }
     public DirectoryPath MSTestTestResults { get; private set; }
     public DirectoryPath VSTestTestResults { get; private set; }
+    public DirectoryPath FixieTestResults { get; private set; }
     public DirectoryPath TestCoverage { get; private set; }
     public DirectoryPath NuGetPackages { get; private set; }
     public DirectoryPath ChocolateyPackages { get; private set; }
@@ -160,6 +166,7 @@ public class BuildDirectories
         DirectoryPath publishedxUnitTests,
         DirectoryPath publishedMSTestTests,
         DirectoryPath publishedVSTestTests,
+        DirectoryPath publishedFixieTests,
         DirectoryPath publishedWebsites,
         DirectoryPath publishedApplications,
         DirectoryPath publishedLibraries,
@@ -173,6 +180,7 @@ public class BuildDirectories
         DirectoryPath xunitTestResults,
         DirectoryPath msTestTestResults,
         DirectoryPath vsTestTestResults,
+        DirectoryPath fixieTestResults,
         DirectoryPath testCoverage,
         DirectoryPath nuGetPackages,
         DirectoryPath chocolateyPackages
@@ -184,6 +192,7 @@ public class BuildDirectories
         PublishedxUnitTests = publishedxUnitTests;
         PublishedMSTestTests = publishedMSTestTests;
         PublishedVSTestTests = publishedVSTestTests;
+        PublishedFixieTests = publishedFixieTests;
         PublishedWebsites = publishedWebsites;
         PublishedApplications = publishedApplications;
         PublishedLibraries = publishedLibraries;
@@ -197,6 +206,7 @@ public class BuildDirectories
         xUnitTestResults = xunitTestResults;
         MSTestTestResults = msTestTestResults;
         VSTestTestResults = vsTestTestResults;
+        FixieTestResults = FixieTestResults;
         TestCoverage = testCoverage;
         NuGetPackages = nuGetPackages;
         ChocolateyPackages = chocolateyPackages;
