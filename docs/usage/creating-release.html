@@ -1,20 +1,22 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Docs - Environment Variables</title>
+        <title>Docs - How to create a release</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet" />
         <script src="/Cake.Recipe/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/Cake.Recipe/assets/js/bootstrap.min.js"></script>        
         <script src="/Cake.Recipe/assets/js/app.min.js"></script>         
@@ -71,18 +73,8 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/fundamentals/environment-variables.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#github">GitHub</a></p>
-<p><a href="#myget">MyGet</a></p>
-<p><a href="#nuget">NuGet</a></p>
-<p><a href="#gitter">Gitter</a></p>
-<p><a href="#slack">Slack</a></p>
-<p><a href="#twitter">Twitter</a></p>
-<p><a href="#coveralls">Coveralls</a></p>
-<p><a href="#appveyor">AppVeyor</a></p>
-<p><a href="#wyam">Wyam</a></p>
-<hr class="infobar-hidden">
-</div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/creating-release.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">                    
@@ -90,17 +82,17 @@
 
                     <ul class="sidebar-menu">
                         
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
-                                        <li class="selected"><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
+                                        <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
-                                        <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
+                                        <li class="selected"><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
 
                     </ul>
                 </li>
@@ -116,40 +108,29 @@
 
 
 	<section class="content-header">
-		<h1>Environment Variables</h1>
+		<h1>How to create a release</h1>
 	</section>
 	<section class="content">
-		<p>The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.</p>
-<p>The following are a list of the default environment variable names that are looked for during the build.</p>
-<p><strong>NOTE:</strong> If required, the name of the environment variables can be modified to fit into your existing system/architecture.</p>
-<h1 id="github">GitHub</h1>
-<h2 id="github_username">GITHUB_USERNAME</h2>
-<h2 id="github_password">GITHUB_PASSWORD</h2>
-<h1 id="myget">MyGet</h1>
-<h2 id="myget_api_key">MYGET_API_KEY</h2>
-<h2 id="myget_source">MYGET_SOURCE</h2>
-<h1 id="nuget">NuGet</h1>
-<h2 id="nuget_api_key">NUGET_API_KEY</h2>
-<h2 id="nuget_source">NUGET_SOURCE</h2>
-<h1 id="gitter">Gitter</h1>
-<h2 id="gitter_token">GITTER_TOKEN</h2>
-<h2 id="gitter_room_id">GITTER_ROOM_ID</h2>
-<h1 id="slack">Slack</h1>
-<h2 id="slack_token">SLACK_TOKEN</h2>
-<h2 id="slack_channel">SLACK_CHANNEL</h2>
-<h1 id="twitter">Twitter</h1>
-<h2 id="twitter_consumer_key">TWITTER_CONSUMER_KEY</h2>
-<h2 id="twitter_consumer_secret">TWITTER_CONSUMER_SECRET</h2>
-<h2 id="twitter_access_token">TWITTER_ACCESS_TOKEN</h2>
-<h2 id="twitter_access_token_secret">TWITTER_ACCESS_TOKEN_SECRET</h2>
-<h1 id="coveralls">Coveralls</h1>
-<h2 id="coveralls_repo_token">COVERALLS_REPO_TOKEN</h2>
-<h1 id="appveyor">AppVeyor</h1>
-<h2 id="appveyor_api_token">APPVEYOR_API_TOKEN</h2>
-<h1 id="wyam">Wyam</h1>
-<h2 id="wyam_access_token">WYAM_ACCESS_TOKEN</h2>
-<h2 id="wyam_deploy_remote">WYAM_DEPLOY_REMOTE</h2>
-<h2 id="wyam_deploy_branch">WYAM_DEPLOY_BRANCH</h2>
+		<p>This document describes the suggested steps to release a new version using the <code>Cake.Recipe</code> script.</p>
+<div class="alert alert-info"><p>Please note that the following steps assume you're using <code>Cake.Recipe</code> on GitHub and with a GitFlow workflow.
+Both are not requirements though and you can adopt the steps to other environments.</p>
+</div>
+<ol>
+<li>Create a release branch (eg. release\1.2.3).</li>
+<li>Make sure that a GitHub milestone exists for this release.</li>
+<li>Make sure there were issues for all changes with the appropriate labels and the correct milestone set.</li>
+<li>Make sure that you have the following environment variables set in your local development environment:
+<ul>
+<li><code>GITHUB_USERNAME</code>: Your GitHub user name.</li>
+<li><code>GITHUB_PASSWORD</code>: Your GitHub password or personal access token.</li>
+</ul>
+</li>
+<li>Create a GitHub release draft by running: <code>.\build.ps1 -target releasenotes</code>.</li>
+<li>Check the generated release notes and make required manual changes.</li>
+<li>If release is ready finish release (merge back into <code>master</code> and <code>develop</code>) but don't tag the release yet.</li>
+<li>Publish the draft release on GitHub.</li>
+</ol>
+<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.</p>
 
 	</section>
                 
@@ -205,5 +186,5 @@
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>
