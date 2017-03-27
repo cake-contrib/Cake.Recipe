@@ -7,7 +7,7 @@
 #tool "nuget:?package=OpenCover&version=4.6.519"
 #tool "nuget:?package=ReportGenerator&version=2.4.5"
 #tool "nuget:?package=ReportUnit&version=1.2.1"
-#tool "nuget:?package=Fixie=1.0.2"
+#tool "nuget:?package=Fixie&version=1.0.2"
 
 ///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
@@ -111,7 +111,7 @@ Task("Test-Fixie")
 
     OpenCover(tool => {
         tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + "/**/*.Tests.dll"), new FixieSettings  {           
-            XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"\
+            XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"
         });
     },
     BuildParameters.Paths.Files.TestCoverageOutputFilePath,
