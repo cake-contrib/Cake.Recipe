@@ -12,7 +12,11 @@ The following are a list of the default environment variable names that are look
 
 ## GITHUB_USERNAME
 
+User name of the GitHub account used to create and publish releases.
+
 ## GITHUB_PASSWORD
+
+Password of the GitHub account used to create and publish releases.
 
 # MyGet
 
