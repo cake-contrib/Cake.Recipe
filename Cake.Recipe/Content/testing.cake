@@ -7,6 +7,7 @@
 #tool "nuget:?package=OpenCover&version=4.6.519"
 #tool "nuget:?package=ReportGenerator&version=2.4.5"
 #tool "nuget:?package=ReportUnit&version=1.2.1"
+#tool "nuget:?package=Fixie=1.0.2"
 
 ///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
@@ -102,11 +103,36 @@ Task("Test-VSTest")
     ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
 });
 
+Task("Test-Fixie")
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests))
+    .Does(() =>
+{
+    EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
+
+    OpenCover(tool => {
+        tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + "/**/*.Tests.dll"), new FixieSettings  {           
+            XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"\
+        });
+    },
+    BuildParameters.Paths.Files.TestCoverageOutputFilePath,
+    new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+        .WithFilter(ToolSettings.TestCoverageFilter)
+        .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+        .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+
+    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+    ReportUnit(BuildParameters.Paths.Directories.FixieTestResults, BuildParameters.Paths.Directories.FixieTestResults, new ReportUnitSettings());
+
+    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+    ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+});
+
 Task("Test")
     .IsDependentOn("Test-NUnit")
     .IsDependentOn("Test-xUnit")
     .IsDependentOn("Test-MSTest")
     .IsDependentOn("Test-VSTest")
+    .IsDependentOn("Test-Fixie")
     .Does(() =>
 {
 });
