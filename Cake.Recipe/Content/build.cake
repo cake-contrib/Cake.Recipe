@@ -213,7 +213,7 @@ public void CopyBuildOutput()
 
         var isxUnitTestProject = false;
         var ismsTestProject = false;
-        var isFixieProject = fasle;
+        var isFixieProject = false;
 
         // Now we need to test for whether this is a unit test project.  Currently, this is only testing for XUnit Projects.
         // It needs to be extended to include others, i.e. NUnit, MSTest, and VSTest
