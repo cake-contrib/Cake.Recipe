@@ -206,7 +206,7 @@ public class BuildDirectories
         xUnitTestResults = xunitTestResults;
         MSTestTestResults = msTestTestResults;
         VSTestTestResults = vsTestTestResults;
-        FixieTestResults = FixieTestResults;
+        FixieTestResults = fixieTestResults;
         TestCoverage = testCoverage;
         NuGetPackages = nuGetPackages;
         ChocolateyPackages = chocolateyPackages;
