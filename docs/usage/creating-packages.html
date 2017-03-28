@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Docs - Fundamentals</title>
+        <title>Docs - How to create a NuGet or Chocolatey Package</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -72,6 +72,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/creating-packages.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -80,18 +81,18 @@
 
                     <ul class="sidebar-menu">
                         
-                <li class="treeview active selected">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                                         <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                                         <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
 
                     </ul>
                 </li>
@@ -107,25 +108,34 @@
 
 
 	<section class="content-header">
-		<h1>Fundamentals</h1>
+		<h1>How to create a NuGet or Chocolatey Package</h1>
 	</section>
 	<section class="content">
-		<p>The following contains all the pieces of core information that you will need in order to use Cake.Recipe.</p>
-
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></strong></td>
-									<td>
-									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
+		<p>This document describes how packaging works when using the <code>Cake.Recipe</code> script.</p>
+<h2 id="initial-configuration">Initial Configuration</h2>
+<p>You have to perform this initial configuration that it drives everything.</p>
+<h2 id="environment-variables">Environment Variables</h2>
+<p>If an environment variable that is defined <a href="https://cake-contrib.github.io/Cake.Recipe/docs/fundamentals/environment-variables">here</a> is set, then the corresponding task that would use that will be executed. Pretty nifty and may be something that is easily missed.</p>
+<p>So for example, if I want to start publishing a MyGet package, then I would need to set the following on my build server.</p>
+<pre><code>MYGET_API_KEY = &lt;your key&gt;
+MYGET_SOURCE = &lt;your source&gt;
+</code></pre>
+<h2 id="creating-packages">Creating Packages</h2>
+<p>Creating packages, either Chocolatey or NuGet, follows another set of conventions. It requires that you have those environment variables configured and that you have a specific folder structure with your NuSpec files located in those.  In the <a href="https://github.com/cake-contrib/Cake.Recipe/blob/develop/Cake.Recipe/Content/paths.cake">paths.cake</a> file, there is a class called <em>BuildPaths</em> that configures all of your build paths based on the initial project configuration that that needs to occur. In that class is the following snippet.</p>
+<pre><code>var nugetNuspecDirectory = &quot;./nuspec/nuget&quot;;
+var chocolateyNuspecDirectory = &quot;./nuspec/chocolatey&quot;;
+</code></pre>
+<p>The snippet above is looking for a <em>nuspec</em> directory at the root of your project. Inside of that directory it is looking for <em>nuget</em> and <em>chocolatey</em> directories. If those directories do not exist and/or there isn't any nuspec files located then the packaging task for that package type is skipped. Any <em>nuspec</em> files found in either directory will be harvested and a package will be generated and pushed to central package directory based on package type.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>With that added, it will push that to MyGet. I am going to guess that you may now be wondering how does that work. If you go to the <a href="https://github.com/cake-contrib/Cake.Recipe/blob/develop/Cake.Recipe/Content/parameters.cake">parameters.cake</a> file in the repository you will notice that there is a static class called <em>BuildParameters</em>, it has a property called <em>ShouldPublishMyGet</em>. That is configured to be <em>true</em> by default, however, there is a check in that class that determines if it should be true or false.</p>
+<pre><code>shouldPublishMyGet = (!IsLocalBuild &amp;&amp;
+                        !IsPullRequest &amp;&amp;
+                        IsMainRepository &amp;&amp;
+                        (IsTagged || !IsMasterBranch) &amp;&amp;
+                        shouldPublishMyGet);
+</code></pre>
+<p>Above, you can tell that it cannot be local build, pull request, not the master branch, and that it should publish to MyGet. Now the last piece of the puzzle is located in the <a href="https://github.com/cake-contrib/Cake.Recipe/blob/develop/Cake.Recipe/Content/nuget.cake">nuget.cake</a> file. That is the Cake file that contains the tasks that create and publish packages. The <em>Publish-MyGet-Packages</em> task has two criteria, that you want to publish a MyGet package and that packages have actually been created. This task also contains the check for the environment variables we set above and will record that error and continue to execute the next task.</p>
+<p>Finally, the packages from each package directory will be harvested and all packages found will be pushed to their respective feeds.</p>
 
 	</section>
                 
