@@ -25,7 +25,7 @@ Task("Export-Release-Notes")
     .WithCriteria(() => !BuildParameters.IsLocalBuild)
     .WithCriteria(() => !BuildParameters.IsPullRequest)
     .WithCriteria(() => BuildParameters.IsMainRepository)
-    .WithCriteria(() => BuildParameters.IsMasterBranch)
+    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsFeatureBranch || BuildParameters.IsHotFixBranch)
     .WithCriteria(() => BuildParameters.IsTagged)
     .Does(() =>
 {
