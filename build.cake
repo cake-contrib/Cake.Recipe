@@ -136,7 +136,7 @@ Teardown(context =>
 {
     if(context.Successful)
     {
-        if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.IsMasterBranch || BuildParameters.IsFeatureBranch || BuildParameters.IsHotFixBranch) && BuildParameters.IsTagged)
+        if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch) && BuildParameters.IsTagged)
         {
             if(sendMessageToTwitter)
             {

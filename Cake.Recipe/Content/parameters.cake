@@ -10,7 +10,7 @@ public static class BuildParameters
     public static bool IsMainRepository { get; private set; }
     public static bool IsMasterBranch { get; private set; }
     public static bool IsDevelopBranch { get; private set; }
-    public static bool IsFeatureBranch { get; private set; }
+    public static bool IsReleaseBranch { get; private set; }
     public static bool IsHotFixBranch { get; private set ; }
     public static bool IsTagged { get; private set; }
     public static bool IsPublishBuild { get; private set; }
@@ -147,7 +147,7 @@ public static class BuildParameters
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("IsMasterBranch: {0}", IsMasterBranch);
         context.Information("IsDevelopBranch: {0}", IsDevelopBranch);
-        context.Information("IsFeatureBranch: {0}", IsFeatureBranch);
+        context.Information("IsReleaseBranch: {0}", IsReleaseBranch);
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
@@ -258,7 +258,7 @@ public static class BuildParameters
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), buildSystem.AppVeyor.Environment.Repository.Name);
         IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch);
         IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
-        IsFeatureBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("feature", StringComparison.OrdinalIgnoreCase);
+        IsReleaseBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase);
         IsHotFixBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("hotfix", StringComparison.OrdinalIgnoreCase);
         IsTagged = (
             buildSystem.AppVeyor.Environment.Repository.Tag.IsTag &&
@@ -299,21 +299,21 @@ public static class BuildParameters
         ShouldPublishNuGet = (!IsLocalBuild &&
                                 !IsPullRequest &&
                                 IsMainRepository &&
-                                (IsMasterBranch || IsFeatureBranch || IsHotFixBranch) &&
+                                (IsMasterBranch || IsReleaseBranch || IsHotFixBranch) &&
                                 IsTagged &&
                                 shouldPublishNuGet);
         
         ShouldPublishChocolatey = (!IsLocalBuild &&
                                     !IsPullRequest &&
                                     IsMainRepository &&
-                                    (IsMasterBranch || IsFeatureBranch || IsHotFixBranch) &&
+                                    (IsMasterBranch || IsReleaseBranch || IsHotFixBranch) &&
                                     IsTagged &&
                                     shouldPublishChocolatey);
 
         ShouldPublishGitHub = (!IsLocalBuild &&
                                 !IsPullRequest &&
                                 IsMainRepository &&
-                                (IsMasterBranch || IsFeatureBranch || IsHotFixBranch) &&
+                                (IsMasterBranch || IsReleaseBranch || IsHotFixBranch) &&
                                 IsTagged &&
                                 shouldPublishGitHub);
 
@@ -326,7 +326,7 @@ public static class BuildParameters
         ShouldExecuteGitLink = (!IsLocalBuild && 
                             !IsPullRequest &&
                             IsMainRepository &&
-                            (IsMasterBranch || IsDevelopBranch || IsFeatureBranch || IsHotFixBranch) &&
+                            (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
                             shouldExecuteGitLink);
     }
 }
