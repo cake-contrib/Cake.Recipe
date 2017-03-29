@@ -60,6 +60,8 @@ Password of the GitHub account used to create and publish releases.
 
 ## APPVEYOR_API_TOKEN
 
+API token for accessing AppVeyor. Used to [clean AppVeyor build cache](../usage/cleaning-cache).
+
 # Wyam
 
 ## WYAM_ACCESS_TOKEN
