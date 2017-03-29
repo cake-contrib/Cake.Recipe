@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Docs - How to create a release</title>
+        <title>Docs - How to clean AppVeyor cache</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -72,7 +72,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/creating-release.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/cleaning-cache.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -91,9 +91,9 @@
                 <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
-                                        <li class="selected"><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
+                                        <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
 
                     </ul>
                 </li>
@@ -109,29 +109,18 @@
 
 
 	<section class="content-header">
-		<h1>How to create a release</h1>
+		<h1>How to clean AppVeyor cache</h1>
 	</section>
 	<section class="content">
-		<p>This document describes the suggested steps to release a new version using the <code>Cake.Recipe</code> script.</p>
-<div class="alert alert-info"><p>Please note that the following steps assume you're using <code>Cake.Recipe</code> on GitHub and with a GitFlow workflow.
-Both are not requirements though and you can adopt the steps to other environments.</p>
-</div>
+		<p>This document describes how to clear the AppVeyor build cache using the <code>Cake.Recipe</code> script.</p>
 <ol>
-<li>Create a release branch (eg. release\1.2.3).</li>
-<li>Make sure that a GitHub milestone exists for this release.</li>
-<li>Make sure there were issues for all changes with the appropriate labels and the correct milestone set.</li>
 <li>Make sure that you have the following environment variables set in your local development environment:
 <ul>
-<li><a href="../fundamentals/environment-variables#github_username">GITHUB_USERNAME</a></li>
-<li><a href="../fundamentals/environment-variables#github_password">GITHUB_PASSWORD</a></li>
+<li><a href="../fundamentals/environment-variables#appveyor_api_token">APPVEYOR_API_TOKEN</a></li>
 </ul>
 </li>
-<li>Create a GitHub release draft by running: <code>.\build.ps1 -target releasenotes</code>.</li>
-<li>Check the generated release notes and make required manual changes.</li>
-<li>If release is ready finish release (merge back into <code>master</code> and <code>develop</code>) but don't tag the release yet.</li>
-<li>Publish the draft release on GitHub.</li>
+<li>Run <code>.\build.ps1 -target clearcache</code>.</li>
 </ol>
-<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.</p>
 
 	</section>
                 
