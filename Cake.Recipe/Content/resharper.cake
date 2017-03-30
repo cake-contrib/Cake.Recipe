@@ -11,12 +11,22 @@ Task("DupFinder")
         ShowText = true,
         OutputFile = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
         ExcludeCodeRegionsByNameSubstring = new string [] { "DupFinder Exclusion" },
-        ThrowExceptionOnFindingDuplicates = true
+        ThrowExceptionOnFindingDuplicates = ToolSettings.DupFinderThrowExceptionOnFindingDuplicates ?? true
     };
 
     if(ToolSettings.DupFinderExcludePattern != null)
     {
         settings.ExcludePattern = ToolSettings.DupFinderExcludePattern;
+    }
+
+    if(ToolSettings.DupFinderExcludeFilesByStartingCommentSubstring != null)
+    {
+        settings.ExcludeFilesByStartingCommentSubstring = ToolSettings.DupFinderExcludeFilesByStartingCommentSubstring;
+    }
+
+    if(ToolSettings.DupFinderDiscardCost != null)
+    {
+        settings.DiscardCost = ToolSettings.DupFinderDiscardCost.Value;
     }
 
     DupFinder(BuildParameters.SolutionFilePath, settings);
