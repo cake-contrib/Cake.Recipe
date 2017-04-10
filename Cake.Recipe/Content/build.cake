@@ -19,11 +19,13 @@ Setup(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    BuildParameters.SetBuildVersion(
-        BuildVersion.CalculatingSemanticVersion(
-            context: Context
-        )
-    );
+    RequireTool(GitVersionTool, () => {
+        BuildParameters.SetBuildVersion(
+            BuildVersion.CalculatingSemanticVersion(
+                context: Context
+            )
+        );
+    });
 
     Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
         BuildParameters.Version.SemVersion,
@@ -120,35 +122,35 @@ Task("Build")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does(() =>
-{
-    Information("Building {0}", BuildParameters.SolutionFilePath);
+    .Does(() => RequireTool(MSBuildExtensionPackTool, () => {
+        Information("Building {0}", BuildParameters.SolutionFilePath);
 
-    var msbuildSettings = new MSBuildSettings().
-            SetPlatformTarget(ToolSettings.BuildPlatformTarget)
-            .WithProperty("TreatWarningsAsErrors","true")
-            .WithTarget("Build")
-            .SetMaxCpuCount(0)
-            .SetConfiguration(BuildParameters.Configuration)
-            .WithLogger(
-                Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
-                "XmlFileLogger",
-                string.Format(
-                    "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
-                    BuildParameters.Paths.Files.BuildLogFilePath)
-            );
+        var msbuildSettings = new MSBuildSettings().
+                SetPlatformTarget(ToolSettings.BuildPlatformTarget)
+                .WithProperty("TreatWarningsAsErrors","true")
+                .WithTarget("Build")
+                .SetMaxCpuCount(0)
+                .SetConfiguration(BuildParameters.Configuration)
+                .WithLogger(
+                    Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
+                    "XmlFileLogger",
+                    string.Format(
+                        "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
+                        BuildParameters.Paths.Files.BuildLogFilePath)
+                );
 
 
-    // TODO: Need to have an XBuild step here as well
-    MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
+        // TODO: Need to have an XBuild step here as well
+        MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
 
-    if(BuildParameters.ShouldExecuteGitLink)
-    {
-        ExecuteGitLink();
-    }
+        if(BuildParameters.ShouldExecuteGitLink)
+        {
+            ExecuteGitLink();
+        }
 
-    CopyBuildOutput();
-});
+        CopyBuildOutput();
+    })
+);
 
 public void CopyBuildOutput()
 {

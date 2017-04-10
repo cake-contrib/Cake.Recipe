@@ -8,10 +8,10 @@ Task("Upload-Coverage-Report")
     .WithCriteria(() => !BuildParameters.IsPullRequest)
     .WithCriteria(() => BuildParameters.IsMainRepository)
     .IsDependentOn("Test")
-    .Does(() =>
-{
-    CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
-    {
-        RepoToken = BuildParameters.Coveralls.RepoToken
-    });
-});
+    .Does(() => RequireTool(CoverallsTool, () => {
+        CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+        {
+            RepoToken = BuildParameters.Coveralls.RepoToken
+        });
+    })
+);

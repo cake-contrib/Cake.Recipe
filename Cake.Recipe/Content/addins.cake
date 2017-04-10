@@ -14,3 +14,19 @@
 #addin nuget:?package=Cake.Kudu&version=0.4.0
 #addin nuget:?package=Cake.Incubator&version=1.0.48
 #addin nuget:?package=Cake.Figlet&version=0.4.0
+
+Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
+    var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
+    try
+    {
+        System.IO.File.WriteAllText(script.FullPath, code);
+        CakeExecuteScript(script, new CakeSettings{ EnvironmentVariables = envVars });
+    }
+    finally
+    {
+        if (FileExists(script))
+        {
+            DeleteFile(script);
+        }
+    }
+};

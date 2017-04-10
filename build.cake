@@ -77,18 +77,10 @@ var publishingError = false;
 #addin nuget:?package=Cake.Kudu&version=0.4.0
 
 ///////////////////////////////////////////////////////////////////////////////
-// TOOLS
-///////////////////////////////////////////////////////////////////////////////
-
-#tool nuget:?package=gitreleasemanager&version=0.5.0
-#tool nuget:?package=GitVersion.CommandLine&version=3.6.2
-#tool nuget:?package=KuduSync.NET&version=1.3.1
-#tool nuget:?package=Wyam&version=0.17.1
-
-///////////////////////////////////////////////////////////////////////////////
 // LOAD
 ///////////////////////////////////////////////////////////////////////////////
 
+#load .\Cake.Recipe\Content\tools.cake
 #load .\Cake.Recipe\Content\appveyor.cake
 #load .\Cake.Recipe\Content\credentials.cake
 #load .\Cake.Recipe\Content\environment.cake
@@ -118,12 +110,14 @@ Setup(context =>
 
     BuildParameters.SetBuildPaths(BuildPaths.GetPaths(Context));
 
-    BuildParameters.SetBuildVersion(
-        BuildVersion.CalculatingSemanticVersion(
-            context: Context
-        )
-    );
-
+    RequireTool(GitVersionTool, () => {
+        BuildParameters.SetBuildVersion(
+            BuildVersion.CalculatingSemanticVersion(
+                context: Context
+            )
+        );
+    });
+    
     Information("Building version {0} of " + title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
         BuildParameters.Version.SemVersion,
         BuildParameters.Configuration,

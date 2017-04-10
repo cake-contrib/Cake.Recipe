@@ -1,66 +1,72 @@
 ///////////////////////////////////////////////////////////////////////////////
-// TOOLS
-///////////////////////////////////////////////////////////////////////////////
-
-#tool "nuget:?package=xunit.runner.console&version=2.1.0"
-#tool "nuget:?package=NUnit.ConsoleRunner&version=3.4.1"
-#tool "nuget:?package=OpenCover&version=4.6.519"
-#tool "nuget:?package=ReportGenerator&version=2.4.5"
-#tool "nuget:?package=ReportUnit&version=1.2.1"
-#tool "nuget:?package=Fixie&version=1.0.2"
-
-///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
+Task("Install-ReportGenerator")
+    .Does(() => RequireTool(ReportGeneratorTool, () => {
+    }));
+
+Task("Install-ReportUnit")
+    .IsDependentOn("Install-ReportGenerator")
+    .Does(() => RequireTool(ReportUnitTool, () => {
+    }));
+
+Task("Install-OpenCover")
+    .IsDependentOn("Install-ReportUnit")
+    .Does(() => RequireTool(OpenCoverTool, () => {
+    }));
+
 Task("Test-NUnit")
+    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedNUnitTests))
-    .Does(() =>
-{
-    EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
+    .Does(() => RequireTool(NUnitTool, () => {
+        EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
 
-    OpenCover(tool => {
-        tool.NUnit3(GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + "/**/*.Tests.dll"), new NUnit3Settings {
-            NoResults = true
-        });
-    },
-    BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-    new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
-        .WithFilter(ToolSettings.TestCoverageFilter)
-        .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-        .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+        OpenCover(tool => {
+            tool.NUnit3(GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + "/**/*.Tests.dll"), new NUnit3Settings {
+                NoResults = true
+            });
+        },
+        BuildParameters.Paths.Files.TestCoverageOutputFilePath,
+        new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+            .WithFilter(ToolSettings.TestCoverageFilter)
+            .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+            .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
-    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-    ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
-});
+        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+    })
+);
 
 Task("Test-xUnit")
+    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedxUnitTests))
-    .Does(() =>
-{
+    .Does(() => RequireTool(XUnitTool, () => {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.xUnitTestResults);
 
-    OpenCover(tool => {
-        tool.XUnit2(GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + "/**/*.Tests.dll"), new XUnit2Settings {
-            OutputDirectory = BuildParameters.Paths.Directories.xUnitTestResults,
-            XmlReport = true,
-            NoAppDomain = true
-        });
-    },
-    BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-    new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
-        .WithFilter(ToolSettings.TestCoverageFilter)
-        .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-        .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+        OpenCover(tool => {
+            tool.XUnit2(GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + "/**/*.Tests.dll"), new XUnit2Settings {
+                OutputDirectory = BuildParameters.Paths.Directories.xUnitTestResults,
+                XmlReport = true,
+                NoAppDomain = true
+            });
+        },
+        BuildParameters.Paths.Files.TestCoverageOutputFilePath,
+        new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+            .WithFilter(ToolSettings.TestCoverageFilter)
+            .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+            .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
-    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-    ReportUnit(BuildParameters.Paths.Directories.xUnitTestResults, BuildParameters.Paths.Directories.xUnitTestResults, new ReportUnitSettings());
+        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+        ReportUnit(BuildParameters.Paths.Directories.xUnitTestResults, BuildParameters.Paths.Directories.xUnitTestResults, new ReportUnitSettings());
 
-    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-    ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
-});
+        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+    })
+);
 
 Task("Test-MSTest")
+    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedMSTestTests))
     .Does(() =>
 {
@@ -73,6 +79,7 @@ Task("Test-MSTest")
 });
 
 Task("Test-VSTest")
+    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedVSTestTests))
     .Does(() =>
 {
@@ -104,28 +111,29 @@ Task("Test-VSTest")
 });
 
 Task("Test-Fixie")
+    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests))
-    .Does(() =>
-{
-    EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
+    .Does(() => RequireTool(FixieTool, () => {
+        EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
 
-    OpenCover(tool => {
-        tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + "/**/*.Tests.dll"), new FixieSettings  {           
-            XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"
-        });
-    },
-    BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-    new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
-        .WithFilter(ToolSettings.TestCoverageFilter)
-        .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-        .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+        OpenCover(tool => {
+            tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + "/**/*.Tests.dll"), new FixieSettings  {           
+                XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"
+            });
+        },
+        BuildParameters.Paths.Files.TestCoverageOutputFilePath,
+        new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+            .WithFilter(ToolSettings.TestCoverageFilter)
+            .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+            .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
-    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-    ReportUnit(BuildParameters.Paths.Directories.FixieTestResults, BuildParameters.Paths.Directories.FixieTestResults, new ReportUnitSettings());
+        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+        ReportUnit(BuildParameters.Paths.Directories.FixieTestResults, BuildParameters.Paths.Directories.FixieTestResults, new ReportUnitSettings());
 
-    // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-    ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
-});
+        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+    })
+);
 
 Task("Test")
     .IsDependentOn("Test-NUnit")

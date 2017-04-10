@@ -4,11 +4,13 @@
 
 public void ExecuteGitLink()
 {
-    Information("Starting GitLink Execution...");
+    RequireTool(GitLinkTool, () => {
+        Information("Starting GitLink Execution...");
 
-    GitLink(BuildParameters.RootDirectoryPath, new GitLinkSettings {
-        SolutionFileName = string.Concat(BuildParameters.SourceDirectoryPath.GetDirectoryName(), "/", BuildParameters.SolutionFilePath.GetFilename())
+        GitLink(BuildParameters.RootDirectoryPath, new GitLinkSettings {
+            SolutionFileName = string.Concat(BuildParameters.SourceDirectoryPath.GetDirectoryName(), "/", BuildParameters.SolutionFilePath.GetFilename())
+        });
+
+        Information("GitLink Execution completed.");
     });
-
-    Information("GitLink Execution completed.");
 }
