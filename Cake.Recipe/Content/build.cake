@@ -72,6 +72,14 @@ Teardown(context =>
         }
     }
 
+    // Clear nupkg files from tools directory
+    if(DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
+    {
+        Information("Deleting nupkg files...");
+        var nupkgFiles = GetFiles(Context.Environment.WorkingDirectory.Combine("tools") + "/**/*.nupkg");
+        DeleteFiles(nupkgFiles);
+    }
+
     Information("Finished running tasks.");
 });
 
