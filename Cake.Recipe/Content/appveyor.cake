@@ -52,7 +52,13 @@ Task("Upload-AppVeyor-Artifacts")
 });
 
 Task("Clear-AppVeyor-Cache")
-    .Does(() =>
-{
-    AppVeyorClearCache(new AppVeyorSettings() { ApiToken = BuildParameters.AppVeyor.ApiToken }, BuildParameters.AppVeyorAccountName, BuildParameters.AppVeyorProjectSlug);
-});
+    .Does(() => 
+        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=1.1.0.9
+        AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") }, 
+            EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""), 
+            EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
+        ",
+        new Dictionary<string, string> {{"TEMP_APPVEYOR_TOKEN", BuildParameters.AppVeyor.ApiToken}, 
+            {"TEMP_APPVEYOR_ACCOUNT_NAME", BuildParameters.AppVeyorAccountName}, 
+            {"TEMP_APPVEYOR_PROJECT_SLUG", BuildParameters.AppVeyorProjectSlug}}
+));
