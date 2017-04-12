@@ -137,19 +137,22 @@ public void PublishDocumentation()
                 ArgumentCustomization = args=>args.Append("--ignore").AppendQuoted(".git;CNAME")
             });
 
-            Information("Stage all changes...");
-            GitAddAll(publishFolder);
+            if (GitHasUncommitedChanges(publishFolder)) 
+            {
+                Information("Stage all changes...");
+                GitAddAll(publishFolder);
 
-            Information("Commit all changes...");
-            GitCommit(
-                publishFolder,
-                sourceCommit.Committer.Name,
-                sourceCommit.Committer.Email,
-                string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
+                Information("Commit all changes...");
+                GitCommit(
+                    publishFolder,
+                    sourceCommit.Committer.Name,
+                    sourceCommit.Committer.Email,
+                    string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
                 );
 
-            Information("Pushing all changes...");
-            GitPush(publishFolder, BuildParameters.Wyam.AccessToken, "x-oauth-basic", BuildParameters.Wyam.DeployBranch);
+                Information("Pushing all changes...");
+                GitPush(publishFolder, BuildParameters.Wyam.AccessToken, "x-oauth-basic", BuildParameters.Wyam.DeployBranch);
+            }
         }
         else
         {
