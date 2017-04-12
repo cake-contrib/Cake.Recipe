@@ -68,13 +68,28 @@ var publishingError = false;
 // ADDINS
 ///////////////////////////////////////////////////////////////////////////////
 
-#addin nuget:?package=Cake.AppVeyor&version=1.1.0.6
 #addin nuget:?package=Cake.Gitter&version=0.2.0
 #addin nuget:?package=Cake.Slack&version=0.4.0
 #addin nuget:?package=Cake.Twitter&version=0.1.0
 #addin nuget:?package=Cake.Wyam&version=0.17.1
 #addin nuget:?package=Cake.Git&version=0.12.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
+
+Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
+    var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
+    try
+    {
+        System.IO.File.WriteAllText(script.FullPath, code);
+        CakeExecuteScript(script, new CakeSettings{ EnvironmentVariables = envVars });
+    }
+    finally
+    {
+        if (FileExists(script))
+        {
+            DeleteFile(script);
+        }
+    }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // LOAD
