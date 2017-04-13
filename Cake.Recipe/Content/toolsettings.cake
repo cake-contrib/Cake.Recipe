@@ -8,6 +8,7 @@ public static class ToolSettings
     public static string TestCoverageExcludeByAttribute { get; private set; }
     public static string TestCoverageExcludeByFile { get; private set; }
     public static PlatformTarget BuildPlatformTarget { get; private set; }
+    public static int MaxCpuCount { get; private set; }
     public static DirectoryPath OutputDirectory { get; private set; }
 
     public static void SetToolSettings(
@@ -17,6 +18,7 @@ public static class ToolSettings
         string testCoverageExcludeByAttribute = null,
         string testCoverageExcludeByFile = null,
         PlatformTarget? buildPlatformTarget = null,
+        int? maxCpuCount = null,
         DirectoryPath outputDirectory = null,
         string[] dupFinderExcludeFilesByStartingCommentSubstring = null,
         int? dupFinderDiscardCost = null,
@@ -34,6 +36,7 @@ public static class ToolSettings
         TestCoverageExcludeByAttribute = testCoverageExcludeByAttribute ?? "*.ExcludeFromCodeCoverage*";
         TestCoverageExcludeByFile = testCoverageExcludeByFile ?? "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs";
         BuildPlatformTarget = buildPlatformTarget ?? PlatformTarget.MSIL;
+        MaxCpuCount = maxCpuCount ?? 0;
         OutputDirectory = outputDirectory;
     }
 }

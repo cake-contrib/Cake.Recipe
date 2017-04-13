@@ -137,7 +137,7 @@ Task("Build")
                 SetPlatformTarget(ToolSettings.BuildPlatformTarget)
                 .WithProperty("TreatWarningsAsErrors","true")
                 .WithTarget("Build")
-                .SetMaxCpuCount(0)
+                .SetMaxCpuCount(ToolSettings.MaxCpuCount)
                 .SetConfiguration(BuildParameters.Configuration)
                 .WithLogger(
                     Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
