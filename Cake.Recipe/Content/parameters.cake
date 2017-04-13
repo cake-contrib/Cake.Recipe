@@ -46,6 +46,7 @@ public static class BuildParameters
     public static bool ShouldPostToMicrosoftTeams { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
+    public static bool ShouldNotifyBetaReleases { get; private set; }
 
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
@@ -155,6 +156,7 @@ public static class BuildParameters
         context.Information("ShouldPostToMicrosoftTeams: {0}", ShouldPostToMicrosoftTeams);
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
+        context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("ShouldExecuteGitLink: {0}", ShouldExecuteGitLink);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
@@ -194,6 +196,7 @@ public static class BuildParameters
         bool shouldPostToMicrosoftTeams = false,
         bool shouldDownloadMilestoneReleaseNotes = false,
         bool shouldDownloadFullReleaseNotes = false,
+        bool shouldNotifyBetaReleases = false,
         FilePath milestoneReleaseNotesFilePath = null,
         FilePath fullReleaseNotesFilePath = null,
         bool shouldPublishMyGet = true,
@@ -244,6 +247,7 @@ public static class BuildParameters
         ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
+        ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
