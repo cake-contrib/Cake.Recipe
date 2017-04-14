@@ -71,7 +71,7 @@ var publishDocumentationTask = Task("Publish-Documentation")
     publishingError = true;
 });
 
-task previewDocumentationTask = Task("Preview-Documentation")
+var previewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {
         Wyam(new WyamSettings
