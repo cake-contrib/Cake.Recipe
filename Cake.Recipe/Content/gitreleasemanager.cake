@@ -9,7 +9,7 @@ var createReleaseNotesTask = Task("Create-Release-Notes")
             GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, new GitReleaseManagerCreateSettings {
                 Milestone         = BuildParameters.Version.Milestone,
                 Name              = BuildParameters.Version.Milestone,
-                Prerelease        = true,
+                Prerelease        = false,
                 TargetCommitish   = "master"
             });
         }
