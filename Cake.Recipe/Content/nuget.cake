@@ -1,4 +1,4 @@
-Task("Create-NuGet-Packages")
+var createNuGetPackagesTask = Task("Create-NuGet-Packages")
     .IsDependentOn("Build")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NugetNuspecDirectory))
     .Does(() =>
@@ -50,7 +50,7 @@ Task("Create-NuGet-Packages")
     }
 });
 
-Task("Publish-MyGet-Packages")
+var publishMyGetPackagesTask = Task("Publish-MyGet-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishMyGet)
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
@@ -93,7 +93,7 @@ Task("Publish-MyGet-Packages")
     publishingError = true;
 });
 
-Task("Publish-Nuget-Packages")
+var publishNuGetPackagesTask = Task("Publish-Nuget-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishNuGet)
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))

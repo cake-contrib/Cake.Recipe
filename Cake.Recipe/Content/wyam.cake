@@ -2,13 +2,13 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Clean-Documentation")
+var cleanDocumentationTask = Task("Clean-Documentation")
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
 });
 
-Task("Publish-Documentation")
+var publishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
@@ -71,7 +71,7 @@ Task("Publish-Documentation")
     publishingError = true;
 });
 
-Task("Preview-Documentation")
+task previewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {
         Wyam(new WyamSettings
@@ -95,7 +95,7 @@ Task("Preview-Documentation")
     })
 );
 
-Task("Force-Publish-Documentation")
+var forcePublishDocumentationTask = Task("Force-Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {

@@ -2,7 +2,7 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Create-Release-Notes")
+var createReleaseNotesTask = Task("Create-Release-Notes")
     .Does(() => RequireTool(GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
@@ -20,7 +20,7 @@ Task("Create-Release-Notes")
     })
 );
 
-Task("Export-Release-Notes")
+var exportReleaseNotesTask = Task("Export-Release-Notes")
     .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes)
     .WithCriteria(() => !BuildParameters.IsLocalBuild)
     .WithCriteria(() => !BuildParameters.IsPullRequest)
@@ -49,7 +49,7 @@ Task("Export-Release-Notes")
     })
 );
 
-Task("Publish-GitHub-Release")
+var publishGitHubReleaseTask = Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishGitHub)
     .Does(() => RequireTool(GitReleaseManagerTool, () => {

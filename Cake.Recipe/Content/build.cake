@@ -87,7 +87,7 @@ Teardown(context =>
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Show-Info")
+var showInfoTask = Task("Show-Info")
     .Does(() =>
 {
     Information("Target: {0}", BuildParameters.Target);
@@ -99,7 +99,7 @@ Task("Show-Info")
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 
-Task("Clean")
+var cleanTask = Task("Clean")
     .Does(() =>
 {
     Information("Cleaning...");
@@ -107,7 +107,7 @@ Task("Clean")
     CleanDirectories(BuildParameters.Paths.Directories.ToClean);
 });
 
-Task("Restore")
+var restoreTask = Task("Restore")
     .Does(() =>
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
@@ -125,7 +125,7 @@ Task("Restore")
         });
 });
 
-Task("Build")
+var buildTask = Task("Build")
     .IsDependentOn("Show-Info")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
@@ -284,17 +284,17 @@ public void CopyBuildOutput()
     }
 }
 
-Task("Package")
+var packageTask = Task("Package")
     .IsDependentOn("Export-Release-Notes")
     .IsDependentOn("Create-NuGet-Packages")
     .IsDependentOn("Create-Chocolatey-Packages")
     .IsDependentOn("Test")
     .IsDependentOn("Analyze");
 
-Task("Default")
+var defaultTask = Task("Default")
     .IsDependentOn("Package");
 
-Task("AppVeyor")
+var appVeyorTask = Task("AppVeyor")
     .IsDependentOn("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Upload-Coverage-Report")
     .IsDependentOn("Publish-MyGet-Packages")
@@ -310,16 +310,16 @@ Task("AppVeyor")
     }
 });
 
-Task("ReleaseNotes")
+var releaseNotesTask = Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
-Task("ClearCache")
+var clearCachceTask = Task("ClearCache")
   .IsDependentOn("Clear-AppVeyor-Cache");
 
-Task("Preview")
+var previewTask = Task("Preview")
   .IsDependentOn("Preview-Documentation");
   
-Task("PublishDocs")
+var publishDocsTask = Task("PublishDocs")
     .IsDependentOn("Force-Publish-Documentation");
     
 ///////////////////////////////////////////////////////////////////////////////

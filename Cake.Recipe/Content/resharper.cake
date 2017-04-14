@@ -2,7 +2,7 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("DupFinder")
+var dupFinderTask = Task("DupFinder")
     .IsDependentOn("Clean")
     .Does(() => RequireTool(ReSharperTools, () => {
         var settings = new DupFinderSettings() {
@@ -53,7 +53,7 @@ Task("DupFinder")
     });
 });
 
-Task("InspectCode")
+var inspectCodeTask = Task("InspectCode")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
     .Does(() => RequireTool(ReSharperTools, () => {
@@ -93,6 +93,6 @@ Task("InspectCode")
     });
 });
 
-Task("Analyze")
+var analyzeTask = Task("Analyze")
     .IsDependentOn("DupFinder")
     .IsDependentOn("InspectCode");

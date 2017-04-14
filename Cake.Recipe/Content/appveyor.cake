@@ -2,7 +2,7 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Print-AppVeyor-Environment-Variables")
+var printAppVeyorEnviromentVariablesTask = Task("Print-AppVeyor-Environment-Variables")
     .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
     .Does(() =>
 {
@@ -34,7 +34,7 @@ Task("Print-AppVeyor-Environment-Variables")
     Information("CONFIGURATION: {0}", EnvironmentVariable("CONFIGURATION"));
 });
 
-Task("Upload-AppVeyor-Artifacts")
+var uploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor)
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
@@ -51,7 +51,7 @@ Task("Upload-AppVeyor-Artifacts")
     }
 });
 
-Task("Clear-AppVeyor-Cache")
+var clearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() => 
         RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=1.1.0.9
         AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") }, 
