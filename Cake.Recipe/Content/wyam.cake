@@ -52,7 +52,8 @@ var publishDocumentationTask = Task("Publish-Documentation")
                     { "Host",  BuildParameters.WebHost },
                     { "LinkRoot",  BuildParameters.WebLinkRoot },
                     { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
-                    { "SourceFiles", BuildParameters.WyamSourceFiles }
+                    { "SourceFiles", BuildParameters.WyamSourceFiles },
+                    { "Title", BuildParameters.Title }
                 }
             });
 
@@ -89,7 +90,8 @@ var previewDocumentationTask = Task("Preview-Documentation")
                 { "Host",  BuildParameters.WebHost },
                 { "LinkRoot",  BuildParameters.WebLinkRoot },
                 { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
-                { "SourceFiles", BuildParameters.WyamSourceFiles }
+                { "SourceFiles", BuildParameters.WyamSourceFiles },
+                { "Title", BuildParameters.Title }
             }
         });
     })
@@ -112,7 +114,8 @@ var forcePublishDocumentationTask = Task("Force-Publish-Documentation")
                 { "Host",  BuildParameters.WebHost },
                 { "LinkRoot",  BuildParameters.WebLinkRoot },
                 { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
-                { "SourceFiles", BuildParameters.WyamSourceFiles }
+                { "SourceFiles", BuildParameters.WyamSourceFiles },
+                { "Title", BuildParameters.Title }
             }
         });
 
