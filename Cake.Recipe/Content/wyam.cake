@@ -53,7 +53,8 @@ var publishDocumentationTask = Task("Publish-Documentation")
                     { "LinkRoot",  BuildParameters.WebLinkRoot },
                     { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
                     { "SourceFiles", BuildParameters.WyamSourceFiles },
-                    { "Title", BuildParameters.Title }
+                    { "Title", BuildParameters.Title },
+                    { "IncludeGlobalNamespace", false }
                 }
             });
 
@@ -91,7 +92,8 @@ var previewDocumentationTask = Task("Preview-Documentation")
                 { "LinkRoot",  BuildParameters.WebLinkRoot },
                 { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
                 { "SourceFiles", BuildParameters.WyamSourceFiles },
-                { "Title", BuildParameters.Title }
+                { "Title", BuildParameters.Title },
+                { "IncludeGlobalNamespace", false }
             }
         });
     })
@@ -115,7 +117,8 @@ var forcePublishDocumentationTask = Task("Force-Publish-Documentation")
                 { "LinkRoot",  BuildParameters.WebLinkRoot },
                 { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
                 { "SourceFiles", BuildParameters.WyamSourceFiles },
-                { "Title", BuildParameters.Title }
+                { "Title", BuildParameters.Title },
+                { "IncludeGlobalNamespace", false }
             }
         });
 
