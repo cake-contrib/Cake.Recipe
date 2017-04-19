@@ -71,7 +71,7 @@ var publishingError = false;
 #addin nuget:?package=Cake.Gitter&version=0.2.0
 #addin nuget:?package=Cake.Slack&version=0.4.0
 #addin nuget:?package=Cake.Twitter&version=0.1.0
-#addin nuget:?package=Cake.Wyam&version=0.17.6
+#addin nuget:?package=Cake.Wyam&version=0.17.7
 #addin nuget:?package=Cake.Git&version=0.13.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
 
