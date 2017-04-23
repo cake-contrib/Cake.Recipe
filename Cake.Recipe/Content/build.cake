@@ -157,8 +157,31 @@ var buildTask = Task("Build")
         }
 
         CopyBuildOutput();
-    })
-);
+    }))
+    .Finally(() => {
+        CreateCodeAnalysisReport();
+    });
+
+public void CreateCodeAnalysisReport()
+{
+    EnsureDirectoryExists(BuildParameters.Paths.Directories.CodeAnalysisResults);
+
+    Information("Create MsBuild code analysis report by rule...");
+    var fileName = BuildParameters.Paths.Directories.CodeAnalysisResults.CombineWithFilePath("ByRule.html");
+    CreateMsBuildCodeAnalysisReport(
+        BuildParameters.Paths.Files.BuildLogFilePath,
+        CodeAnalysisReport.MsBuildXmlFileLoggerByRule,
+        fileName);
+    Information("MsBuild code analysis report by rule was written to: {0}", fileName.FullPath);
+
+    Information("Create MsBuild code analysis report by assembly...");
+    fileName = BuildParameters.Paths.Directories.CodeAnalysisResults.CombineWithFilePath("ByAssembly.html");
+    CreateMsBuildCodeAnalysisReport(
+        BuildParameters.Paths.Files.BuildLogFilePath,
+        CodeAnalysisReport.MsBuildXmlFileLoggerByAssembly,
+        BuildParameters.Paths.Directories.CodeAnalysisResults.CombineWithFilePath("ByAssembly.html"));
+    Information("MsBuild code analysis report by assembly was written to: {0}", fileName.FullPath);        
+}
 
 public void CopyBuildOutput()
 {
