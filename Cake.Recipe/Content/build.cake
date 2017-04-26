@@ -247,6 +247,7 @@ public void CopyBuildOutput()
         var isxUnitTestProject = false;
         var ismsTestProject = false;
         var isFixieProject = false;
+        var isNUnitProject = false;
 
         // Now we need to test for whether this is a unit test project.  Currently, this is only testing for XUnit Projects.
         // It needs to be extended to include others, i.e. NUnit, MSTest, and VSTest
@@ -268,6 +269,11 @@ public void CopyBuildOutput()
             {
                 isFixieProject = true;
                 break;
+            }
+            else if(reference.Include.ToLower().Contains("nunit.framework"))
+            {
+                isNUnitProject = true;;
+                break;            
             }
         }
 
@@ -292,6 +298,14 @@ public void CopyBuildOutput()
         {
             Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
+            EnsureDirectoryExists(outputFolder);
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            continue;
+        }
+        else if(parsedProject.OutputType.ToLower() == "library" && isNUnitProject)
+        {
+            Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
             continue;
