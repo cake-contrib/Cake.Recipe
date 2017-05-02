@@ -1,5 +1,5 @@
 ---
-Order: 20
+Order: 25
 Title: How to clean AppVeyor cache
 ---
 
