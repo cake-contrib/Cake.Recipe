@@ -66,6 +66,12 @@ API token for accessing AppVeyor. Used to [clean AppVeyor build cache](../usage/
 
 ## WYAM_ACCESS_TOKEN
 
+Access token to use to publish the Wyam documentation. Used to [publish documentation](../usage/publishing-documentation).
+
 ## WYAM_DEPLOY_REMOTE
 
+URI of the remote repository where the Wyam documentation is published to. Used to [publish documentation](../usage/publishing-documentation).
+
 ## WYAM_DEPLOY_BRANCH
+
+Branch into which the Wyam documentation should be published. Used to [publish documentation](../usage/publishing-documentation).
