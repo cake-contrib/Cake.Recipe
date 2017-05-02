@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - How to clean AppVeyor cache</title>
+        <title>Cake.Recipe - How to preview documentation</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -72,7 +72,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/cleaning-cache.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/previewing-documentation.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -93,9 +93,9 @@
                     <ul class="treeview-menu">
                                         <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
 
                     </ul>
                 </li>
@@ -111,18 +111,16 @@
 
 
 	<section class="content-header">
-		<h1>How to clean AppVeyor cache</h1>
+		<h1>How to preview documentation</h1>
 	</section>
 	<section class="content">
-		<p>This document describes how to clear the AppVeyor build cache using the <code>Cake.Recipe</code> script.</p>
+		<p>This document describes how to preview the documentation in a local webserver using the <code>Cake.Recipe</code> script.</p>
 <ol>
-<li>Make sure that you have the following environment variables set in your local development environment:
-<ul>
-<li><a href="../fundamentals/environment-variables#appveyor_api_token">APPVEYOR_API_TOKEN</a></li>
-</ul>
-</li>
-<li>Run <code>.\build.ps1 -target clearcache</code>.</li>
+<li>Run <code>.\build.ps1 -target preview</code>.</li>
+<li>Open your browser at <code>http:\\localhost:5080\&lt;BuildParameters.WebLinkRoot&gt;</code></li>
 </ol>
+<div class="alert alert-info"><p>The scripts supports watching for changes and automatically rebuilds the documentation without requiring to restart the build task.</p>
+</div>
 
 	</section>
                 
