@@ -2,21 +2,21 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Install-ReportGenerator")
+BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
     .Does(() => RequireTool(ReportGeneratorTool, () => {
     }));
 
-Task("Install-ReportUnit")
+BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
     .IsDependentOn("Install-ReportGenerator")
     .Does(() => RequireTool(ReportUnitTool, () => {
     }));
 
-Task("Install-OpenCover")
+BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
     .IsDependentOn("Install-ReportUnit")
     .Does(() => RequireTool(OpenCoverTool, () => {
     }));
 
-var testNUnitTask = Task("Test-NUnit")
+BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedNUnitTests))
     .Does(() => RequireTool(NUnitTool, () => {
@@ -38,7 +38,7 @@ var testNUnitTask = Task("Test-NUnit")
     })
 );
 
-var testxUnitTask = Task("Test-xUnit")
+BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedxUnitTests))
     .Does(() => RequireTool(XUnitTool, () => {
@@ -65,7 +65,7 @@ var testxUnitTask = Task("Test-xUnit")
     })
 );
 
-var testMSTestTask = Task("Test-MSTest")
+BuildParameters.Tasks.TestMSTestTask = Task("Test-MSTest")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedMSTestTests))
     .Does(() =>
@@ -78,7 +78,7 @@ var testMSTestTask = Task("Test-MSTest")
     });
 });
 
-var testVSTestTask = Task("Test-VSTest")
+BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedVSTestTests))
     .Does(() =>
@@ -93,7 +93,7 @@ var testVSTestTask = Task("Test-VSTest")
     if (AppVeyor.IsRunningOnAppVeyor)
     {
         vsTestSettings.WithAppVeyorLogger();
-    } 
+    }
 
     OpenCover(
 		tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + "/**/*.Tests.dll"), vsTestSettings); },
@@ -110,14 +110,14 @@ var testVSTestTask = Task("Test-VSTest")
     ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
 });
 
-var testFixieTask = Task("Test-Fixie")
+BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests))
     .Does(() => RequireTool(FixieTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
 
         OpenCover(tool => {
-            tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + "/**/*.Tests.dll"), new FixieSettings  {           
+            tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + "/**/*.Tests.dll"), new FixieSettings  {
                 XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"
             });
         },
@@ -135,7 +135,7 @@ var testFixieTask = Task("Test-Fixie")
     })
 );
 
-var testTask = Task("Test")
+BuildParameters.Tasks.TestTask = Task("Test")
     .IsDependentOn("Test-NUnit")
     .IsDependentOn("Test-xUnit")
     .IsDependentOn("Test-MSTest")

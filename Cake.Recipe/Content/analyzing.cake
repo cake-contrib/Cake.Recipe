@@ -2,8 +2,7 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-var dupFinderTask = Task("DupFinder")
-    .IsDependentOn("Clean")
+BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
     .Does(() => RequireTool(ReSharperTools, () => {
         var settings = new DupFinderSettings() {
             ShowStats = true,
@@ -53,9 +52,7 @@ var dupFinderTask = Task("DupFinder")
     });
 });
 
-var inspectCodeTask = Task("InspectCode")
-    .IsDependentOn("Clean")
-    .IsDependentOn("Restore")
+BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     .Does(() => RequireTool(ReSharperTools, () => {
         var settings = new InspectCodeSettings() {
             SolutionWideAnalysis = true,
@@ -85,7 +82,7 @@ var inspectCodeTask = Task("InspectCode")
         {
             AppVeyor.UploadArtifact(outputHtmlFile);
         }
-        
+
         if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
         {
             StartProcess("explorer.exe", outputHtmlFile.FullPath);
@@ -93,6 +90,6 @@ var inspectCodeTask = Task("InspectCode")
     });
 });
 
-var analyzeTask = Task("Analyze")
+BuildParameters.Tasks.AnalyzeTask = Task("Analyze")
     .IsDependentOn("DupFinder")
     .IsDependentOn("InspectCode");

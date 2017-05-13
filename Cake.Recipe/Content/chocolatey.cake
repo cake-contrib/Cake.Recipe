@@ -1,5 +1,4 @@
-var createdChocolateyPackagesTask = Task("Create-Chocolatey-Packages")
-    .IsDependentOn("Build")
+BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Packages")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory))
     .Does(() =>
 {
@@ -21,7 +20,7 @@ var createdChocolateyPackagesTask = Task("Create-Chocolatey-Packages")
     }
 });
 
-var publishChocolateyPackagesTasks = Task("Publish-Chocolatey-Packages")
+BuildParameters.Tasks.PublishChocolateyPackagesTask = Task("Publish-Chocolatey-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishChocolatey)
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))

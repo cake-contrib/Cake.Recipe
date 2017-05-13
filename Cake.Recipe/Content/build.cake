@@ -87,7 +87,7 @@ Teardown(context =>
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-var showInfoTask = Task("Show-Info")
+BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     .Does(() =>
 {
     Information("Target: {0}", BuildParameters.Target);
@@ -99,7 +99,7 @@ var showInfoTask = Task("Show-Info")
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
 
-var cleanTask = Task("Clean")
+BuildParameters.Tasks.CleanTask = Task("Clean")
     .Does(() =>
 {
     Information("Cleaning...");
@@ -107,7 +107,13 @@ var cleanTask = Task("Clean")
     CleanDirectories(BuildParameters.Paths.Directories.ToClean);
 });
 
-var restoreTask = Task("Restore")
+BuildParameters.Tasks.DotNetCoreCleanTask = Task("DotNetCore-Clean")
+    .Does(() =>
+{
+    Information("DotNetCore-Clean...");
+});
+
+BuildParameters.Tasks.RestoreTask = Task("Restore")
     .Does(() =>
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
@@ -115,17 +121,23 @@ var restoreTask = Task("Restore")
     // TODO Use parameter for Cake Contrib feed from environment variable, similar to BuildParameters.MyGet.SourceUrl
     NuGetRestore(
         BuildParameters.SolutionFilePath,
-        new NuGetRestoreSettings 
-        { 
-            Source = new List<string> 
-            { 
+        new NuGetRestoreSettings
+        {
+            Source = new List<string>
+            {
                 "https://www.nuget.org/api/v2",
-                "https://www.myget.org/F/cake-contrib/api/v2" 
+                "https://www.myget.org/F/cake-contrib/api/v2"
             }
         });
 });
 
-var buildTask = Task("Build")
+BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
+    .Does(() =>
+{
+    Information("DotNetCore-Restore...");
+});
+
+BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Show-Info")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
@@ -162,6 +174,16 @@ var buildTask = Task("Build")
         CreateCodeAnalysisReport();
     });
 
+
+BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
+    .IsDependentOn("Show-Info")
+    .IsDependentOn("Print-AppVeyor-Environment-Variables")
+    .IsDependentOn("DotNetCore-Clean")
+    .IsDependentOn("DotNetCore-Restore")
+    .Does(() => {
+        Information("DotNetCore-Build...");
+    });
+
 public void CreateCodeAnalysisReport()
 {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.CodeAnalysisResults);
@@ -180,7 +202,7 @@ public void CreateCodeAnalysisReport()
         BuildParameters.Paths.Files.BuildLogFilePath,
         CodeAnalysisReport.MsBuildXmlFileLoggerByAssembly,
         BuildParameters.Paths.Directories.CodeAnalysisResults.CombineWithFilePath("ByAssembly.html"));
-    Information("MsBuild code analysis report by assembly was written to: {0}", fileName.FullPath);        
+    Information("MsBuild code analysis report by assembly was written to: {0}", fileName.FullPath);
 }
 
 public void CopyBuildOutput()
@@ -212,7 +234,7 @@ public void CopyBuildOutput()
         }
 
         // If the project is an exe, then simply copy all of the contents to the correct output folder
-        if(parsedProject.OutputType.ToLower() == "exe" || parsedProject.OutputType.ToLower() == "winexe") 
+        if(parsedProject.OutputType.ToLower() == "exe" || parsedProject.OutputType.ToLower() == "winexe")
         {
             Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
@@ -240,7 +262,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is a Web Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
 
@@ -273,7 +295,7 @@ public void CopyBuildOutput()
             else if(reference.Include.ToLower().Contains("nunit.framework"))
             {
                 isNUnitProject = true;;
-                break;            
+                break;
             }
         }
 
@@ -282,7 +304,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.OutputType.ToLower() == "library" && ismsTestProject)
@@ -291,7 +313,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.OutputType.ToLower() == "library" && isFixieProject)
@@ -299,7 +321,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.OutputType.ToLower() == "library" && isNUnitProject)
@@ -307,7 +329,7 @@ public void CopyBuildOutput()
             Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else
@@ -315,23 +337,23 @@ public void CopyBuildOutput()
             Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true); 
+            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
     }
 }
 
-var packageTask = Task("Package")
+BuildParameters.Tasks.PackageTask = Task("Package")
     .IsDependentOn("Export-Release-Notes")
     .IsDependentOn("Create-NuGet-Packages")
     .IsDependentOn("Create-Chocolatey-Packages")
     .IsDependentOn("Test")
     .IsDependentOn("Analyze");
 
-var defaultTask = Task("Default")
+BuildParameters.Tasks.DefaultTask = Task("Default")
     .IsDependentOn("Package");
 
-var appVeyorTask = Task("AppVeyor")
+BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
     .IsDependentOn("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Upload-Coverage-Report")
     .IsDependentOn("Publish-MyGet-Packages")
@@ -347,18 +369,18 @@ var appVeyorTask = Task("AppVeyor")
     }
 });
 
-var releaseNotesTask = Task("ReleaseNotes")
+BuildParameters.Tasks.ReleaseNotesTask = Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
-var clearCachceTask = Task("ClearCache")
+BuildParameters.Tasks.ClearCacheTask = Task("ClearCache")
   .IsDependentOn("Clear-AppVeyor-Cache");
 
-var previewTask = Task("Preview")
+BuildParameters.Tasks.PreviewTask = Task("Preview")
   .IsDependentOn("Preview-Documentation");
-  
-var publishDocsTask = Task("PublishDocs")
+
+BuildParameters.Tasks.PublishDocsTask = Task("PublishDocs")
     .IsDependentOn("Force-Publish-Documentation");
-    
+
 ///////////////////////////////////////////////////////////////////////////////
 // EXECUTION
 ///////////////////////////////////////////////////////////////////////////////
@@ -382,6 +404,23 @@ public class Builder
 
     public void Run()
     {
-        _action(BuildParameters.Target);       
+        BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("Build");
+        BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn("Build");
+        BuildParameters.Tasks.TestTask.IsDependentOn("Build");
+        BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
+        BuildParameters.Tasks.InspectCodeTask.IsDependentOn("Restore");
+
+        _action(BuildParameters.Target);
+    }
+
+    public void RunDotNetCore()
+    {
+        BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("DotNetCore-Build");
+        BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn("DotNetCore-Build");
+        BuildParameters.Tasks.TestTask.IsDependentOn("DotNetCore-Build");
+        BuildParameters.Tasks.DupFinderTask.IsDependentOn("DotNetCore-Clean");
+        BuildParameters.Tasks.InspectCodeTask.IsDependentOn("DotNetCore-Restore");
+
+        _action(BuildParameters.Target);
     }
 }

@@ -2,7 +2,7 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-var uploadCoverageReportTask = Task("Upload-Coverage-Report")
+BuildParameters.Tasks.UploadCoverageReportTask = Task("Upload-Coverage-Report")
     .WithCriteria(() => FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
     .WithCriteria(() => !BuildParameters.IsLocalBuild)
     .WithCriteria(() => !BuildParameters.IsPullRequest)

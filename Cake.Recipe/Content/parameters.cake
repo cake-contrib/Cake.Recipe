@@ -28,7 +28,7 @@ public static class BuildParameters
     public static WyamCredentials Wyam { get; private set; }
     public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
-    
+    public static BuildTasks Tasks { get; set; }
     public static DirectoryPath RootDirectoryPath { get; private set; }
     public static FilePath SolutionFilePath { get; private set; }
     public static DirectoryPath SourceDirectoryPath { get; private set; }
@@ -39,7 +39,7 @@ public static class BuildParameters
     public static string RepositoryName { get; private set; }
     public static string AppVeyorAccountName { get; private set; }
     public static string AppVeyorProjectSlug { get; private set; }
-    
+
     public static bool ShouldPostToGitter { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToTwitter { get; private set; }
@@ -67,6 +67,11 @@ public static class BuildParameters
     public static string WebHost { get; private set; }
     public static string WebLinkRoot { get; private set; }
     public static string WebBaseEditUrl { get; private set; }
+
+    static BuildParameters()
+    {
+        Tasks = new BuildTasks();
+    }
 
     public static bool CanUseGitReleaseManager
     {
@@ -131,7 +136,7 @@ public static class BuildParameters
 
     public static void SetBuildPaths(BuildPaths paths)
     {
-        Paths  = paths;
+        Paths = paths;
     }
 
     public static void PrintParameters(ICakeContext context)
@@ -219,7 +224,7 @@ public static class BuildParameters
         {
             throw new ArgumentNullException("context");
         }
-        
+
         SourceDirectoryPath = sourceDirectoryPath;
         Title = title;
         SolutionFilePath = solutionFilePath ?? SourceDirectoryPath.CombineWithFilePath(Title + ".sln");
@@ -292,6 +297,8 @@ public static class BuildParameters
             publishTarget => StringComparer.OrdinalIgnoreCase.Equals(publishTarget, Target)
         );
 
+        SetBuildTasks();
+
         SetBuildPaths(BuildPaths.GetPaths(context));
 
         ShouldPublishMyGet = (!IsLocalBuild &&
@@ -306,7 +313,7 @@ public static class BuildParameters
                                 (IsMasterBranch || IsReleaseBranch || IsHotFixBranch) &&
                                 IsTagged &&
                                 shouldPublishNuGet);
-        
+
         ShouldPublishChocolatey = (!IsLocalBuild &&
                                     !IsPullRequest &&
                                     IsMainRepository &&
@@ -327,7 +334,7 @@ public static class BuildParameters
                                 (IsMasterBranch || IsDevelopBranch) &&
                                 shouldGenerateDocumentation);
 
-        ShouldExecuteGitLink = (!IsLocalBuild && 
+        ShouldExecuteGitLink = (!IsLocalBuild &&
                             !IsPullRequest &&
                             IsMainRepository &&
                             (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&

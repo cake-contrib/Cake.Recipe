@@ -2,13 +2,13 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-var cleanDocumentationTask = Task("Clean-Documentation")
+BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
 });
 
-var publishDocumentationTask = Task("Publish-Documentation")
+BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
@@ -21,24 +21,24 @@ var publishDocumentationTask = Task("Publish-Documentation")
         var docFileChanged = false;
 
         var wyamDocsFolderDirectoryName = BuildParameters.WyamRootDirectoryPath.GetDirectoryName();
-        
+
         foreach(var file in filesChanged)
         {
             var backslash = '\\';
             Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-            if(file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, backslash)) || 
+            if(file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, backslash)) ||
                 file.Path.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, backslash)) ||
                 file.Path.Contains("config.wyam"))
             {
             docFileChanged = true;
-            break; 
+            break;
             }
         }
 
         if(docFileChanged)
         {
             Information("Detected that documentation files have changed, so running Wyam...");
-            
+
             Wyam(new WyamSettings
             {
                 Recipe = BuildParameters.WyamRecipe,
@@ -73,7 +73,7 @@ var publishDocumentationTask = Task("Publish-Documentation")
     publishingError = true;
 });
 
-var previewDocumentationTask = Task("Preview-Documentation")
+BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {
         Wyam(new WyamSettings
@@ -99,7 +99,7 @@ var previewDocumentationTask = Task("Preview-Documentation")
     })
 );
 
-var forcePublishDocumentationTask = Task("Force-Publish-Documentation")
+BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => RequireTool(WyamTool, () => {
@@ -139,11 +139,11 @@ public void PublishDocumentation()
             GitClone(BuildParameters.Wyam.DeployRemote, publishFolder, new GitCloneSettings{ BranchName = BuildParameters.Wyam.DeployBranch });
 
             Information("Sync output files...");
-            Kudu.Sync(BuildParameters.Paths.Directories.PublishedDocumentation, publishFolder, new KuduSyncSettings { 
+            Kudu.Sync(BuildParameters.Paths.Directories.PublishedDocumentation, publishFolder, new KuduSyncSettings {
                 ArgumentCustomization = args=>args.Append("--ignore").AppendQuoted(".git;CNAME")
             });
 
-            if (GitHasUncommitedChanges(publishFolder)) 
+            if (GitHasUncommitedChanges(publishFolder))
             {
                 Information("Stage all changes...");
                 GitAddAll(publishFolder);

@@ -111,6 +111,7 @@ Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
 #load .\Cake.Recipe\Content\twitter.cake
 #load .\Cake.Recipe\Content\wyam.cake
 #load .\Cake.Recipe\Content\gitlink.cake
+#load .\Cake.Recipe\Content\tasks.cake
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN

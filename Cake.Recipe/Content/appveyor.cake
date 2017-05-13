@@ -2,7 +2,7 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-var printAppVeyorEnviromentVariablesTask = Task("Print-AppVeyor-Environment-Variables")
+BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVeyor-Environment-Variables")
     .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
     .Does(() =>
 {
@@ -34,7 +34,7 @@ var printAppVeyorEnviromentVariablesTask = Task("Print-AppVeyor-Environment-Vari
     Information("CONFIGURATION: {0}", EnvironmentVariable("CONFIGURATION"));
 });
 
-var uploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
+BuildParameters.Tasks.UploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor)
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
@@ -51,14 +51,14 @@ var uploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
     }
 });
 
-var clearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
-    .Does(() => 
+BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
+    .Does(() =>
         RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=1.1.0.9
-        AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") }, 
-            EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""), 
+        AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
+            EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
             EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
         ",
-        new Dictionary<string, string> {{"TEMP_APPVEYOR_TOKEN", BuildParameters.AppVeyor.ApiToken}, 
-            {"TEMP_APPVEYOR_ACCOUNT_NAME", BuildParameters.AppVeyorAccountName}, 
+        new Dictionary<string, string> {{"TEMP_APPVEYOR_TOKEN", BuildParameters.AppVeyor.ApiToken},
+            {"TEMP_APPVEYOR_ACCOUNT_NAME", BuildParameters.AppVeyorAccountName},
             {"TEMP_APPVEYOR_PROJECT_SLUG", BuildParameters.AppVeyorProjectSlug}}
 ));
