@@ -297,8 +297,6 @@ public static class BuildParameters
             publishTarget => StringComparer.OrdinalIgnoreCase.Equals(publishTarget, Target)
         );
 
-        SetBuildTasks();
-
         SetBuildPaths(BuildPaths.GetPaths(context));
 
         ShouldPublishMyGet = (!IsLocalBuild &&
