@@ -227,6 +227,12 @@ public void CopyBuildOutput()
             Warning("Skipping wix project");
             continue;
         }
+        
+        if(project.Path.FullPath.ToLower().Contains("shproj"))
+        {
+            Warning("Skipping shared project");
+            continue;
+        }
 
         if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
         {
