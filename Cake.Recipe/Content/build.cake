@@ -107,12 +107,6 @@ BuildParameters.Tasks.CleanTask = Task("Clean")
     CleanDirectories(BuildParameters.Paths.Directories.ToClean);
 });
 
-BuildParameters.Tasks.DotNetCoreCleanTask = Task("DotNetCore-Clean")
-    .Does(() =>
-{
-    Information("DotNetCore-Clean...");
-});
-
 BuildParameters.Tasks.RestoreTask = Task("Restore")
     .Does(() =>
 {
@@ -134,7 +128,14 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
 BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
     .Does(() =>
 {
-    Information("DotNetCore-Restore...");
+    DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
+    {
+        Verbose = false,
+        Sources = new [] {
+            "https://api.nuget.org/v3/index.json",
+            "https://www.myget.org/F/cake-contrib/api/v3/index.json"
+        }
+    });
 });
 
 BuildParameters.Tasks.BuildTask = Task("Build")
@@ -178,10 +179,26 @@ BuildParameters.Tasks.BuildTask = Task("Build")
 BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .IsDependentOn("Show-Info")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
-    .IsDependentOn("DotNetCore-Clean")
+    .IsDependentOn("Clean")
     .IsDependentOn("DotNetCore-Restore")
     .Does(() => {
-        Information("DotNetCore-Build...");
+        Information("Building {0}", BuildParameters.SolutionFilePath);
+
+        DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
+        {
+            Configuration = BuildParameters.Configuration,
+            ArgumentCustomization = args => args
+                .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
+                .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
+                .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
+        });
+
+        if(BuildParameters.ShouldExecuteGitLink)
+        {
+            ExecuteGitLink();
+        }
+
+        CopyBuildOutput();
     });
 
 public void CreateCodeAnalysisReport()
@@ -227,7 +244,7 @@ public void CopyBuildOutput()
             continue;
         }
 
-        if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
+        if(parsedProject.OutputPath == null || parsedProject.AssemblyName == null || parsedProject.OutputType == null)
         {
             throw new Exception(string.Format("Unable to parse project file correctly: {0}", project.Path));
         }
@@ -235,31 +252,8 @@ public void CopyBuildOutput()
         // If the project is an exe, then simply copy all of the contents to the correct output folder
         if(!parsedProject.IsLibrary())
         {
-            Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
-            EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
-            continue;
-        }
-
-        var isWebProject = false;
-
-        // Next up, we need to check if this is a web project.  Easiest way to check this is to see if there is a web.config file
-        // If there is, simply copy the output files to the correct folder
-        foreach(var file in parsedProject.Files)
-        {
-            Verbose("FilePath: {0}", file.FilePath.Path);
-            if(file.FilePath.Path.ToLower().Contains("web.config"))
-            {
-                isWebProject = true;
-                break;
-            }
-        }
-
-        if(parsedProject.IsLibrary() && isWebProject)
-        {
-            Information("Project has an output type of library and is a Web Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
+            Information("Project has an output type of exe: {0}", parsedProject.AssemblyName);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.AssemblyName);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
@@ -273,7 +267,20 @@ public void CopyBuildOutput()
         // Now we need to test for whether this is a unit test project.  Currently, this is only testing for XUnit Projects.
         // It needs to be extended to include others, i.e. NUnit, MSTest, and VSTest
         // If this is found, move the output to the unit test folder, otherwise, simply copy to normal output folder
-        foreach(var reference in parsedProject.References)
+
+        ICollection<ProjectAssemblyReference> references = null;
+        if(!BuildParameters.IsDotNetCoreBuild)
+        {
+            Information("Not a .Net Core Build");
+            references = parsedProject.References;
+        }
+        else
+        {
+            Information("Is a .Net Core Build");
+            references = new List<ProjectAssemblyReference>();
+        }
+
+        foreach(var reference in references)
         {
             Verbose("Reference Include: {0}", reference.Include);
             if(reference.Include.ToLower().Contains("xunit.core"))
@@ -300,8 +307,8 @@ public void CopyBuildOutput()
 
         if(parsedProject.IsLibrary() && isxUnitTestProject)
         {
-            Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
+            Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.AssemblyName);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.AssemblyName);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
@@ -309,32 +316,32 @@ public void CopyBuildOutput()
         else if(parsedProject.IsLibrary() && ismsTestProject)
         {
             // We will use vstest.console.exe by default for MSTest Projects
-            Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.RootNameSpace);
+            Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.AssemblyName);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.AssemblyName);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.IsLibrary() && isFixieProject)
         {
-            Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
+            Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.AssemblyName);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.AssemblyName);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.IsLibrary() && isNUnitProject)
         {
-            Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
+            Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.AssemblyName);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.AssemblyName);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else
         {
-            Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
+            Information("Project has an output type of library: {0}", parsedProject.AssemblyName);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.AssemblyName);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
@@ -408,6 +415,7 @@ public class Builder
         BuildParameters.Tasks.TestTask.IsDependentOn("Build");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("Restore");
+        BuildParameters.IsDotNetCoreBuild = false;
 
         _action(BuildParameters.Target);
     }
@@ -417,8 +425,9 @@ public class Builder
         BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.TestTask.IsDependentOn("DotNetCore-Build");
-        BuildParameters.Tasks.DupFinderTask.IsDependentOn("DotNetCore-Clean");
+        BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("DotNetCore-Restore");
+        BuildParameters.IsDotNetCoreBuild = true;
 
         _action(BuildParameters.Target);
     }
