@@ -16,6 +16,7 @@ public static class BuildParameters
     public static bool IsPublishBuild { get; private set; }
     public static bool IsReleaseBuild { get; private set; }
     public static bool IsDotNetCoreBuild { get; set; }
+    public static bool IsNuGetBuild { get; set; }
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public static GitterCredentials Gitter { get; private set; }

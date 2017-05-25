@@ -195,7 +195,7 @@ Task("Clean")
     CleanDirectories(BuildParameters.Paths.Directories.ToClean);
 });
 
-Task("Create-Nuget-Package")
+Task("x-Create-Nuget-Package")
     .Does(() =>
 {
     var nuspecFile = "./Cake.Recipe/Cake.Recipe.nuspec";
@@ -219,7 +219,7 @@ Task("Package")
     .IsDependentOn("Show-Info")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
-    .IsDependentOn("Create-NuGet-Package")
+    .IsDependentOn("x-Create-NuGet-Package")
     .IsDependentOn("Publish-Documentation");
 
 Task("Default")

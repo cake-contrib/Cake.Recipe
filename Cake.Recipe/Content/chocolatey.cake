@@ -1,4 +1,5 @@
 BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Packages")
+    .IsDependentOn("Clean")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory))
     .Does(() =>
 {

@@ -100,6 +100,8 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
 });
 
 BuildParameters.Tasks.CleanTask = Task("Clean")
+    .IsDependentOn("Show-Info")
+    .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .Does(() =>
 {
     Information("Cleaning...");
@@ -139,8 +141,6 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 });
 
 BuildParameters.Tasks.BuildTask = Task("Build")
-    .IsDependentOn("Show-Info")
-    .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
     .Does(() => RequireTool(MSBuildExtensionPackTool, () => {
@@ -177,8 +177,6 @@ BuildParameters.Tasks.BuildTask = Task("Build")
 
 
 BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
-    .IsDependentOn("Show-Info")
-    .IsDependentOn("Print-AppVeyor-Environment-Variables")
     .IsDependentOn("Clean")
     .IsDependentOn("DotNetCore-Restore")
     .Does(() => {
@@ -351,11 +349,7 @@ public void CopyBuildOutput()
 }
 
 BuildParameters.Tasks.PackageTask = Task("Package")
-    .IsDependentOn("Export-Release-Notes")
-    .IsDependentOn("Create-NuGet-Packages")
-    .IsDependentOn("Create-Chocolatey-Packages")
-    .IsDependentOn("Test")
-    .IsDependentOn("Analyze");
+    .IsDependentOn("Export-Release-Notes");
 
 BuildParameters.Tasks.DefaultTask = Task("Default")
     .IsDependentOn("Package");
@@ -416,7 +410,12 @@ public class Builder
         BuildParameters.Tasks.TestTask.IsDependentOn("Build");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("Restore");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Test");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
         BuildParameters.IsDotNetCoreBuild = false;
+        BuildParameters.IsNuGetBuild = false;
 
         _action(BuildParameters.Target);
     }
@@ -428,7 +427,21 @@ public class Builder
         BuildParameters.Tasks.TestTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("DotNetCore-Restore");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Test");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
         BuildParameters.IsDotNetCoreBuild = true;
+        BuildParameters.IsNuGetBuild = false;
+
+        _action(BuildParameters.Target);
+    }
+
+    public void RunNuGet()
+    {
+        BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Package");
+        BuildParameters.IsDotNetCoreBuild = false;
+        BuildParameters.IsNuGetBuild = true;
 
         _action(BuildParameters.Target);
     }
