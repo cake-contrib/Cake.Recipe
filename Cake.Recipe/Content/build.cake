@@ -209,16 +209,9 @@ public void CopyBuildOutput()
 {
     Information("Copying build output...");
 
-    foreach(var project in ParseSolution(BuildParameters.SolutionFilePath).Projects)
+    foreach(var project in ParseSolution(BuildParameters.SolutionFilePath).GetProjects())
     {
         // There is quite a bit of duplication in this function, that really needs to be tidied Upload
-
-        // If the project is a solution folder, move along, as there is nothing to be done here
-        if(project.IsSolutionFolder())
-        {
-            Information("Project is Solution Folder, so nothing to do here.");
-            continue;
-        }
 
         var parsedProject = ParseProject(project.Path, BuildParameters.Configuration);
 
@@ -240,7 +233,7 @@ public void CopyBuildOutput()
         }
 
         // If the project is an exe, then simply copy all of the contents to the correct output folder
-        if(parsedProject.OutputType.ToLower() == "exe" || parsedProject.OutputType.ToLower() == "winexe")
+        if(!parsedProject.IsLibrary())
         {
             Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
@@ -263,7 +256,7 @@ public void CopyBuildOutput()
             }
         }
 
-        if(parsedProject.OutputType.ToLower() == "library" && isWebProject)
+        if(parsedProject.IsLibrary() && isWebProject)
         {
             Information("Project has an output type of library and is a Web Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
@@ -305,7 +298,7 @@ public void CopyBuildOutput()
             }
         }
 
-        if(parsedProject.OutputType.ToLower() == "library" && isxUnitTestProject)
+        if(parsedProject.IsLibrary() && isxUnitTestProject)
         {
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
@@ -313,7 +306,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.OutputType.ToLower() == "library" && ismsTestProject)
+        else if(parsedProject.IsLibrary() && ismsTestProject)
         {
             // We will use vstest.console.exe by default for MSTest Projects
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
@@ -322,7 +315,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.OutputType.ToLower() == "library" && isFixieProject)
+        else if(parsedProject.IsLibrary() && isFixieProject)
         {
             Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
@@ -330,7 +323,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.OutputType.ToLower() == "library" && isNUnitProject)
+        else if(parsedProject.IsLibrary() && isNUnitProject)
         {
             Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
