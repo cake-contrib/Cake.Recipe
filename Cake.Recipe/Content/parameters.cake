@@ -131,6 +131,41 @@ public static class BuildParameters
         }
     }
 
+    public static bool CanPublishToChocolatey
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Chocolatey.ApiKey) &&
+                !string.IsNullOrEmpty(BuildParameters.Chocolatey.SourceUrl);
+        }
+    }
+
+    public static bool CanPublishToMyGet
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey) &&
+                !string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl);
+        }
+    }
+
+    public static bool CanPublishToNuGet
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.NuGet.ApiKey) &&
+                !string.IsNullOrEmpty(BuildParameters.NuGet.SourceUrl);
+        }
+    }
+
+    public static bool CanPublishToCoveralls
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Coveralls.RepoToken);
+        }
+    }
+
     public static void SetBuildVersion(BuildVersion version)
     {
         Version  = version;

@@ -73,34 +73,33 @@ BuildParameters.Tasks.PublishMyGetPackagesTask = Task("Publish-MyGet-Packages")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
-    if(string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey)) {
-        throw new InvalidOperationException("Could not resolve MyGet API key.");
-    }
-
-    if(string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl)) {
-        throw new InvalidOperationException("Could not resolve MyGet API url.");
-    }
-
-    var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    if(BuildParameters.CanPublishToMyGet)
     {
-        // Push the package.
-        NuGetPush(nupkgFile, new NuGetPushSettings {
-            Source = BuildParameters.MyGet.SourceUrl,
-            ApiKey = BuildParameters.MyGet.ApiKey
-        });
+        var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            NuGetPush(nupkgFile, new NuGetPushSettings {
+                Source = BuildParameters.MyGet.SourceUrl,
+                ApiKey = BuildParameters.MyGet.ApiKey
+            });
+        }
+
+        nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            NuGetPush(nupkgFile, new NuGetPushSettings {
+                Source = BuildParameters.MyGet.SourceUrl,
+                ApiKey = BuildParameters.MyGet.ApiKey
+            });
+        }
     }
-
-    nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    else
     {
-        // Push the package.
-        NuGetPush(nupkgFile, new NuGetPushSettings {
-            Source = BuildParameters.MyGet.SourceUrl,
-            ApiKey = BuildParameters.MyGet.ApiKey
-        });
+        Warning("Unable to publish to MyGet, as necessary credentials are not available");
     }
 })
 .OnError(exception =>
@@ -116,23 +115,22 @@ BuildParameters.Tasks.PublishNuGetPackagesTask = Task("Publish-Nuget-Packages")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
     .Does(() =>
 {
-    if(string.IsNullOrEmpty(BuildParameters.NuGet.ApiKey)) {
-        throw new InvalidOperationException("Could not resolve NuGet API key.");
-    }
-
-    if(string.IsNullOrEmpty(BuildParameters.NuGet.SourceUrl)) {
-        throw new InvalidOperationException("Could not resolve NuGet API url.");
-    }
-
-    var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    if(BuildParameters.CanPublishToNuGet)
     {
-        // Push the package.
-        NuGetPush(nupkgFile, new NuGetPushSettings {
-            Source = BuildParameters.NuGet.SourceUrl,
-            ApiKey = BuildParameters.NuGet.ApiKey
-        });
+        var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            NuGetPush(nupkgFile, new NuGetPushSettings {
+                Source = BuildParameters.NuGet.SourceUrl,
+                ApiKey = BuildParameters.NuGet.ApiKey
+            });
+        }
+    }
+    else
+    {
+        Warning("Unable to publish to NuGet, as necessary credentials are not available");
     }
 })
 .OnError(exception =>

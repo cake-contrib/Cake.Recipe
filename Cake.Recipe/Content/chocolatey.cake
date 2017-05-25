@@ -27,23 +27,22 @@ BuildParameters.Tasks.PublishChocolateyPackagesTask = Task("Publish-Chocolatey-P
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
-    if(string.IsNullOrEmpty(BuildParameters.Chocolatey.ApiKey)) {
-        throw new InvalidOperationException("Could not resolve Chocolatey API key.");
-    }
-
-    if(string.IsNullOrEmpty(BuildParameters.Chocolatey.SourceUrl)) {
-        throw new InvalidOperationException("Could not resolve Chocolatey API url.");
-    }
-
-    var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    if(BuildParameters.CanPublishToChocolatey)
     {
-        // Push the package.
-        ChocolateyPush(nupkgFile, new ChocolateyPushSettings {
-          ApiKey = BuildParameters.Chocolatey.ApiKey,
-          Source = BuildParameters.Chocolatey.SourceUrl
-        });
+        var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            ChocolateyPush(nupkgFile, new ChocolateyPushSettings {
+            ApiKey = BuildParameters.Chocolatey.ApiKey,
+            Source = BuildParameters.Chocolatey.SourceUrl
+            });
+        }
+    }
+    else
+    {
+        Warning("Unable to publish to Chocolatey, as necessary credentials are not available");
     }
 })
 .OnError(exception =>

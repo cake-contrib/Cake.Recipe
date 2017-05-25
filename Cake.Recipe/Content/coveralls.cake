@@ -9,9 +9,16 @@ BuildParameters.Tasks.UploadCoverageReportTask = Task("Upload-Coverage-Report")
     .WithCriteria(() => BuildParameters.IsMainRepository)
     .IsDependentOn("Test")
     .Does(() => RequireTool(CoverallsTool, () => {
-        CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+        if(BuildParameters.CanPublishToCoveralls)
         {
-            RepoToken = BuildParameters.Coveralls.RepoToken
-        });
+            CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+            {
+                RepoToken = BuildParameters.Coveralls.RepoToken
+            });
+        }
+        else
+        {
+            Warning("Unable to publish to Coveralls, as necessary credentials are not available");
+        }
     })
 );
