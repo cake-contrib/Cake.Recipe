@@ -47,11 +47,11 @@ var appVeyorProjectSlug       = "cake-recipe";
 ///////////////////////////////////////////////////////////////////////////////
 
 Environment.SetVariableNames();
-BuildParameters.SetParameters(Context, 
-                            BuildSystem, 
-                            sourceDirectoryPath, 
-                            title, 
-                            repositoryOwner: repositoryOwner, 
+BuildParameters.SetParameters(Context,
+                            BuildSystem,
+                            sourceDirectoryPath,
+                            title,
+                            repositoryOwner: repositoryOwner,
                             repositoryName: repositoryName,
                             appVeyorAccountName: appVeyorAccountName,
                             appVeyorProjectSlug: appVeyorProjectSlug,
@@ -133,7 +133,7 @@ Setup(context =>
             )
         );
     });
-    
+
     Information("Building version {0} of " + title + " ({1}, {2}) using version {3} of Cake. (IsTagged: {4})",
         BuildParameters.Version.SemVersion,
         BuildParameters.Configuration,
