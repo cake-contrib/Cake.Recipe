@@ -66,8 +66,8 @@ public class BuildVersion
             Version = version,
             SemVersion = semVersion,
             Milestone = milestone,
-            CakeVersion = cakeVersion
-            InformationalVersion = informationalVersion;
+            CakeVersion = cakeVersion,
+            InformationalVersion = informationalVersion
         };
     }
 }
