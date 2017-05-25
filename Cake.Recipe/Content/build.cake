@@ -191,6 +191,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
                 .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
                 .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
                 .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
+                .Append("/p:AssemblyInformationalVersion={0}", BuildParameters.Version.InformationalVersion)
         });
 
         if(BuildParameters.ShouldExecuteGitLink)
