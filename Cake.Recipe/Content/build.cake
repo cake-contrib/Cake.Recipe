@@ -244,7 +244,7 @@ public void CopyBuildOutput()
             continue;
         }
 
-        if(parsedProject.OutputPath == null || parsedProject.AssemblyName == null || parsedProject.OutputType == null)
+        if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
         {
             throw new Exception(string.Format("Unable to parse project file correctly: {0}", project.Path));
         }
@@ -252,8 +252,8 @@ public void CopyBuildOutput()
         // If the project is an exe, then simply copy all of the contents to the correct output folder
         if(!parsedProject.IsLibrary())
         {
-            Information("Project has an output type of exe: {0}", parsedProject.AssemblyName);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.AssemblyName);
+            Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
@@ -307,8 +307,8 @@ public void CopyBuildOutput()
 
         if(parsedProject.IsLibrary() && isxUnitTestProject)
         {
-            Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.AssemblyName);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.AssemblyName);
+            Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
@@ -316,32 +316,32 @@ public void CopyBuildOutput()
         else if(parsedProject.IsLibrary() && ismsTestProject)
         {
             // We will use vstest.console.exe by default for MSTest Projects
-            Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.AssemblyName);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.AssemblyName);
+            Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.IsLibrary() && isFixieProject)
         {
-            Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.AssemblyName);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.AssemblyName);
+            Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else if(parsedProject.IsLibrary() && isNUnitProject)
         {
-            Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.AssemblyName);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.AssemblyName);
+            Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
         else
         {
-            Information("Project has an output type of library: {0}", parsedProject.AssemblyName);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.AssemblyName);
+            Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
+            var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
