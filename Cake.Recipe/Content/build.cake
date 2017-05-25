@@ -356,9 +356,7 @@ BuildParameters.Tasks.DefaultTask = Task("Default")
 
 BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
     .IsDependentOn("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Upload-Coverage-Report")
     .IsDependentOn("Publish-MyGet-Packages")
-    .IsDependentOn("Publish-Chocolatey-Packages")
     .IsDependentOn("Publish-Nuget-Packages")
     .IsDependentOn("Publish-GitHub-Release")
     .IsDependentOn("Publish-Documentation")
@@ -414,6 +412,9 @@ public class Builder
         BuildParameters.Tasks.PackageTask.IsDependentOn("Test");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
+        BuildParameters.Tasks.UploadCoverageReportTask.IsDependentOn("Test");
+        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
+        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.IsDotNetCoreBuild = false;
         BuildParameters.IsNuGetBuild = false;
 
@@ -431,6 +432,9 @@ public class Builder
         BuildParameters.Tasks.PackageTask.IsDependentOn("Test");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
+        BuildParameters.Tasks.UploadCoverageReportTask.IsDependentOn("Test");
+        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
+        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.IsDotNetCoreBuild = true;
         BuildParameters.IsNuGetBuild = false;
 
