@@ -2,17 +2,21 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    var nuspecFile = "./Cake.Wyam.Recipe/Cake.Wyam.Recipe.nuspec";
+    if(BuildParameters.NuSpecFilePath != null) {
+        EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
-    EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
-
-    // Create packages.
-    NuGetPack(nuspecFile, new NuGetPackSettings {
-        Version = BuildParameters.Version.SemVersion,
-        OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
-        Symbols = false,
-        NoPackageAnalysis = true
-    });
+        // Create packages.
+        NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
+            Version = BuildParameters.Version.SemVersion,
+            OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+            Symbols = false,
+            NoPackageAnalysis = true
+        });
+    }
+    else
+    {
+        throw new Exception("NuSpecFilePath has not been set");
+    }
 });
 
 BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")

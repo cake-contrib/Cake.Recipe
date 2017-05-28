@@ -70,6 +70,8 @@ public static class BuildParameters
     public static string WebLinkRoot { get; private set; }
     public static string WebBaseEditUrl { get; private set; }
 
+    public static FilePath NuSpecFilePath { get; private set; }
+
     static BuildParameters()
     {
         Tasks = new BuildTasks();
@@ -217,6 +219,7 @@ public static class BuildParameters
         context.Information("WebHost: {0}", WebHost);
         context.Information("WebLinkRoot: {0}", WebLinkRoot);
         context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
+        context.Information("NuSpecFilePath: {0}", NuSpecFilePath);
     }
 
     public static void SetParameters(
@@ -255,7 +258,8 @@ public static class BuildParameters
         string wyamSourceFiles = null,
         string webHost = null,
         string webLinkRoot = null,
-        string webBaseEditUrl = null)
+        string webBaseEditUrl = null,
+        FilePath nuspecFilePath = null)
     {
         if (context == null)
         {
@@ -293,6 +297,8 @@ public static class BuildParameters
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
+
+        NuSpecFilePath = nuspecFilePath ?? context.MakeAbsolute((FilePath)"./Cake.Recipe/Cake.Recipe.nuspec");
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
