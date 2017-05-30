@@ -406,6 +406,7 @@ public class Builder
         BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("Build");
         BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn("Build");
         BuildParameters.Tasks.TestTask.IsDependentOn("Build");
+        BuildParameters.Tasks.DupFinderTask.IsDependentOn("Restore");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("Restore");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");
@@ -426,6 +427,7 @@ public class Builder
         BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.TestTask.IsDependentOn("DotNetCore-Build");
+        BuildParameters.Tasks.DupFinderTask.IsDependentOn("DotNetCore-Restore");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("Clean");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("DotNetCore-Restore");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");

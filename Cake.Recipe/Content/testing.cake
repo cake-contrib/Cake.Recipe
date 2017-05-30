@@ -3,6 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
+    .IsDependentOn("Build")
     .Does(() => RequireTool(ReportGeneratorTool, () => {
     }));
 
