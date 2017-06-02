@@ -148,7 +148,7 @@ public void PublishDocumentation()
                 Information("Stage all changes...");
                 GitAddAll(publishFolder);
 
-                if(GitHasStagedChanges)
+                if(GitHasStagedChanges(publishFolder))
                 {
                     Information("Commit all changes...");
                     GitCommit(
