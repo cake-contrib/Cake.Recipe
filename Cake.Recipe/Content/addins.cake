@@ -5,7 +5,7 @@
 #addin nuget:?package=Cake.CodeAnalysisReporting&version=0.1.1
 #addin nuget:?package=Cake.Coveralls&version=0.4.0
 #addin nuget:?package=Cake.Figlet&version=0.4.0
-#addin nuget:?package=Cake.Git&version=0.13.0
+#addin nuget:?package=Cake.Git&version=0.15.0
 #addin nuget:?package=Cake.Gitter&version=0.5.0
 #addin nuget:?package=Cake.Incubator&version=1.3.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
