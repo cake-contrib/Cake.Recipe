@@ -71,7 +71,7 @@ public class BuildVersion
             Milestone = milestone,
             CakeVersion = cakeVersion,
             InformationalVersion = informationalVersion,
-            FullSemVer = fullSemVersion
+            FullSemVersion = fullSemVersion
         };
     }
 }
