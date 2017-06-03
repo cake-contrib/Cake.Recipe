@@ -17,6 +17,7 @@ public static class Environment
     public static string TwitterAccessTokenVariable { get; private set; }
     public static string TwitterAccessTokenSecretVariable { get; private set; }
     public static string AppVeyorApiTokenVariable { get; private set; }
+    public static string CodecovRepoTokenVariable { get; private set; }
     public static string CoverallsRepoTokenVariable { get; private set; }
     public static string MicrosoftTeamsWebHookUrlVariable { get; private set; }
     public static string WyamAccessTokenVariable { get; private set; }
@@ -41,6 +42,7 @@ public static class Environment
         string twitterAccessTokenVariable = null,
         string twitterAccessTokenSecretVariable = null,
         string appVeyorApiTokenVariable = null,
+        string codecovRepoTokenVariable = null,
         string coverallsRepoTokenVariable = null,
         string microsoftTeamsWebHookUrlVariable = null,
         string wyamAccessTokenVariable = null,
@@ -64,6 +66,7 @@ public static class Environment
         TwitterAccessTokenVariable = twitterAccessTokenVariable ?? "TWITTER_ACCESS_TOKEN";
         TwitterAccessTokenSecretVariable = twitterAccessTokenSecretVariable ?? "TWITTER_ACCESS_TOKEN_SECRET";
         AppVeyorApiTokenVariable = appVeyorApiTokenVariable ?? "APPVEYOR_API_TOKEN";
+        CodecovRepoTokenVariable = codecovRepoTokenVariable ?? "CODECOV_REPO_TOKEN";
         CoverallsRepoTokenVariable = coverallsRepoTokenVariable ?? "COVERALLS_REPO_TOKEN";
         MicrosoftTeamsWebHookUrlVariable = microsoftTeamsWebHookUrlVariable ?? "MICROSOFTTEAMS_WEBHOOKURL";
         WyamAccessTokenVariable = wyamAccessTokenVariable ?? "WYAM_ACCESS_TOKEN";

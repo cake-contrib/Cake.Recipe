@@ -26,6 +26,7 @@ public static class BuildParameters
     public static NuGetCredentials NuGet { get; private set; }
     public static ChocolateyCredentials Chocolatey { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
+    public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
     public static WyamCredentials Wyam { get; private set; }
     public static BuildVersion Version { get; private set; }
@@ -53,6 +54,7 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
+    public static bool ShouldRunCodecov { get; private set; }
     public static bool ShouldPublishMyGet { get; private set; }
     public static bool ShouldPublishChocolatey { get; private set; }
     public static bool ShouldPublishNuGet { get; private set; }
@@ -160,6 +162,16 @@ public static class BuildParameters
         }
     }
 
+    public static bool CanPublishToCodecov
+    {
+        get
+        {
+            return ShouldRunCodecov &&
+                (!string.IsNullOrEmpty(BuildParameters.Codecov.RepoToken) ||
+                BuildParameters.IsRunningOnAppVeyor);
+        }
+    }
+
     public static bool CanPublishToCoveralls
     {
         get
@@ -250,6 +262,7 @@ public static class BuildParameters
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
         bool shouldExecuteGitLink = true,
+        bool shouldRunCodecov = true,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -294,6 +307,7 @@ public static class BuildParameters
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
+        ShouldRunCodecov = shouldRunCodecov;
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
@@ -325,6 +339,7 @@ public static class BuildParameters
         NuGet = GetNuGetCredentials(context);
         Chocolatey = GetChocolateyCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
+        Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
         Wyam = GetWyamCredentials(context);
         IsPublishBuild = new [] {
