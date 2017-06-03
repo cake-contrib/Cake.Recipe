@@ -22,6 +22,7 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> PublishDocsTask { get; set; }
     public CakeTaskBuilder<ActionTask> CreateChocolateyPackagesTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishChocolateyPackagesTask { get; set; }
+    public CakeTaskBuilder<ActionTask> UploadCodecovReportTask { get; set; }
     public CakeTaskBuilder<ActionTask> UploadCoverageReportTask { get; set; }
     public CakeTaskBuilder<ActionTask> CreateReleaseNotesTask { get; set; }
     public CakeTaskBuilder<ActionTask> ExportReleaseNotesTask { get; set; }

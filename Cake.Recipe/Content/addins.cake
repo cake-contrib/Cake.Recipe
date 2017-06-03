@@ -3,6 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #addin nuget:?package=Cake.CodeAnalysisReporting&version=0.1.1
+#addin nuget:?package=Cake.Codecov&version=0.2.0
 #addin nuget:?package=Cake.Coveralls&version=0.4.0
 #addin nuget:?package=Cake.Figlet&version=0.4.0
 #addin nuget:?package=Cake.Git&version=0.15.0

@@ -106,6 +106,12 @@ public class AppVeyorCredentials
     }
 }
 
+public class CodecovCredentials : CoverallsCredentials
+{
+    public CodecovCredentials(string repoToken)
+        : base(repoToken) { }
+}
+
 public class CoverallsCredentials
 {
     public string RepoToken { get; private set; }
@@ -191,6 +197,12 @@ public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)
 {
     return new AppVeyorCredentials(
         context.EnvironmentVariable(Environment.AppVeyorApiTokenVariable));
+}
+
+public static CodecovCredentials GetCodecovCredentials(ICakeContext context)
+{
+    return new CodecovCredentials(
+        context.EnvironmentVariable(Environment.CodecovRepoTokenVariable));
 }
 
 public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)

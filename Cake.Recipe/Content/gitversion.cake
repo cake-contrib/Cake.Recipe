@@ -5,6 +5,7 @@ public class BuildVersion
     public string Milestone { get; private set; }
     public string CakeVersion { get; private set; }
     public string InformationalVersion { get; private set; }
+    public string FullSemVersion { get; private set; }
 
     public static BuildVersion CalculatingSemanticVersion(
         ICakeContext context)
@@ -18,6 +19,7 @@ public class BuildVersion
         string semVersion = null;
         string milestone = null;
         string informationalVersion = null;
+        string fullSemVersion = null;
 
         if (context.IsRunningOnWindows())
         {
@@ -45,6 +47,7 @@ public class BuildVersion
             semVersion = assertedVersions.LegacySemVerPadded;
             informationalVersion = assertedVersions.InformationalVersion;
             milestone = string.Concat(version);
+            fullSemVersion = assertedVersions.FullSemVer;
 
             context.Information("Calculated Semantic Version: {0}", semVersion);
         }
@@ -67,7 +70,8 @@ public class BuildVersion
             SemVersion = semVersion,
             Milestone = milestone,
             CakeVersion = cakeVersion,
-            InformationalVersion = informationalVersion
+            InformationalVersion = informationalVersion,
+            FullSemVer = fullSemVersion
         };
     }
 }
