@@ -9,7 +9,8 @@ BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
     .Does(() => RequireTool(CodecovTool, () => {
         var settings = new CodecovSettings {
             Files = new[] { BuildParameters.Paths.Files.TestCoverageOutputFilePath.ToString() },
-            Token = BuildParameters.Codecov.RepoToken
+            Token = BuildParameters.Codecov.RepoToken,
+            Required = true
         };
         if (BuildParameters.Version != null &&
             !string.IsNullOrEmpty(BuildParameters.Version.FullSemVersion) &&
@@ -24,4 +25,9 @@ BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
 
         Codecov(settings);
     })
-);
+).OnError (exception =>
+{
+    Error(exception.Message);
+    Information("Upload-Codecov-Report Task failed, but continuing with next Task...");
+    publishingError = true;
+});
