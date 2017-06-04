@@ -19,7 +19,7 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
                 .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
                 .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
                 .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
-                .Append("/p:AssemblyInformationalVersion={0}");
+                .Append("/p:AssemblyInformationalVersion={0}", BuildParameters.Version.InformationalVersion);
         }
     };
 
