@@ -408,6 +408,11 @@ public class Builder
         BuildParameters.Tasks.TestTask.IsDependentOn("Build");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("Build");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("Build");
+        BuildParameters.Tasks.TestTask.IsDependentOn("Test-NUnit");
+        BuildParameters.Tasks.TestTask.IsDependentOn("Test-xUnit");
+        BuildParameters.Tasks.TestTask.IsDependentOn("Test-MSTest");
+        BuildParameters.Tasks.TestTask.IsDependentOn("Test-VSTest");
+        BuildParameters.Tasks.TestTask.IsDependentOn("Test-Fixie");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Test");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
@@ -417,6 +422,8 @@ public class Builder
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Codecov-Report");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
+        BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn("Build");
+        BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportUnit");
         BuildParameters.IsDotNetCoreBuild = false;
         BuildParameters.IsNuGetBuild = false;
 
@@ -430,6 +437,7 @@ public class Builder
         BuildParameters.Tasks.TestTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.DupFinderTask.IsDependentOn("DotNetCore-Build");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn("DotNetCore-Build");
+        BuildParameters.Tasks.TestTask.IsDependentOn("DotNetCore-Test");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Test");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
@@ -439,6 +447,8 @@ public class Builder
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Codecov-Report");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
+        BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn("DotNetCore-Build");
+        BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
         BuildParameters.IsDotNetCoreBuild = true;
         BuildParameters.IsNuGetBuild = false;
 
