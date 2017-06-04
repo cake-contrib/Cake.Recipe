@@ -27,6 +27,7 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> CreateReleaseNotesTask { get; set; }
     public CakeTaskBuilder<ActionTask> ExportReleaseNotesTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishGitHubReleaseTask { get; set; }
+    public CakeTaskBuilder<ActionTask> DotNetCorePackTask { get; set; }
     public CakeTaskBuilder<ActionTask> CreateNuGetPackageTask { get; set; }
     public CakeTaskBuilder<ActionTask> CreateNuGetPackagesTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishMyGetPackagesTask { get; set; }

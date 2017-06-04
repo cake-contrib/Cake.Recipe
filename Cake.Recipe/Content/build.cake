@@ -449,7 +449,7 @@ public class Builder
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
 
-        if (isDotNetCoreBuild)
+        if (!isDotNetCoreBuild)
         {
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-NUnit");
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-xUnit");
@@ -462,6 +462,7 @@ public class Builder
         {
             BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Test");
             BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
+            BuildParameters.Tasks.PackageTask.IsDependentOn(prefix + "Pack");
         }
     }
 }

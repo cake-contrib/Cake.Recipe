@@ -1,3 +1,34 @@
+BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
+    .IsDependentOn("DotNetCore-Build")
+    .WithCriteria(() => BuildParameters.ShouldRunDotNetCorePack)
+    .Does(() =>
+{
+    var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
+        - GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.Tests.csproj");
+
+    var settings = new DotNetCorePackSettings {
+        NoBuild = true,
+        Configuration = BuildParameters.Configuration,
+        OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+        ArgumentCustomization = (args) => {
+            if (BuildParameters.ShouldBuildDotNetCoreSourcePackage)
+            {
+                args.Append("--include-source");
+            }
+            return args
+                .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
+                .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
+                .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
+                .Append("/p:AssemblyInformationalVersion={0}");
+        }
+    };
+
+    foreach (var project in projects)
+    {
+        DotNetCorePack(project.ToString(), settings);
+    }
+});
+
 BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
     .IsDependentOn("Clean")
     .Does(() =>
