@@ -11,7 +11,7 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
         Configuration = BuildParameters.Configuration,
         OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
         ArgumentCustomization = (args) => {
-            if (BuildParameters.ShouldBuildDotNetCoreSourcePackage)
+            if (BuildParameters.ShouldBuildNugetSourcePackage)
             {
                 args.Append("--include-source");
             }
