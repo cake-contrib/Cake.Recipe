@@ -137,13 +137,6 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
 BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .IsDependentOn("Install-OpenCover")
     .Does(() => {
-    // Since we need to run dotnet test for each unit test library
-    // and merge the coverage result at each run, we need to delete
-    // the existing file in case it exists from a previous run.
-    if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
-    {
-        DeleteFile(BuildParameters.Paths.Files.TestCoverageOutputFilePath);
-    }
 
     var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*Tests.csproj");
 
