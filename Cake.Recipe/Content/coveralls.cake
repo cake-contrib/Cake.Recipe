@@ -20,4 +20,9 @@ BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report"
             Warning("Unable to publish to Coveralls, as necessary credentials are not available");
         }
     })
-);
+).OnError (exception =>
+{
+    Error(exception.Message);
+    Information("Upload-Coveralls-Report Task failed, but continuing with next Task...");
+    publishingError = true;
+});
