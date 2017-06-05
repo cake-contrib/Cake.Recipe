@@ -25,6 +25,7 @@ public void LaunchDefaultProgram(FilePath file) {
 }
 
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
+    .WithCriteria(() => BuildParameters.ShouldRunDupFinder)
     .Does(() => RequireTool(ReSharperTools, () => {
         var settings = new DupFinderSettings() {
             ShowStats = true,
@@ -75,6 +76,7 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 });
 
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
+    .WithCriteria(() => BuildParameters.ShouldRunInspectCode)
     .Does(() => RequireTool(ReSharperTools, () => {
         var settings = new InspectCodeSettings() {
             SolutionWideAnalysis = true,
