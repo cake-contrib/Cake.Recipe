@@ -52,6 +52,12 @@ Password of the GitHub account used to create and publish releases.
 
 ## TWITTER_ACCESS_TOKEN_SECRET
 
+# Codecov
+
+## CODECOV_REPO_TOKEN
+
+API token for uploading coverage reports to codecov.io. *This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories*
+
 # Coveralls
 
 ## COVERALLS_REPO_TOKEN
