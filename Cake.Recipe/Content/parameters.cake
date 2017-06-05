@@ -55,6 +55,8 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
+    public static bool ShouldRunDupFinder { get; private set; }
+    public static bool ShouldRunInspectCode { get; private set; }
     public static bool ShouldRunCodecov { get; private set; }
     public static bool ShouldRunDotNetCorePack { get; private set; }
     public static bool ShouldPublishMyGet { get; private set; }
@@ -264,6 +266,8 @@ public static class BuildParameters
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
         bool shouldExecuteGitLink = true,
+        bool shouldRunDupFinder = true,
+        bool shouldRunInspectCode = true,
         bool shouldRunCodecov = true,
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
@@ -311,6 +315,8 @@ public static class BuildParameters
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
+        ShouldRunDupFinder = shouldRunDupFinder;
+        ShouldRunInspectCode = shouldRunInspectCode;
         ShouldRunCodecov = shouldRunCodecov;
         ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
