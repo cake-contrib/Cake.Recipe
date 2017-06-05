@@ -27,6 +27,7 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> CreateReleaseNotesTask { get; set; }
     public CakeTaskBuilder<ActionTask> ExportReleaseNotesTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishGitHubReleaseTask { get; set; }
+    public CakeTaskBuilder<ActionTask> DotNetCorePackTask { get; set; }
     public CakeTaskBuilder<ActionTask> CreateNuGetPackageTask { get; set; }
     public CakeTaskBuilder<ActionTask> CreateNuGetPackagesTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishMyGetPackagesTask { get; set; }
@@ -39,6 +40,7 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> TestMSTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> TestVSTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> TestFixieTask { get; set; }
+    public CakeTaskBuilder<ActionTask> DotNetCoreTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> TestTask { get; set; }
     public CakeTaskBuilder<ActionTask> CleanDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> PublishDocumentationTask { get; set; }

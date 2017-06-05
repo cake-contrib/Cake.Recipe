@@ -3,7 +3,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
-    .IsDependentOn("Build")
     .Does(() => RequireTool(ReportGeneratorTool, () => {
     }));
 
@@ -13,7 +12,6 @@ BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
     }));
 
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
-    .IsDependentOn("Install-ReportUnit")
     .Does(() => RequireTool(OpenCoverTool, () => {
     }));
 
@@ -136,12 +134,49 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
     })
 );
 
-BuildParameters.Tasks.TestTask = Task("Test")
-    .IsDependentOn("Test-NUnit")
-    .IsDependentOn("Test-xUnit")
-    .IsDependentOn("Test-MSTest")
-    .IsDependentOn("Test-VSTest")
-    .IsDependentOn("Test-Fixie")
-    .Does(() =>
-{
+BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
+    .IsDependentOn("Install-OpenCover")
+    .Does(() => {
+
+    var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*Tests.csproj");
+
+    foreach (var project in projects)
+    {
+        Action<ICakeContext> testAction = tool =>
+        {
+            var settings = new DotNetCoreTestSettings
+            {
+                Configuration = BuildParameters.Configuration,
+                NoBuild = true
+            };
+            tool.DotNetCoreTest(project.FullPath, settings);
+        };
+
+        if (BuildParameters.IsRunningOnUnix)
+        {
+            testAction(Context);
+        }
+        else
+        {
+            OpenCover(testAction,
+                BuildParameters.Paths.Files.TestCoverageOutputFilePath,
+                new OpenCoverSettings {
+                    ReturnTargetCodeOffset = 0,
+                    OldStyle = true,
+                    Register = "user",
+                    MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath)
+                }
+                .WithFilter(ToolSettings.TestCoverageFilter)
+                .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
+                .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+        }
+    }
+
+    if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
+    {
+        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
+        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+    }
 });
+
+BuildParameters.Tasks.TestTask = Task("Test");

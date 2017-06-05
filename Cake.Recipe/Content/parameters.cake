@@ -43,6 +43,7 @@ public static class BuildParameters
     public static string AppVeyorAccountName { get; private set; }
     public static string AppVeyorProjectSlug { get; private set; }
 
+    public static bool ShouldBuildNugetSourcePackage { get; private set; }
     public static bool ShouldPostToGitter { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToTwitter { get; private set; }
@@ -55,6 +56,7 @@ public static class BuildParameters
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
     public static bool ShouldRunCodecov { get; private set; }
+    public static bool ShouldRunDotNetCorePack { get; private set; }
     public static bool ShouldPublishMyGet { get; private set; }
     public static bool ShouldPublishChocolatey { get; private set; }
     public static bool ShouldPublishNuGet { get; private set; }
@@ -263,6 +265,8 @@ public static class BuildParameters
         bool shouldGenerateDocumentation = true,
         bool shouldExecuteGitLink = true,
         bool shouldRunCodecov = true,
+        bool shouldRunDotNetCorePack = false,
+        bool shouldBuildNugetSourcePackage = false,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -308,6 +312,8 @@ public static class BuildParameters
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
         ShouldRunCodecov = shouldRunCodecov;
+        ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
+        ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
