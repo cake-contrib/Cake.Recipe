@@ -1,6 +1,28 @@
 ///////////////////////////////////////////////////////////////////////////////
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
+using System.Diagnostics;
+
+public void LaunchDefaultProgram(FilePath file) {
+    FilePath program;
+    string arguments = "";
+
+    if (BuildParameters.IsRunningOnWindows)
+    {
+        program = "cmd";
+        arguments = "/c start ";
+    }
+    else if ((program = Context.Tools.Resolve("xdg-open")) == null &&
+             (program = Context.Tools.Resolve("open")) == null)
+    {
+        Warning("Unable to open report file: {0}", file.ToString());
+        return;
+    }
+
+    arguments += " " + file.FullPath;
+    // We can't use the StartProcess alias as this won't actually open the file.
+    Process.Start(new ProcessStartInfo(program.FullPath, arguments) { CreateNoWindow = true });
+}
 
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
     .Does(() => RequireTool(ReSharperTools, () => {
@@ -45,9 +67,9 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
             AppVeyor.UploadArtifact(outputHtmlFile);
         }
 
-        if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
+        if(BuildParameters.IsLocalBuild)
         {
-            StartProcess("explorer.exe", outputHtmlFile.FullPath);
+            LaunchDefaultProgram(outputHtmlFile);
         }
     });
 });
@@ -83,9 +105,9 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
             AppVeyor.UploadArtifact(outputHtmlFile);
         }
 
-        if(BuildParameters.IsLocalBuild && BuildParameters.IsRunningOnWindows)
+        if(BuildParameters.IsLocalBuild)
         {
-            StartProcess("explorer.exe", outputHtmlFile.FullPath);
+            LaunchDefaultProgram(outputHtmlFile);
         }
     });
 });
