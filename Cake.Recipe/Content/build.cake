@@ -368,6 +368,10 @@ BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
     }
 });
 
+BuildParameters.Tasks.UploadCoverageReportTask = Task("Upload-Coverage-Report")
+  .IsDependentOn("Upload-Coveralls-Report")
+  .IsDependentOn("Upload-Codecov-Report");
+
 BuildParameters.Tasks.ReleaseNotesTask = Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
@@ -443,8 +447,7 @@ public class Builder
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Packages");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
         BuildParameters.Tasks.UploadCodecovReportTask.IsDependentOn("Test");
-        BuildParameters.Tasks.UploadCoverageReportTask.IsDependentOn("Test");
-        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Codecov-Report");
+        BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
