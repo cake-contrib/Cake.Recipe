@@ -254,7 +254,25 @@ public void CopyBuildOutput()
             Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
+
+            // If .NET Core project, copy using dotnet publish for each target framework
+            // Otherwise just copy
+            if(parsedProject.IsNetCore)
+            {
+                foreach(var targetFramework in parsedProject.NetCore.TargetFrameworks)
+                {
+                    DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings {
+                        OutputDirectory = outputFolder.Combine(targetFramework),
+                        Framework = targetFramework,
+                        Configuration = BuildParameters.Configuration
+                    });
+                }
+            }
+            else
+            {
+                CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
+            }
+
             continue;
         }
 
