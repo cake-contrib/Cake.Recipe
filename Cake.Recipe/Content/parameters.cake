@@ -8,6 +8,7 @@ public static class BuildParameters
     public static bool IsRunningOnAppVeyor { get; private set; }
     public static bool IsPullRequest { get; private set; }
     public static bool IsMainRepository { get; private set; }
+	public static bool IsPublicRepository {get; private set; }
     public static bool IsMasterBranch { get; private set; }
     public static bool IsDevelopBranch { get; private set; }
     public static bool IsReleaseBranch { get; private set; }
@@ -205,6 +206,7 @@ public static class BuildParameters
         context.Information("IsLocalBuild: {0}", IsLocalBuild);
         context.Information("IsPullRequest: {0}", IsPullRequest);
         context.Information("IsMainRepository: {0}", IsMainRepository);
+		context.Information("IsPublicRepository: {0}", IsPublicRepository);
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("IsMasterBranch: {0}", IsMasterBranch);
         context.Information("IsDevelopBranch: {0}", IsDevelopBranch);
@@ -280,7 +282,8 @@ public static class BuildParameters
         string webHost = null,
         string webLinkRoot = null,
         string webBaseEditUrl = null,
-        FilePath nuspecFilePath = null)
+        FilePath nuspecFilePath = null,
+		bool isPublicRepository = true)
     {
         if (context == null)
         {
@@ -334,6 +337,7 @@ public static class BuildParameters
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
         IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), buildSystem.AppVeyor.Environment.Repository.Name);
+		IsPublicRepository = isPublicRepository;
         IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch);
         IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
         IsReleaseBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase);
