@@ -136,7 +136,12 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
         Sources = new [] {
             "https://api.nuget.org/v3/index.json",
             "https://www.myget.org/F/cake-contrib/api/v3/index.json"
-        }
+        },
+        ArgumentCustomization = args => args
+            .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
+            .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
+            .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
+            .Append("/p:AssemblyInformationalVersion={0}", BuildParameters.Version.InformationalVersion)
     });
 });
 
