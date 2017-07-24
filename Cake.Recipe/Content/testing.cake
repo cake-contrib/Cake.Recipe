@@ -138,7 +138,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .IsDependentOn("Install-OpenCover")
     .Does(() => {
 
-    var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*Tests.csproj");
+    var projects = GetFiles(BuildParameters.TestDirectoryPath + BuildParameters.TestProjectPattern);
 
     foreach (var project in projects)
     {
