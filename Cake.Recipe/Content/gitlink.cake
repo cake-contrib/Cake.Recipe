@@ -8,7 +8,7 @@ public void ExecuteGitLink()
         Information("Starting GitLink Execution...");
 
         var gitLinkSettings = new GitLinkSettings {
-            SolutionFileName = string.Concat(BuildParameters.SourceDirectoryPath.GetDirectoryName(), "/", BuildParameters.SolutionFilePath.GetFilename())
+            SolutionFileName = BuildParameters.SolutionFilePath.ToString()
         };
 
 
