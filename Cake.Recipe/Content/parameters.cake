@@ -300,7 +300,7 @@ public static class BuildParameters
         SolutionDirectoryPath = solutionDirectoryPath ?? SourceDirectoryPath.Combine(Title);
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
         TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
-        TestProjectPattern = testProjectPattern ?? "/**/*Tests.csproj";
+        TestProjectPattern = testProjectPattern ?? (IsDotNetCoreBuild ? "/**/*Tests.csproj" : "/**/*Tests.dll");
         ResharperSettingsFileName = resharperSettingsFileName ?? string.Format("{0}.sln.DotSettings", Title);
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
