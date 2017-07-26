@@ -38,7 +38,7 @@ public static class BuildParameters
     public static DirectoryPath SourceDirectoryPath { get; private set; }
     public static DirectoryPath SolutionDirectoryPath { get; private set; }
     public static DirectoryPath TestDirectoryPath { get; private set; }
-    public static string TestProjectPattern { get; private set; }
+    public static string TestFilePattern { get; private set; }
     public static string Title { get; private set; }
     public static string ResharperSettingsFileName { get; private set; }
     public static string RepositoryOwner { get; private set; }
@@ -251,7 +251,7 @@ public static class BuildParameters
         DirectoryPath solutionDirectoryPath = null,
         DirectoryPath rootDirectoryPath = null,
         DirectoryPath testDirectoryPath = null,
-        string testProjectPattern = null,
+        string testFilePattern = null,
         string resharperSettingsFileName = null,
         string repositoryOwner = null,
         string repositoryName = null,
@@ -300,7 +300,7 @@ public static class BuildParameters
         SolutionDirectoryPath = solutionDirectoryPath ?? SourceDirectoryPath.Combine(Title);
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
         TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
-        TestProjectPattern = testProjectPattern ?? (IsDotNetCoreBuild ? "/**/*Tests.csproj" : "/**/*Tests.dll");
+        TestFilePattern = testFilePattern;
         ResharperSettingsFileName = resharperSettingsFileName ?? string.Format("{0}.sln.DotSettings", Title);
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
