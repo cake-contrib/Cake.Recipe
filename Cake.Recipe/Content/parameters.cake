@@ -37,6 +37,8 @@ public static class BuildParameters
     public static FilePath SolutionFilePath { get; private set; }
     public static DirectoryPath SourceDirectoryPath { get; private set; }
     public static DirectoryPath SolutionDirectoryPath { get; private set; }
+    public static DirectoryPath TestDirectoryPath { get; private set; }
+    public static string TestFilePattern { get; private set; }
     public static string Title { get; private set; }
     public static string ResharperSettingsFileName { get; private set; }
     public static string RepositoryOwner { get; private set; }
@@ -248,6 +250,8 @@ public static class BuildParameters
         FilePath solutionFilePath = null,
         DirectoryPath solutionDirectoryPath = null,
         DirectoryPath rootDirectoryPath = null,
+        DirectoryPath testDirectoryPath = null,
+        string testFilePattern = null,
         string resharperSettingsFileName = null,
         string repositoryOwner = null,
         string repositoryName = null,
@@ -295,6 +299,8 @@ public static class BuildParameters
         SolutionFilePath = solutionFilePath ?? SourceDirectoryPath.CombineWithFilePath(Title + ".sln");
         SolutionDirectoryPath = solutionDirectoryPath ?? SourceDirectoryPath.Combine(Title);
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
+        TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
+        TestFilePattern = testFilePattern;
         ResharperSettingsFileName = resharperSettingsFileName ?? string.Format("{0}.sln.DotSettings", Title);
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
