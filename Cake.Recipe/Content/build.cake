@@ -132,7 +132,6 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 {
     DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
     {
-        Verbose = false,
         Sources = new [] {
             "https://api.nuget.org/v3/index.json",
             "https://www.myget.org/F/cake-contrib/api/v3/index.json"
