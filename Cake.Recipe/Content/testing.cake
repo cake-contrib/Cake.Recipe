@@ -22,7 +22,7 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
 
         OpenCover(tool => {
-            tool.NUnit3(GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + BuildParameters.TestFilePattern ?? "/**/*Tests.dll"), new NUnit3Settings {
+            tool.NUnit3(GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new NUnit3Settings {
                 NoResults = true
             });
         },
@@ -44,7 +44,7 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
     EnsureDirectoryExists(BuildParameters.Paths.Directories.xUnitTestResults);
 
         OpenCover(tool => {
-            tool.XUnit2(GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + BuildParameters.TestFilePattern ?? "/**/*Tests.dll"), new XUnit2Settings {
+            tool.XUnit2(GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new XUnit2Settings {
                 OutputDirectory = BuildParameters.Paths.Directories.xUnitTestResults,
                 XmlReport = true,
                 NoAppDomain = true
@@ -72,7 +72,7 @@ BuildParameters.Tasks.TestMSTestTask = Task("Test-MSTest")
     EnsureDirectoryExists(BuildParameters.Paths.Directories.MSTestTestResults);
 
     // TODO: Need to add OpenCover here
-    MSTest(GetFiles(BuildParameters.Paths.Directories.PublishedMSTestTests + BuildParameters.TestFilePattern ?? "/**/*Tests.dll"), new MSTestSettings() {
+    MSTest(GetFiles(BuildParameters.Paths.Directories.PublishedMSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new MSTestSettings() {
         NoIsolation = false
     });
 });
@@ -95,7 +95,7 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
     }
 
     OpenCover(
-		tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + BuildParameters.TestFilePattern ?? "/**/*Tests.dll"), vsTestSettings); },
+		tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), vsTestSettings); },
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
         new OpenCoverSettings() { ReturnTargetCodeOffset = 0 }
             .WithFilter(ToolSettings.TestCoverageFilter)
@@ -116,7 +116,7 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
         EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
 
         OpenCover(tool => {
-            tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + BuildParameters.TestFilePattern ?? "/**/*Tests.dll"), new FixieSettings  {
+            tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new FixieSettings  {
                 XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"
             });
         },
@@ -138,7 +138,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .IsDependentOn("Install-OpenCover")
     .Does(() => {
 
-    var projects = GetFiles(BuildParameters.TestDirectoryPath + BuildParameters.TestFilePattern ?? "/**/*Tests.csproj");
+    var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
 
     foreach (var project in projects)
     {
