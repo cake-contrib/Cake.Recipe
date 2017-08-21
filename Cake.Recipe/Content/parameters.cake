@@ -81,6 +81,9 @@ public static class BuildParameters
 
     public static FilePath NuSpecFilePath { get; private set; }
 
+    public static FilePath NugetConfig { get; private set; }
+    public static ICollection<string> NuGetSources { get; private set; }
+
     static BuildParameters()
     {
         Tasks = new BuildTasks();
@@ -240,6 +243,8 @@ public static class BuildParameters
         context.Information("WebLinkRoot: {0}", WebLinkRoot);
         context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
         context.Information("NuSpecFilePath: {0}", NuSpecFilePath);
+        context.Information("NugetConfig: {0} ({1})", NugetConfig, context.FileExists(NugetConfig));
+        context.Information("NuGetSources: {0}", string.Join(", ", NuGetSources));
     }
 
     public static void SetParameters(
@@ -287,7 +292,10 @@ public static class BuildParameters
         string webLinkRoot = null,
         string webBaseEditUrl = null,
         FilePath nuspecFilePath = null,
-        bool isPublicRepository = true)
+        bool isPublicRepository = true,
+        FilePath nugetConfig = null,
+        ICollection<string> nuGetSources = null
+        )
     {
         if (context == null)
         {
@@ -334,6 +342,30 @@ public static class BuildParameters
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
 
         NuSpecFilePath = nuspecFilePath ?? context.MakeAbsolute((FilePath)"./Cake.Recipe/Cake.Recipe.nuspec");
+
+        NugetConfig = context.MakeAbsolute(nugetConfig ?? (FilePath)"./NuGet.Config");
+        NuGetSources = nuGetSources;
+        if (nuGetSources == null)
+        {
+            if (context.FileExists(NugetConfig))
+            {
+                NuGetSources = (
+                                    from configuration in System.Xml.Linq.XDocument.Load(NugetConfig.FullPath).Elements("configuration")
+                                    from packageSources in configuration.Elements("packageSources")
+                                    from add in packageSources.Elements("add")
+                                    from value in add.Attributes("value")
+                                    select value.Value
+                                ).ToArray();
+            }
+            else
+            {
+                // TODO Use parameter for Cake Contrib feed from environment variable, similar to BuildParameters.MyGet.SourceUrl
+                NuGetSources = new []{
+                    "https://api.nuget.org/v3/index.json",
+                    "https://www.myget.org/F/cake-contrib/api/v3/index.json"
+                };
+            }
+        }
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
