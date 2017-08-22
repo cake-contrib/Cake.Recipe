@@ -14,4 +14,15 @@ BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context);
 
+Task("Run-Integration-Tests")
+    .IsDependentOn("Default")
+    .Does(() => {
+    CakeExecuteScript("./test.cake",
+        new CakeSettings {
+            Arguments = new Dictionary<string, string>{
+                { "recipe-version", BuildParameters.Version.SemVersion },
+                { "verbosity", Context.Log.Verbosity.ToString("F") }
+            }});
+});
+
 Build.RunNuGet();
