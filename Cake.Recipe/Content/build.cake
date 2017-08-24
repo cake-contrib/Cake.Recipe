@@ -225,7 +225,7 @@ public void CopyBuildOutput()
     {
         // There is quite a bit of duplication in this function, that really needs to be tidied Upload
 
-        var parsedProject = ParseProject(project.Path, BuildParameters.Configuration);
+        var parsedProject = ParseProject(project.Path, BuildParameters.Configuration, ToolSettings.BuildPlatformTarget.ToString());
 
         if(project.Path.FullPath.ToLower().Contains("wixproj"))
         {
