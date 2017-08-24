@@ -142,8 +142,9 @@ BuildParameters.Tasks.BuildTask = Task("Build")
     .Does(() => RequireTool(MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        var msbuildSettings = new MSBuildSettings().
-                SetPlatformTarget(ToolSettings.BuildPlatformTarget)
+        var msbuildSettings = new MSBuildSettings()
+                .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
+                .UseToolVersion(ToolSettings.BuildMSBuildToolVersion)
                 .WithProperty("TreatWarningsAsErrors","true")
                 .WithTarget("Build")
                 .SetMaxCpuCount(ToolSettings.MaxCpuCount)
@@ -155,7 +156,6 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                         "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
                         BuildParameters.Paths.Files.BuildLogFilePath)
                 );
-
 
         // TODO: Need to have an XBuild step here as well
         MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
