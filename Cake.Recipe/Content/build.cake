@@ -225,7 +225,10 @@ public void CopyBuildOutput()
     {
         // There is quite a bit of duplication in this function, that really needs to be tidied Upload
 
-        var parsedProject = ParseProject(project.Path, BuildParameters.Configuration, ToolSettings.BuildPlatformTarget.ToString());
+        Information("Input BuildPlatformTarget: {0}", ToolSettings.BuildPlatformTarget.ToString());
+        var platformTarget = ToolSettings.BuildPlatformTarget == PlatformTarget.MSIL ? "AnyCPU" : ToolSettings.BuildPlatformTarget.ToString();
+        Information("Using BuildPlatformTarget: {0}", platformTarget);
+        var parsedProject = ParseProject(project.Path, BuildParameters.Configuration, platformTarget);
 
         if(project.Path.FullPath.ToLower().Contains("wixproj"))
         {
@@ -241,6 +244,9 @@ public void CopyBuildOutput()
 
         if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
         {
+            Information("OutputPath: {0}", parsedProject.OutputPath);
+            Information("RootNameSpace: {0}", parsedProject.RootNameSpace);
+            Information("OutputType: {0}", parsedProject.OutputType);
             throw new Exception(string.Format("Unable to parse project file correctly: {0}", project.Path));
         }
 
