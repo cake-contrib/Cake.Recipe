@@ -8,7 +8,8 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.Recipe",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Recipe",
-                            appVeyorAccountName: "cakecontrib");
+                            appVeyorAccountName: "cakecontrib",
+                            shouldDeployGraphDocumentation: true);
 
 BuildParameters.PrintParameters(Context);
 
