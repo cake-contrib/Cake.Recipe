@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html><html><head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
+        <title>Cake.Recipe - Environment Variables</title>
+        <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet">
+        <script src="/Cake.Recipe/assets/js/jquery-2.2.3.min.js"></script>
+        <script src="/Cake.Recipe/assets/js/bootstrap.min.js"></script>        
+        <script src="/Cake.Recipe/assets/js/app.min.js"></script>         
+        <script src="/Cake.Recipe/assets/js/highlight.pack.js"></script>   
+        <script src="/Cake.Recipe/assets/js/jquery.slimscroll.min.js"></script>
+        <script src="/Cake.Recipe/assets/js/jquery.sticky-kit.min.js"></script>
+        <script src="/Cake.Recipe/assets/js/mermaid.min.js"></script>
+        <!--[if lt IE 9]>
+        <script src="/Cake.Recipe/assets/js/html5shiv.min.js"></script>
+        <script src="/Cake.Recipe/assets/js/respond.min.js"></script>
+        <![endif]-->  
+
+        
+    </head>
+    <body class="hold-transition wyam layout-boxed  ">    
+        <div class="top-banner"></div>
+        <div class="wrapper with-container">
+            <!-- Header -->
+            <header class="main-header">   
+                     
+                <a href="/Cake.Recipe/" class="logo">
+                            <span>Cake.Recipe</span>
+                </a>   
+                         
+                <nav class="navbar navbar-static-top" role="navigation">
+                    <!-- Sidebar toggle button-->
+                        <a href="#" class="sidebar-toggle visible-xs-block" data-toggle="offcanvas" role="button">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-right"></i>
+                        </a>
+                                        
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                            <span class="sr-only">Toggle side menu</span>
+                            <i class="fa fa-chevron-circle-down"></i>
+                        </button>
+                    </div>
+            
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                        <ul class="nav navbar-nav">                            
+                                    <li class="active"><a href="/Cake.Recipe/docs">Documentation</a></li>
+        <li><a href="/Cake.Recipe/graph">Graph</a></li>
+ 
+                        </ul>       
+                    </div>
+                    <!-- /.navbar-collapse -->
+                
+                    <!-- Navbar Right Menu -->
+                </nav>
+            </header>
+            
+            <!-- Left side column. contains the logo and sidebar -->
+            <aside class="main-sidebar ">
+                <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
+                    	
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/fundamentals/environment-variables.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#github">GitHub</a></p>
+<p><a href="#myget">MyGet</a></p>
+<p><a href="#nuget">NuGet</a></p>
+<p><a href="#gitter">Gitter</a></p>
+<p><a href="#slack">Slack</a></p>
+<p><a href="#twitter">Twitter</a></p>
+<p><a href="#codecov">Codecov</a></p>
+<p><a href="#coveralls">Coveralls</a></p>
+<p><a href="#appveyor">AppVeyor</a></p>
+<p><a href="#wyam">Wyam</a></p>
+<hr class="infobar-hidden">
+</div>
+
+                </section>
+                <section class="sidebar">                    
+                    
+
+                    <ul class="sidebar-menu">
+                        
+                <li class="treeview active">
+                    <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                                        <li class="selected"><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                                        <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
+
+                    </ul>
+                </li>
+
+                    </ul>
+                </section>                
+            </aside>
+            
+            <!-- Content Wrapper. Contains page content -->
+            <div class="content-wrapper">
+                
+
+
+
+	<section class="content-header">
+		<h1>Environment Variables</h1>
+	</section>
+	<section class="content">
+		<p>The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.</p>
+<p>The following are a list of the default environment variable names that are looked for during the build.</p>
+<p><strong>NOTE:</strong> If required, the name of the environment variables can be modified to fit into your existing system/architecture.</p>
+<h1 id="github">GitHub</h1>
+<h2 id="github_username">GITHUB_USERNAME</h2>
+<p>User name of the GitHub account used to create and publish releases.</p>
+<h2 id="github_password">GITHUB_PASSWORD</h2>
+<p>Password of the GitHub account used to create and publish releases.</p>
+<h1 id="myget">MyGet</h1>
+<h2 id="myget_api_key">MYGET_API_KEY</h2>
+<h2 id="myget_source">MYGET_SOURCE</h2>
+<h1 id="nuget">NuGet</h1>
+<h2 id="nuget_api_key">NUGET_API_KEY</h2>
+<h2 id="nuget_source">NUGET_SOURCE</h2>
+<h1 id="gitter">Gitter</h1>
+<h2 id="gitter_token">GITTER_TOKEN</h2>
+<h2 id="gitter_room_id">GITTER_ROOM_ID</h2>
+<h1 id="slack">Slack</h1>
+<h2 id="slack_token">SLACK_TOKEN</h2>
+<h2 id="slack_channel">SLACK_CHANNEL</h2>
+<h1 id="twitter">Twitter</h1>
+<h2 id="twitter_consumer_key">TWITTER_CONSUMER_KEY</h2>
+<h2 id="twitter_consumer_secret">TWITTER_CONSUMER_SECRET</h2>
+<h2 id="twitter_access_token">TWITTER_ACCESS_TOKEN</h2>
+<h2 id="twitter_access_token_secret">TWITTER_ACCESS_TOKEN_SECRET</h2>
+<h1 id="codecov">Codecov</h1>
+<h2 id="codecov_repo_token">CODECOV_REPO_TOKEN</h2>
+<p>API token for uploading coverage reports to codecov.io. <em>This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories</em></p>
+<h1 id="coveralls">Coveralls</h1>
+<h2 id="coveralls_repo_token">COVERALLS_REPO_TOKEN</h2>
+<h1 id="appveyor">AppVeyor</h1>
+<h2 id="appveyor_api_token">APPVEYOR_API_TOKEN</h2>
+<p>API token for accessing AppVeyor. Used to <a href="../usage/cleaning-cache">clean AppVeyor build cache</a>.</p>
+<h1 id="wyam">Wyam</h1>
+<h2 id="wyam_access_token">WYAM_ACCESS_TOKEN</h2>
+<p>Access token to use to publish the Wyam documentation. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
+<h2 id="wyam_deploy_remote">WYAM_DEPLOY_REMOTE</h2>
+<p>URI of the remote repository where the Wyam documentation is published to. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
+<h2 id="wyam_deploy_branch">WYAM_DEPLOY_BRANCH</h2>
+<p>Branch into which the Wyam documentation should be published. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
+
+	</section>
+                
+            </div>           
+            
+            <!-- Footer -->
+            <footer class="main-footer">
+            </footer>
+            
+        </div>
+        <div class="wrapper bottom-wrapper">
+            <footer class="bottom-footer">
+                Generated by <a href="https://wyam.io">Wyam</a>
+            </footer>
+        </div>
+        <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
+        
+        <script>           
+            // Close the sidebar if we select an anchor link
+            $(".main-sidebar a[href^='#']:not('.expand')").click(function(){
+                $(document.body).removeClass('sidebar-open');
+            });
+            
+            $(document).load(function() {
+                mermaid.initialize(
+                {
+                    flowchart:
+                    {
+                        htmlLabels: false,
+                        useMaxWidth:false
+                    }
+                });  
+                mermaid.init(undefined, ".mermaid")
+                $('svg').addClass('img-responsive');
+                
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
+                });  
+            });
+            hljs.initHighlightingOnLoad();
+
+            // Back to top
+            $(window).scroll(function() {
+                if ($(this).scrollTop() >= 200) {        // If page is scrolled more than 50px
+                    $('#return-to-top').fadeIn(1000);    // Fade in the arrow
+                } else {
+                    $('#return-to-top').fadeOut(1000);   // Else fade out the arrow
+                }
+            });
+            $('#return-to-top').click(function() {      // When arrow is clicked
+                $('body,html').animate({
+                    scrollTop : 0                       // Scroll to top of body
+                }, 500);
+            });
+        </script>
+    
+</body></html>
