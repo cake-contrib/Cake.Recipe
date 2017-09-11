@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+	<channel>
+		<title>Cake.Plist</title>
+		<link>http://cake-contrib.github.io/Cake.Plist</link>
+		<description />
+		<copyright>2017</copyright>
+		<pubDate>Mon, 11 Sep 2017 18:51:22 GMT</pubDate>
+		<lastBuildDate>Mon, 11 Sep 2017 18:51:22 GMT</lastBuildDate>
+		<item>
+			<title>New Release - 0.3.0</title>
+			<link>http://cake-contrib.github.io/Cake.Plist/blog/new-release-0.3.0</link>
+			<description>&lt;p&gt;The main focus of this release was to introduce Cake.Recipe as the main build engine for the project.  Going forward, this means that Cake.Plist will be consistent with the other projects in this organisation, and as a result, more maintainable going forward.&lt;/p&gt;</description>
+			<author>gep13</author>
+			<guid>http://cake-contrib.github.io/Cake.Plist/blog/new-release-0.3.0</guid>
+			<pubDate>Wed, 08 Mar 2017 00:00:00 GMT</pubDate>
+		</item>
+	</channel>
+</rss>
