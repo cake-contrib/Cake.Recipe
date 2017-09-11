@@ -44,6 +44,8 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> DotNetCoreTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> TestTask { get; set; }
     public CakeTaskBuilder<ActionTask> CleanDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> DeployGraphDocumentation {get; set;}
+    public CakeTaskBuilder<ActionTask> DeployGraphWebFiles {get; set;}
     public CakeTaskBuilder<ActionTask> PublishDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> PreviewDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> ForcePublishDocumentationTask { get; set; }

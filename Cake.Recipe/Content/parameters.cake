@@ -66,6 +66,7 @@ public static class BuildParameters
     public static bool ShouldPublishChocolatey { get; private set; }
     public static bool ShouldPublishNuGet { get; private set; }
     public static bool ShouldPublishGitHub { get; private set; }
+    public static bool ShouldDeployGraphDocumentation{get ;private set;}
     public static bool ShouldGenerateDocumentation { get; private set; }
     public static bool ShouldExecuteGitLink { get; private set; }
 
@@ -224,6 +225,7 @@ public static class BuildParameters
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
         context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
+        context.Information("ShouldDeployGraphDocumentation: {0}", ShouldDeployGraphDocumentation);
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("ShouldExecuteGitLink: {0}", ShouldExecuteGitLink);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
@@ -275,6 +277,7 @@ public static class BuildParameters
         bool shouldPublishChocolatey = true,
         bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
+        bool shouldDeployGraphDocumentation = true,
         bool shouldGenerateDocumentation = true,
         bool shouldExecuteGitLink = true,
         bool shouldRunDupFinder = true,
@@ -443,6 +446,8 @@ public static class BuildParameters
                                 IsMainRepository &&
                                 (IsMasterBranch || IsDevelopBranch) &&
                                 shouldGenerateDocumentation);
+
+        ShouldDeployGraphDocumentation = shouldDeployGraphDocumentation;
 
         ShouldExecuteGitLink = (!IsLocalBuild &&
                             !IsPullRequest &&

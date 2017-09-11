@@ -8,6 +8,7 @@
 #addin nuget:?package=Cake.Figlet&version=0.4.0
 #addin nuget:?package=Cake.Git&version=0.15.0
 #addin nuget:?package=Cake.Gitter&version=0.5.0
+#addin nuget:?package=Cake.Graph&version=0.2.0
 #addin nuget:?package=Cake.Incubator&version=1.3.0
 #addin nuget:?package=Cake.Kudu&version=0.4.0
 #addin nuget:?package=Cake.MicrosoftTeams&version=0.3.0

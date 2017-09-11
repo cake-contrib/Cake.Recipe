@@ -256,3 +256,6 @@ tools/
 BuildArtifacts/
 *.temp.nuspec
 tests/integration/repos/
+
+# Cake.Graph related
+docs/input/tasks/*.json
