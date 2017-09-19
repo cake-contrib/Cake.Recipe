@@ -38,6 +38,8 @@ public static class BuildParameters
     public static DirectoryPath SourceDirectoryPath { get; private set; }
     public static DirectoryPath SolutionDirectoryPath { get; private set; }
     public static DirectoryPath TestDirectoryPath { get; private set; }
+    public static FilePath IntegrationTestScriptPath { get; private set; }
+    public static string IntegrationTestTask { get; private set; }
     public static string TestFilePattern { get; private set; }
     public static string Title { get; private set; }
     public static string ResharperSettingsFileName { get; private set; }
@@ -69,6 +71,7 @@ public static class BuildParameters
     public static bool ShouldDeployGraphDocumentation{get ;private set;}
     public static bool ShouldGenerateDocumentation { get; private set; }
     public static bool ShouldExecuteGitLink { get; private set; }
+    public static bool ShouldRunIntegrationTests { get; private set; }
 
     public static DirectoryPath WyamRootDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
@@ -259,6 +262,8 @@ public static class BuildParameters
         DirectoryPath rootDirectoryPath = null,
         DirectoryPath testDirectoryPath = null,
         string testFilePattern = null,
+        string integrationTestScriptPath = null,
+        string integrationTestTask = null,
         string resharperSettingsFileName = null,
         string repositoryOwner = null,
         string repositoryName = null,
@@ -285,6 +290,7 @@ public static class BuildParameters
         bool shouldRunCodecov = true,
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
+        bool shouldRunIntegrationTests = false,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -312,6 +318,8 @@ public static class BuildParameters
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
         TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
         TestFilePattern = testFilePattern;
+        IntegrationTestScriptPath = integrationTestScriptPath;
+        IntegrationTestTask = integrationTestTask ?? "Default";
         ResharperSettingsFileName = resharperSettingsFileName ?? string.Format("{0}.sln.DotSettings", Title);
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
@@ -454,5 +462,9 @@ public static class BuildParameters
                             IsMainRepository &&
                             (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
                             shouldExecuteGitLink);
+
+        ShouldRunIntegrationTests = ((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&        
+                            (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) && 
+                            IntegrationTestScriptPath != null || shouldRunIntegrationTests);
     }
 }

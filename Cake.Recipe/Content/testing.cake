@@ -179,4 +179,19 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     }
 });
 
+BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
+    .WithCriteria(() => BuildParameters.IntegrationTestScriptPath != null)
+    .IsDependentOn("Default")
+    .Does(() => 
+    {
+            CakeExecuteScript(BuildParameters.IntegrationTestScriptPath,
+                new CakeSettings 
+                {
+                    Arguments = new Dictionary<string, string>
+                    {
+                        { "verbosity", Context.Log.Verbosity.ToString("F") }
+                    }
+                });
+    });
+
 BuildParameters.Tasks.TestTask = Task("Test");
