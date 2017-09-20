@@ -39,7 +39,6 @@ public static class BuildParameters
     public static DirectoryPath SolutionDirectoryPath { get; private set; }
     public static DirectoryPath TestDirectoryPath { get; private set; }
     public static FilePath IntegrationTestScriptPath { get; private set; }
-    public static string IntegrationTestTask { get; private set; }
     public static string TestFilePattern { get; private set; }
     public static string Title { get; private set; }
     public static string ResharperSettingsFileName { get; private set; }
@@ -231,6 +230,7 @@ public static class BuildParameters
         context.Information("ShouldDeployGraphDocumentation: {0}", ShouldDeployGraphDocumentation);
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("ShouldExecuteGitLink: {0}", ShouldExecuteGitLink);
+        context.Information("ShouldRunIntegrationTests: {0}", ShouldRunIntegrationTests);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
         context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
@@ -263,7 +263,6 @@ public static class BuildParameters
         DirectoryPath testDirectoryPath = null,
         string testFilePattern = null,
         string integrationTestScriptPath = null,
-        string integrationTestTask = null,
         string resharperSettingsFileName = null,
         string repositoryOwner = null,
         string repositoryName = null,
@@ -318,8 +317,7 @@ public static class BuildParameters
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
         TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
         TestFilePattern = testFilePattern;
-        IntegrationTestScriptPath = integrationTestScriptPath;
-        IntegrationTestTask = integrationTestTask ?? "Default";
+        IntegrationTestScriptPath = integrationTestScriptPath ?? context.MakeAbsolute((FilePath)"test.cake");
         ResharperSettingsFileName = resharperSettingsFileName ?? string.Format("{0}.sln.DotSettings", Title);
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
@@ -463,8 +461,9 @@ public static class BuildParameters
                             (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
                             shouldExecuteGitLink);
 
-        ShouldRunIntegrationTests = ((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&        
-                            (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) && 
-                            IntegrationTestScriptPath != null || shouldRunIntegrationTests);
+        ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) && 
+                                        (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) && 
+                                        context.FileExists(context.MakeAbsolute(BuildParameters.IntegrationTestScriptPath))) || 
+                                        shouldRunIntegrationTests);
     }
 }
