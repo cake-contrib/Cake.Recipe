@@ -180,7 +180,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
 });
 
 BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
-    .WithCriteria(() => BuildParameters.IntegrationTestScriptPath != null)
+    .WithCriteria(() => BuildParameters.ShouldRunIntegrationTests)
     .IsDependentOn("Default")
     .Does(() => 
     {
