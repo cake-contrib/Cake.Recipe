@@ -53,6 +53,7 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
         new OpenCoverSettings
         {
+            OldStyle = true,
             ReturnTargetCodeOffset = 0,
             ArgumentCustomization = args => args.Append("-returntargetcode")
         }
