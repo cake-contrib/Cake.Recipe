@@ -51,7 +51,12 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
             });
         },
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-        new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+        new OpenCoverSettings
+        {
+            OldStyle = true,
+            ReturnTargetCodeOffset = 0,
+            ArgumentCustomization = args => args.Append("-returntargetcode")
+        }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
             .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
