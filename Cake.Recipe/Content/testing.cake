@@ -27,7 +27,12 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
             });
         },
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-        new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+        new OpenCoverSettings
+        {
+            OldStyle = true,
+            ReturnTargetCodeOffset = 0,
+            ArgumentCustomization = args => args.Append("-returntargetcode")
+        }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
             .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
@@ -102,7 +107,12 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
     OpenCover(
 		tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), vsTestSettings); },
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-        new OpenCoverSettings() { ReturnTargetCodeOffset = 0 }
+        new OpenCoverSettings
+        {
+            OldStyle = true,
+            ReturnTargetCodeOffset = 0,
+            ArgumentCustomization = args => args.Append("-returntargetcode")
+        }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
             .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
@@ -126,7 +136,12 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
             });
         },
         BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-        new OpenCoverSettings { ReturnTargetCodeOffset = 0 }
+        new OpenCoverSettings
+        {
+            OldStyle = true,
+            ReturnTargetCodeOffset = 0,
+            ArgumentCustomization = args => args.Append("-returntargetcode")
+        }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
             .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
@@ -169,7 +184,8 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
                     ReturnTargetCodeOffset = 0,
                     OldStyle = true,
                     Register = "user",
-                    MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath)
+                    MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath),
+                    ArgumentCustomization = args => args.Append("-returntargetcode")
                 }
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
