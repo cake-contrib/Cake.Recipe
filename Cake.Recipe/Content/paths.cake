@@ -27,7 +27,6 @@ public class BuildPaths
         var chocolateyNuspecDirectory = "./nuspec/chocolatey";
 
         var testResultsDirectory = buildDirectoryPath + "/TestResults";
-        var codeAnalysisResultsDirectory = testResultsDirectory + "/CodeAnalysis";
         var inspectCodeResultsDirectory = testResultsDirectory + "/InspectCode";
         var dupFinderResultsDirectory = testResultsDirectory + "/DupFinder";
         var NUnitTestResultsDirectory = testResultsDirectory + "/NUnit";
@@ -66,7 +65,6 @@ public class BuildPaths
             nugetNuspecDirectory,
             chocolateyNuspecDirectory,
             testResultsDirectory,
-            codeAnalysisResultsDirectory,
             inspectCodeResultsDirectory,
             dupFinderResultsDirectory,
             NUnitTestResultsDirectory,
@@ -149,7 +147,6 @@ public class BuildDirectories
     public DirectoryPath NugetNuspecDirectory { get; private set; }
     public DirectoryPath ChocolateyNuspecDirectory { get; private set; }
     public DirectoryPath TestResults { get; private set; }
-    public DirectoryPath CodeAnalysisResults { get; private set; }
     public DirectoryPath InspectCodeTestResults { get; private set; }
     public DirectoryPath DupFinderTestResults { get; private set; }
     public DirectoryPath NUnitTestResults { get; private set; }
@@ -177,7 +174,6 @@ public class BuildDirectories
         DirectoryPath nugetNuspecDirectory,
         DirectoryPath chocolateyNuspecDirectory,
         DirectoryPath testResults,
-        DirectoryPath codeAnalysisResults,
         DirectoryPath inspectCodeTestResults,
         DirectoryPath dupFinderTestResults,
         DirectoryPath nunitTestResults,
@@ -204,7 +200,6 @@ public class BuildDirectories
         NugetNuspecDirectory = nugetNuspecDirectory;
         ChocolateyNuspecDirectory = chocolateyNuspecDirectory;
         TestResults = testResults;
-        CodeAnalysisResults = codeAnalysisResults;
         InspectCodeTestResults = inspectCodeTestResults;
         DupFinderTestResults = dupFinderTestResults;
         NUnitTestResults = nunitTestResults;
