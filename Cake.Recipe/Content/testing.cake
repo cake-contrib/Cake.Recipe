@@ -30,8 +30,7 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
         new OpenCoverSettings
         {
             OldStyle = true,
-            ReturnTargetCodeOffset = 0,
-            ArgumentCustomization = args => args.Append("-returntargetcode")
+            ReturnTargetCodeOffset = 0
         }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
@@ -59,8 +58,7 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
         new OpenCoverSettings
         {
             OldStyle = true,
-            ReturnTargetCodeOffset = 0,
-            ArgumentCustomization = args => args.Append("-returntargetcode")
+            ReturnTargetCodeOffset = 0
         }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
@@ -110,8 +108,7 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
         new OpenCoverSettings
         {
             OldStyle = true,
-            ReturnTargetCodeOffset = 0,
-            ArgumentCustomization = args => args.Append("-returntargetcode")
+            ReturnTargetCodeOffset = 0
         }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
@@ -139,8 +136,7 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
         new OpenCoverSettings
         {
             OldStyle = true,
-            ReturnTargetCodeOffset = 0,
-            ArgumentCustomization = args => args.Append("-returntargetcode")
+            ReturnTargetCodeOffset = 0
         }
             .WithFilter(ToolSettings.TestCoverageFilter)
             .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
@@ -184,8 +180,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
                     ReturnTargetCodeOffset = 0,
                     OldStyle = true,
                     Register = "user",
-                    MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath),
-                    ArgumentCustomization = args => args.Append("-returntargetcode")
+                    MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath)
                 }
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
