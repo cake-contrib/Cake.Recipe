@@ -41,6 +41,7 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> TestMSTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> TestVSTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> TestFixieTask { get; set; }
+    public CakeTaskBuilder<ActionTask> TransifexSetupTask { get; set; }
     public CakeTaskBuilder<ActionTask> DotNetCoreTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> IntegrationTestTask { get;set; }
     public CakeTaskBuilder<ActionTask> TestTask { get; set; }

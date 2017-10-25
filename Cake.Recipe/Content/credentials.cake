@@ -122,6 +122,19 @@ public class CoverallsCredentials
     }
 }
 
+public class TransifexCredentials : AppVeyorCredentials
+{
+    public bool HasCredentials
+    {
+        get { return !string.IsNullOrEmpty(ApiToken); }
+    }
+
+    public TransifexCredentials(string apiToken)
+        : base(apiToken)
+    {
+    }
+}
+
 public class WyamCredentials
 {
     public string AccessToken { get; private set; }
@@ -209,6 +222,13 @@ public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)
 {
     return new CoverallsCredentials(
         context.EnvironmentVariable(Environment.CoverallsRepoTokenVariable));
+}
+
+public static TransifexCredentials GetTransifexCredentials(ICakeContext context)
+{
+    return new TransifexCredentials(
+        context.EnvironmentVariable(Environment.TransifexApiTokenVariable)
+    );
 }
 
 public static WyamCredentials GetWyamCredentials(ICakeContext context)

@@ -18,6 +18,7 @@ public static class BuildParameters
     public static bool IsReleaseBuild { get; private set; }
     public static bool IsDotNetCoreBuild { get; set; }
     public static bool IsNuGetBuild { get; set; }
+    public static bool TransifexEnabled { get; set; }
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public static GitterCredentials Gitter { get; private set; }
@@ -29,6 +30,7 @@ public static class BuildParameters
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
+    public static TransifexCredentials Transifex { get; private set; }
     public static WyamCredentials Wyam { get; private set; }
     public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
@@ -236,6 +238,7 @@ public static class BuildParameters
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
         context.Information("RepositoryOwner: {0}", RepositoryOwner);
         context.Information("RepositoryName: {0}", RepositoryName);
+        context.Information("TransifexEnabled: {0}", TransifexEnabled);
         context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
         context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
         context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
@@ -290,6 +293,7 @@ public static class BuildParameters
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
+        bool? transifexEnabled = null,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -323,6 +327,8 @@ public static class BuildParameters
         RepositoryName = repositoryName ?? Title;
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
+
+        TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository();
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));

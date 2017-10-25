@@ -20,6 +20,7 @@ public static class Environment
     public static string CodecovRepoTokenVariable { get; private set; }
     public static string CoverallsRepoTokenVariable { get; private set; }
     public static string MicrosoftTeamsWebHookUrlVariable { get; private set; }
+    public static string TransifexApiTokenVariable { get; private set; }
     public static string WyamAccessTokenVariable { get; private set; }
     public static string WyamDeployRemoteVariable { get; private set; }
     public static string WyamDeployBranchVariable { get; private set; }
@@ -45,6 +46,7 @@ public static class Environment
         string codecovRepoTokenVariable = null,
         string coverallsRepoTokenVariable = null,
         string microsoftTeamsWebHookUrlVariable = null,
+        string transifexApiTokenVariable = null,
         string wyamAccessTokenVariable = null,
         string wyamDeployRemoteVariable = null,
         string wyamDeployBranchVariable = null)
@@ -69,6 +71,7 @@ public static class Environment
         CodecovRepoTokenVariable = codecovRepoTokenVariable ?? "CODECOV_REPO_TOKEN";
         CoverallsRepoTokenVariable = coverallsRepoTokenVariable ?? "COVERALLS_REPO_TOKEN";
         MicrosoftTeamsWebHookUrlVariable = microsoftTeamsWebHookUrlVariable ?? "MICROSOFTTEAMS_WEBHOOKURL";
+        TransifexApiTokenVariable = transifexApiTokenVariable ?? "TRANSIFEX_API_TOKEN";
         WyamAccessTokenVariable = wyamAccessTokenVariable ?? "WYAM_ACCESS_TOKEN";
         WyamDeployRemoteVariable = wyamDeployRemoteVariable ?? "WYAM_DEPLOY_REMOTE";
         WyamDeployBranchVariable = wyamDeployBranchVariable ?? "WYAM_DEPLOY_BRANCH";
