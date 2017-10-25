@@ -30,3 +30,15 @@ BuildTasks.TransifexSetupTask = Task("Transifex-Setup")
         const string text = "[https://www.transifex.com]\r\nhostname = https://www.transifex.com\r\npassword = " + BuildParameters.Transifex.ApiToken + "\r\nusername = api";
         System.IO.File.WriteAllText(path, text, encoding);
     });
+
+BuildTasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
+    .WithCriteria(() => BuildParameters.TransifexEnabled)
+    .WithCriteria(() => BuildParameters.IsRunningOnAppveyor || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase))
+    .IsDependentOn("Transifex-Setup")
+    .Does(() =>
+    {
+        // TODO: Allow the usage of force, perhaps when target have been explicitly called.
+        TransifexPush(new TransifexPushSettings {
+            UploadSourceFiles = true
+        });
+    });
