@@ -6,7 +6,7 @@ public static bool TransifexUserSettingsExists(ICakeContext context)
 
 public static string GetTransifexUserSettingsPath()
 {
-    var path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments) + "/.transifexrc");
+    var path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile) + "/.transifexrc");
     return path;
 }
 
