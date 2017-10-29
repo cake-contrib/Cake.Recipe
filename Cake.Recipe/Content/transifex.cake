@@ -19,7 +19,7 @@ public static bool TransifexIsConfiguredForRepository()
 // Initialized, this is mostly related to running on appveyor or other CI.
 // Because we expect the repository to already be configured to use
 // transifex, we cannot run tx init, or it would replace the repository configuration file.
-BuildTasks.TransifexSetupTask = Task("Transifex-Setup")
+BuildParameters.Tasks.TransifexSetupTask = Task("Transifex-Setup")
     .WithCriteria(() => BuildParameters.TransifexEnabled)
     .WithCriteria(() => !TransifexUserSettingsExists())
     .WithCriteria(() => BuildParameters.Transifex.HasCredentials)
@@ -31,7 +31,7 @@ BuildTasks.TransifexSetupTask = Task("Transifex-Setup")
         System.IO.File.WriteAllText(path, text, encoding);
     });
 
-BuildTasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
+BuildParameters.Tasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
     .WithCriteria(() => BuildParameters.TransifexEnabled)
     .WithCriteria(() => BuildParameters.IsRunningOnAppveyor || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase))
     .IsDependentOn("Transifex-Setup")
@@ -43,7 +43,7 @@ BuildTasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
         });
     });
 
-BuildTasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
+BuildParameters.Tasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
     .WithCriteria(() => BuildParameters.TransifexEnabled)
     .IsDependentOn("Transifex-Push-SourceFiles")
     .Does(() =>
@@ -55,7 +55,7 @@ BuildTasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
         });
     });
 
-BuildTasks.TransifexPushTranslations = Task("Transifex-Push-Translations")
+BuildParameters.Tasks.TransifexPushTranslations = Task("Transifex-Push-Translations")
     .Does(() =>
     {
         TransifexPush(new TransifexPushSettings {
