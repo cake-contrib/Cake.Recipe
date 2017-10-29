@@ -37,8 +37,8 @@ BuildTasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
     .IsDependentOn("Transifex-Setup")
     .Does(() =>
     {
-        // TODO: Allow the usage of force, perhaps when target have been explicitly called.
         TransifexPush(new TransifexPushSettings {
-            UploadSourceFiles = true
+            UploadSourceFiles = true,
+            Force = string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase)
         });
     });
