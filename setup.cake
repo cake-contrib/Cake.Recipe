@@ -14,7 +14,7 @@ BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context);
 
-Task("Run-Integration-Tests")
+Task("Run-Local-Integration-Tests")
     .IsDependentOn("Default")
     .Does(() => {
     CakeExecuteScript("./test.cake",
