@@ -42,3 +42,15 @@ BuildTasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
             Force = string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase)
         });
     });
+
+BuildTasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
+    .WithCriteria(() => BuildParameters.TransifexEnabled)
+    .IsDependentOn("Transifex-Push-SourceFiles")
+    .Does(() =>
+    {
+        TransifexPull(new TransifexPullSettings {
+            All = true,
+            Mode = BuildParameters.TransifexPullMode,
+            MinimumPercentage = BuildParameters.TransifexPullPercentage
+        });
+    });

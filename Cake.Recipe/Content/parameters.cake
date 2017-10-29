@@ -49,6 +49,9 @@ public static class BuildParameters
     public static string AppVeyorAccountName { get; private set; }
     public static string AppVeyorProjectSlug { get; private set; }
 
+    public static TransifexMode TransifexPullMode { get; private set; }
+    public static int TransifexPullPercentage { get; private set; }
+
     public static bool ShouldBuildNugetSourcePackage { get; private set; }
     public static bool ShouldPostToGitter { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
@@ -239,6 +242,11 @@ public static class BuildParameters
         context.Information("RepositoryOwner: {0}", RepositoryOwner);
         context.Information("RepositoryName: {0}", RepositoryName);
         context.Information("TransifexEnabled: {0}", TransifexEnabled);
+        if (TransifexEnabled)
+        {
+            context.Information("TransifexPullMode: {0}", TransifexPullMode);
+            context.Information("TransifexPullPercentage: {0}", TransifexPullPercentage);
+        }
         context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
         context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
         context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
@@ -294,6 +302,8 @@ public static class BuildParameters
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
         bool? transifexEnabled = null,
+        TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
+        int transifexPullPercentage = 60,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -329,6 +339,8 @@ public static class BuildParameters
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
 
         TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository();
+        TransifexPullMode = transifexPullMode;
+        TransifexPullPercentage = transifexPullPercentage;
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
