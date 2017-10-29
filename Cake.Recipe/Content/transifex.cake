@@ -27,7 +27,7 @@ BuildParameters.Tasks.TransifexSetupTask = Task("Transifex-Setup")
     {
         var path = GetTransifexUserSettingsPath();
         var encoding = new System.Text.UTF8Encoding(false);
-        var text = "[https://www.transifex.com]\r\nhostname = https://www.transifex.com\r\npassword = " + BuildParameters.Transifex.ApiToken + "\r\nusername = api";
+        string text = "[https://www.transifex.com]\r\nhostname = https://www.transifex.com\r\npassword = " + BuildParameters.Transifex.ApiToken + "\r\nusername = api";
         System.IO.File.WriteAllText(path, text, encoding);
     });
 
