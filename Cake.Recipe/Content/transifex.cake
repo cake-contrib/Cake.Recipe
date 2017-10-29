@@ -54,3 +54,11 @@ BuildTasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
             MinimumPercentage = BuildParameters.TransifexPullPercentage
         });
     });
+
+BuildTasks.TransifexPushTranslations = Task("Transifex-Push-Translations")
+    .Does(() =>
+    {
+        TransifexPush(new TransifexPushSettings {
+            UploadTranslations = true
+        });
+    });

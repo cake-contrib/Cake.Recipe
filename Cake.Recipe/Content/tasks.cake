@@ -43,6 +43,7 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> TestFixieTask { get; set; }
     public CakeTaskBuilder<ActionTask> TransifexPullTranslations { get; set; }
     public CakeTaskBuilder<ActionTask> TransifexPushSourceResource { get; set; }
+    public CakeTaskBuilder<ActionTask> TransifexPushTranslations { get; set; }
     public CakeTaskBuilder<ActionTask> TransifexSetupTask { get; set; }
     public CakeTaskBuilder<ActionTask> DotNetCoreTestTask { get; set; }
     public CakeTaskBuilder<ActionTask> IntegrationTestTask { get;set; }
