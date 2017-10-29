@@ -338,7 +338,7 @@ public static class BuildParameters
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
 
-        TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository();
+        TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository(context);
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
 
@@ -422,6 +422,7 @@ public static class BuildParameters
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
+        Transifex = GetTransifexCredentials(context);
         Wyam = GetWyamCredentials(context);
         IsPublishBuild = new [] {
             "Create-Release-Notes"
