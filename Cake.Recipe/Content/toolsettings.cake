@@ -29,8 +29,13 @@ public static class ToolSettings
     {
         context.Information("Setting up tools...");
 
-        // TODO: Remove hard coding of Cake.Example.Tests
-        DupFinderExcludePattern = dupFinderExcludePattern ?? new string[] { context.MakeAbsolute(context.Environment.WorkingDirectory) + "/src/Cake.Example.Tests/*.cs" };
+        var absoluteWorkingDirectory = context.MakeAbsolute(context.Environment.WorkingDirectory);
+        DupFinderExcludePattern = dupFinderExcludePattern ??
+            new string[]
+            {
+                string.Format("{0}/Source/{1}.Tests/**/*.cs", absoluteWorkingDirectory, BuildParameters.Title),
+                string.Format("{0}/Source/{1}/**/*.AssemblyInfo.cs", absoluteWorkingDirectory, BuildParameters.Title)
+            };
         DupFinderExcludeFilesByStartingCommentSubstring = dupFinderExcludeFilesByStartingCommentSubstring;
         DupFinderDiscardCost = dupFinderDiscardCost;
         DupFinderThrowExceptionOnFindingDuplicates = dupFinderThrowExceptionOnFindingDuplicates;
