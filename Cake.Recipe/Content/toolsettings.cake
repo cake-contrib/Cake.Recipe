@@ -29,12 +29,13 @@ public static class ToolSettings
     {
         context.Information("Setting up tools...");
 
-        var absoluteWorkingDirectory = context.MakeAbsolute(context.Environment.WorkingDirectory);
+        var absoluteTestDirectory = context.MakeAbsolute(BuildParameters.TestDirectoryPath);
+        var absoluteSourceDirectory = context.MakeAbsolute(BuildParameters.SolutionDirectoryPath);
         DupFinderExcludePattern = dupFinderExcludePattern ??
             new string[]
             {
-                string.Format("{0}/Source/{1}.Tests/**/*.cs", absoluteWorkingDirectory, BuildParameters.Title),
-                string.Format("{0}/Source/{1}/**/*.AssemblyInfo.cs", absoluteWorkingDirectory, BuildParameters.Title)
+                string.Format("{0}/{1}.Tests/**/*.cs", absoluteTestDirectory, BuildParameters.Title),
+                string.Format("{0}/**/*.AssemblyInfo.cs", absoluteSourceDirectory)
             };
         DupFinderExcludeFilesByStartingCommentSubstring = dupFinderExcludeFilesByStartingCommentSubstring;
         DupFinderDiscardCost = dupFinderDiscardCost;
