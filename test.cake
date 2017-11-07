@@ -1,4 +1,4 @@
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Git&Version=0.15.0"
+#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Git&Version=0.16.1"
 
 ////////////////////////////////////////////////////////
 /// Global variables
