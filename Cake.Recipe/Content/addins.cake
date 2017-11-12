@@ -28,7 +28,7 @@ Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
                 EnvironmentVariables = envVars,
                 Arguments = new Dictionary<string, string>
                 {
-                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient }
+                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient.ToString() }
                 }
             });
     }

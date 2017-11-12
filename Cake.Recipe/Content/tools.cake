@@ -29,7 +29,7 @@ Action<string, Action> RequireTool = (tool, action) => {
             {
                 Arguments = new Dictionary<string, string>
                 {
-                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient }
+                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient.ToString() }
                 }
             });
     }
