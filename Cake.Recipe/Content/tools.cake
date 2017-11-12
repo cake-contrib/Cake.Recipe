@@ -24,7 +24,14 @@ Action<string, Action> RequireTool = (tool, action) => {
     try
     {
         System.IO.File.WriteAllText(script.FullPath, tool);
-        CakeExecuteScript(script);
+        CakeExecuteScript(script, 
+            new CakeSettings 
+            { 
+                Arguments = new Dictionary<string, string>
+                {
+                    "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient
+                }
+            });
     }
     finally
     {

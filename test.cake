@@ -109,7 +109,8 @@ foreach(var testRepo in testRepos)
                     context.CakeExecuteScript(setupCakePath,
                             new CakeSettings {
                                 Arguments = new Dictionary<string, string>{
-                                    { "verbosity", context.Log.Verbosity.ToString("F") }
+                                    { "verbosity", context.Log.Verbosity.ToString("F") },
+                                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient }
                         }});
                 }
                 catch(Exception ex)

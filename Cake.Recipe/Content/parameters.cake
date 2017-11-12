@@ -2,6 +2,7 @@ public static class BuildParameters
 {
     public static string Target { get; private set; }
     public static string Configuration { get; private set; }
+    public static bool UseInProcessNuGetClient { get; private set; }
     public static bool IsLocalBuild { get; private set; }
     public static bool IsRunningOnUnix { get; private set; }
     public static bool IsRunningOnWindows { get; private set; }
@@ -396,6 +397,7 @@ public static class BuildParameters
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
+        UseInProcessNuGetClient = context.Argument("nuget_useinprocessclient", false);
         IsLocalBuild = buildSystem.IsLocalBuild;
         IsRunningOnUnix = context.IsRunningOnUnix();
         IsRunningOnWindows = context.IsRunningOnWindows();

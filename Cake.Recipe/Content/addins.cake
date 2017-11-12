@@ -22,7 +22,15 @@ Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     try
     {
         System.IO.File.WriteAllText(script.FullPath, code);
-        CakeExecuteScript(script, new CakeSettings{ EnvironmentVariables = envVars });
+        CakeExecuteScript(script, 
+            new CakeSettings 
+            { 
+                EnvironmentVariables = envVars,
+                Arguments = new Dictionary<string, string>
+                {
+                    "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient
+                }
+            });
     }
     finally
     {
