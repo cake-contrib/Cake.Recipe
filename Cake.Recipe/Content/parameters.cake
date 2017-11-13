@@ -1,5 +1,9 @@
 public static class BuildParameters
 {
+    private static string _gitterMessage;
+    private static string _microsoftTeamsMessage;
+    private static string _twitterMessage;
+
     public static string Target { get; private set; }
     public static string Configuration { get; private set; }
     public static bool UseInProcessNuGetClient { get; private set; }
@@ -20,9 +24,66 @@ public static class BuildParameters
     public static bool IsDotNetCoreBuild { get; set; }
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
-    public static string GitterMessage { get; set; }
-    public static string MicrosoftTeamsMessage { get; set; }
-    public static string TwitterMessage { get; set; }
+
+    public static string GitterMessage
+    {
+        get
+        {
+            if(_gitterMessage == null)
+            {
+                return "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+            }
+            else
+            {
+                return _gitterMessage;
+            }
+        }
+
+        set {
+            _gitterMessage = value;
+        }
+    }
+
+    public static string MicrosoftTeamsMessage
+    {
+        get
+        {
+            if(_microsoftTeamsMessage = null)
+            {
+                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+            }
+            else
+            {
+                return _microsoftTeamsMessage;
+            }
+        }
+
+        set
+        {
+            _microsoftTeamsMessage = value;
+        }
+    }
+
+    public static string TwitterMessage
+    {
+        get
+        {
+            if(_twitterMessage == null)
+            {
+                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+            }
+            else
+            {
+                return _twitterMessage;
+            }
+        }
+
+        set
+        {
+            _twitterMessage = value;
+        }
+    }
+
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public static GitterCredentials Gitter { get; private set; }
@@ -349,9 +410,9 @@ public static class BuildParameters
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
 
-        GitterMessage = gitterMessage ?? "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
-        MicrosoftTeamsMessage = microsoftTeamsMessage ?? "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
-        TwitterMessage = twitterMessage ?? "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+        GitterMessage = gitterMessage;
+        MicrosoftTeamsMessage = microsoftTeamsMessage;
+        TwitterMessage = twitterMessage;
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
