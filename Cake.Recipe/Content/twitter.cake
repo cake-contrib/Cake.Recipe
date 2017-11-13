@@ -2,13 +2,17 @@
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToTwitter(string message)
+public void SendMessageToTwitter()
 {
     try
     {
         Information("Sending message to Twitter...");
 
-        TwitterSendTweet(BuildParameters.Twitter.ConsumerKey, BuildParameters.Twitter.ConsumerSecret, BuildParameters.Twitter.AccessToken, BuildParameters.Twitter.AccessTokenSecret, message);
+        TwitterSendTweet(BuildParameters.Twitter.ConsumerKey,
+                         BuildParameters.Twitter.ConsumerSecret,
+                         BuildParameters.Twitter.AccessToken,
+                         BuildParameters.Twitter.AccessTokenSecret,
+                         BuildParameters.TwitterMessage);
 
         Information("Message succcessfully sent.");
     }

@@ -43,21 +43,19 @@ Teardown(context =>
     {
         if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.IsMasterBranch || ((BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch) && BuildParameters.ShouldNotifyBetaReleases)) && BuildParameters.IsTagged)
         {
-            var message = "Version " + BuildParameters.Version.SemVersion + " of " + BuildParameters.Title + " Addin has just been released, https://www.nuget.org/packages/" + BuildParameters.Title + ".";
-
             if(BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
-                SendMessageToTwitter(message);
+                SendMessageToTwitter();
             }
 
             if(BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
-                SendMessageToGitterRoom("@/all Version " + BuildParameters.Version.SemVersion + " of the " + BuildParameters.Title + " Addin has just been released, https://www.nuget.org/packages/" + BuildParameters.Title + ".");
+                SendMessageToGitterRoom();
             }
 
             if(BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
-                SendMessageToMicrosoftTeams(message);
+                SendMessageToMicrosoftTeams();
             }
         }
     }

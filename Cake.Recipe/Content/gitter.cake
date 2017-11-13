@@ -2,14 +2,14 @@
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToGitterRoom(string message)
+public void SendMessageToGitterRoom()
 {
     try
     {
         Information("Sending message to Gitter...");
 
         var postMessageResult = Gitter.Chat.PostMessage(
-                    message: message,
+                    message: BuildParameters.GitterMessage,
                     messageSettings: new GitterChatMessageSettings { Token = BuildParameters.Gitter.Token, RoomId = BuildParameters.Gitter.RoomId}
             );
 

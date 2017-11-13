@@ -20,6 +20,9 @@ public static class BuildParameters
     public static bool IsDotNetCoreBuild { get; set; }
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
+    public static string GitterMessage { get; set; }
+    public static string MicrosoftTeamsMessage { get; set; }
+    public static string TwitterMessage { get; set; }
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public static GitterCredentials Gitter { get; private set; }
@@ -305,6 +308,9 @@ public static class BuildParameters
         bool? transifexEnabled = null,
         TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
         int transifexPullPercentage = 60,
+        string gitterMessage = null,
+        string microsoftTeamsMessage = null,
+        string twitterMessage = null,
         DirectoryPath wyamRootDirectoryPath = null,
         DirectoryPath wyamPublishDirectoryPath = null,
         FilePath wyamConfigurationFile = null,
@@ -342,6 +348,10 @@ public static class BuildParameters
         TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository(context);
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
+
+        GitterMessage = gitterMessage ?? "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+        MicrosoftTeamsMessage = microsoftTeamsMessage ?? "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+        TwitterMessage = twitterMessage ?? "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
@@ -482,9 +492,9 @@ public static class BuildParameters
                             (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
                             shouldExecuteGitLink);
 
-        ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) && 
-                                        (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) && 
-                                        context.FileExists(context.MakeAbsolute(BuildParameters.IntegrationTestScriptPath))) || 
+        ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&
+                                        (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
+                                        context.FileExists(context.MakeAbsolute(BuildParameters.IntegrationTestScriptPath))) ||
                                         shouldRunIntegrationTests);
     }
 }

@@ -2,13 +2,13 @@
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToMicrosoftTeams(string message)
+public void SendMessageToMicrosoftTeams()
 {
     try
     {
         Information("Sending message to Microsoft Teams...");
 
-        MicrosoftTeamsPostMessage(message,
+        MicrosoftTeamsPostMessage(BuildParameters.MicrosoftTeamsMessage,
             new MicrosoftTeamsSettings {
                 IncomingWebhookUrl = BuildParameters.MicrosoftTeams.WebHookUrl
         });
