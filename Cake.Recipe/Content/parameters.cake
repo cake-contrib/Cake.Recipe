@@ -48,7 +48,7 @@ public static class BuildParameters
     {
         get
         {
-            if(_microsoftTeamsMessage = null)
+            if(_microsoftTeamsMessage == null)
             {
                 return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
             }
