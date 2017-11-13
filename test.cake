@@ -106,12 +106,22 @@ foreach(var testRepo in testRepos)
                 {
                     var setupCakePath = path.CombineWithFilePath("setup.cake");
                     context.Information("Testing {0}...", setupCakePath);
+                    var arguments = new Dictionary<string, string>();
+
+                    if(BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient") != null) {
+                        arguments.Add("nuget_useinprocessclient", BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient"));
+                    }
+
+                    if(BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification") != null) {
+                        arguments.Add("settings_skipverification", BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification"));
+                    }
+
+                    arguments.Add("verbosity", context.Log.Verbosity.ToString("F"));
+
                     context.CakeExecuteScript(setupCakePath,
                             new CakeSettings {
-                                Arguments = new Dictionary<string, string>{
-                                    { "verbosity", context.Log.Verbosity.ToString("F") },
-                                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient.ToString() }
-                        }});
+                                Arguments = arguments
+                            });
                 }
                 catch(Exception ex)
                 {

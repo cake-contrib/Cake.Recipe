@@ -22,14 +22,21 @@ Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     try
     {
         System.IO.File.WriteAllText(script.FullPath, code);
+        var arguments = new Dictionary<string, string>();
+
+        if(BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient") != null) {
+            arguments.Add("nuget_useinprocessclient", BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient"));
+        }
+
+        if(BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification") != null) {
+            arguments.Add("settings_skipverification", BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification"));
+        }
+
         CakeExecuteScript(script,
             new CakeSettings
             {
                 EnvironmentVariables = envVars,
-                Arguments = new Dictionary<string, string>
-                {
-                    { "nuget_useinprocessclient", BuildParameters.UseInProcessNuGetClient.ToString() }
-                }
+                Arguments = arguments
             });
     }
     finally
