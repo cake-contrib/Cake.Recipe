@@ -326,6 +326,9 @@ public static class BuildParameters
         context.Information("RepositoryOwner: {0}", RepositoryOwner);
         context.Information("RepositoryName: {0}", RepositoryName);
         context.Information("TransifexEnabled: {0}", TransifexEnabled);
+        context.Information("CanPullTranslations: {0}", CanPullTranslations);
+        context.Information("CanPushTranslations: {0}", CanPushTranslations);
+        
         if (TransifexEnabled)
         {
             context.Information("TransifexPullMode: {0}", TransifexPullMode);
