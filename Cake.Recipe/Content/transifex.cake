@@ -32,8 +32,7 @@ BuildParameters.Tasks.TransifexSetupTask = Task("Transifex-Setup")
     });
 
 BuildParameters.Tasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
-    .WithCriteria(() => BuildParameters.TransifexEnabled)
-    .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase))
+    .WithCriteria(() => BuildParameters.CanPushTranslations)
     .IsDependentOn("Transifex-Setup")
     .Does(() =>
     {
@@ -44,7 +43,7 @@ BuildParameters.Tasks.TransifexPushSourceResource = Task("Transifex-Push-SourceF
     });
 
 BuildParameters.Tasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
-    .WithCriteria(() => BuildParameters.TransifexEnabled)
+    .WithCriteria(() => BuildParameters.CanPullTranslations)
     .IsDependentOn("Transifex-Push-SourceFiles")
     .Does(() =>
     {
