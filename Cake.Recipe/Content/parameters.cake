@@ -263,6 +263,25 @@ public static class BuildParameters
         }
     }
 
+    public static bool CanPullTranslations
+    {
+        get
+        {
+            return BuildParameters.TransifexEnabled &&
+              (!BuildParameters.IsPullRequest || !BuildParameters.IsRunningOnAppVeyor);
+        }
+    }
+
+    public static bool CanPushTranslations
+    {
+        get
+        {
+            return BuildParameters.TransifexEnabled && !BuildParameters.IsPullRequest
+                && (BuildParameters.IsRunningOnAppVeyor
+                    || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparer.OrdinalIgnoreCase));
+        }
+    }
+
     public static void SetBuildVersion(BuildVersion version)
     {
         Version  = version;
