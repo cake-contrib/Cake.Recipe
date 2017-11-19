@@ -278,7 +278,7 @@ public static class BuildParameters
         {
             return BuildParameters.TransifexEnabled && !BuildParameters.IsPullRequest
                 && (BuildParameters.IsRunningOnAppVeyor
-                    || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparer.OrdinalIgnoreCase));
+                    || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase));
         }
     }
 
