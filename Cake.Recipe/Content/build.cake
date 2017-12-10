@@ -141,7 +141,9 @@ BuildParameters.Tasks.BuildTask = Task("Build")
     .Does(() => RequireTool(MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        var msbuildSettings = new MSBuildSettings()
+        if(BuildParameters.IsRunningOnWindows)
+        {
+            var msbuildSettings = new MSBuildSettings()
                 .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
                 .UseToolVersion(ToolSettings.BuildMSBuildToolVersion)
                 .WithProperty("TreatWarningsAsErrors","true")
@@ -155,9 +157,18 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                         "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
                         BuildParameters.Paths.Files.BuildLogFilePath)
                 );
+            
+            MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
+        } 
+        else
+        {
+            var xbuildSettings = new XBuildSettings()
+                .SetConfiguration(BuildParameters.Configuration)
+                .WithTarget("Build")
+                .WithProperty("TreatWarningsAsErrors", "true");
 
-        // TODO: Need to have an XBuild step here as well
-        MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);;
+            XBuild(BuildParameters.SolutionFilePath, xbuildSettings);
+        }
 
         if(BuildParameters.ShouldExecuteGitLink)
         {
