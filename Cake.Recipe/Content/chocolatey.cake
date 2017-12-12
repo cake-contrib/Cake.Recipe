@@ -24,7 +24,7 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
 
 BuildParameters.Tasks.PublishChocolateyPackagesTask = Task("Publish-Chocolatey-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(BuildParameters.IsRunningOnWindows)
+    .WithCriteria(() => BuildParameters.IsRunningOnWindows)
     .WithCriteria(() => BuildParameters.ShouldPublishChocolatey)
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
