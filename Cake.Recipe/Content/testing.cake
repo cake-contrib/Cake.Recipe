@@ -12,7 +12,7 @@ BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
     }));
 
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
-    .WithCriteria(BuildParameters.IsRunningOnWindows)
+    .WithCriteria(() => BuildParameters.IsRunningOnWindows)
     .Does(() => RequireTool(OpenCoverTool, () => {
     }));
 
