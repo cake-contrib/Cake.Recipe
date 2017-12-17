@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVeyor-Environment-Variables")
-    .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
+    .WithCriteria(() => AppVeyor.IsRunningOnAppVeyor)
     .Does(() =>
 {
     Information("CI: {0}", EnvironmentVariable("CI"));
