@@ -55,20 +55,11 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
     .Does(() => RequireTool(GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
-            if(DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
-            {
-                foreach(var package in GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
-                {
-                    GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
-                }
-            }
-
-            if(DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
-            {
-                foreach(var package in GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
-                {
-                    GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
-                }
+            // Concatenating FilePathCollections should make sure we get unique FilePaths
+            foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+                                   GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
+                                   GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
+                GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
             }
 
             GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone);

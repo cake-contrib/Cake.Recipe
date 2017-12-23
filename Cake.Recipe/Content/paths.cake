@@ -37,8 +37,9 @@ public class BuildPaths
 
         var testCoverageDirectory = buildDirectoryPath + "/TestCoverage";
 
-        var nuGetPackagesOutputDirectory = buildDirectoryPath + "/Packages/NuGet";
-        var chocolateyPackagesOutputDirectory = buildDirectoryPath + "/Packages/Chocolatey";
+        var packagesDirectory = buildDirectoryPath + "/Packages";
+        var nuGetPackagesOutputDirectory = packagesDirectory + "/NuGet";
+        var chocolateyPackagesOutputDirectory = packagesDirectory + "/Chocolatey";
 
         // Files
         var testCoverageOutputFilePath = ((DirectoryPath)testCoverageDirectory).CombineWithFilePath("OpenCover.xml");
@@ -74,7 +75,8 @@ public class BuildPaths
             FixieTestResultsDirectory,
             testCoverageDirectory,
             nuGetPackagesOutputDirectory,
-            chocolateyPackagesOutputDirectory
+            chocolateyPackagesOutputDirectory,
+            packagesDirectory
             );
 
         var buildFiles = new BuildFiles(
@@ -157,6 +159,7 @@ public class BuildDirectories
     public DirectoryPath TestCoverage { get; private set; }
     public DirectoryPath NuGetPackages { get; private set; }
     public DirectoryPath ChocolateyPackages { get; private set; }
+    public DirectoryPath Packages { get; private set; }
     public ICollection<DirectoryPath> ToClean { get; private set; }
 
     public BuildDirectories(
@@ -183,7 +186,8 @@ public class BuildDirectories
         DirectoryPath fixieTestResults,
         DirectoryPath testCoverage,
         DirectoryPath nuGetPackages,
-        DirectoryPath chocolateyPackages
+        DirectoryPath chocolateyPackages,
+        DirectoryPath packages
         )
     {
         Build = build;
@@ -210,6 +214,7 @@ public class BuildDirectories
         TestCoverage = testCoverage;
         NuGetPackages = nuGetPackages;
         ChocolateyPackages = chocolateyPackages;
+        Packages = packages;
 
         ToClean = new[] {
             Build,
