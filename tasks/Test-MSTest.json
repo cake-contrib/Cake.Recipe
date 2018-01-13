@@ -1,1 +1,1 @@
-[{"data":{"id":"Test-MSTest","source":null,"target":null}},{"data":{"id":"4759ab4d-ec72-43f4-9506-ea5671c54ce8","source":"Test-MSTest","target":"Install-OpenCover"}},{"data":{"id":"Install-OpenCover","source":null,"target":null}}]
+[{"data":{"id":"Test-MSTest","source":null,"target":null}},{"data":{"id":"dc566011-e669-4320-9bd9-a52103fc4113","source":"Test-MSTest","target":"Install-OpenCover"}},{"data":{"id":"Install-OpenCover","source":null,"target":null}}]

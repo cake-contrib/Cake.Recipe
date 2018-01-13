@@ -1,20 +1,22 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Environment Variables</title>
+        <title>Cake.Recipe - How to publish code coverage reports</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet" />
         <script src="/Cake.Recipe/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/Cake.Recipe/assets/js/bootstrap.min.js"></script>        
         <script src="/Cake.Recipe/assets/js/app.min.js"></script>         
@@ -71,19 +73,8 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/fundamentals/environment-variables.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#github">GitHub</a></p>
-<p><a href="#myget">MyGet</a></p>
-<p><a href="#nuget">NuGet</a></p>
-<p><a href="#gitter">Gitter</a></p>
-<p><a href="#slack">Slack</a></p>
-<p><a href="#twitter">Twitter</a></p>
-<p><a href="#codecov">Codecov</a></p>
-<p><a href="#coveralls">Coveralls</a></p>
-<p><a href="#appveyor">AppVeyor</a></p>
-<p><a href="#wyam">Wyam</a></p>
-<hr class="infobar-hidden">
-</div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/code-coverage-reports.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">                    
@@ -91,14 +82,14 @@
 
                     <ul class="sidebar-menu">
                         
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
-                                        <li class="selected"><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
+                                        <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                                         <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
@@ -107,7 +98,7 @@
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
 
                     </ul>
                 </li>
@@ -123,49 +114,27 @@
 
 
 	<section class="content-header">
-		<h1>Environment Variables</h1>
+		<h1>How to publish code coverage reports</h1>
 	</section>
 	<section class="content">
-		<p>The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.</p>
-<p>The following are a list of the default environment variable names that are looked for during the build.</p>
-<p><strong>NOTE:</strong> If required, the name of the environment variables can be modified to fit into your existing system/architecture.</p>
-<h1 id="github">GitHub</h1>
-<h2 id="github_username">GITHUB_USERNAME</h2>
-<p>User name of the GitHub account used to create and publish releases.</p>
-<h2 id="github_password">GITHUB_PASSWORD</h2>
-<p>Password of the GitHub account used to create and publish releases.</p>
-<h1 id="myget">MyGet</h1>
-<h2 id="myget_api_key">MYGET_API_KEY</h2>
-<h2 id="myget_source">MYGET_SOURCE</h2>
-<h1 id="nuget">NuGet</h1>
-<h2 id="nuget_api_key">NUGET_API_KEY</h2>
-<h2 id="nuget_source">NUGET_SOURCE</h2>
-<h1 id="gitter">Gitter</h1>
-<h2 id="gitter_token">GITTER_TOKEN</h2>
-<h2 id="gitter_room_id">GITTER_ROOM_ID</h2>
-<h1 id="slack">Slack</h1>
-<h2 id="slack_token">SLACK_TOKEN</h2>
-<h2 id="slack_channel">SLACK_CHANNEL</h2>
-<h1 id="twitter">Twitter</h1>
-<h2 id="twitter_consumer_key">TWITTER_CONSUMER_KEY</h2>
-<h2 id="twitter_consumer_secret">TWITTER_CONSUMER_SECRET</h2>
-<h2 id="twitter_access_token">TWITTER_ACCESS_TOKEN</h2>
-<h2 id="twitter_access_token_secret">TWITTER_ACCESS_TOKEN_SECRET</h2>
-<h1 id="codecov">Codecov</h1>
-<h2 id="codecov_repo_token">CODECOV_REPO_TOKEN</h2>
-<p>API token for uploading coverage reports to codecov.io. <em>This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories</em></p>
-<h1 id="coveralls">Coveralls</h1>
-<h2 id="coveralls_repo_token">COVERALLS_REPO_TOKEN</h2>
-<h1 id="appveyor">AppVeyor</h1>
-<h2 id="appveyor_api_token">APPVEYOR_API_TOKEN</h2>
-<p>API token for accessing AppVeyor. Used to <a href="../usage/cleaning-cache">clean AppVeyor build cache</a>.</p>
-<h1 id="wyam">Wyam</h1>
-<h2 id="wyam_access_token">WYAM_ACCESS_TOKEN</h2>
-<p>Access token to use to publish the Wyam documentation. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
-<h2 id="wyam_deploy_remote">WYAM_DEPLOY_REMOTE</h2>
-<p>URI of the remote repository where the Wyam documentation is published to. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
-<h2 id="wyam_deploy_branch">WYAM_DEPLOY_BRANCH</h2>
-<p>Branch into which the Wyam documentation should be published. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
+		<p>This document describes known issues pushing code coverage reports during Cake.Recipe builds.</p>
+<h2 id="coveralls-reports">Coveralls Reports</h2>
+<p>If your project target is <code>netcoreapp</code> or <code>netstandard</code> and you are not seeing coveralls reports.  You may be seeing a step in your build server logs like the the one below.</p>
+<pre><code class="language-powershell">========================================
+Upload-Coveralls-Report
+========================================
+No coverage statistics files.
+</code></pre>
+<p>OpenCover doesn't support the <a href="(https://github.com/dotnet/core/blob/e6049bb60307d987e044c39a106e0d6cf98857a3/Documentation/diagnostics/portable_pdb.md)">portable debug type</a>, which is the default of a .NET Core project. The resolution is to change or add a <code>DebugType</code> node in your <code>netcoreapp</code> test project and <strong>all</strong> projects it covers.  Acceptable options are <code>full</code> or <code>pdbonly</code>.  After adding one of the following xml tags to each project in your solution that tests, or is tested by a <code>netstandard</code> or <code>netcoreapp</code> project, OpenCover will produce a valid coverage file and upload to coveralls.</p>
+<pre><code class="language-xml">  &lt;PropertyGroup&gt;
+    &lt;DebugType&gt;full&lt;/DebugType&gt;
+  &lt;/PropertyGroup&gt;
+</code></pre>
+<p>or</p>
+<pre><code class="language-xml">  &lt;PropertyGroup&gt;
+    &lt;DebugType&gt;pdbonly&lt;/DebugType&gt;
+  &lt;/PropertyGroup&gt;
+</code></pre>
 
 	</section>
                 
@@ -221,5 +190,5 @@
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>
