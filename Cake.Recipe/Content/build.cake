@@ -303,7 +303,7 @@ public void CopyBuildOutput()
                 isxUnitTestProject = true;
                 break;
             }
-            else if(reference.Include.ToLower().Contains("unittestframework"))
+            else if(reference.Include.ToLower().Contains("unittestframework") || reference.Include.ToLower().Contains("visualstudio.testplatform"))
             {
                 ismsTestProject = true;
                 break;
