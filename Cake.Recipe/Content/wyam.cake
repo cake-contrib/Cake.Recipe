@@ -8,21 +8,11 @@ BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
 });
 
-BuildParameters.Tasks.DeployGraphWebFiles = Task("Deploy-Graph-Web-Files")
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => {
-        Graph(Tasks).DeployWebFiles(s => s
-            .UseWyam()
-        );
-    });
-
 BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentation")
     .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation)
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
     .Does(() => {
-        Graph(Tasks).GenerateNodeSets(s => s
-            .UseWyam()
-        );
+        Graph(Tasks).Deploy();
     });
 
 BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
