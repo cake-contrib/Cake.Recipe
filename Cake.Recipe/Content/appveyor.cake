@@ -40,12 +40,10 @@ BuildParameters.Tasks.UploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifa
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
-    foreach(var package in GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
-    {
-        AppVeyor.UploadArtifact(package);
-    }
-
-    foreach(var package in GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
+    // Concatenating FilePathCollections should make sure we get unique FilePaths
+    foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+                           GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
+                           GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
