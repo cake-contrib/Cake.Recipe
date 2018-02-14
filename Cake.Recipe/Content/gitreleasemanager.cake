@@ -59,6 +59,7 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
             foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
                                    GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
                                    GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
+            {
                 GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
             }
 
