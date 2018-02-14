@@ -24,6 +24,7 @@ public static class BuildParameters
     public static bool IsDotNetCoreBuild { get; set; }
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
+    public static bool ForceLocalPublish { get; set; }
 
     public static string GitterMessage
     {
@@ -328,12 +329,14 @@ public static class BuildParameters
         context.Information("TransifexEnabled: {0}", TransifexEnabled);
         context.Information("CanPullTranslations: {0}", CanPullTranslations);
         context.Information("CanPushTranslations: {0}", CanPushTranslations);
-        
+        context.Information("ForceLocalPublish: {0}", ForceLocalPublish);
+
         if (TransifexEnabled)
         {
             context.Information("TransifexPullMode: {0}", TransifexPullMode);
             context.Information("TransifexPullPercentage: {0}", TransifexPullPercentage);
         }
+
         context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
         context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
         context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
@@ -466,6 +469,7 @@ public static class BuildParameters
 
         NugetConfig = context.MakeAbsolute(nugetConfig ?? (FilePath)"./NuGet.Config");
         NuGetSources = nuGetSources;
+
         if (nuGetSources == null)
         {
             if (context.FileExists(NugetConfig))
@@ -490,6 +494,7 @@ public static class BuildParameters
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
+        ForceLocalPublish = context.Argument("forceLocalPublish", false);
         CakeConfiguration = context.GetConfiguration();
         IsLocalBuild = buildSystem.IsLocalBuild;
         IsRunningOnUnix = context.IsRunningOnUnix();

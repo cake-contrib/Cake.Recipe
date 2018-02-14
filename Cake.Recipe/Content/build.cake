@@ -91,6 +91,16 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
 {
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
+    Information("ForceLocalPublish: {0}", BuildParameters.ForceLocalPublish);
+    Information("ShouldDownloadMilestoneReleaseNotes: {0}", BuildParameters.ShouldDownloadMilestoneReleaseNotes);
+    Information("ShouldDownloadFullReleaseNotes: {0}", BuildParameters.ShouldDownloadFullReleaseNotes);
+    Information("IsLocalBuild: {0}", BuildParameters.IsLocalBuild);
+    Information("IsPullRequest: {0}", BuildParameters.IsPullRequest);
+    Information("IsMainRepository: {0}", BuildParameters.IsMainRepository);
+    Information("IsMasterBranch: {0}", BuildParameters.IsMasterBranch);
+    Information("IsReleaseBranch: {0}", BuildParameters.IsReleaseBranch);
+    Information("IsHotFixBranch: {0}", BuildParameters.IsHotFixBranch);
+    Information("IsTagged: {0}", BuildParameters.IsTagged);
 
     Information("Solution FilePath: {0}", MakeAbsolute((FilePath)BuildParameters.SolutionFilePath));
     Information("Solution DirectoryPath: {0}", MakeAbsolute((DirectoryPath)BuildParameters.SolutionDirectoryPath));
@@ -157,9 +167,9 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                         "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
                         BuildParameters.Paths.Files.BuildLogFilePath)
                 );
-            
+
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
-        } 
+        }
         else
         {
             var xbuildSettings = new XBuildSettings()
