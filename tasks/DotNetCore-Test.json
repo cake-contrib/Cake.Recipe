@@ -1,1 +1,1 @@
-[{"data":{"id":"DotNetCore-Test","source":null,"target":null}},{"data":{"id":"9daaf240-d047-4447-80b8-9eb018294a13","source":"DotNetCore-Test","target":"Install-OpenCover"}},{"data":{"id":"Install-OpenCover","source":null,"target":null}}]
+[{"data":{"id":"DotNetCore-Test","source":null,"target":null}},{"data":{"id":"4ccb5c4d-ddf2-49e3-bac7-8a8f394af110","source":"DotNetCore-Test","target":"Install-OpenCover"}},{"data":{"id":"Install-OpenCover","source":null,"target":null}}]
