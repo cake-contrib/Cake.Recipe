@@ -91,7 +91,7 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
 {
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
-    Information("ForceLocalPublish: {0}", BuildParameters.ForceLocalPublish);
+    Information("PrepareLocalRelease: {0}", BuildParameters.PrepareLocalRelease);
     Information("ShouldDownloadMilestoneReleaseNotes: {0}", BuildParameters.ShouldDownloadMilestoneReleaseNotes);
     Information("ShouldDownloadFullReleaseNotes: {0}", BuildParameters.ShouldDownloadFullReleaseNotes);
     Information("IsLocalBuild: {0}", BuildParameters.IsLocalBuild);

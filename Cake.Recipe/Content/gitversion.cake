@@ -25,7 +25,7 @@ public class BuildVersion
         if (context.IsRunningOnWindows())
         {
             context.Information("Calculating Semantic Version...");
-            if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.ForceLocalPublish)
+            if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
             {
                 if(!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
                 {

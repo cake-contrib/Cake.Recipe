@@ -22,11 +22,11 @@ BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
 
 BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
     .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes)
-    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.ForceLocalPublish)
-    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.ForceLocalPublish)
-    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.ForceLocalPublish)
-    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.ForceLocalPublish)
-    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.ForceLocalPublish)
+    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease)
     .Does(() => RequireTool(GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {

@@ -24,7 +24,7 @@ public static class BuildParameters
     public static bool IsDotNetCoreBuild { get; set; }
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
-    public static bool ForceLocalPublish { get; set; }
+    public static bool PrepareLocalRelease { get; set; }
 
     public static string GitterMessage
     {
@@ -329,7 +329,7 @@ public static class BuildParameters
         context.Information("TransifexEnabled: {0}", TransifexEnabled);
         context.Information("CanPullTranslations: {0}", CanPullTranslations);
         context.Information("CanPushTranslations: {0}", CanPushTranslations);
-        context.Information("ForceLocalPublish: {0}", ForceLocalPublish);
+        context.Information("PrepareLocalRelease: {0}", PrepareLocalRelease);
 
         if (TransifexEnabled)
         {
@@ -494,7 +494,7 @@ public static class BuildParameters
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
-        ForceLocalPublish = context.Argument("forceLocalPublish", false);
+        PrepareLocalRelease = context.Argument("prepareLocalRelease", false);
         CakeConfiguration = context.GetConfiguration();
         IsLocalBuild = buildSystem.IsLocalBuild;
         IsRunningOnUnix = context.IsRunningOnUnix();
