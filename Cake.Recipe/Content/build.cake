@@ -255,7 +255,7 @@ public void CopyBuildOutput()
 
             // If .NET Core project, copy using dotnet publish for each target framework
             // Otherwise just copy
-            if(parsedProject.IsNetCore)
+            if(parsedProject.IsNetCore || parsedProject.IsNetStandard)
             {
                 foreach(var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
