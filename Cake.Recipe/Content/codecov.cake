@@ -9,7 +9,6 @@ BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
     .Does(() => RequireTool(CodecovTool, () => {
         var settings = new CodecovSettings {
             Files = new[] { BuildParameters.Paths.Files.TestCoverageOutputFilePath.ToString() },
-            Token = BuildParameters.Codecov.RepoToken,
             Required = true
         };
         if (BuildParameters.Version != null &&
