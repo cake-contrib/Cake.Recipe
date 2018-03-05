@@ -22,7 +22,7 @@ public class BuildVersion
         string fullSemVersion = null;
         GitVersion assertedVersions = null;
 
-        if (context.IsRunningOnWindows())
+        if (BuildParameters.ShouldRunGitVersion)
         {
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)

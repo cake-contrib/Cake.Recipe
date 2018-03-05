@@ -142,6 +142,7 @@ public static class BuildParameters
     public static bool ShouldGenerateDocumentation { get; private set; }
     public static bool ShouldExecuteGitLink { get; private set; }
     public static bool ShouldRunIntegrationTests { get; private set; }
+    public static bool ShouldRunGitVersion { get; private set; }
 
     public static DirectoryPath WyamRootDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
@@ -321,6 +322,7 @@ public static class BuildParameters
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("ShouldExecuteGitLink: {0}", ShouldExecuteGitLink);
         context.Information("ShouldRunIntegrationTests: {0}", ShouldRunIntegrationTests);
+        context.Information("ShouldRunGitVersion: {0}", ShouldRunGitVersion);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
         context.Information("IsRunningOnWindows: {0}", IsRunningOnWindows);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
@@ -391,6 +393,7 @@ public static class BuildParameters
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
+        bool? shouldRunGitVersion = null,
         bool? transifexEnabled = null,
         TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
         int transifexPullPercentage = 60,
@@ -461,6 +464,7 @@ public static class BuildParameters
         ShouldRunCodecov = shouldRunCodecov;
         ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
+        ShouldRunGitVersion = shouldRunGitVersion ?? context.IsRunningOnWindows();
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
