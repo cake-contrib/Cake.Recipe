@@ -6,20 +6,32 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
     var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
         - GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.Tests.csproj");
 
+    var msBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", BuildParameters.Version.SemVersion)
+                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
+                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
+                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+
+    if(!IsRunningOnWindows())
+    {
+        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+
+        // Use FrameworkPathOverride when not running on Windows.
+        Information("Pack will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+    }
+
     var settings = new DotNetCorePackSettings {
         NoBuild = true,
         Configuration = BuildParameters.Configuration,
         OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+        MSBuildSettings = msBuildSettings,
         ArgumentCustomization = (args) => {
             if (BuildParameters.ShouldBuildNugetSourcePackage)
             {
                 args.Append("--include-source");
             }
-            return args
-                .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
-                .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
-                .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
-                .Append("/p:AssemblyInformationalVersion={0}", BuildParameters.Version.InformationalVersion);
+            return args;
         }
     };
 

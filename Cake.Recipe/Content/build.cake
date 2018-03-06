@@ -134,14 +134,25 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
 BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
     .Does(() =>
 {
+    var msBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", BuildParameters.Version.SemVersion)
+                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
+                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
+                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+
+    if(!IsRunningOnWindows())
+    {
+        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+
+        // Use FrameworkPathOverride when not running on Windows.
+        Information("Restore will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+    }
+
     DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
     {
         Sources = BuildParameters.NuGetSources,
-        ArgumentCustomization = args => args
-            .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
-            .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
-            .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
-            .Append("/p:AssemblyInformationalVersion={0}", BuildParameters.Version.InformationalVersion)
+        MSBuildSettings = msBuildSettings
     });
 });
 
@@ -195,14 +206,25 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .Does(() => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
+        var msBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", BuildParameters.Version.SemVersion)
+                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
+                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
+                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+
+        if(!IsRunningOnWindows())
+        {
+            var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+
+            // Use FrameworkPathOverride when not running on Windows.
+            Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+            msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+        }
+
         DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
         {
             Configuration = BuildParameters.Configuration,
-            ArgumentCustomization = args => args
-                .Append("/p:Version={0}", BuildParameters.Version.SemVersion)
-                .Append("/p:AssemblyVersion={0}", BuildParameters.Version.Version)
-                .Append("/p:FileVersion={0}", BuildParameters.Version.Version)
-                .Append("/p:AssemblyInformationalVersion={0}", BuildParameters.Version.InformationalVersion)
+            MSBuildSettings = msBuildSettings
         });
 
         if(BuildParameters.ShouldExecuteGitLink)
@@ -257,12 +279,28 @@ public void CopyBuildOutput()
             // Otherwise just copy
             if(parsedProject.IsVS2017ProjectFormat)
             {
+                var msBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", BuildParameters.Version.SemVersion)
+                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
+                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
+                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+
+                if(!IsRunningOnWindows())
+                {
+                    var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+
+                    // Use FrameworkPathOverride when not running on Windows.
+                    Information("Publish will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+                    msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+                }
+
                 foreach(var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
                     DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings {
                         OutputDirectory = outputFolder.Combine(targetFramework),
                         Framework = targetFramework,
-                        Configuration = BuildParameters.Configuration
+                        Configuration = BuildParameters.Configuration,
+                        MSBuildSettings = msBuildSettings
                     });
                 }
             }
