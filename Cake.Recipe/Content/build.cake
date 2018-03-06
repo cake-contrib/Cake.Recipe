@@ -394,9 +394,26 @@ public void CopyBuildOutput()
         else
         {
             Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
-            EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
+
+            // If .NET SDK project, copy for each output path
+            // Otherwise just copy
+            if(parsedProject.IsVS2017ProjectFormat)
+            {
+                foreach(var outputPath in parsedProject.OutputPaths)
+                {
+                    var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace).Combine(outputPath.GetDirectoryName());
+                    EnsureDirectoryExists(outputFolder);
+                    Information(outputPath);
+                    CopyFiles(GetFiles(outputPath + "/**/*"), outputFolder, true);
+                }
+            }
+            else
+            {
+                var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
+                EnsureDirectoryExists(outputFolder);
+                Information(parsedProject.OutputPath.FullPath);
+                CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
+            }
             continue;
         }
     }
