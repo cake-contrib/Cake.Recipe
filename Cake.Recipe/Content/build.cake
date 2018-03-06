@@ -253,9 +253,9 @@ public void CopyBuildOutput()
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
             EnsureDirectoryExists(outputFolder);
 
-            // If .NET Core project, copy using dotnet publish for each target framework
+            // If .NET SDK project, copy using dotnet publish for each target framework
             // Otherwise just copy
-            if(parsedProject.IsNetCore || parsedProject.IsNetStandard)
+            if(parsedProject.IsVS2017ProjectFormat)
             {
                 foreach(var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
