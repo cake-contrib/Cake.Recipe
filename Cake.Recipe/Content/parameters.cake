@@ -389,7 +389,7 @@ public static class BuildParameters
         bool shouldExecuteGitLink = true,
         bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
-        bool shouldRunCodecov = true,
+        bool shouldRunCodecov = false,
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
