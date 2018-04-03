@@ -53,4 +53,8 @@ public class BuildTasks
     public CakeTaskBuilder<ActionTask> PublishDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> PreviewDocumentationTask { get; set; }
     public CakeTaskBuilder<ActionTask> ForcePublishDocumentationTask { get; set; }
+    public CakeTaskBuilder<ActionTask> TravisCITask { get; set; }
+    public CakeTaskBuilder<ActionTask> PrintTravisCIEnvironmentVariablesTask { get; set; }
+    public CakeTaskBuilder<ActionTask> UploadTravisCIArtifactsTask { get; set; }
+    public CakeTaskBuilder<ActionTask> ClearTravisCICacheTask { get; set; }
 }

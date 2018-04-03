@@ -432,12 +432,26 @@ BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
     .IsDependentOn("Publish-GitHub-Release")
     .IsDependentOn("Publish-Documentation")
     .Finally(() =>
-{
-    if(publishingError)
     {
-        throw new Exception("An error occurred during the publishing of " + BuildParameters.Title + ".  All publishing tasks have been attempted.");
-    }
-});
+        if(publishingError)
+        {
+            throw new Exception("An error occurred during the publishing of " + BuildParameters.Title + ".  All publishing tasks have been attempted.");
+        }
+    });
+
+BuildParameters.Tasks.TravisCITask = Task("TravisCI")
+    .IsDependentOn("Upload-TravisCI-Artifacts")
+    .IsDependentOn("Publish-MyGet-Packages")
+    .IsDependentOn("Publish-Nuget-Packages")
+    .IsDependentOn("Publish-GitHub-Release")
+    .IsDependentOn("Publish-Documentation")
+    .Finally(() =>
+    {
+        if(publishingError)
+        {
+            throw new Exception("An error occurred during the publishing of " + BuildParameters.Title + ".  All publishing tasks have been attempted.");
+        }
+    });
 
 BuildParameters.Tasks.UploadCoverageReportTask = Task("Upload-Coverage-Report")
   .IsDependentOn("Upload-Coveralls-Report")
@@ -522,6 +536,8 @@ public class Builder
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
         BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
+        BuildParameters.Tasks.TravisCITask.IsDependentOn("Upload-Coverage-Report");
+        BuildParameters.Tasks.TravisCITask.IsDependentOn("Publish-NuGet-Packages");
 
         if (!isDotNetCoreBuild)
         {
