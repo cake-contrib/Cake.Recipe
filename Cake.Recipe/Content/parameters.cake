@@ -94,6 +94,7 @@ public static class BuildParameters
     public static NuGetCredentials NuGet { get; private set; }
     public static ChocolateyCredentials Chocolatey { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
+    public static TravisCICredentials TravisCI {get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
     public static TransifexCredentials Transifex { get; private set; }
@@ -524,6 +525,7 @@ public static class BuildParameters
         NuGet = GetNuGetCredentials(context);
         Chocolatey = GetChocolateyCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
+        TravisCI = GetTravisCICredentials(context);
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
         Transifex = GetTransifexCredentials(context);

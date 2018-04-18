@@ -106,6 +106,16 @@ public class AppVeyorCredentials
     }
 }
 
+public class TravisCICredentials
+{
+    public string ApiToken { get; private set; }
+
+    public TravisCICredentials(string apiToken)
+    {
+        ApiToken = apiToken;
+    }
+}
+
 public class CodecovCredentials : CoverallsCredentials
 {
     public CodecovCredentials(string repoToken)
@@ -210,6 +220,12 @@ public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)
 {
     return new AppVeyorCredentials(
         context.EnvironmentVariable(Environment.AppVeyorApiTokenVariable));
+}
+
+public static TravisCICredentials GetTravisCICredentials(ICakeContext context)
+{
+    return new TravisCICredentials(
+        context.EnvironmentVariable(Environment.TravisCIApiTokenVariable));    
 }
 
 public static CodecovCredentials GetCodecovCredentials(ICakeContext context)

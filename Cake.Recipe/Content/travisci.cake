@@ -26,16 +26,26 @@ BuildParameters.Tasks.UploadTravisCIArtifactsTask = Task("Upload-TravisCI-Artifa
     .Does(() =>
     {    
         using(var travisCI = TravisCI.Fold("Upload"))
-        // Concatenating FilePathCollections should make sure we get unique FilePaths
-        foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
-                            GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*"))
         {
-            TravisCI.UploadArtifact(package);
+            TravisCIUpload(settings => 
+            {
+                settings.AuthToken = EnvironmentVariable("AuthToken");
+                settings.TargetPaths = new[] 
+                {
+                    GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*"), 
+                    GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*")
+                };
+            });
         }
     });
 
 BuildParameters.Task.ClearTravisCICacheTask = Task("Clear-TravisCI-Cache")
-    .Does(() => 
-    {
-
-    });
+    .Does(() =>         
+        RequireAddin(@"#addin nuget:?package=Cake.TravisCI&version=0.1.0
+        TravisCICache(new TravisCISettings() { ApiToken = EnvironmentVariable(""TEMP_TRAVISCI_TOKEN"") },
+            EnvironmentVariable(""TEMP_TRAVISCI_ACCOUNT_NAME""),
+            EnvironmentVariable(""TEMP_TRAVISCI_PROJECT_SLUG""));
+        ",
+        new Dictionary<string, string> {{"TEMP_TRAVISCI_TOKEN", BuildParameters.TravisCI.ApiToken},
+            {"TEMP_TRAVISCI_ACCOUNT_NAME", BuildParameters.TravisCIAccountName},
+            {"TEMP_TRAVISCI_PROJECT_SLUG", BuildParameters.TravisCIProjectSlug}}));
