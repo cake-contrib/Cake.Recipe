@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - How to publish documentation</title>
+        <title>Cake.Recipe - Publishdocs</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -58,9 +58,9 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">                            
-                                    <li class="active"><a href="/Cake.Recipe/docs">Documentation</a></li>
+                                    <li><a href="/Cake.Recipe/docs">Documentation</a></li>
         <li><a href="/Cake.Recipe/graph">Graph</a></li>
-        <li><a href="/Cake.Recipe/tasks">Tasks</a></li>
+        <li class="active"><a href="/Cake.Recipe/tasks">Tasks</a></li>
  
                         </ul>       
                     </div>
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/publishing-documentation.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/tasks/PublishDocs.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -84,26 +84,60 @@
 
                     <ul class="sidebar-menu">
                         
-                <li class="treeview">
-                    <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                                        <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
-
-                    </ul>
-                </li>
-                <li class="treeview active">
-                    <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
-                    <ul class="treeview-menu">
-                                        <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
-
-                    </ul>
-                </li>
+                <li><a href="/Cake.Recipe/tasks/Analyze">Analyze</a></li>
+                <li><a href="/Cake.Recipe/tasks/AppVeyor">Appveyor</a></li>
+                <li><a href="/Cake.Recipe/tasks/Build">Build</a></li>
+                <li><a href="/Cake.Recipe/tasks/Clean">Clean</a></li>
+                <li><a href="/Cake.Recipe/tasks/Clean-Documentation">Clean Documentation</a></li>
+                <li><a href="/Cake.Recipe/tasks/Clear-AppVeyor-Cache">Clear Appveyor Cache</a></li>
+                <li><a href="/Cake.Recipe/tasks/ClearCache">Clearcache</a></li>
+                <li><a href="/Cake.Recipe/tasks/Create-Chocolatey-Packages">Create Chocolatey Packages</a></li>
+                <li><a href="/Cake.Recipe/tasks/Create-Nuget-Package">Create Nuget Package</a></li>
+                <li><a href="/Cake.Recipe/tasks/Create-NuGet-Packages">Create Nuget Packages</a></li>
+                <li><a href="/Cake.Recipe/tasks/Create-Release-Notes">Create Release Notes</a></li>
+                <li><a href="/Cake.Recipe/tasks/Default">Default</a></li>
+                <li><a href="/Cake.Recipe/tasks/Deploy-Graph-Documentation">Deploy Graph Documentation</a></li>
+                <li><a href="/Cake.Recipe/tasks/DotNetCore-Build">Dotnetcore Build</a></li>
+                <li><a href="/Cake.Recipe/tasks/DotNetCore-Pack">Dotnetcore Pack</a></li>
+                <li><a href="/Cake.Recipe/tasks/DotNetCore-Restore">Dotnetcore Restore</a></li>
+                <li><a href="/Cake.Recipe/tasks/DotNetCore-Test">Dotnetcore Test</a></li>
+                <li><a href="/Cake.Recipe/tasks/DupFinder">Dupfinder</a></li>
+                <li><a href="/Cake.Recipe/tasks/Export-Release-Notes">Export Release Notes</a></li>
+                <li><a href="/Cake.Recipe/tasks/Force-Publish-Documentation">Force Publish Documentation</a></li>
+                <li><a href="/Cake.Recipe/tasks/Generate-Version-File">Generate Version File</a></li>
+                <li><a href="/Cake.Recipe/tasks/InspectCode">Inspectcode</a></li>
+                <li><a href="/Cake.Recipe/tasks/Install-OpenCover">Install Opencover</a></li>
+                <li><a href="/Cake.Recipe/tasks/Install-ReportGenerator">Install Reportgenerator</a></li>
+                <li><a href="/Cake.Recipe/tasks/Install-ReportUnit">Install Reportunit</a></li>
+                <li><a href="/Cake.Recipe/tasks/Package">Package</a></li>
+                <li><a href="/Cake.Recipe/tasks/Preview">Preview</a></li>
+                <li><a href="/Cake.Recipe/tasks/Preview-Documentation">Preview Documentation</a></li>
+                <li><a href="/Cake.Recipe/tasks/Print-AppVeyor-Environment-Variables">Print Appveyor Environment Variables</a></li>
+                <li><a href="/Cake.Recipe/tasks/Publish-Chocolatey-Packages">Publish Chocolatey Packages</a></li>
+                <li><a href="/Cake.Recipe/tasks/Publish-Documentation">Publish Documentation</a></li>
+                <li><a href="/Cake.Recipe/tasks/Publish-GitHub-Release">Publish Github Release</a></li>
+                <li><a href="/Cake.Recipe/tasks/Publish-MyGet-Packages">Publish Myget Packages</a></li>
+                <li><a href="/Cake.Recipe/tasks/Publish-Nuget-Packages">Publish Nuget Packages</a></li>
+                <li class="selected"><a href="/Cake.Recipe/tasks/PublishDocs">Publishdocs</a></li>
+                <li><a href="/Cake.Recipe/tasks/ReleaseNotes">Releasenotes</a></li>
+                <li><a href="/Cake.Recipe/tasks/Restore">Restore</a></li>
+                <li><a href="/Cake.Recipe/tasks/Run-Integration-Tests">Run Integration Tests</a></li>
+                <li><a href="/Cake.Recipe/tasks/Run-Local-Integration-Tests">Run Local Integration Tests</a></li>
+                <li><a href="/Cake.Recipe/tasks/Show-Info">Show Info</a></li>
+                <li><a href="/Cake.Recipe/tasks/Test">Test</a></li>
+                <li><a href="/Cake.Recipe/tasks/Test-Fixie">Test Fixie</a></li>
+                <li><a href="/Cake.Recipe/tasks/Test-MSTest">Test Mstest</a></li>
+                <li><a href="/Cake.Recipe/tasks/Test-NUnit">Test Nunit</a></li>
+                <li><a href="/Cake.Recipe/tasks/Test-VSTest">Test Vstest</a></li>
+                <li><a href="/Cake.Recipe/tasks/Test-xUnit">Test Xunit</a></li>
+                <li><a href="/Cake.Recipe/tasks/Transifex-Pull-Translations">Transifex Pull Translations</a></li>
+                <li><a href="/Cake.Recipe/tasks/Transifex-Push-SourceFiles">Transifex Push Sourcefiles</a></li>
+                <li><a href="/Cake.Recipe/tasks/Transifex-Push-Translations">Transifex Push Translations</a></li>
+                <li><a href="/Cake.Recipe/tasks/Transifex-Setup">Transifex Setup</a></li>
+                <li><a href="/Cake.Recipe/tasks/Upload-AppVeyor-Artifacts">Upload Appveyor Artifacts</a></li>
+                <li><a href="/Cake.Recipe/tasks/Upload-Codecov-Report">Upload Codecov Report</a></li>
+                <li><a href="/Cake.Recipe/tasks/Upload-Coverage-Report">Upload Coverage Report</a></li>
+                <li><a href="/Cake.Recipe/tasks/Upload-Coveralls-Report">Upload Coveralls Report</a></li>
 
                     </ul>
                             
@@ -117,23 +151,15 @@
 
 
 	<section class="content-header">
-		<h1>How to publish documentation</h1>
+		<h1>Publishdocs</h1>
 	</section>
 	<section class="content">
-		<p>This document describes how to publish the documentation to the configured branch using the <code>Cake.Recipe</code> script.</p>
-<div class="alert alert-info"><p>Please note that for every change done in the <code>BuildParameters.WyamPublishDirectoryPath</code> automatically triggers a deployment as part of the build.
-Manually publishing the documentation is only required if there are changes in the source code (Method signatures, namespaces, XML comments, ...).</p>
+		<div class="mermaid">
+graph TD;
+PublishDocs-->Force-Publish-Documentation;
+Force-Publish-Documentation-->Clean-Documentation;
+Force-Publish-Documentation-->Deploy-Graph-Documentation;
 </div>
-<ol>
-<li>Make sure that you have the following environment variables set in your local development environment:
-<ul>
-<li><a href="../fundamentals/environment-variables#wyam_access_token">WYAM_ACCESS_TOKEN</a></li>
-<li><a href="../fundamentals/environment-variables#wyam_deploy_branch">WYAM_DEPLOY_BRANCH</a></li>
-<li><a href="../fundamentals/environment-variables#wyam_deploy_remote">WYAM_DEPLOY_REMOTE</a></li>
-</ul>
-</li>
-<li>Run <code>.\build.ps1 -target publishdocs</code>.</li>
-</ol>
 
 	</section>
                 

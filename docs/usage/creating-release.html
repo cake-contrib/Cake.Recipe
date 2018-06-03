@@ -60,6 +60,7 @@
                         <ul class="nav navbar-nav">                            
                                     <li class="active"><a href="/Cake.Recipe/docs">Documentation</a></li>
         <li><a href="/Cake.Recipe/graph">Graph</a></li>
+        <li><a href="/Cake.Recipe/tasks">Tasks</a></li>
  
                         </ul>       
                     </div>
@@ -77,7 +78,8 @@
     <div id="infobar-headings"></div>
 
                 </section>
-                <section class="sidebar">                    
+                <section class="sidebar">    
+                                     
                     
 
                     <ul class="sidebar-menu">
@@ -104,6 +106,7 @@
                 </li>
 
                     </ul>
+                            
                 </section>                
             </aside>
             
@@ -131,7 +134,7 @@ Both are not requirements though and you can adopt the steps to other environmen
 <li><a href="../fundamentals/environment-variables#github_password">GITHUB_PASSWORD</a></li>
 </ul>
 </li>
-<li>Create a GitHub release draft by running: <code>.\build.ps1 -target releasenotes</code>.</li>
+<li>Create a GitHub release draft by running: <code>.\build.ps1 -target releasenotes</code> on Windows and on MacOS/Linux<code>./build.sh --target=releasenotes</code> (on unix build parameter <code>shouldRunGitVersion: true</code> needs to be set for version to be calculated by GitVersion).</li>
 <li>Check the generated release notes and make required manual changes.</li>
 <li>If release is ready finish release (merge back into <code>master</code> and <code>develop</code>) but don't tag the release yet.</li>
 <li>Publish the draft release on GitHub.</li>

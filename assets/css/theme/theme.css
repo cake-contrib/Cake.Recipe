@@ -276,6 +276,7 @@ h1 {
 .sidebar-menu > li > a {
   padding-top: 5px;
   padding-bottom: 5px;
+  padding-left: 24px;
 }
 .sidebar-menu li a:link,
 .sidebar-menu li a:visited,
@@ -314,7 +315,7 @@ h1 {
 }
 .sidebar-menu li > a.expand {
   position: absolute;
-  left: -16px;
+  left: -18px;
   top: 2px;
   font-size: 18px;
   /* Font Awesome */
@@ -330,7 +331,8 @@ h1 {
   content: "\f0da";
 }
 .sidebar-menu li.active > a.expand {
-  top: 0;
+  top: -4px;
+  left: -10px;
   padding-top: 0;
   -webkit-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
