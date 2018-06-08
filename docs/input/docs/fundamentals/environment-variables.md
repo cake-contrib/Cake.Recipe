@@ -16,7 +16,7 @@ User name of the GitHub account used to create and publish releases.
 
 ## GITHUB_PASSWORD
 
-Password of the GitHub account used to create and publish releases.
+Password or [Personal Access Token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) of the GitHub account used to create and publish releases.
 
 # MyGet
 
