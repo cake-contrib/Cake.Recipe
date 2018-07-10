@@ -16,6 +16,8 @@
 #addin nuget:?package=Cake.Transifex&version=0.6.0
 #addin nuget:?package=Cake.Twitter&version=0.7.0
 #addin nuget:?package=Cake.Wyam&version=1.4.0
+// Needed for Cake.Graph
+#addin nuget:?package=RazorEngine&version=3.10.0&loaddependencies=true
 
 Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
