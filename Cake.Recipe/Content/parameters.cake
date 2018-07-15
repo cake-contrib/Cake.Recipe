@@ -25,6 +25,7 @@ public static class BuildParameters
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
     public static bool PrepareLocalRelease { get; set; }
+    public static bool TreatWarningsAsErrors { get; set; }
 
     public static string GitterMessage
     {
@@ -311,6 +312,7 @@ public static class BuildParameters
         context.Information("IsDevelopBranch: {0}", IsDevelopBranch);
         context.Information("IsReleaseBranch: {0}", IsReleaseBranch);
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
+        context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
@@ -412,7 +414,8 @@ public static class BuildParameters
         FilePath nuspecFilePath = null,
         bool isPublicRepository = true,
         FilePath nugetConfig = null,
-        ICollection<string> nuGetSources = null
+        ICollection<string> nuGetSources = null,
+        bool treatWarningsAsErrors = true
         )
     {
         if (context == null)
@@ -515,6 +518,7 @@ public static class BuildParameters
             buildSystem.AppVeyor.Environment.Repository.Tag.IsTag &&
             !string.IsNullOrWhiteSpace(buildSystem.AppVeyor.Environment.Repository.Tag.Name)
         );
+        TreatWarningsAsErrors = treatWarningsAsErrors;
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
         Gitter = GetGitterCredentials(context);
