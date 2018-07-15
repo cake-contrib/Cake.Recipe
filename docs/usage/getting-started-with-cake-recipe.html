@@ -74,7 +74,7 @@
                     	
         <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/getting-started-with-cake-recipe.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"><h6>On This Page</h6><p><a href="#download-the-files">1. Download the files</a></p>
-<p><a href="#configure-the-setup.cake-file-for-your-project">2. Configure the <code>setup.cake</code> file for your project</a></p>
+<p><a href="#configure-the-recipe.cake-file-for-your-project">2. Configure the <code>recipe.cake</code> file for your project</a></p>
 <p><a href="#run-the-cake.recipe-build">3. Run the Cake.Recipe build</a></p>
 <p><a href="#getting-the-most-from-cake.recipe">4. Getting the most from Cake.Recipe</a></p>
 <p><a href="#modifying-the-cake.recipe-build">5. Modifying the Cake.Recipe build</a></p>
@@ -129,11 +129,11 @@
 		<p>This guide will show you how to setup Cake.Recipe for a new project.</p>
 <h1 id="download-the-files">1. Download the files</h1>
 <p>You can retrieve the Cake.Recipe files from <a href="https://github.com/cake-contrib/Cake.Recipe">GitHub</a> or the entire package from <a href="https://www.nuget.org/packages/Cake.Recipe">Nuget</a>.
-The only two files you'll need straight away are the <code>build.ps1</code> and <code>setup.cake</code> files. Put these in the root of your repository.</p>
-<p>The <code>build.ps1</code> is a modified version of the standard cake bootstrapper which defaults to using setup.cake instead of build.cake.</p>
-<p>The <code>setup.cake</code> file will load the recipes and run the tasks when the build script is run.</p>
-<h1 id="configure-the-setup.cake-file-for-your-project">2. Configure the <code>setup.cake</code> file for your project</h1>
-<p>Change the default values in the <code>setup.cake</code> to suit your project.
+The only two files you'll need straight away are the <code>build.ps1</code> and <code>recipe.cake</code> files. Put these in the root of your repository.</p>
+<p>The <code>build.ps1</code> is a modified version of the standard cake bootstrapper which defaults to using recipe.cake instead of build.cake.</p>
+<p>The <code>recipe.cake</code> file will load the recipes and run the tasks when the build script is run.</p>
+<h1 id="configure-the-recipe.cake-file-for-your-project">2. Configure the <code>recipe.cake</code> file for your project</h1>
+<p>Change the default values in the <code>recipe.cake</code> to suit your project.
 The sourceDirectoryPath should be the path to the folder containing your solution file.
 There are other properties that can be set in this method that will affect which tasks run and how they behave during the build.
 Look at the <code>parameters.cake</code> file to see the complete list of parameters.</p>
@@ -156,9 +156,9 @@ For more details on setting environment variables visit the <a href="../fundamen
 <h1 id="modifying-the-cake.recipe-build">5. Modifying the Cake.Recipe build</h1>
 <p>Cake.Recipes will not suit everyone out of the box, but it has been designed in an extensible way so you can still load your own cake scripts, or you can modify the tasks that come with Cake.Recipe.</p>
 <h2 id="loading-additional-scripts">5.1 Loading additional scripts</h2>
-<p>Once your additional cake script is ready add a <a href="https://www.cakebuild.net/docs/fundamentals/preprocessor-directives">load directive</a> to your setup.cake script. That's it. The tasks can now be called from the command line by changing the target.</p>
+<p>Once your additional cake script is ready add a <a href="https://www.cakebuild.net/docs/fundamentals/preprocessor-directives">load directive</a> to your recipe.cake script. That's it. The tasks can now be called from the command line by changing the target.</p>
 <h2 id="modifying-the-actions-of-cake.recipe-tasks">5.2 Modifying the actions of Cake.Recipe tasks</h2>
-<p>If there is a task that doesn't work how you need it to you can modify it in your <code>setup.cake</code> file.
+<p>If there is a task that doesn't work how you need it to you can modify it in your <code>recipe.cake</code> file.
 Once you have identified the task you wish to modify find the property it is assigned to in the <code>BuildTasks</code> class in the <code>tasks.cake</code> file. This reference will be needed to modify the task.</p>
 <p>You may wish to remove any existing actions before proceeding to give the task a new action.
 This can be done with the following code
