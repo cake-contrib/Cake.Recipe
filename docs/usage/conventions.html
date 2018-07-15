@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Usage</title>
+        <title>Cake.Recipe - A Note On Conventions</title>
         <link href="/Cake.Recipe/assets/css/mermaid.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/index.cshtml"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/conventions.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -91,11 +91,11 @@
 
                     </ul>
                 </li>
-                <li class="treeview active selected">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                                         <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
@@ -118,61 +118,62 @@
 
 
 	<section class="content-header">
-		<h1>Usage</h1>
+		<h1>A Note On Conventions</h1>
 	</section>
 	<section class="content">
-		<p>How to obtain, configure, and execute Cake.Recipe.</p>
-
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></strong></td>
-									<td>
-									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
-
+		<p>As set out in the introduction <a href="/">Cake.Recipe is a set of convention based build scripts</a>. The conventions are important, as they determine the defaults. But they are not set in stone and they can be changed in several ways</p>
+<ul>
+<li><p>Using <a href="https://github.com/cake-contrib/Cake.Recipe/blob/develop/Cake.Recipe/Content/parameters.cake#L358">BuildParameters.SetParameters</a>, to change any of the parameters</p>
+</li>
+<li><p>Setting <a href="../fundamentals/environment-variables">environment</a> Variables</p>
+</li>
+</ul>
+<p>So, what are these conventions?</p>
+<ul>
+<li>Folder Structure
+The description below is not to focus on the placement of files, but to show where the defaults are, all of these are influenceable.
+<ul>
+<li>$
+<ul>
+<li>src
+<ul>
+<li><code>title</code>.sln</li>
+<li><code>title</code>.nuspec</li>
+</ul>
+</li>
+<li>tests, should create <code>.Tests</code> e.g. title.Tests.dll, title.integration.Tests.dll</li>
+<li>build.ps1</li>
+<li>build.cake</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Your cake file may specify as follows:</p>
+<pre><code>BuildParameters.SetParameters(context: Context,
+                        sourceDirectoryPath: &quot;./src&quot;,
+                        title: `&quot;title&quot;`);
+</code></pre>
+<ul>
+<li><p>Building class library
+When you are writing a reusable library, you are going to want to publish your code as a Nuget package for reuse. Whether you are writing .Net Framework based or .Net Standard based code, the recipe's intent will be to build your code, package using your nuspec file and publish. Best practices demand that your tests succeed and you meet your basic code quality criterias. All of these are turned on by default, may be turned off in the above <code>SetParameters</code> argument list.</p>
+<ul>
+<li>To build a .Net Core package, the command <code>Build.RunDotNetCore()</code></li>
+<li>To build a .Net framework package, the command <code>Build.Run()</code> is followed with <code>Build.RunNuGet()</code>, to do a Nuget packa and publish.</li>
+</ul>
+</li>
+<li><p>Building MSI
+When you are writing a component that delivers a MSI package to your customer and nuget publish a reusable library is not your goal, you will tend to write custom tasks to perform the MSI creation tasks after the default <code>Build.Run()</code>. Common tasks to sign your executable on the build infrastructure, sign your MSI and finally deliver it to consumers will be your custom tasks. <a href="https://github.com/chocolatey/ChocolateyGUI/blob/develop/setup.cake#L103">example</a></p>
+</li>
+<li><p>Diagnostic debugging</p>
+</li>
+</ul>
+<ul>
+<li>A common practice and a good way to learn when you begin is by printing the current calculated parameters influencing your build. To do so, add the following to your cake file
+<code>BuildParameters.PrintParameters(Context);</code></li>
+<li>Another common practice when starting a new project is to execute your cake script with the diagnostic flags of cake.exe, e.g.
+<a href="https://cakebuild.net/docs/cli/usage">&quot;--verbosity=diagnostic&quot;</a></li>
+</ul>
 
 	</section>
                 
