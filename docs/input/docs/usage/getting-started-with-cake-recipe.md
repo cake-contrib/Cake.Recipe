@@ -6,15 +6,15 @@ This guide will show you how to setup Cake.Recipe for a new project.
 # 1. Download the files
 
 You can retrieve the Cake.Recipe files from [GitHub](https://github.com/cake-contrib/Cake.Recipe) or the entire package from [Nuget](https://www.nuget.org/packages/Cake.Recipe).
-The only two files you'll need straight away are the `build.ps1` and `setup.cake` files. Put these in the root of your repository.
+The only two files you'll need straight away are the `build.ps1` and `recipe.cake` files. Put these in the root of your repository.
 
-The `build.ps1` is a modified version of the standard cake bootstrapper which defaults to using setup.cake instead of build.cake.
+The `build.ps1` is a modified version of the standard cake bootstrapper which defaults to using recipe.cake instead of build.cake.
 
-The `setup.cake` file will load the recipes and run the tasks when the build script is run.
+The `recipe.cake` file will load the recipes and run the tasks when the build script is run.
 
-# 2. Configure the `setup.cake` file for your project
+# 2. Configure the `recipe.cake` file for your project
 
-Change the default values in the `setup.cake` to suit your project. 
+Change the default values in the `recipe.cake` to suit your project.
 The sourceDirectoryPath should be the path to the folder containing your solution file.
 There are other properties that can be set in this method that will affect which tasks run and how they behave during the build.
 Look at the `parameters.cake` file to see the complete list of parameters.
@@ -35,7 +35,7 @@ This step is the same as that described on Step 3 on the [Setting up a new proje
 
 # 4. Getting the most from Cake.Recipe
 
-Cake.Recipe has a wide variety of built in tasks, many of which need additional configuration to work correctly. 
+Cake.Recipe has a wide variety of built in tasks, many of which need additional configuration to work correctly.
 This configuration is either set with parameters in the `BuildParameters.SetParameters` method, with environment variables, or through custom configuration files such as `.AppVeyor.yml`.
 For more details on setting environment variables visit the [Cake.Recipe documentation](../fundamentals/environment-variables).
 
@@ -47,11 +47,11 @@ Cake.Recipes will not suit everyone out of the box, but it has been designed in 
 
 ## 5.1 Loading additional scripts
 
-Once your additional cake script is ready add a [load directive](https://www.cakebuild.net/docs/fundamentals/preprocessor-directives) to your setup.cake script. That's it. The tasks can now be called from the command line by changing the target.
+Once your additional cake script is ready add a [load directive](https://www.cakebuild.net/docs/fundamentals/preprocessor-directives) to your recipe.cake script. That's it. The tasks can now be called from the command line by changing the target.
 
 ## 5.2 Modifying the actions of Cake.Recipe tasks
 
-If there is a task that doesn't work how you need it to you can modify it in your `setup.cake` file. 
+If there is a task that doesn't work how you need it to you can modify it in your `recipe.cake` file.
 Once you have identified the task you wish to modify find the property it is assigned to in the `BuildTasks` class in the `tasks.cake` file. This reference will be needed to modify the task.
 
 You may wish to remove any existing actions before proceeding to give the task a new action.

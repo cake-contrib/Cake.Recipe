@@ -104,7 +104,7 @@ foreach(var testRepo in testRepos)
             .Does(context => {
                 try
                 {
-                    var setupCakePath = path.CombineWithFilePath("setup.cake");
+                    var setupCakePath = path.CombineWithFilePath("recipe.cake");
                     context.Information("Testing {0}...", setupCakePath);
                     var arguments = new Dictionary<string, string>();
 
