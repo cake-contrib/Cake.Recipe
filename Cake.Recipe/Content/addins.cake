@@ -2,8 +2,8 @@
 // ADDINS
 ///////////////////////////////////////////////////////////////////////////////
 
-#addin nuget:?package=Cake.Codecov&version=0.3.0
-#addin nuget:?package=Cake.Coveralls&version=0.7.0
+#addin nuget:?package=Cake.Codecov&version=11.22.33
+#addin nuget:?package=Cake.Coveralls&version=99.88.77
 #addin nuget:?package=Cake.Figlet&version=1.0.0
 #addin nuget:?package=Cake.Git&version=0.16.1
 #addin nuget:?package=Cake.Gitter&version=0.7.0
