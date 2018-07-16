@@ -79,11 +79,12 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     .WithCriteria(() => BuildParameters.IsRunningOnWindows)
     .WithCriteria(() => BuildParameters.ShouldRunInspectCode)
-    .Does(() => RequireTool(ReSharperTools, () => {
+    .Does<BuildData>(data => RequireTool(ReSharperTools, () => {
+        var inspectCodeLogFilePath = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml");
+
         var settings = new InspectCodeSettings() {
             SolutionWideAnalysis = true,
-            OutputFile = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
-            ThrowExceptionOnFindingViolations = true
+            OutputFile = inspectCodeLogFilePath
         };
 
         if(FileExists(BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName)))
@@ -92,30 +93,34 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
         }
 
         InspectCode(BuildParameters.SolutionFilePath, settings);
+
+        // Parse issues.
+        var issues =
+            ReadIssues(
+                InspectCodeIssuesFromFilePath(inspectCodeLogFilePath),
+                "./");
+        Information("{0} InspectCode issues are found.", issues.Count());
+        data.AddIssues(issues);
     })
-)
-.ReportError(exception =>
-{
-    RequireTool(ReSharperReportsTool, () => {
-        var outputHtmlFile = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.html");
+);
 
-        Information("Violations were found in your codebase, creating HTML report...");
-        ReSharperReports(
-            BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml"),
-            outputHtmlFile);
+BuildParameters.Tasks.InspectCodeTask = Task("CreateIssuesReport")
+    .Does<BuildData>(data => {
+        var issueReportFile = BuildParameters.Paths.Directories.TestResults.CombineWithFilePath("issues-report.html");
 
-        if(BuildParameters.IsRunningOnAppVeyor && FileExists(outputHtmlFile))
+        CreateIssueReport(
+            data.Issues,
+            GenericIssueReportFormatFromEmbeddedTemplate(GenericIssueReportTemplate.HtmlDxDataGrid),
+            "./",
+            issueReportFile);
+
+        if(BuildParameters.IsRunningOnAppVeyor && FileExists(issueReportFile))
         {
-            AppVeyor.UploadArtifact(outputHtmlFile);
-        }
-
-        if(BuildParameters.IsLocalBuild)
-        {
-            LaunchDefaultProgram(outputHtmlFile);
+            AppVeyor.UploadArtifact(issueReportFile);
         }
     });
-});
 
 BuildParameters.Tasks.AnalyzeTask = Task("Analyze")
     .IsDependentOn("DupFinder")
-    .IsDependentOn("InspectCode");
+    .IsDependentOn("InspectCode")
+    .IsDependentOn("CreateIssuesReport");
