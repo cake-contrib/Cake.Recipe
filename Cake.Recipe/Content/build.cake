@@ -8,7 +8,7 @@ var publishingError = false;
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
 
-Setup(context =>
+Setup<BuildData>(context =>
 {
     Information(Figlet(BuildParameters.Title));
 
@@ -34,6 +34,8 @@ Setup(context =>
         BuildParameters.Version.CakeVersion,
         BuildMetaData.Version,
         BuildParameters.IsTagged);
+
+    return new BuildData();
 });
 
 Teardown(context =>
@@ -159,7 +161,7 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does(() => RequireTool(MSBuildExtensionPackTool, () => {
+    .Does<BuildData>(data => RequireTool(MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         if(BuildParameters.IsRunningOnWindows)
@@ -180,6 +182,16 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                 );
 
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
+
+            // Parse warnings.
+            var issues = ReadIssues(
+                MsBuildIssuesFromFilePath(
+                    BuildParameters.Paths.Files.BuildLogFilePath,
+                    MsBuildXmlFileLoggerFormat),
+                "./");
+
+            Information("{0} MsBuild warnings are found.", issues.Count());
+            data.AddIssues(issues);
         }
         else
         {
