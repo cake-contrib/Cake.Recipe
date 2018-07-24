@@ -98,7 +98,7 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
         var issues =
             ReadIssues(
                 InspectCodeIssuesFromFilePath(inspectCodeLogFilePath),
-                "./");
+                data.RepositoryRoot);
         Information("{0} InspectCode issues are found.", issues.Count());
         data.AddIssues(issues);
     })

@@ -2,6 +2,8 @@ public class BuildData
 {
 	private readonly List<IIssue> issues = new List<IIssue>();
 
+	public DirectoryPath RepositoryRoot { get; }
+
 	public IEnumerable<IIssue> Issues 
 	{ 
 		get
@@ -10,8 +12,14 @@ public class BuildData
 		} 
 	}
 
-	public BuildData()
+	public BuildData(ICakeContext context)
 	{
+		if (context == null)
+		{
+			throw new ArgumentNullException(nameof(context));
+		}
+
+		RepositoryRoot = context.MakeAbsolute(context.Directory("./"));
 	}
 
 	public void AddIssues(IEnumerable<IIssue> issues)

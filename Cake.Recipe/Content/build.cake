@@ -35,7 +35,7 @@ Setup<BuildData>(context =>
         BuildMetaData.Version,
         BuildParameters.IsTagged);
 
-    return new BuildData();
+    return new BuildData(context);
 });
 
 Teardown(context =>
@@ -188,7 +188,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                 MsBuildIssuesFromFilePath(
                     BuildParameters.Paths.Files.BuildLogFilePath,
                     MsBuildXmlFileLoggerFormat),
-                "./");
+                data.RepositoryRoot);
 
             Information("{0} MsBuild warnings are found.", issues.Count());
             data.AddIssues(issues);
