@@ -26,6 +26,8 @@ public static class BuildParameters
     public static bool TransifexEnabled { get; set; }
     public static bool PrepareLocalRelease { get; set; }
     public static bool TreatWarningsAsErrors { get; set; }
+    public static string MasterBranchName { get; private set; }
+    public static string DevelopBranchName { get; private set; }
 
     public static string GitterMessage
     {
@@ -415,7 +417,9 @@ public static class BuildParameters
         bool isPublicRepository = true,
         FilePath nugetConfig = null,
         ICollection<string> nuGetSources = null,
-        bool treatWarningsAsErrors = true
+        bool treatWarningsAsErrors = true,
+        string masterBranchName = "master",
+        string developBranchName = "develop"
         )
     {
         if (context == null)
@@ -503,6 +507,8 @@ public static class BuildParameters
         Configuration = context.Argument("configuration", "Release");
         PrepareLocalRelease = context.Argument("prepareLocalRelease", false);
         CakeConfiguration = context.GetConfiguration();
+        MasterBranchName = masterBranchName;
+        DevelopBranchName = developBranchName;
         IsLocalBuild = buildSystem.IsLocalBuild;
         IsRunningOnUnix = context.IsRunningOnUnix();
         IsRunningOnWindows = context.IsRunningOnWindows();
@@ -510,8 +516,8 @@ public static class BuildParameters
         IsPullRequest = buildSystem.AppVeyor.Environment.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), buildSystem.AppVeyor.Environment.Repository.Name);
         IsPublicRepository = isPublicRepository;
-        IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals("master", buildSystem.AppVeyor.Environment.Repository.Branch);
-        IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals("develop", buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsMasterBranch = StringComparer.OrdinalIgnoreCase.Equals(masterBranchName, buildSystem.AppVeyor.Environment.Repository.Branch);
+        IsDevelopBranch = StringComparer.OrdinalIgnoreCase.Equals(developBranchName, buildSystem.AppVeyor.Environment.Repository.Branch);
         IsReleaseBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("release", StringComparison.OrdinalIgnoreCase);
         IsHotFixBranch = buildSystem.AppVeyor.Environment.Repository.Branch.StartsWith("hotfix", StringComparison.OrdinalIgnoreCase);
         IsTagged = (
