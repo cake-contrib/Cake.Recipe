@@ -1,0 +1,11 @@
+Name: Cake.Storm.Android
+NuGet: Cake.Storm.Android
+Assemblies:
+- "/**/Cake.Storm.Android.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin to help build xamarin android application."
+Categories:
+- cake
+- android
+- xamarin

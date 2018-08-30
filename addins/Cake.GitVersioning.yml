@@ -1,0 +1,13 @@
+Name: Cake.GitVersioning
+NuGet: Cake.GitVersioning
+Assemblies:
+- "/**/Cake.GitVersioning.dll"
+Repository: http://github.com/aarnott/Nerdbank.GitVersioning
+Author: aarnott
+Description: "Cake wrapper for Nerdbank.GitVersioning.  Stamps your assemblies with semver 2.0 compliant git commit specific version information and provides NuGet versioning information as well."
+Categories:
+- git
+- commit
+- versioning
+- version
+- assemblyinfo

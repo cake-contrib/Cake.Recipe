@@ -1,0 +1,13 @@
+Name: Cake.Helm
+NuGet: Cake.Helm
+Assemblies:
+- "/**/Cake.Helm.dll"
+Repository: https://github.com/santey/Cake.Helm
+Author: santey
+Description: "Cake AddIn that extends Cake with Helm"
+Prerelease: "true"
+Categories:
+- cake
+- helm
+- build
+- contrib

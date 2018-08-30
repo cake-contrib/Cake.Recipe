@@ -1,0 +1,9 @@
+Name: Cake.Jira
+NuGet: Cake.Jira
+Assemblies:
+- "/**/Cake.Jira.dll"
+Repository: https://github.com/Ninglin/Cake.Jira/
+Author: Ninglin
+Description: "Cake build addin for integration with Jira."
+Categories:
+- Jira

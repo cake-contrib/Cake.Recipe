@@ -1,0 +1,14 @@
+Name: Cake.AzCopy
+NuGet: Cake.AzCopy
+Assemblies:
+- "/**/Cake.AzCopy.dll"
+Repository: https://github.com/agc93/Cake.AzCopy
+Author: agc93
+Description: "A simple Cake addin powered by AzCopy for uploading and downloading to/from Azure Storage (including Blob, Table and Files)"
+Prerelease: "true"
+Categories:
+- cake
+- build
+- script
+- azure
+- azcopy

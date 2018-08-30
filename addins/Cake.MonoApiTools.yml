@@ -1,0 +1,13 @@
+Name: Cake.MonoApiTools
+NuGet: Cake.MonoApiTools
+Assemblies:
+- "/**/Cake.MonoApiTools.dll"
+Repository: https://github.com/Redth/Cake.MonoApiTools
+Author: Redth
+Description: "Cake Build addin to provide aliases for using the Mono API Tools (API info, XML diff, HTML diff and Markdown diff)."
+Categories:
+- Mono
+- API
+- mono-api-info
+- mono-api-diff
+- mono-api-html

@@ -1,0 +1,9 @@
+Name: Cake.DeployParams
+NuGet: Cake.DeployParams
+Assemblies:
+- "/**/Cake.DeployParams.dll"
+Repository: https://github.com/wooboo/Cake.DeployParams
+Author: wooboo
+Description: "DeployParams extension for Cake."
+Categories:
+

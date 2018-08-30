@@ -1,0 +1,9 @@
+Name: Cake.Netlify
+NuGet: Cake.Netlify
+Assemblies:
+- "/**/Cake.Netlify.dll"
+Repository: https://github.com/cake-contrib/Cake.Netlify
+Author: Jamie Phillips
+Description: "Cake Addin for working with Netlify-CLI from a Cake script."
+Categories:
+- Netlify

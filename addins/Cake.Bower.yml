@@ -1,0 +1,9 @@
+Name: Cake.Bower
+NuGet: Cake.Bower
+Assemblies:
+- "/**/Cake.Bower.dll"
+Repository: https://github.com/cake-contrib/Cake.Bower
+Author: Warren Bates
+Description: "A set of aliases for Cake to help with running Bower scripts as part of a build"
+Categories:
+- Bower

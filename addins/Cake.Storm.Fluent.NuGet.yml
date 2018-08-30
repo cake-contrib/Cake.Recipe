@@ -1,0 +1,14 @@
+Name: Cake.Storm.Fluent.NuGet
+NuGet: Cake.Storm.Fluent.NuGet
+Assemblies:
+- "/**/Cake.Storm.Fluent.NuGet.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin for fluent description for nuget release tasks."
+Categories:
+- cake
+- build
+- contrib
+- fluent
+- nuget
+- package

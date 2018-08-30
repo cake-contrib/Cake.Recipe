@@ -1,0 +1,9 @@
+Name: Cake.CachedNpm
+NuGet: Cake.CachedNpm
+Assemblies:
+- "/**/Cake.CachedNpm.dll"
+Repository: https://www.nuget.org/packages/Cake.CachedNpm/
+Author: Engage
+Description: "Provides Cake addin for caching the node_modules folder in file system."
+Categories:
+

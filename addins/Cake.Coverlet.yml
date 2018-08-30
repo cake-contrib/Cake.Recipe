@@ -1,0 +1,13 @@
+Name: Cake.Coverlet
+NuGet: Cake.Coverlet
+Assemblies:
+- "/**/Cake.Coverlet.dll"
+Repository: https://github.com/romanx/Cake.Coverlet
+Author: romanx
+Description: "Coverlet extensions for Cake Build"
+Categories:
+- cake
+- script
+- build
+- coverage
+- coverlet

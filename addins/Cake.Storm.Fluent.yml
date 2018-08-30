@@ -1,0 +1,12 @@
+Name: Cake.Storm.Fluent
+NuGet: Cake.Storm.Fluent
+Assemblies:
+- "/**/Cake.Storm.Fluent.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin for fluent description of build tasks."
+Categories:
+- cake
+- build
+- contrib
+- fluent

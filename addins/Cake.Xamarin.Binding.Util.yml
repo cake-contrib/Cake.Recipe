@@ -1,0 +1,9 @@
+Name: Cake.Xamarin.Binding.Util
+NuGet: Cake.Xamarin.Binding.Util
+Assemblies:
+- "/**/Cake.Xamarin.Binding.Util.dll"
+Repository: https://go.microsoft.com/fwlink/?linkid=864959
+Author: Microsoft
+Description: "Cake Add-In providing utilities for Xamarin Binding build scripts"
+Categories:
+

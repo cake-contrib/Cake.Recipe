@@ -1,0 +1,9 @@
+Name: Cake.SimpleVersionIncrement
+NuGet: Cake.SimpleVersionIncrement
+Assemblies:
+- "/**/Cake.SimpleVersionIncrement.dll"
+Repository: https://www.nuget.org/packages/Cake.SimpleVersionIncrement/
+Author: David Lavender
+Description: "Description"
+Categories:
+

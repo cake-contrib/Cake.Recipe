@@ -1,0 +1,9 @@
+Name: Cake.Karma
+NuGet: Cake.Karma
+Assemblies:
+- "/**/Cake.Karma.dll"
+Repository: https://github.com/cake-contrib/Cake.Karma/
+Author: Adam Houldsworth
+Description: "Cake Karma Addin."
+Categories:
+- Karma

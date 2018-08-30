@@ -1,0 +1,13 @@
+Name: Cake.Storm.Fluent.iOS
+NuGet: Cake.Storm.Fluent.iOS
+Assemblies:
+- "/**/Cake.Storm.Fluent.iOS.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin for fluent description for iOS relative tasks."
+Categories:
+- cake
+- build
+- contrib
+- fluent
+- ios

@@ -1,0 +1,11 @@
+Name: Cake.Storm.Nuget
+NuGet: Cake.Storm.Nuget
+Assemblies:
+- "/**/Cake.Storm.Nuget.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin to help pack/publish nuget packages."
+Categories:
+- cake
+- nuget
+- json

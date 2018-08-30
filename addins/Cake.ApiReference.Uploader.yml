@@ -1,0 +1,9 @@
+Name: Cake.ApiReference.Uploader
+NuGet: Cake.ApiReference.Uploader
+Assemblies:
+- "/**/Cake.ApiReference.Uploader.dll"
+Repository: https://github.com/dotnetaddicted/cake-apireference-uploader
+Author: dotnetaddicted
+Description: "CakeBuild extension for uploading Api references to specified URL."
+Categories:
+- CakeBuild

@@ -1,0 +1,9 @@
+Name: Cake.AzureBlobStorage
+NuGet: Cake.AzureBlobStorage
+Assemblies:
+- "/**/Cake.AzureBlobStorage.dll"
+Repository: https://www.nuget.org/packages/Cake.AzureBlobStorage/
+Author: David Lavender
+Description: "Allows for the uploading and downloading of a zipped directory into azure storage"
+Categories:
+

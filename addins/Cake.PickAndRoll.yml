@@ -1,0 +1,9 @@
+Name: Cake.PickAndRoll
+NuGet: Cake.PickAndRoll
+Assemblies:
+- "/**/Cake.PickAndRoll.dll"
+Repository: https://github.com/jincod/PickAndRoll.git
+Author: jincod
+Description: "Keep environment specific attributes in separate configuration files and build desired config on demand."
+Categories:
+- Configs-Generator

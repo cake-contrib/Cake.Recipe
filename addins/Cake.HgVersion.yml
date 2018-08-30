@@ -1,0 +1,11 @@
+Name: Cake.HgVersion
+NuGet: Cake.HgVersion
+Assemblies:
+- "/**/Cake.HgVersion.dll"
+Repository: https://github.com/vCipher/Cake.HgVersion
+Author: vCipher
+Description: "Cake AddIn that extends Cake with SemVer versioning using Mercurial history"
+Categories:
+- cake
+- mercurial
+- semver

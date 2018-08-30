@@ -1,0 +1,11 @@
+Name: Cake.Storm.JsonBuildConfiguration
+NuGet: Cake.Storm.JsonBuildConfiguration
+Assemblies:
+- "/**/Cake.Storm.JsonBuildConfiguration.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin to help read a build configuration from a json file."
+Categories:
+- cake
+- configuration
+- json

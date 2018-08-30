@@ -1,0 +1,9 @@
+Name: Cake.Packages
+NuGet: Cake.Packages
+Assemblies:
+- "/**/Cake.Packages.dll"
+Repository: https://www.nuget.org/packages/Cake.Packages/
+Author: Tom Staijen
+Description: "Generated Dashboard Controllers"
+Categories:
+

@@ -1,0 +1,9 @@
+Name: Cake.GitHubUtility
+NuGet: Cake.GitHubUtility
+Assemblies:
+- "/**/Cake.GitHubUtility.dll"
+Repository: https://www.nuget.org/packages/Cake.GitHubUtility/
+Author: Cake.GitHubUtility
+Description: "Package Description"
+Categories:
+

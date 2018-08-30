@@ -1,0 +1,10 @@
+Name: Cake.AWS.Lambda
+NuGet: Cake.AWS.Lambda
+Assemblies:
+- "/**/Cake.AWS.Lambda.dll"
+Repository: https://github.com/SharpeRAD/Cake.AWS.Lambda
+Author: SharpeRAD
+Description: "Cake Build addon for Amazon Lambda."
+Categories:
+- Amazon
+- Lambda

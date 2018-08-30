@@ -1,0 +1,9 @@
+Name: Cake.ArtifactDrop
+NuGet: Cake.ArtifactDrop
+Assemblies:
+- "/**/Cake.ArtifactDrop.dll"
+Repository: https://github.com/stefandevo/Cake.ArtifactDrop
+Author: stefandevo
+Description: "When you need to upload a build artifact to the cloud from VSTS Build system for example."
+Categories:
+

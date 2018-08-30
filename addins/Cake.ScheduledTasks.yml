@@ -1,0 +1,12 @@
+Name: Cake.ScheduledTasks
+NuGet: Cake.ScheduledTasks
+Assemblies:
+- "/**/Cake.ScheduledTasks.dll"
+Repository: https://github.com/cake-contrib/Cake.ScheduledTasks
+Author: Ashwin Menon
+Description: "Windows task scheduler addin for Cake"
+Categories:
+- cake
+- windows
+- scheduled
+- tasks

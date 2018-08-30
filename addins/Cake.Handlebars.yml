@@ -1,0 +1,14 @@
+Name: Cake.Handlebars
+NuGet: Cake.Handlebars
+Assemblies:
+- "/**/Cake.Handlebars.dll"
+Repository: https://github.com/agc93/Cake.Handlebars
+Author: agc93
+Description: "A simple Cake addin powered by Handlebars.Net for rendering and compiling Handlebars templates"
+Prerelease: "true"
+Categories:
+- cake
+- build
+- script
+- handlebars
+- templates

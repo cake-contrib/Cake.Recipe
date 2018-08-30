@@ -1,0 +1,12 @@
+Name: Cake.Storm.iOS
+NuGet: Cake.Storm.iOS
+Assemblies:
+- "/**/Cake.Storm.iOS.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin to help build xamarin iOS application."
+Categories:
+- cake
+- ios
+- xamarin
+- plist

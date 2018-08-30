@@ -1,0 +1,9 @@
+Name: Cake.LittleHelpers
+NuGet: Cake.LittleHelpers
+Assemblies:
+- "/**/Cake.LittleHelpers.dll"
+Repository: https://www.nuget.org/packages/Cake.LittleHelpers/
+Author: Engage
+Description: "Little helpers for cake build script."
+Categories:
+

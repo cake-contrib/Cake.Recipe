@@ -1,0 +1,12 @@
+Name: Cake.VSforMac
+NuGet: Cake.VSforMac
+Assemblies:
+- "/**/Cake.Xamarin.dll"
+Repository: https://github.com/osamarabea/Cake.Xamarin
+Author: osamarabea
+Description: "Cake Build addon for Visual Studio for mac with vstool support"
+Categories:
+- Xamarin
+- Visual
+- Studio
+- Mac

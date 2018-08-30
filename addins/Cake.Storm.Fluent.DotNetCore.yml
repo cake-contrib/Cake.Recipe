@@ -1,0 +1,15 @@
+Name: Cake.Storm.Fluent.DotNetCore
+NuGet: Cake.Storm.Fluent.DotNetCore
+Assemblies:
+- "/**/Cake.Storm.Fluent.DotNetCore.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin for fluent description for dotnetcore tooling relative tasks."
+Categories:
+- cake
+- build
+- contrib
+- fluent
+- dotnetcore
+- vs2017
+- netstandard

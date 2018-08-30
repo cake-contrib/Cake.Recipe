@@ -1,0 +1,11 @@
+Name: Cake.Npx
+NuGet: Cake.Npx
+Assemblies:
+- "/**/Cake.Npx.dll"
+Repository: https://github.com/michael-wolfenden/Cake.Npx
+Author: michael-wolfenden
+Description: "A set of aliases for Cake for running Npx commands"
+Categories:
+- cake
+- npx
+- build

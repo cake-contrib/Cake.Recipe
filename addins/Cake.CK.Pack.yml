@@ -1,0 +1,10 @@
+Name: Cake.CK.Pack
+NuGet: Cake.CK.Pack
+Assemblies:
+- "/**/Cake.CK.Pack.dll"
+Repository: https://github.com/Invenietis/ck-globbing
+Author: Invenietis
+Description: "Packer with globbing and file filtering for Cake."
+Categories:
+- CK
+- Pack

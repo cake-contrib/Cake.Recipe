@@ -1,0 +1,17 @@
+Name: Cake.Aws.ElasticBeanstalk.Dev
+NuGet: Cake.Aws.ElasticBeanstalk.Dev
+Assemblies:
+- "/**/Cake.AWS.ElasticBeanstalk.dll"
+Repository: https://github.com/mathieukempe/Cake.AWS.ElasticBeanstalk
+Author: mathieukempe
+Description: "Package Description"
+Prerelease: "true"
+Categories:
+- Build
+- addin
+- that
+- extends
+- with
+- AWS
+- Elasticbeanstalk
+- extensions

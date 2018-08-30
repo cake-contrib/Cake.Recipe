@@ -1,0 +1,15 @@
+Name: Cake.HandlebarsDotNet
+NuGet: Cake.HandlebarsDotNet
+Assemblies:
+- "/**/Cake.HandlebarsDotNet.dll"
+Repository: https://github.com/thzinc/Cake.HandlebarsDotNet
+Author: thzinc
+Description: "Cake addin for working with Handlebars templates"
+Categories:
+- c#
+- csharp
+- cake
+- addin
+- handlebars
+- handlebarsjs
+- handlebars.net

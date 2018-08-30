@@ -1,0 +1,9 @@
+Name: Cake.Storm.Environment
+NuGet: Cake.Storm.Environment
+Assemblies:
+- "/**/Cake.Storm.Environment.dll"
+Repository: https://github.com/Julien-Mialon/cake
+Author: Julien-Mialon
+Description: "Cake addin to help transform files depending on environment target built."
+Categories:
+- cake

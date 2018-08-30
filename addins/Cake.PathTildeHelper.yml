@@ -1,0 +1,9 @@
+Name: Cake.PathTildeHelper
+NuGet: Cake.PathTildeHelper
+Assemblies:
+- "/**/Cake.PathTildeHelper.dll"
+Repository: https://github.com/patridge/Cake.PathTildeHelper
+Author: patridge
+Description: "Cake add-in to provide aliases to help translate tilde (~) characters to absolute paths usable in locations requiring a full path."
+Categories:
+

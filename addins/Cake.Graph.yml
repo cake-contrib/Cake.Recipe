@@ -1,0 +1,12 @@
+Name: Cake.Graph
+NuGet: Cake.Graph
+Assemblies:
+- "/**/Cake.Graph.dll"
+Repository: https://github.com/cake-contrib/Cake.Graph
+Author: Warren Bates
+Description: "An alias for Cake to help with displaying Task dependencies"
+Categories:
+- Graph
+- Nodes
+- Dependencies
+- Tasks

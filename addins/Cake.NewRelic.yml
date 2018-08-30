@@ -1,0 +1,9 @@
+Name: Cake.NewRelic
+NuGet: Cake.NewRelic
+Assemblies:
+- "/**/Cake.NewRelic.dll"
+Repository: https://github.com/BMWilding/Cake.NewRelic
+Author: BMWilding
+Description: "NewRelic Deployment Tool for Cake"
+Categories:
+- NewRelic

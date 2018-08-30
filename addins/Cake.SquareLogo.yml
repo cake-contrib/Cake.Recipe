@@ -1,0 +1,10 @@
+Name: Cake.SquareLogo
+NuGet: Cake.SquareLogo
+Assemblies:
+- "/**/Cake.SquareLogo.dll"
+Repository: https://www.nuget.org/packages/Cake.SquareLogo/
+Author: Cake.SquareLogo
+Description: "Package Description"
+Prerelease: "true"
+Categories:
+

@@ -1,0 +1,11 @@
+Name: Cake.Deploy.Variables
+NuGet: Cake.Deploy.Variables
+Assemblies:
+- "/**/Cake.Deploy.Variables.dll"
+Repository: https://github.com/ObjectivityLtd/Cake.Deploy.Variables
+Author: ObjectivityLtd
+Description: "Cake addin for the deployment variables management."
+Categories:
+- Deploy
+- Variables
+- Deployment

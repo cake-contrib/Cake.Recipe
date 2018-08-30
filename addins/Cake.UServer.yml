@@ -1,0 +1,9 @@
+Name: Cake.UServer
+NuGet: Cake.UServer
+Assemblies:
+- "/**/Cake.UServer.dll"
+Repository: https://github.com/cake-addin/cake-u-server
+Author: cake-addin
+Description: "Cake.UServer"
+Categories:
+- µHttpSharp

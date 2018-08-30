@@ -1,0 +1,12 @@
+Name: Cake.WindowsAppStore
+NuGet: Cake.WindowsAppStore
+Assemblies:
+- "/**/Cake.WindowsAppStore.dll"
+Repository: https://github.com/cake-contrib/Cake.WindowsAppStore
+Author: Geert van Horrik, Cake Contributors
+Description: "WindowsAppStore Addin for Cake Build Automation System."
+Categories:
+- Microsoft
+- Windows
+- Store
+- Deployment

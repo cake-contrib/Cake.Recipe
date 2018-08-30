@@ -1,0 +1,9 @@
+Name: Cake.Utility
+NuGet: Cake.Utility
+Assemblies:
+- "/**/Cake.Utility.dll"
+Repository: https://github.com/waynebrantley/Cake.Utility
+Author: waynebrantley
+Description: "Common cake routines used across projects"
+Categories:
+

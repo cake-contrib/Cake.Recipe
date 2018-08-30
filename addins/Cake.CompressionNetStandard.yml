@@ -1,0 +1,10 @@
+Name: Cake.CompressionNetStandard
+NuGet: Cake.CompressionNetStandard
+Assemblies:
+- "/**/Cake.Compression.dll"
+Repository: https://www.nuget.org/packages/Cake.CompressionNetStandard/
+Author: Cake.Compression
+Description: "A Cake AddIn which provides compression functionality for BZip2, GZip and Zip."
+Prerelease: "true"
+Categories:
+

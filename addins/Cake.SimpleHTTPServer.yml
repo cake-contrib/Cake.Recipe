@@ -1,0 +1,9 @@
+Name: Cake.SimpleHTTPServer
+NuGet: Cake.SimpleHTTPServer
+Assemblies:
+- "/**/Cake.SimpleHTTPServer.dll"
+Repository: https://github.com/cake-addin/cake-server
+Author: cake-addin
+Description: "Cake.SimpleHTTPServer"
+Categories:
+- SimpleHTTPServer
