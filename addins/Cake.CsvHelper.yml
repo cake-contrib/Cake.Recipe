@@ -1,0 +1,10 @@
+Name: Cake.CsvHelper
+NuGet: Cake.CsvHelper
+Assemblies:
+- "/**/Cake.CsvHelper.dll"
+Repository: https://github.com/RadioSystems/Cake.CsvHelper
+Author: RadioSystems
+Description: "Cake Addin for working with CSV files using the CSVHelper library."
+Categories:
+- CsvHelper
+- CSV

@@ -1,0 +1,12 @@
+Name: Cake.Docker
+NuGet: Cake.Docker
+Assemblies:
+- "/**/Cake.Docker.dll"
+Repository: https://github.com/MihaMarkic/Cake.Docker
+Author: MihaMarkic
+Description: "Cake Build addin for Docker."
+Categories:
+- cake
+- docker
+- build
+- contrib

@@ -1,0 +1,13 @@
+Name: Cake.EnvXmlTransform
+NuGet: Cake.EnvXmlTransform
+Assemblies:
+- "/**/Cake.EnvXmlTransform.dll"
+Repository: https://github.com/nengberg/cake-envxmltransform
+Author: nengberg
+Description: "A plugin for Cake for environment-based configuration transformations"
+Categories:
+- Xdt
+- Xml
+- Config
+- Configuration
+- Configtransform

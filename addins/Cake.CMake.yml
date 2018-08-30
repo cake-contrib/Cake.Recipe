@@ -1,0 +1,10 @@
+Name: Cake.CMake
+NuGet: Cake.CMake
+Assemblies:
+- "/**/Cake.CMake.dll"
+Repository: https://github.com/cake-contrib/Cake.CMake
+Author: Patrik Svensson
+Description: "Addin that extends Cake with CMake support."
+Categories:
+- Unity
+- Unity3D

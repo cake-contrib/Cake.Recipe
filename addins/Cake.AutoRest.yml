@@ -1,0 +1,14 @@
+Name: Cake.AutoRest
+NuGet: Cake.AutoRest
+Assemblies:
+- "/**/Cake.AutoRest.dll"
+Repository: https://github.com/agc93/Cake.AutoRest/
+Author: agc93
+Description: "A Cake addin to generate client code from API definitions (including Swagger) using AutoRest"
+Prerelease: "true"
+Categories:
+- cake
+- build
+- script
+- swagger
+- azure

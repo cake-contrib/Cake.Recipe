@@ -1,0 +1,9 @@
+Name: Cake.Gulp
+NuGet: Cake.Gulp
+Assemblies:
+- "/**/Cake.Gulp.dll"
+Repository: https://github.com/cake-contrib/Cake.Gulp
+Author: Phil Oyston
+Description: "A set of aliases for Cake to help with running Gulp scripts as part of a build"
+Categories:
+- Gulp

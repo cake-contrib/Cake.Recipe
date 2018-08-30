@@ -1,0 +1,11 @@
+Name: Cake.Hg
+NuGet: Cake.Hg
+Assemblies:
+- "/**/Cake.Hg.dll"
+Repository: https://github.com/cake-contrib/Cake.Hg
+Author: vCipher
+Description: "Cake AddIn that extends Cake with Mercurial features"
+Categories:
+- cake
+- hg
+- mercurial

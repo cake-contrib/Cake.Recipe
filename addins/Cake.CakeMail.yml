@@ -1,0 +1,10 @@
+Name: Cake.CakeMail
+NuGet: Cake.CakeMail
+Assemblies:
+- "/**/Cake.CakeMail.dll"
+Repository: https://github.com/cake-contrib/Cake.CakeMail/
+Author: Jericho
+Description: "Cake Build addin to provide Aliases for sending emails via CakeMail."
+Categories:
+- Email
+- CakeMail

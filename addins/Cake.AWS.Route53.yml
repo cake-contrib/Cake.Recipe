@@ -1,0 +1,11 @@
+Name: Cake.AWS.Route53
+NuGet: Cake.AWS.Route53
+Assemblies:
+- "/**/Cake.AWS.Route53.dll"
+Repository: https://github.com/SharpeRAD/Cake.AWS.Route53
+Author: SharpeRAD
+Description: "Cake Build addon for managing Amazon Route53 DNS."
+Categories:
+- Amazon
+- Route53
+- DNS

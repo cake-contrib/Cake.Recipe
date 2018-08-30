@@ -1,0 +1,10 @@
+Name: Cake.HockeyApp
+NuGet: Cake.HockeyApp
+Assemblies:
+- "/**/Cake.HockeyApp.dll"
+Repository: https://github.com/cake-contrib/Cake.HockeyApp
+Author: Paul Reichelt, Cake Contributors
+Description: "HockeyApp Addin for Cake Build Automation System."
+Categories:
+- HockeyApp
+- Deployment

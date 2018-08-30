@@ -1,0 +1,9 @@
+Name: Cake.Codecov
+NuGet: Cake.Codecov
+Assemblies:
+- "/**/Cake.Codecov.dll"
+Repository: https://github.com/cake-contrib/Cake.Codecov
+Author: Larz White
+Description: "Cake addin that extends Cake with ability to use Codecov."
+Categories:
+- Codecov

@@ -1,0 +1,11 @@
+Name: Cake.AWS.CloudFront
+NuGet: Cake.AWS.CloudFront
+Assemblies:
+- "/**/Cake.AWS.CloudFront.dll"
+Repository: https://github.com/SharpeRAD/Cake.AWS.CloudFront
+Author: SharpeRAD
+Description: "Cake Build addon for managing Amazon CloudFront CDN."
+Categories:
+- Amazon
+- CloudFront
+- CDN

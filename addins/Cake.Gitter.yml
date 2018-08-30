@@ -1,0 +1,9 @@
+Name: Cake.Gitter
+NuGet: Cake.Gitter
+Assemblies:
+- "/**/Cake.Gitter.dll"
+Repository: https://github.com/cake-contrib/Cake.Gitter/
+Author: gep13
+Description: "Cake Gitter AddIn."
+Categories:
+- Gitter

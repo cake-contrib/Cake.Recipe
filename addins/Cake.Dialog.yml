@@ -1,0 +1,9 @@
+Name: Cake.Dialog
+NuGet: Cake.Dialog
+Assemblies:
+- "/**/CakeDialog.dll"
+Repository: https://github.com/wk-j/cake-dialog
+Author: wk-j
+Description: "Cake.Dialog"
+Categories:
+- Dialog

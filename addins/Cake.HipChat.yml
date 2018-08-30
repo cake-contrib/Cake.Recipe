@@ -1,0 +1,9 @@
+Name: Cake.HipChat
+NuGet: Cake.HipChat
+Assemblies:
+- "/**/Cake.HipChat.dll"
+Repository: https://github.com/cake-contrib/Cake.HipChat/
+Author: scene316
+Description: "Cake HipChat AddIn"
+Categories:
+- HipChat

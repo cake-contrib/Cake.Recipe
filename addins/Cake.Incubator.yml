@@ -1,0 +1,11 @@
+Name: Cake.Incubator
+NuGet: Cake.Incubator
+Assemblies:
+- "/**/Cake.Incubator.dll"
+Repository: https://github.com/cake-contrib/Cake.Incubator
+Author: Scott Mackay (@wwwlicious)
+Description: "Cake AddIn that provides useful extensions and additional aliases for Cake.Build scripts"
+Categories:
+- Extensions
+- Project
+- Solution

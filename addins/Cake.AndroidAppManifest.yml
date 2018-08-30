@@ -1,0 +1,10 @@
+Name: Cake.AndroidAppManifest
+NuGet: Cake.AndroidAppManifest
+Assemblies:
+- "/**/Cake.AndroidAppManifest.dll"
+Repository: https://github.com/cake-contrib/Cake.AndroidAppManifest
+Author: Geoffrey Huntley, jzeferino
+Description: "Cake Build addin for [de]serializing and updating an Android AppManifest."
+Categories:
+- Xamarin
+- Android

@@ -1,0 +1,9 @@
+Name: Cake.Chutzpah
+NuGet: Cake.Chutzpah
+Assemblies:
+- "/**/Cake.Chutzpah.dll"
+Repository: https://github.com/cake-contrib/Cake.Chutzpah
+Author: James Nail
+Description: "Chutzpah addin for Cake build."
+Categories:
+- Chutzpah

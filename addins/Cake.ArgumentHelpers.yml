@@ -1,0 +1,9 @@
+Name: Cake.ArgumentHelpers
+NuGet: Cake.ArgumentHelpers
+Assemblies:
+- "/**/Cake.ArgumentHelpers.dll"
+Repository: https://github.com/patridge/Cake.ArgumentHelpers
+Author: patridge
+Description: "Cake add-on trying to make it easier to handle various inputs from arguments and environment variable."
+Categories:
+

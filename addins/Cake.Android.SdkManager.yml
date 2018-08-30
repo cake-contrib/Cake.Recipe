@@ -1,0 +1,9 @@
+Name: Cake.Android.SdkManager
+NuGet: Cake.Android.SdkManager
+Assemblies:
+- "/**/Cake.Android.SdkManager.dll"
+Repository: https://github.com/Redth/Cake.Android.SdkManager
+Author: Redth
+Description: "Cake Build addon to provide Aliases for Android's SDK Manager."
+Categories:
+

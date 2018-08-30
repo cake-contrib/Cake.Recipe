@@ -1,0 +1,9 @@
+Name: Cake.Coveralls
+NuGet: Cake.Coveralls
+Assemblies:
+- "/**/Cake.Coveralls.dll"
+Repository: https://github.com/cake-contrib/Cake.Coveralls/
+Author: gep13
+Description: "Cake Coveralls AddIn."
+Categories:
+- Coveralls

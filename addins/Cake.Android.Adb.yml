@@ -1,0 +1,9 @@
+Name: Cake.Android.Adb
+NuGet: Cake.Android.Adb
+Assemblies:
+- "/**/Cake.Android.Adb.dll"
+Repository: https://github.com/Redth/Cake.Android.Adb
+Author: Redth
+Description: "Cake Build addon to provide Aliases for Android's ADB (Android Debug Bridge)."
+Categories:
+

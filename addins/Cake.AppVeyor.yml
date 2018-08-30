@@ -1,0 +1,9 @@
+Name: Cake.AppVeyor
+NuGet: Cake.AppVeyor
+Assemblies:
+- "/**/Cake.AppVeyor.dll"
+Repository: https://github.com/cake-contrib/Cake.AppVeyor
+Author: Redth
+Description: "Cake Build addin for AppVeyor API's."
+Categories:
+

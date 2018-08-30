@@ -1,0 +1,10 @@
+Name: Cake.AWS.ElasticLoadBalancing
+NuGet: Cake.AWS.ElasticLoadBalancing
+Assemblies:
+- "/**/Cake.AWS.ElasticLoadBalancing.dll"
+Repository: https://github.com/SharpeRAD/Cake.AWS.ElasticLoadBalancing
+Author: SharpeRAD
+Description: "Cake Build addon for configuring Amazon Elastic Load Balancers."
+Categories:
+- Amazon
+- ElasticLoadBalancing

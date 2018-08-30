@@ -1,0 +1,9 @@
+Name: Cake.Ember
+NuGet: Cake.Ember
+Assemblies:
+- "/**/Cake.Ember.dll"
+Repository: https://github.com/cake-contrib/Cake.Ember/
+Author: gep13
+Description: "Cake Ember AddIn."
+Categories:
+- Ember

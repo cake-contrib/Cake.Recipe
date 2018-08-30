@@ -1,0 +1,9 @@
+Name: Cake.AliaSql
+NuGet: Cake.AliaSql
+Assemblies:
+- "/**/Cake.AliaSql.dll"
+Repository: https://github.com/cake-contrib/Cake.AliaSql
+Author: Richard Simpson
+Description: "AliaSql extension for Cake."
+Categories:
+- AliaSql

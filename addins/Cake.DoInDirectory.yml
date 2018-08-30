@@ -1,0 +1,9 @@
+Name: Cake.DoInDirectory
+NuGet: Cake.DoInDirectory
+Assemblies:
+- "/**/Cake.DoInDirectory.dll"
+Repository: https://github.com/pitermarx/Cake.DoInDirectory
+Author: pitermarx
+Description: "An extension to Cake Build. Changes the current directory."
+Categories:
+

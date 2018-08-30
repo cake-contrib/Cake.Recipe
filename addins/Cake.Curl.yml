@@ -1,0 +1,9 @@
+Name: Cake.Curl
+NuGet: Cake.Curl
+Assemblies:
+- "/**/Cake.Curl.dll"
+Repository: https://github.com/ecampidoglio/Cake.Curl
+Author: ecampidoglio
+Description: "Cake.Curl is a cross-platform add-in for Cake that allows to transfer files to a remote URL using curl."
+Categories:
+- curl

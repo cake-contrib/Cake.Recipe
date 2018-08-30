@@ -1,0 +1,11 @@
+Name: Cake.AppPackager
+NuGet: Cake.AppPackager
+Assemblies:
+- "/**/Cake.AppPackager.dll"
+Repository: https://github.com/cake-contrib/Cake.AppPackager
+Author: Jamie Phillips
+Description: "Cake Addin for creating UWP packages."
+Categories:
+- AppPackager
+- MakeAppX
+- UWP

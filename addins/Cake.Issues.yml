@@ -1,0 +1,19 @@
+Name: Cake.Issues
+NuGet: Cake.Issues
+Assemblies:
+- "/**/Cake.Issues.dll"
+Repository: https://github.com/cake-contrib/Cake.Issues
+Author: BBT Software AG and contributors
+Description: "The issues addin for Cake allows you to read issue from any code analyzer or linter.
+
+This addin provides the aliases for reading issues.
+It also requires one or more issue provider addins for the specific code anylzer or linter.
+
+There are also additional addins for generating reports or posting issues to pull requests.
+
+See the Project Site for an overview of the whole ecosystem of addins for working with issues in Cake scripts."
+Prerelease: "true"
+Categories:
+- Issues
+- CodeAnalysis
+- Linting

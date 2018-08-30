@@ -1,0 +1,9 @@
+Name: Cake.Email
+NuGet: Cake.Email
+Assemblies:
+- "/**/Cake.Email.dll"
+Repository: https://github.com/cake-contrib/Cake.Email/
+Author: Jericho
+Description: "Cake Build addin to provide Aliases for sending emails via SMTP."
+Categories:
+- Email

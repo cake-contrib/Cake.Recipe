@@ -1,0 +1,10 @@
+Name: Cake.AssemblyInfoReflector
+NuGet: Cake.AssemblyInfoReflector
+Assemblies:
+- "/**/Cake.AssemblyInfoReflector.dll"
+Repository: http://github.com/wexman/Cake.AssemblyInfoReflector
+Author: wexman
+Description: "Cake Addin for retrieving assembly info from an existing assembly."
+Prerelease: "true"
+Categories:
+

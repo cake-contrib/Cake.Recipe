@@ -1,0 +1,14 @@
+Name: Cake.Fastlane
+NuGet: Cake.Fastlane
+Assemblies:
+- "/**/Cake.Fastlane.dll"
+Repository: https://github.com/RLittlesII/Cake.Fastlane/
+Author: RLittlesII
+Description: "Cake add in that extends Cake with support for fastlane tools."
+Categories:
+- cake
+- script
+- build
+- fastlane
+- ios
+- mobile

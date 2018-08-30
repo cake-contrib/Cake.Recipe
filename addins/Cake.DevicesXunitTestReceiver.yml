@@ -1,0 +1,12 @@
+Name: Cake.DevicesXunitTestReceiver
+NuGet: Cake.DevicesXunitTestReceiver
+Assemblies:
+- "/**/Cake.DevicesXunitTestReceiver.dll"
+Repository: https://github.com/pellet/Cake.DevicesXunitTestReceiver
+Author: pellet
+Description: "Cake Build addin for receiving test results from Devices.Xunit test hosts."
+Categories:
+- Xamarin
+- Xunit
+- Android
+- iOS

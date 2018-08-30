@@ -1,0 +1,14 @@
+Name: Cake.EntityFramework
+NuGet: Cake.EntityFramework
+Assemblies:
+- "/**/Cake.EntityFramework.dll"
+Repository: https://github.com/cake-contrib/Cake.EntityFramework
+Author: Silvenga, louisfischer
+Description: "A set of Cake aliases for Entity Framework code-first migrations."
+Categories:
+- cake
+- EntityFramework
+- ef
+- code-first
+- migrations
+- sql-server

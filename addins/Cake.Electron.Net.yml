@@ -1,0 +1,13 @@
+Name: Cake.Electron.Net
+NuGet: Cake.Electron.Net
+Assemblies:
+- "/**/Cake.Electron.Net.dll"
+Repository: https://github.com/Blind-Striker/Cake.Electron.Net
+Author: Blind-Striker
+Description: "Cake AddIn that extends Cake with Electron.NET"
+Categories:
+- cake
+- build
+- contrib
+- electron
+- electron-net

@@ -1,0 +1,10 @@
+Name: Cake.Homebrew
+NuGet: Cake.Homebrew
+Assemblies:
+- "/**/Cake.Homebrew.dll"
+Repository: https://github.com/RLittlesII/Cake.Homebrew
+Author: RLittlesII
+Description: "Cake addin that provides Homebrew aliases"
+Categories:
+- cake
+- homebrew

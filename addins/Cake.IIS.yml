@@ -1,0 +1,9 @@
+Name: Cake.IIS
+NuGet: Cake.IIS
+Assemblies:
+- "/**/Cake.IIS.dll"
+Repository: https://github.com/SharpeRAD/Cake.IIS
+Author: SharpeRAD
+Description: "Cake Build addon for IIS."
+Categories:
+- IIS

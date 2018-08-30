@@ -1,0 +1,9 @@
+Name: Cake.FluentMigrator
+NuGet: Cake.FluentMigrator
+Assemblies:
+- "/**/Cake.FluentMigrator.dll"
+Repository: https://github.com/cake-contrib/Cake.FluentMigrator
+Author: Fredrik Leijon
+Description: "FluentMigrator extension for Cake."
+Categories:
+- FluentMigrator

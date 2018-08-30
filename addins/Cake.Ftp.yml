@@ -1,0 +1,10 @@
+Name: Cake.Ftp
+NuGet: Cake.Ftp
+Assemblies:
+- "/**/Cake.Ftp.dll"
+Repository: https://github.com/cake-contrib/Cake.Ftp
+Author: Jamie Phillips
+Description: "Cake Addin for working with FTP from a Cake script."
+Categories:
+- CakeFtp
+- Ftp

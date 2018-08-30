@@ -1,0 +1,9 @@
+Name: Cake.FileHelpers
+NuGet: Cake.FileHelpers
+Assemblies:
+- "/**/Cake.FileHelpers.dll"
+Repository: https://github.com/cake-contrib/Cake.FileHelpers
+Author: Redth
+Description: "Cake Build addon to provide Aliases for common File operations (Reading, Writing, Replacing Text)."
+Categories:
+

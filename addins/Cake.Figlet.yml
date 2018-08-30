@@ -1,0 +1,9 @@
+Name: Cake.Figlet
+NuGet: Cake.Figlet
+Assemblies:
+- "/**/Cake.Figlet.dll"
+Repository: https://github.com/cake-contrib/Cake.Figlet
+Author: Phil Scott
+Description: "Cake Build addon to provide Ascii art."
+Categories:
+- Figlet

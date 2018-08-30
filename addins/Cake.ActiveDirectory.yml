@@ -1,0 +1,11 @@
+Name: Cake.ActiveDirectory
+NuGet: Cake.ActiveDirectory
+Assemblies:
+- "/**/Cake.ActiveDirectory.dll"
+Repository: https://github.com/RadioSystems/Cake.ActiveDirectory
+Author: RadioSystems
+Description: "Cake Addin for working with Active Directory."
+Categories:
+- Active
+- Directory
+- AD

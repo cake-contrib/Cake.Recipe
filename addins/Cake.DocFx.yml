@@ -1,0 +1,9 @@
+Name: Cake.DocFx
+NuGet: Cake.DocFx
+Assemblies:
+- "/**/Cake.DocFx.dll"
+Repository: https://github.com/cake-contrib/Cake.DocFx
+Author: Paul Reichelt
+Description: "DocFx Addin for Cake Build Automation System"
+Categories:
+- DocFx

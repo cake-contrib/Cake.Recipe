@@ -1,0 +1,20 @@
+Name: Cake.Issues.DocFx
+NuGet: Cake.Issues.DocFx
+Assemblies:
+- "/**/Cake.Issues.DocFx.dll"
+Repository: https://github.com/cake-contrib/Cake.Issues.DocFx
+Author: BBT Software AG and contributors
+Description: "The DocFx support for the Cake.Issues addin for Cake allows you to read warnings from DocFx log files.
+
+This addin provides the aliases for reading warnings from DocFx log files and provides them to the Cake.Issues addin.
+It also requires the core Cake.Issues addin.
+
+There are also additional addins for generating reports or posting issues to pull requests.
+
+See the Project Site for an overview of the whole ecosystem of addins for working with issues in Cake scripts."
+Categories:
+- Issues
+- IssueProvider
+- CodeAnalysis
+- Linting
+- DocFx

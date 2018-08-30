@@ -1,0 +1,9 @@
+Name: Cake.Endpoint
+NuGet: Cake.Endpoint
+Assemblies:
+- "/**/Cake.Endpoint.dll"
+Repository: https://github.com/cake-contrib/cake.endpoint
+Author: engelbert strauss GmbH & Co. KG
+Description: "Json based endpoint orchestration addin for cake build."
+Categories:
+- Endpoint

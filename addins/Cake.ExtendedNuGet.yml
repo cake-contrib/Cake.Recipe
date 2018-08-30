@@ -1,0 +1,9 @@
+Name: Cake.ExtendedNuGet
+NuGet: Cake.ExtendedNuGet
+Assemblies:
+- "/**/Cake.ExtendedNuGet.dll"
+Repository: https://github.com/Redth/Cake.ExtendedNuGet
+Author: Redth
+Description: "Cake Build addon to provide Aliases for NuGet package inspection."
+Categories:
+
