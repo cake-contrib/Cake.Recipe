@@ -32,10 +32,10 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
         foreach(var file in filesChanged)
         {
-            var backslash = '\\';
+            var forwardSlash = '/';
             Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-            if(file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, backslash)) ||
-                file.Path.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, backslash)) ||
+            if(file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
+                file.Path.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
                 file.Path.Contains("config.wyam"))
             {
             docFileChanged = true;
