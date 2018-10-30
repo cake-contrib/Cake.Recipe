@@ -9,7 +9,7 @@ private const string GitVersionTool = "#tool nuget:?package=GitVersion.CommandLi
 private const string ReSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2018.1.2";
 private const string ReSharperReportsTool = "#tool nuget:?package=ReSharperReports&version=0.4.0";
 private const string KuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.3.1";
-private const string WyamTool = "#tool nuget:?package=Wyam&version=1.6.0";
+private const string WyamTool = "#tool nuget:?package=Wyam&version=1.7.1";
 private const string GitLinkTool = "#tool nuget:?package=gitlink&version=2.4.0";
 private const string MSBuildExtensionPackTool = "#tool nuget:?package=MSBuild.Extension.Pack&version=1.9.1";
 private const string XUnitTool = "#tool nuget:?package=xunit.runner.console&version=2.3.1";
