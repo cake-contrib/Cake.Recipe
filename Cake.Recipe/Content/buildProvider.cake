@@ -41,9 +41,9 @@ public class AppVeyorTagInfo : ITagInfo
         Name = appVeyor.Environment.Repository.Tag.Name;
     }
 
-    bool IsTag { get; }
+    public bool IsTag { get; }
 
-    string Name { get; }    
+    public string Name { get; }    
 }
 
 public class AppVeyorRepositoryInfo : IRepositoryInfo
@@ -55,21 +55,21 @@ public class AppVeyorRepositoryInfo : IRepositoryInfo
         Tag = new AppVeyorTagInfo(appVeyor);
     }
 
-    string Branch { get; }
+    public string Branch { get; }
 
-    string Name { get; }
+    public string Name { get; }
 
-    ITagInfo Tag { get; }    
+    public ITagInfo Tag { get; }    
 }
 
 public class AppVeyorPullRequestInfo : IPullRequestInfo
 {
-    public AppVeyorPulLRequestInfo(IAppVeyorProvider appVeyor)
+    public AppVeyorPullRequestInfo(IAppVeyorProvider appVeyor)
     {
         IsPullRequest = appVeyor.Environment.PullRequest.IsPullRequest;
     }
 
-    bool IsPullRequest { get; }    
+    public bool IsPullRequest { get; }    
 }
 
 public class AppVeyorBuildInfo : IBuildInfo
@@ -79,7 +79,7 @@ public class AppVeyorBuildInfo : IBuildInfo
         Number = appVeyor.Environment.Build.Number;
     }
 
-    int Number { get; }    
+    public int Number { get; }    
 }
 
 public class AppVeyorBuildProvider : IBuildProvider
@@ -91,17 +91,15 @@ public class AppVeyorBuildProvider : IBuildProvider
         Build = new AppVeyorBuildInfo(appVeyor);
     }
 
-    IRepositoryInfo Repository { get; }
+    public IRepositoryInfo Repository { get; }
 
-    IPullRequestInfo PullRequest { get; }
+    public IPullRequestInfo PullRequest { get; }
 
-    IBuildInfo Build { get; 
+    public IBuildInfo Build { get; }
 }
 
-public IBuildProvider GetBuildProvider(ICakeContext context)
+public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)
 {
-    if (context.BuildSystem.IsRunningOnAppVeyor)
-    {
-        return new AppVeyorBuildProvider(context.BuildSystem.AppVeyor);
-    }
+    // always fallback to AppVeyor
+    return new AppVeyorBuildProvider(buildSystem.AppVeyor);
 }
