@@ -160,6 +160,8 @@ public static class BuildParameters
     public static FilePath NugetConfig { get; private set; }
     public static ICollection<string> NuGetSources { get; private set; }
 
+    public static IBuildProvider BuildProvider { get; private set; }
+
     static BuildParameters()
     {
         Tasks = new BuildTasks();
@@ -422,6 +424,8 @@ public static class BuildParameters
         {
             throw new ArgumentNullException("context");
         }
+
+        BuildProvider = GetBuildProvider(context);
 
         SourceDirectoryPath = sourceDirectoryPath;
         Title = title;
