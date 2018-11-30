@@ -348,22 +348,51 @@ public void CopyBuildOutput()
         foreach(var reference in references)
         {
             Verbose("Reference Include: {0}", reference.Include);
-            if(reference.Include.ToLower().Contains("xunit.core"))
+            var referenceInclude = reference.Include.ToLower();
+            if(referenceInclude.Contains("xunit.core"))
             {
                 isxUnitTestProject = true;
                 break;
             }
-            else if(reference.Include.ToLower().Contains("unittestframework") || reference.Include.ToLower().Contains("visualstudio.testplatform"))
+            else if(referenceInclude.Contains("unittestframework") || referenceInclude.Contains("visualstudio.testplatform"))
             {
                 ismsTestProject = true;
                 break;
             }
-            else if(reference.Include.ToLower().Contains("fixie"))
+            else if(referenceInclude.Contains("fixie"))
             {
                 isFixieProject = true;
                 break;
             }
-            else if(reference.Include.ToLower().Contains("nunit.framework"))
+            else if(referenceInclude.Contains("nunit.framework"))
+            {
+                isNUnitProject = true;;
+                break;
+            }
+        }
+
+        ICollection<PackageReference> packageReferences = parsedProject.PackageReferences;
+
+        foreach(var reference in packageReferences)
+        {
+            Verbose("PackageReference Name: {0}", reference.Name);
+            var referenceName = reference.Name.ToLower();
+            if(referenceName.Contains("xunit") || referenceName.Contains("xunit.runner.visualstudio"))
+            {
+                isxUnitTestProject = true;
+                break;
+            }
+            else if(referenceName.Contains("mstest.testframework") || referenceName.Contains("mstest.testadapter"))
+            {
+                ismsTestProject = true;
+                break;
+            }
+            else if(referenceName.Contains("fixie"))
+            {
+                isFixieProject = true;
+                break;
+            }
+            else if(referenceName.Contains("nunit") || referenceName.Contains("nunit3testadapter"))
             {
                 isNUnitProject = true;;
                 break;
