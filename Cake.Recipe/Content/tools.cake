@@ -12,7 +12,7 @@ private const string KuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1
 private const string WyamTool = "#tool nuget:?package=Wyam&version=1.7.4";
 private const string GitLinkTool = "#tool nuget:?package=gitlink&version=2.4.0";
 private const string MSBuildExtensionPackTool = "#tool nuget:?package=MSBuild.Extension.Pack&version=1.9.1";
-private const string XUnitTool = "#tool nuget:?package=xunit.runner.console&version=2.3.1";
+private const string XUnitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1";
 private const string NUnitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.1";
 private const string OpenCoverTool = "#tool nuget:?package=OpenCover&version=4.6.519";
 private const string ReportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=3.1.2";
