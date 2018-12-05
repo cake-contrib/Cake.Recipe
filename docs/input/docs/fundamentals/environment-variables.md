@@ -30,6 +30,16 @@ Password or [Personal Access Token](https://help.github.com/articles/creating-a-
 
 ## NUGET_SOURCE
 
+# Chocolatey
+
+## CHOCOLATEY_API_KEY
+
+API key for Chocolatey. Used to publish Chocolatey packages.
+
+## CHOCOLATEY_SOURCE
+
+Source of the Chocolatey feed. Used to publish Chocolatey packages.
+
 # Gitter
 
 ## GITTER_TOKEN
