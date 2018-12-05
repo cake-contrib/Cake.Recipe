@@ -9,8 +9,8 @@ BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
             GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, new GitReleaseManagerCreateSettings {
                 Milestone         = BuildParameters.Version.Milestone,
                 Name              = BuildParameters.Version.Milestone,
-                Prerelease        = false,
-                TargetCommitish   = "master"
+                TargetCommitish   = BuildParameters.MasterBranchName,
+                Prerelease        = false
             });
         }
         else
