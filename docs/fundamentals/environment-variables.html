@@ -76,6 +76,7 @@
     <div id="infobar-headings"><h6>On This Page</h6><p><a href="#github">GitHub</a></p>
 <p><a href="#myget">MyGet</a></p>
 <p><a href="#nuget">NuGet</a></p>
+<p><a href="#chocolatey">Chocolatey</a></p>
 <p><a href="#gitter">Gitter</a></p>
 <p><a href="#slack">Slack</a></p>
 <p><a href="#twitter">Twitter</a></p>
@@ -93,17 +94,20 @@
 
                     <ul class="sidebar-menu">
                         
+
                 <li class="treeview active">
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
-                                        <li class="selected"><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
+                        
+                <li class="selected"><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
 
                     </ul>
                 </li>
                 <li class="treeview">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
-                                        <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
+                        
+                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
@@ -126,9 +130,9 @@
 
 
 
-	<section class="content-header">
-		<h1>Environment Variables</h1>
-	</section>
+		<section class="content-header">
+			<h1>Environment Variables</h1>
+		</section>
 	<section class="content">
 		<p>The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.</p>
 <p>The following are a list of the default environment variable names that are looked for during the build.</p>
@@ -144,6 +148,11 @@
 <h1 id="nuget">NuGet</h1>
 <h2 id="nuget_api_key">NUGET_API_KEY</h2>
 <h2 id="nuget_source">NUGET_SOURCE</h2>
+<h1 id="chocolatey">Chocolatey</h1>
+<h2 id="chocolatey_api_key">CHOCOLATEY_API_KEY</h2>
+<p>API key for Chocolatey. Used to publish Chocolatey packages.</p>
+<h2 id="chocolatey_source">CHOCOLATEY_SOURCE</h2>
+<p>Source of the Chocolatey feed. Used to publish Chocolatey packages.</p>
 <h1 id="gitter">Gitter</h1>
 <h2 id="gitter_token">GITTER_TOKEN</h2>
 <h2 id="gitter_room_id">GITTER_ROOM_ID</h2>
