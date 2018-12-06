@@ -274,8 +274,9 @@ public static class BuildParameters
     {
         get
         {
-            return BuildParameters.TransifexEnabled &&
-              (!BuildParameters.IsPullRequest || !BuildParameters.IsRunningOnAppVeyor);
+            return BuildParameters.TransifexEnabled && !BuildParameters.IsPullRequest
+                && (BuildParameters.IsRunningOnAppVeyor
+                    || string.Equals(BuildParameters.Target, "Transifex-Pull-Translations", StringComparison.OrdinalIgnoreCase));
         }
     }
 
