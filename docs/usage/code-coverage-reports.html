@@ -132,7 +132,7 @@ Upload-Coveralls-Report
 ========================================
 No coverage statistics files.
 </code></pre>
-<p>OpenCover doesn't support the <a href="(https://github.com/dotnet/core/blob/e6049bb60307d987e044c39a106e0d6cf98857a3/Documentation/diagnostics/portable_pdb.md)">portable debug type</a>, which is the default of a .NET Core project. The resolution is to change or add a <code>DebugType</code> node in your <code>netcoreapp</code> test project and <strong>all</strong> projects it covers.  Acceptable options are <code>full</code> or <code>pdbonly</code>.  After adding one of the following xml tags to each project in your solution that tests, or is tested by a <code>netstandard</code> or <code>netcoreapp</code> project, OpenCover will produce a valid coverage file and upload to coveralls.</p>
+<p>OpenCover doesn't support the <a href="https://github.com/dotnet/core/blob/e6049bb60307d987e044c39a106e0d6cf98857a3/Documentation/diagnostics/portable_pdb.md">portable debug type</a>, which is the default of a .NET Core project. The resolution is to change or add a <code>DebugType</code> node in your <code>netcoreapp</code> test project and <strong>all</strong> projects it covers.  Acceptable options are <code>full</code> or <code>pdbonly</code>.  After adding one of the following xml tags to each project in your solution that tests, or is tested by a <code>netstandard</code> or <code>netcoreapp</code> project, OpenCover will produce a valid coverage file and upload to coveralls.</p>
 <pre><code class="language-xml">  &lt;PropertyGroup&gt;
     &lt;DebugType&gt;full&lt;/DebugType&gt;
   &lt;/PropertyGroup&gt;
