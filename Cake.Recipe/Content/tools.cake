@@ -2,7 +2,7 @@
 // TOOLS
 ///////////////////////////////////////////////////////////////////////////////
 
-private const string CodecovTool = "#tool nuget:?package=codecov&version=1.0.5";
+private const string CodecovTool = "#tool nuget:?package=codecov&version=1.1.0";
 private const string CoverallsTool = "#tool nuget:?package=coveralls.io&version=1.4.2";
 private const string GitReleaseManagerTool = "#tool nuget:?package=gitreleasemanager&version=0.7.1";
 private const string GitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=3.6.5";
