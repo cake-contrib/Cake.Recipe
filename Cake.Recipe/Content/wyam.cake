@@ -11,8 +11,8 @@ BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
 BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentation")
     .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation)
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => {
-        Graph(Tasks).Deploy();
+    .Does(async () => {
+        await Graph(Tasks).DeployAsync();
     });
 
 BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")

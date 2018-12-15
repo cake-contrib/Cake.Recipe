@@ -7,7 +7,7 @@
 #addin nuget:?package=Cake.Figlet&version=1.2.0
 #addin nuget:?package=Cake.Git&version=0.19.0
 #addin nuget:?package=Cake.Gitter&version=0.10.0
-#addin nuget:?package=Cake.Graph&version=0.6.0
+#addin nuget:?package=Cake.Graph&version=0.7.1&prerelease&loaddependencies=true
 #addin nuget:?package=Cake.Incubator&version=3.1.0
 #addin nuget:?package=Cake.Kudu&version=0.8.0
 #addin nuget:?package=Cake.MicrosoftTeams&version=0.8.0
@@ -21,8 +21,6 @@
 #addin nuget:?package=Cake.Issues.InspectCode&version=0.6.1
 #addin nuget:?package=Cake.Issues.Reporting&version=0.6.1
 #addin nuget:?package=Cake.Issues.Reporting.Generic&version=0.6.1
-// Needed for Cake.Graph
-#addin nuget:?package=RazorEngine&version=3.10.0&loaddependencies=true
 
 Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
