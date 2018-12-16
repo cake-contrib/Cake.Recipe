@@ -3,30 +3,34 @@
 ////////////////////////////////////////////////////////
 /// Global variables
 ////////////////////////////////////////////////////////
-var recipePath          = MakeAbsolute(Directory("./BuildArtifacts/Packages/NuGet"));
-var testReposRootPath   = MakeAbsolute(Directory("./tests/integration/repos"));
-var recipeVersion       = Argument("recipe-version", "*");
-var exceptions          = new List<Exception>();
-var testRepos           = new [] {
-                            new {
-                                Path = testReposRootPath.Combine("Cake.Gulp"),
-                                Url = "https://github.com/cake-contrib/Cake.Gulp.git"
-                            },
-                            new {
-                                Path = testReposRootPath.Combine("Cake.Http"),
-                                Url = "https://github.com/cake-contrib/Cake.Http.git"
-                            },
-                            new {
-                                Path = testReposRootPath.Combine("Cake.Unity"),
-                                Url = "https://github.com/cake-contrib/Cake.Unity.git"
-                            }
-                          };
-var package             = GetFiles(
-                            string.Concat(
-                                recipePath,
-                                "/Cake.Recipe." + recipeVersion + ".nupkg"
-                                )
-                          ).FirstOrDefault();
+var recipePath                    = MakeAbsolute(Directory("./BuildArtifacts/Packages/NuGet"));
+var recipeVersion                 = Argument("recipe-version", "*");
+var shouldCreateGlobalReposFolder = Argument("shouldCreateGlobalReposFolder", true);
+var testReposRootPath             = MakeAbsolute(Directory(shouldCreateGlobalReposFolder ? "c:/CakeRecipeTests/repos" : "./tests/repos"));
+var exceptions                    = new List<Exception>();
+var testRepos                     = new [] {
+                                      new {
+                                          Path = testReposRootPath.Combine("Cake.Gulp"),
+                                          Url = "https://github.com/cake-contrib/Cake.Gulp.git",
+                                          BuildScriptName = "setup.cake"
+                                      },
+                                      new {
+                                          Path = testReposRootPath.Combine("Cake.Http"),
+                                          Url = "https://github.com/cake-contrib/Cake.Http.git",
+                                          BuildScriptName = "setup.cake"
+                                      },
+                                      new {
+                                          Path = testReposRootPath.Combine("Cake.Twitter"),
+                                          Url = "https://github.com/cake-contrib/Cake.Twitter.git",
+                                          BuildScriptName = "recipe.cake"
+                                      }
+                                  };
+var package                       = GetFiles(
+                                        string.Concat(
+                                            recipePath,
+                                            "/Cake.Recipe." + recipeVersion + ".nupkg"
+                                        )
+                                    ).FirstOrDefault();
 
 if (package == null)
 {
@@ -104,24 +108,13 @@ foreach(var testRepo in testRepos)
             .Does(context => {
                 try
                 {
-                    var setupCakePath = path.CombineWithFilePath("recipe.cake");
+                    var setupCakePath = path.CombineWithFilePath(testRepo.BuildScriptName);
                     context.Information("Testing {0}...", setupCakePath);
-                    var arguments = new Dictionary<string, string>();
-
-                    if(BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient") != null) {
-                        arguments.Add("nuget_useinprocessclient", BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient"));
-                    }
-
-                    if(BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification") != null) {
-                        arguments.Add("settings_skipverification", BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification"));
-                    }
-
-                    arguments.Add("verbosity", context.Log.Verbosity.ToString("F"));
-
                     context.CakeExecuteScript(setupCakePath,
                             new CakeSettings {
-                                Arguments = arguments
-                            });
+                                Arguments = new Dictionary<string, string>{
+                                    { "verbosity", context.Log.Verbosity.ToString("F") }
+                        }});
                 }
                 catch(Exception ex)
                 {
