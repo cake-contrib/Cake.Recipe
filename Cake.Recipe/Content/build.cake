@@ -324,82 +324,18 @@ public void CopyBuildOutput()
             continue;
         }
 
-        var isxUnitTestProject = false;
-        var ismsTestProject = false;
-        var isFixieProject = false;
-        var isNUnitProject = false;
-
-        // Now we need to test for whether this is a unit test project.  Currently, this is only testing for XUnit Projects.
-        // It needs to be extended to include others, i.e. NUnit, MSTest, and VSTest
+        // Now we need to test for whether this is a unit test project.
         // If this is found, move the output to the unit test folder, otherwise, simply copy to normal output folder
-
-        ICollection<ProjectAssemblyReference> references = null;
         if(!BuildParameters.IsDotNetCoreBuild)
         {
             Information("Not a .Net Core Build");
-            references = parsedProject.References;
         }
         else
         {
             Information("Is a .Net Core Build");
-            references = new List<ProjectAssemblyReference>();
         }
 
-        foreach(var reference in references)
-        {
-            Verbose("Reference Include: {0}", reference.Include);
-            var referenceInclude = reference.Include.ToLower();
-            if(referenceInclude.Contains("xunit.core"))
-            {
-                isxUnitTestProject = true;
-                break;
-            }
-            else if(referenceInclude.Contains("unittestframework") || referenceInclude.Contains("visualstudio.testplatform"))
-            {
-                ismsTestProject = true;
-                break;
-            }
-            else if(referenceInclude.Contains("fixie"))
-            {
-                isFixieProject = true;
-                break;
-            }
-            else if(referenceInclude.Contains("nunit.framework"))
-            {
-                isNUnitProject = true;;
-                break;
-            }
-        }
-
-        ICollection<PackageReference> packageReferences = parsedProject.PackageReferences;
-
-        foreach(var reference in packageReferences)
-        {
-            Verbose("PackageReference Name: {0}", reference.Name);
-            var referenceName = reference.Name.ToLower();
-            if(referenceName.Contains("xunit") || referenceName.Contains("xunit.runner.visualstudio"))
-            {
-                isxUnitTestProject = true;
-                break;
-            }
-            else if(referenceName.Contains("mstest.testframework") || referenceName.Contains("mstest.testadapter"))
-            {
-                ismsTestProject = true;
-                break;
-            }
-            else if(referenceName.Contains("fixie"))
-            {
-                isFixieProject = true;
-                break;
-            }
-            else if(referenceName.Contains("nunit") || referenceName.Contains("nunit3testadapter"))
-            {
-                isNUnitProject = true;;
-                break;
-            }
-        }
-
-        if(parsedProject.IsLibrary() && isxUnitTestProject)
+        if(parsedProject.IsLibrary() && parsedProject.IsXUnitTestProject())
         {
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
@@ -407,7 +343,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.IsLibrary() && ismsTestProject)
+        else if(parsedProject.IsLibrary() && parsedProject.IsMSTestProject())
         {
             // We will use vstest.console.exe by default for MSTest Projects
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
@@ -416,7 +352,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.IsLibrary() && isFixieProject)
+        else if(parsedProject.IsLibrary() && parsedProject.IsFixieTestProject())
         {
             Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
@@ -424,7 +360,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.IsLibrary() && isNUnitProject)
+        else if(parsedProject.IsLibrary() && parsedProject.IsNUnitTestProject())
         {
             Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
