@@ -4,8 +4,9 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
     .Does(() =>
 {
     var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
-        - GetFiles(BuildParameters.SourceDirectoryPath + "/tools/**/*.csproj")
-        - GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.Tests.csproj");
+        - GetFiles(BuildParameters.RootDirectoryPath + "/tools/**/*.csproj")
+        - GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.Tests.csproj")
+        - GetFiles(BuildParameters.SourceDirectoryPath + "/packages/**/*.csproj");
 
     var msBuildSettings = new DotNetCoreMSBuildSettings()
                             .WithProperty("Version", BuildParameters.Version.SemVersion)
