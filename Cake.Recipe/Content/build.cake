@@ -424,7 +424,7 @@ BuildParameters.Tasks.ReleaseNotesTask = Task("ReleaseNotes")
   .IsDependentOn("Create-Release-Notes");
 
 BuildParameters.Tasks.LabelsTask = Task("Labels")
-  .IsDependentOn("Create-Default-Labels")
+  .IsDependentOn("Create-Default-Labels");
 
 BuildParameters.Tasks.ClearCacheTask = Task("ClearCache")
   .IsDependentOn("Clear-AppVeyor-Cache");
