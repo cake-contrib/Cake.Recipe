@@ -77,3 +77,16 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
     Information("Publish-GitHub-Release Task failed, but continuing with next Task...");
     publishingError = true;
 });
+
+BuildParameters.Tasks.CreateDefaultLabelsTask = Task("Create-Default-Labels")
+    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+        if(BuildParameters.CanUseGitReleaseManager)
+        {
+            GitReleaseManagerLabel(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
+        }
+        else
+        {
+            Warning("Unable to use GitReleaseManager, as necessary credentials are not available");
+        }
+    })
+);

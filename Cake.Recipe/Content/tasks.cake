@@ -17,6 +17,7 @@ public class BuildTasks
     public CakeTaskBuilder DefaultTask { get; set; }
     public CakeTaskBuilder AppVeyorTask { get; set; }
     public CakeTaskBuilder ReleaseNotesTask { get; set; }
+    public CakeTaskBuilder LabelsTask { get; set; }
     public CakeTaskBuilder ClearCacheTask { get; set; }
     public CakeTaskBuilder PreviewTask { get; set; }
     public CakeTaskBuilder PublishDocsTask { get; set; }
@@ -28,6 +29,7 @@ public class BuildTasks
     public CakeTaskBuilder CreateReleaseNotesTask { get; set; }
     public CakeTaskBuilder ExportReleaseNotesTask { get; set; }
     public CakeTaskBuilder PublishGitHubReleaseTask { get; set; }
+    public CakeTaskBuilder CreateDefaultLabelsTask { get; set; }
     public CakeTaskBuilder DotNetCorePackTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackageTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackagesTask { get; set; }
