@@ -12,4 +12,4 @@ choco install dotnet4.7.2
 
 # Required Cake Version
 
-As a minimum, it is recommended that Cake.Recipe should be used in conjunction with Cake 0.30.0.
+As a minimum, it is recommended that Cake.Recipe should be used in conjunction with Cake 0.32.0.
