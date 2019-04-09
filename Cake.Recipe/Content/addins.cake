@@ -2,7 +2,7 @@
 // ADDINS
 ///////////////////////////////////////////////////////////////////////////////
 
-#addin nuget:?package=Cake.Codecov&version=0.4.0
+#addin nuget:?package=Cake.Codecov&version=0.5.0
 #addin nuget:?package=Cake.Coveralls&version=0.9.0
 #addin nuget:?package=Cake.Figlet&version=1.2.0
 #addin nuget:?package=Cake.Git&version=0.19.0
