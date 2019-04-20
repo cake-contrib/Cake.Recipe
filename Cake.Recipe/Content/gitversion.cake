@@ -24,6 +24,10 @@ public class BuildVersion
 
         if (BuildParameters.ShouldRunGitVersion)
         {
+            if (context.IsRunningOnUnix()) {
+                PatchGitLibConfigFiles(context);
+            }
+
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
             {
@@ -91,5 +95,28 @@ public class BuildVersion
             InformationalVersion = informationalVersion,
             FullSemVersion = fullSemVersion
         };
+    }
+
+    private static void PatchGitLibConfigFiles(ICakeContext context)
+    {
+        var configFiles = context.GetFiles("./tools/**/LibGit2Sharp.dll.config");
+
+        foreach(var config in configFiles) {
+            var xml = System.Xml.Linq.XDocument.Load(config.ToString());
+
+            if (xml.Element("configuration").Elements("dllmap")
+                .All(e => e.Attribute("target").Value != "libgit2.so")) {
+
+                var dllName = xml.Element("configuration").Elements("dllmap").First(e => e.Attribute("os").Value == "linux").Attribute("dll").Value;
+                xml.Element("configuration")
+                    .Add(new System.Xml.Linq.XElement("dllmap",
+                        new System.Xml.Linq.XAttribute("os", "linux"),
+                        new System.Xml.Linq.XAttribute("dll", dllName),
+                        new System.Xml.Linq.XAttribute("target", "libgit2.so")));
+
+                context.Information($"Patching '{config}' to use fallback libgit2.so on Linux...");
+                xml.Save(config.ToString());
+            }
+        }
     }
 }
