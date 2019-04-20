@@ -17,7 +17,7 @@ private const string NUnitTool = "#tool nuget:?package=NUnit.ConsoleRunner&versi
 private const string OpenCoverTool = "#tool nuget:?package=OpenCover&version=4.6.519";
 private const string ReportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=3.1.2";
 private const string ReportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1";
-private const string FixieTool = "#tool nuget:?package=Fixie&version=1.0.2";
+private const string FixieTool = "#tool nuget:?package=Fixie&version=2.0.4";
 
 Action<string, Action> RequireTool = (tool, action) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
