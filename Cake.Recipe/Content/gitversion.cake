@@ -24,6 +24,10 @@ public class BuildVersion
 
         if (BuildParameters.ShouldRunGitVersion)
         {
+            if (context.IsRunningOnUnix()) {
+                PatchGitLibConfigFiles(context);
+            }
+
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
             {
@@ -91,5 +95,47 @@ public class BuildVersion
             InformationalVersion = informationalVersion,
             FullSemVersion = fullSemVersion
         };
+    }
+
+    private static void PatchGitLibConfigFiles(ICakeContext context)
+    {
+        var configFiles = context.GetFiles("./tools/**/LibGit2Sharp.dll.config");
+        var libgitPath = GetLibGit2Path(context);
+        if (string.IsNullOrEmpty(libgitPath)) { return; }
+
+        foreach(var config in configFiles) {
+            var xml = System.Xml.Linq.XDocument.Load(config.ToString());
+
+            if (xml.Element("configuration").Elements("dllmap")
+                .All(e => e.Attribute("target").Value != libgitPath)) {
+
+                var dllName = xml.Element("configuration").Elements("dllmap").First(e => e.Attribute("os").Value == "linux").Attribute("dll").Value;
+                xml.Element("configuration")
+                    .Add(new System.Xml.Linq.XElement("dllmap",
+                        new System.Xml.Linq.XAttribute("os", "linux"),
+                        new System.Xml.Linq.XAttribute("dll", dllName),
+                        new System.Xml.Linq.XAttribute("target", libgitPath)));
+
+                context.Information($"Patching '{config}' to use fallback system path on Linux...");
+                xml.Save(config.ToString());
+            }
+        }
+    }
+
+    private static string GetLibGit2Path(ICakeContext context)
+    {
+        var possiblePaths = new[] {
+            "/usr/lib*/libgit2.so*",
+            "/usr/lib/*/libgit2.so*"
+        };
+
+        foreach (var path in possiblePaths) {
+            var file = context.GetFiles(path).FirstOrDefault();
+            if (file != null && !string.IsNullOrEmpty(file.ToString())) {
+                return file.ToString();
+            }
+        }
+
+        return null;
     }
 }
