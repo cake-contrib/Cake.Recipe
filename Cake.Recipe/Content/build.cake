@@ -27,6 +27,13 @@ Setup<BuildData>(context =>
         );
     });
 
+    // TODO:
+    // Make this a const somewhere
+    if(BuildParameters.Version.CakeVersion != "0.32.1")
+    {
+        throw new Exception("boom!");
+    }
+
     Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake, and version {4} of Cake.Recipe. (IsTagged: {5})",
         BuildParameters.Version.SemVersion,
         BuildParameters.Configuration,
