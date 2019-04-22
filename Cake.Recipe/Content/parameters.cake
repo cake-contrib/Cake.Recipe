@@ -35,7 +35,7 @@ public static class BuildParameters
         {
             if(_gitterMessage == null)
             {
-                return "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+                return "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
             }
             else
             {
@@ -54,7 +54,7 @@ public static class BuildParameters
         {
             if(_microsoftTeamsMessage == null)
             {
-                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
             }
             else
             {
@@ -74,7 +74,7 @@ public static class BuildParameters
         {
             if(_twitterMessage == null)
             {
-                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, https://www.nuget.org/packages/" + Title + ".";
+                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
             }
             else
             {
