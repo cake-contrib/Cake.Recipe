@@ -2,11 +2,23 @@
 <package>
   <metadata>
     <id>Cake.Recipe</id>
-    <version>0.1.35</version>
+    <version>0.1.0</version>
     <authors>gep13</authors>
-    <owners>gep13</owners>
-    <description>Re-usable build script for Cake that can be used for numerous projects.</description>
+    <owners>gep13, cake-contrib</owners>
+    <summary>Opinionated set of scripts for use with Cake.</summary>
+    <description>
+This NuGet package contains a set of re-usable scripts that can be added to your build using the load preprocessor directive.  As a result, it is possible to use the same set of build scripts across multiple projects, without having to duplicate the scripts.  All that is required is a small recipe build script, which sets the project specific information.  More information can be found about this project on the documentation page here:
+
+https://cake-contrib.github.io/Cake.Recipe/docs/
+
+NOTE:  Currently, Cake.Recipe itself is built using 0.32.1, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 0.32.1 of Cake.  Currently, attempting to build your project using 0.33.0 will result in errors which come from Cake.Recipe.
+    </description>
+    <license type="expression">MIT</license>
+    <projectUrl>https://github.com/cake-contrib/Cake.Recipe/</projectUrl>
+    <repository type="git" url="https://github.com/cake-contrib/Cake.Recipe"/>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics@a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</iconUrl>
-    <tags>Default Build Cake</tags>
+    <copyright>Copyright (c) Cake Contributions 2016 - Present</copyright>
+    <tags>Cake, Build, Automation, Recipe</tags>
   </metadata>
 </package>

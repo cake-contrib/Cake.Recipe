@@ -3,6 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 var publishingError = false;
+var currentSupportedCakeVersionNumber = "0.32.1";
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -26,6 +27,13 @@ Setup<BuildData>(context =>
             )
         );
     });
+
+    Information(string.Format("Cake Version: {0}", BuildParameters.Version.CakeVersion);
+
+    if(BuildParameters.Version.CakeVersion != currentSupportedCakeVersionNumber)
+    {
+        throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", currentSupportedCakeVersionNumber));
+    }
 
     Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake, and version {4} of Cake.Recipe. (IsTagged: {5})",
         BuildParameters.Version.SemVersion,

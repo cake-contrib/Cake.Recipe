@@ -1,4 +1,5 @@
-#addin "nuget:https://api.nuget.org/v3/index.json?package=Cake.Git&Version=0.17.0"
+#addin nuget:?package=Cake.FileHelpers&version=3.2.0
+#addin nuget:?package=Cake.Git&version=0.19.0
 
 ////////////////////////////////////////////////////////
 /// Global variables
@@ -25,13 +26,13 @@ var testRepos                     = new [] {
                                           BuildScriptName = "recipe.cake"
                                       }
                                   };
+
 var package                       = GetFiles(
                                         string.Concat(
                                             recipePath,
                                             "/Cake.Recipe." + recipeVersion + ".nupkg"
                                         )
                                     ).FirstOrDefault();
-
 if (package == null)
 {
     throw new Exception("Failed to find Cake Recipe NuGet Package");
@@ -42,97 +43,109 @@ if (package == null)
 ////////////////////////////////////////////////////////
 
 Task("Clean")
-    .Does(() => {
-        if (DirectoryExists(testReposRootPath))
-        {
-            ForceDeleteDirectory(testReposRootPath.FullPath);
-        }
-        EnsureDirectoryExists(testReposRootPath);
+    .Does(() =>
+{
+    if (DirectoryExists(testReposRootPath))
+    {
+        ForceDeleteDirectory(testReposRootPath.FullPath);
+    }
+
+    EnsureDirectoryExists(testReposRootPath);
 });
 
 var cloneTask = Task("Clone-Repositories")
     .IsDependentOn("Clean")
-    .Does(() => {
-        Information("Clone complete.");
+    .Does(() =>
+{
+    Information("Clone complete.");
 });
 
-var unzipTask = Task("Unzip-Cake-Recipe")
+var updateFileTask = Task("Update-Repo-Cake-Recipe-File")
     .IsDependentOn("Clone-Repositories")
-    .Does(() => {
-        Information("Unzip Cake recipe done.");
+    .Does(() =>
+{
+    Information("Update Repo Cake.Recipe File done.");
 });
 
 var testsTask = Task("Tests")
-    .IsDependentOn("Unzip-Cake-Recipe")
-    .Does(() => {
-        if (exceptions.Any())
-        {
-            throw new AggregateException("Integration tests failed", exceptions);
-        }
-        Information("Tests complete.");
-});
+    .IsDependentOn("Update-Repo-Cake-Recipe-File")
+    .Does(() =>
+{
+    if (exceptions.Any())
+    {
+        throw new AggregateException("Integration tests failed", exceptions);
+    }
 
+    Information("Tests complete.");
+});
 
 ////////////////////////////////////////////////////////
 /// Dynamic tasks
 ////////////////////////////////////////////////////////
 
 Information("Setting up integration tests...");
+
 foreach(var testRepo in testRepos)
 {
     var url = testRepo.Url;
     var path = testRepo.Path;
-    var pkg = package;
-    var pkgName = pkg.GetFilename();
     var name = path.GetDirectoryName();
     var exs = exceptions;
 
     cloneTask.IsDependentOn(
         Task("Clone: " + name)
-            .Does(context => {
-                context.Information("Cloning {0}...", url);
-                context.GitClone(url, path);
+            .Does(context =>
+    {
+        context.Information("Cloning {0}...", url);
+        context.GitClone(url, path);
     }));
 
-    unzipTask.IsDependentOn(
-        Task("Unzip: " + name)
-            .Does(context => {
-                var testReposRecipePath = path.Combine("tools").Combine("Cake.Recipe");
-                context.Information("Unzipping nuget {0} to {1}...", pkgName, testReposRecipePath);
-                context.EnsureDirectoryExists(testReposRecipePath);
-                context.Unzip(pkg, testReposRecipePath);
+    updateFileTask.IsDependentOn(
+        Task("Update file for: " + name)
+            .Does(context =>
+    {
+        // Here we want to search the entry cake file for the load preprocessor directive that is loading Cake.Recipe
+        // i.e. change this #load nuget:?package=Cake.Recipe&prerelease
+        // #load nuget:file://<path_to_where_newly_generated_nupkg_lives>?package=Cake.Recipe&prerelease
+
+        ReplaceRegexInFiles(
+            path.CombineWithFilePath(testRepo.BuildScriptName).FullPath,
+            @"\s*#l(oad)?.*Cake\.Recipe.*",
+            string.Format("#load nuget:file://{0}?package=Cake.Recipe&prerelease", recipePath));
     }));
 
     testsTask.IsDependentOn(
         Task("Tests: " + name)
-            .Does(context => {
-                try
-                {
-                    var setupCakePath = path.CombineWithFilePath(testRepo.BuildScriptName);
-                    context.Information("Testing {0}...", setupCakePath);
-                    context.CakeExecuteScript(setupCakePath,
-                            new CakeSettings {
-                                Arguments = new Dictionary<string, string>{
-                                    { "verbosity", context.Log.Verbosity.ToString("F") }
-                        }});
-                }
-                catch(Exception ex)
-                {
-                    Error("{0}: {1}", name, ex);
-                    exs.Add(new Exception(
-                            testRepo.Url,
-                            ex
-                        ));
-                }
+            .Does(context =>
+    {
+        try
+        {
+            var setupCakePath = path.CombineWithFilePath(testRepo.BuildScriptName);
+            context.Information("Testing {0}...", setupCakePath);
+            context.CakeExecuteScript(setupCakePath,
+                    new CakeSettings {
+                        Arguments = new Dictionary<string, string>{
+                            { "verbosity", context.Log.Verbosity.ToString("F") }
+                }});
+        }
+        catch(Exception ex)
+        {
+            Error("{0}: {1}", name, ex);
+            exs.Add(new Exception(
+                    testRepo.Url,
+                    ex
+                ));
+        }
     }));
 }
 
-Setup(context => {
+Setup(context =>
+{
     Information("Starting integration tests...");
 });
 
-Teardown(context => {
-
+Teardown(context =>
+{
 });
 
 RunTarget("Tests");
