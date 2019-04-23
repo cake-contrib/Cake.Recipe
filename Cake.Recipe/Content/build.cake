@@ -28,7 +28,7 @@ Setup<BuildData>(context =>
         );
     });
 
-    Information(string.Format("Cake Version: {0}", BuildParameters.Version.CakeVersion);
+    Information(string.Format("Cake Version: {0}", BuildParameters.Version.CakeVersion));
 
     if(BuildParameters.Version.CakeVersion != currentSupportedCakeVersionNumber)
     {
