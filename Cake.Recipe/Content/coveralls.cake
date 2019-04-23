@@ -2,16 +2,27 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Upload-Coverage-Report")
-    .WithCriteria(() => FileExists(parameters.Paths.Files.TestCoverageOutputFilePath))
-    .WithCriteria(() => !parameters.IsLocalBuild)
-    .WithCriteria(() => !parameters.IsPullRequest)
-    .WithCriteria(() => parameters.IsMainRepository)
-    .IsDependentOn("Test")
-    .Does(() =>
+BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report")
+    .WithCriteria(() => FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
+    .WithCriteria(() => !BuildParameters.IsLocalBuild)
+    .WithCriteria(() => !BuildParameters.IsPullRequest)
+    .WithCriteria(() => BuildParameters.IsMainRepository)
+    .Does(() => RequireTool(CoverallsTool, () => {
+        if(BuildParameters.CanPublishToCoveralls)
+        {
+            CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+            {
+                RepoToken = BuildParameters.Coveralls.RepoToken
+            });
+        }
+        else
+        {
+            Warning("Unable to publish to Coveralls, as necessary credentials are not available");
+        }
+    })
+).OnError (exception =>
 {
-    CoverallsIo(parameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
-    {
-        RepoToken = parameters.Coveralls.RepoToken
-    });
+    Error(exception.Message);
+    Information("Upload-Coveralls-Report Task failed, but continuing with next Task...");
+    publishingError = true;
 });

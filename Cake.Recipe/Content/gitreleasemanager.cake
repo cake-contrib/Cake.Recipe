@@ -2,46 +2,91 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Create-Release-Notes")
-    .Does(() =>
-{
-    GitReleaseManagerCreate(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, new GitReleaseManagerCreateSettings {
-        Milestone         = parameters.Version.Milestone,
-        Name              = parameters.Version.Milestone,
-        Prerelease        = true,
-        TargetCommitish   = "master"
-    });
-});
+BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
+    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+        if(BuildParameters.CanUseGitReleaseManager)
+        {
+            GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, new GitReleaseManagerCreateSettings {
+                Milestone         = BuildParameters.Version.Milestone,
+                Name              = BuildParameters.Version.Milestone,
+                TargetCommitish   = BuildParameters.MasterBranchName,
+                Prerelease        = false
+            });
+        }
+        else
+        {
+            Warning("Unable to use GitReleaseManager, as necessary credentials are not available");
+        }
+    })
+);
 
-Task("Publish-GitHub-Release")
+BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
+    .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes)
+    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease)
+    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+        if(BuildParameters.CanUseGitReleaseManager)
+        {
+            if(BuildParameters.ShouldDownloadMilestoneReleaseNotes)
+            {
+                GitReleaseManagerExport(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.MilestoneReleaseNotesFilePath, new GitReleaseManagerExportSettings {
+                    TagName         = BuildParameters.Version.Milestone
+                });
+            }
+
+            if(BuildParameters.ShouldDownloadFullReleaseNotes)
+            {
+                GitReleaseManagerExport(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.FullReleaseNotesFilePath);
+            }
+        }
+        else
+        {
+            Warning("Unable to use GitReleaseManager, as necessary credentials are not available");
+        }
+    })
+);
+
+BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
-    .WithCriteria(() => !parameters.IsLocalBuild)
-    .WithCriteria(() => !parameters.IsPullRequest)
-    .WithCriteria(() => parameters.IsMainRepository)
-    .WithCriteria(() => parameters.IsMasterBranch)
-    .WithCriteria(() => parameters.IsTagged)
-    .Does(() =>
-{
-    if(DirectoryExists(parameters.Paths.Directories.NuGetPackages))
-    {
-        foreach(var package in GetFiles(parameters.Paths.Directories.NuGetPackages + "/*"))
+    .WithCriteria(() => BuildParameters.ShouldPublishGitHub)
+    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+        if(BuildParameters.CanUseGitReleaseManager)
         {
-            GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, parameters.Version.Milestone, package.ToString());
-        }
-    }
+            // Concatenating FilePathCollections should make sure we get unique FilePaths
+            foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+                                   GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
+                                   GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
+            {
+                GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
+            }
 
-    if(DirectoryExists(parameters.Paths.Directories.ChocolateyPackages))
-    {
-        foreach(var package in GetFiles(parameters.Paths.Directories.ChocolateyPackages + "/*"))
+            GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone);
+        }
+        else
         {
-            GitReleaseManagerAddAssets(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, parameters.Version.Milestone, package.ToString());
+            Warning("Unable to use GitReleaseManager, as necessary credentials are not available");
         }
-    }
-
-    GitReleaseManagerClose(parameters.GitHub.UserName, parameters.GitHub.Password, repositoryOwner, repositoryName, parameters.Version.Milestone);
-})
+    })
+)
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-GitHub-Release Task failed, but continuing with next Task...");
     publishingError = true;
 });
+
+BuildParameters.Tasks.CreateDefaultLabelsTask = Task("Create-Default-Labels")
+    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+        if(BuildParameters.CanUseGitReleaseManager)
+        {
+            GitReleaseManagerLabel(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
+        }
+        else
+        {
+            Warning("Unable to use GitReleaseManager, as necessary credentials are not available");
+        }
+    })
+);

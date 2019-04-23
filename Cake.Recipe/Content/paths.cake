@@ -3,9 +3,7 @@ public class BuildPaths
     public BuildFiles Files { get; private set; }
     public BuildDirectories Directories { get; private set; }
 
-    public static BuildPaths GetPaths(DirectoryPath sourceDirectoryPath,
-        ICakeContext context
-        )
+    public static BuildPaths GetPaths(ICakeContext context)
     {
         if (context == null)
         {
@@ -16,11 +14,14 @@ public class BuildPaths
         var buildDirectoryPath             = "./BuildArtifacts";
         var tempBuildDirectoryPath         = buildDirectoryPath + "/temp";
         var publishedNUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedNUnitTests";
-        var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";
+        var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";        
         var publishedMSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedMSTestTests";
+        var publishedVSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedVSTestTests";
+        var publishedFixieTestsDirectory   = tempBuildDirectoryPath + "/_PublishedFixieTests";
         var publishedWebsitesDirectory     = tempBuildDirectoryPath + "/_PublishedWebsites";
         var publishedApplicationsDirectory = tempBuildDirectoryPath + "/_PublishedApplications";
         var publishedLibrariesDirectory    = tempBuildDirectoryPath + "/_PublishedLibraries";
+        var publishedDocumentationDirectory= buildDirectoryPath + "/Documentation";
 
         var nugetNuspecDirectory = "./nuspec/nuget";
         var chocolateyNuspecDirectory = "./nuspec/chocolatey";
@@ -31,15 +32,19 @@ public class BuildPaths
         var NUnitTestResultsDirectory = testResultsDirectory + "/NUnit";
         var xUnitTestResultsDirectory = testResultsDirectory + "/xUnit";
         var MSTestTestResultsDirectory = testResultsDirectory + "/MSTest";
+        var VSTestTestResultsDirectory = testResultsDirectory + "/VSTest";
+        var FixieTestResultsDirectory = testResultsDirectory + "/Fixie";
 
         var testCoverageDirectory = buildDirectoryPath + "/TestCoverage";
 
-        var nuGetPackagesOutputDirectory = buildDirectoryPath + "/Packages/NuGet";
-        var chocolateyPackagesOutputDirectory = buildDirectoryPath + "/Packages/Chocolatey";
+        var packagesDirectory = buildDirectoryPath + "/Packages";
+        var nuGetPackagesOutputDirectory = packagesDirectory + "/NuGet";
+        var chocolateyPackagesOutputDirectory = packagesDirectory + "/Chocolatey";
 
         // Files
         var testCoverageOutputFilePath = ((DirectoryPath)testCoverageDirectory).CombineWithFilePath("OpenCover.xml");
-        var solutionInfoFilePath = ((DirectoryPath)sourceDirectoryPath).CombineWithFilePath("SolutionInfo.cs");
+        var solutionInfoFilePath = ((DirectoryPath)BuildParameters.SourceDirectoryPath).CombineWithFilePath("SolutionInfo.cs");
+        var buildLogFilePath = ((DirectoryPath)buildDirectoryPath).CombineWithFilePath("MsBuild.log");
 
         var repoFilesPaths = new FilePath[] {
             "LICENSE",
@@ -47,15 +52,17 @@ public class BuildPaths
         };
 
         var buildDirectories = new BuildDirectories(
-            sourceDirectoryPath,
             buildDirectoryPath,
             tempBuildDirectoryPath,
             publishedNUnitTestsDirectory,
             publishedxUnitTestsDirectory,
             publishedMSTestTestsDirectory,
+            publishedVSTestTestsDirectory,
+            publishedFixieTestsDirectory,
             publishedWebsitesDirectory,
             publishedApplicationsDirectory,
             publishedLibrariesDirectory,
+            publishedDocumentationDirectory,
             nugetNuspecDirectory,
             chocolateyNuspecDirectory,
             testResultsDirectory,
@@ -64,16 +71,20 @@ public class BuildPaths
             NUnitTestResultsDirectory,
             xUnitTestResultsDirectory,
             MSTestTestResultsDirectory,
+            VSTestTestResultsDirectory,
+            FixieTestResultsDirectory,
             testCoverageDirectory,
             nuGetPackagesOutputDirectory,
-            chocolateyPackagesOutputDirectory
+            chocolateyPackagesOutputDirectory,
+            packagesDirectory
             );
 
         var buildFiles = new BuildFiles(
             context,
             repoFilesPaths,
             testCoverageOutputFilePath,
-            solutionInfoFilePath
+            solutionInfoFilePath,
+            buildLogFilePath
             );
 
         return new BuildPaths
@@ -92,16 +103,20 @@ public class BuildFiles
 
     public FilePath SolutionInfoFilePath { get; private set; }
 
+    public FilePath BuildLogFilePath { get; private set; }
+
     public BuildFiles(
         ICakeContext context,
         FilePath[] repoFilesPaths,
         FilePath testCoverageOutputFilePath,
-        FilePath solutionInfoFilePath
+        FilePath solutionInfoFilePath,
+        FilePath buildLogFilePath
         )
     {
         RepoFilesPaths = Filter(context, repoFilesPaths);
         TestCoverageOutputFilePath = testCoverageOutputFilePath;
         SolutionInfoFilePath = solutionInfoFilePath;
+        BuildLogFilePath = buildLogFilePath;
     }
 
     private static FilePath[] Filter(ICakeContext context, FilePath[] files)
@@ -120,15 +135,17 @@ public class BuildFiles
 
 public class BuildDirectories
 {
-    public DirectoryPath Source { get; private set; }
     public DirectoryPath Build { get; private set; }
     public DirectoryPath TempBuild { get; private set; }
     public DirectoryPath PublishedNUnitTests { get; private set; }
     public DirectoryPath PublishedxUnitTests { get; private set; }
     public DirectoryPath PublishedMSTestTests { get; private set; }
+    public DirectoryPath PublishedVSTestTests { get; private set; }
+    public DirectoryPath PublishedFixieTests { get; private set; }
     public DirectoryPath PublishedWebsites { get; private set; }
     public DirectoryPath PublishedApplications { get; private set; }
     public DirectoryPath PublishedLibraries { get; private set; }
+    public DirectoryPath PublishedDocumentation { get; private set; }
     public DirectoryPath NugetNuspecDirectory { get; private set; }
     public DirectoryPath ChocolateyNuspecDirectory { get; private set; }
     public DirectoryPath TestResults { get; private set; }
@@ -137,21 +154,26 @@ public class BuildDirectories
     public DirectoryPath NUnitTestResults { get; private set; }
     public DirectoryPath xUnitTestResults { get; private set; }
     public DirectoryPath MSTestTestResults { get; private set; }
+    public DirectoryPath VSTestTestResults { get; private set; }
+    public DirectoryPath FixieTestResults { get; private set; }
     public DirectoryPath TestCoverage { get; private set; }
     public DirectoryPath NuGetPackages { get; private set; }
     public DirectoryPath ChocolateyPackages { get; private set; }
+    public DirectoryPath Packages { get; private set; }
     public ICollection<DirectoryPath> ToClean { get; private set; }
 
     public BuildDirectories(
-        DirectoryPath source,
         DirectoryPath build,
         DirectoryPath tempBuild,
         DirectoryPath publishedNUnitTests,
         DirectoryPath publishedxUnitTests,
         DirectoryPath publishedMSTestTests,
+        DirectoryPath publishedVSTestTests,
+        DirectoryPath publishedFixieTests,
         DirectoryPath publishedWebsites,
         DirectoryPath publishedApplications,
         DirectoryPath publishedLibraries,
+        DirectoryPath publishedDocumentation,
         DirectoryPath nugetNuspecDirectory,
         DirectoryPath chocolateyNuspecDirectory,
         DirectoryPath testResults,
@@ -160,20 +182,25 @@ public class BuildDirectories
         DirectoryPath nunitTestResults,
         DirectoryPath xunitTestResults,
         DirectoryPath msTestTestResults,
+        DirectoryPath vsTestTestResults,
+        DirectoryPath fixieTestResults,
         DirectoryPath testCoverage,
         DirectoryPath nuGetPackages,
-        DirectoryPath chocolateyPackages
+        DirectoryPath chocolateyPackages,
+        DirectoryPath packages
         )
     {
-        Source = source;
         Build = build;
         TempBuild = tempBuild;
         PublishedNUnitTests = publishedNUnitTests;
         PublishedxUnitTests = publishedxUnitTests;
         PublishedMSTestTests = publishedMSTestTests;
+        PublishedVSTestTests = publishedVSTestTests;
+        PublishedFixieTests = publishedFixieTests;
         PublishedWebsites = publishedWebsites;
         PublishedApplications = publishedApplications;
         PublishedLibraries = publishedLibraries;
+        PublishedDocumentation = publishedDocumentation;
         NugetNuspecDirectory = nugetNuspecDirectory;
         ChocolateyNuspecDirectory = chocolateyNuspecDirectory;
         TestResults = testResults;
@@ -182,9 +209,12 @@ public class BuildDirectories
         NUnitTestResults = nunitTestResults;
         xUnitTestResults = xunitTestResults;
         MSTestTestResults = msTestTestResults;
+        VSTestTestResults = vsTestTestResults;
+        FixieTestResults = fixieTestResults;
         TestCoverage = testCoverage;
         NuGetPackages = nuGetPackages;
         ChocolateyPackages = chocolateyPackages;
+        Packages = packages;
 
         ToClean = new[] {
             Build,

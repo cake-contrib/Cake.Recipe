@@ -2,23 +2,15 @@
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToGitterRoom(string message)
+public void SendMessageToGitterRoom()
 {
     try
     {
         Information("Sending message to Gitter...");
 
-        if(string.IsNullOrEmpty(parameters.Gitter.Token)) {
-            throw new InvalidOperationException("Could not resolve Gitter Token.");
-        }
-
-        if(string.IsNullOrEmpty(parameters.Gitter.RoomId)) {
-            throw new InvalidOperationException("Could not resolve Gitter Room Id.");
-        }
-
         var postMessageResult = Gitter.Chat.PostMessage(
-                    message: message,
-                    messageSettings: new GitterChatMessageSettings { Token = parameters.Gitter.Token, RoomId = parameters.Gitter.RoomId}
+                    message: BuildParameters.GitterMessage,
+                    messageSettings: new GitterChatMessageSettings { Token = BuildParameters.Gitter.Token, RoomId = BuildParameters.Gitter.RoomId}
             );
 
         if (postMessageResult.Ok)

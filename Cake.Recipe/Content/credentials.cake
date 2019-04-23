@@ -10,6 +10,16 @@ public class GitHubCredentials
     }
 }
 
+public class MicrosoftTeamsCredentials
+{
+    public string WebHookUrl { get; private set;}
+
+    public MicrosoftTeamsCredentials(string webHookUrl)
+    {
+        WebHookUrl = webHookUrl;
+    }
+}
+
 public class GitterCredentials
 {
     public string Token { get; private set; }
@@ -96,6 +106,12 @@ public class AppVeyorCredentials
     }
 }
 
+public class CodecovCredentials : CoverallsCredentials
+{
+    public CodecovCredentials(string repoToken)
+        : base(repoToken) { }
+}
+
 public class CoverallsCredentials
 {
     public string RepoToken { get; private set; }
@@ -106,65 +122,119 @@ public class CoverallsCredentials
     }
 }
 
+public class TransifexCredentials : AppVeyorCredentials
+{
+    public bool HasCredentials
+    {
+        get { return !string.IsNullOrEmpty(ApiToken); }
+    }
+
+    public TransifexCredentials(string apiToken)
+        : base(apiToken)
+    {
+    }
+}
+
+public class WyamCredentials
+{
+    public string AccessToken { get; private set; }
+    public string DeployRemote { get; private set; }
+    public string DeployBranch { get; private set; }
+
+    public WyamCredentials(string accessToken, string deployRemote, string deployBranch)
+    {
+        AccessToken = accessToken;
+        DeployRemote = deployRemote;
+        DeployBranch = deployBranch;
+    }
+}
+
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
     return new GitHubCredentials(
-        context.EnvironmentVariable(githubUserNameVariable),
-        context.EnvironmentVariable(githubPasswordVariable));
+        context.EnvironmentVariable(Environment.GithubUserNameVariable),
+        context.EnvironmentVariable(Environment.GithubPasswordVariable));
+}
+
+public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
+{
+    return new MicrosoftTeamsCredentials(
+        context.EnvironmentVariable(Environment.MicrosoftTeamsWebHookUrlVariable));
 }
 
 public static GitterCredentials GetGitterCredentials(ICakeContext context)
 {
     return new GitterCredentials(
-        context.EnvironmentVariable(gitterTokenVariable),
-        context.EnvironmentVariable(gitterRoomIdVariable));
+        context.EnvironmentVariable(Environment.GitterTokenVariable),
+        context.EnvironmentVariable(Environment.GitterRoomIdVariable));
 }
 
 public static SlackCredentials GetSlackCredentials(ICakeContext context)
 {
     return new SlackCredentials(
-        context.EnvironmentVariable(slackTokenVariable),
-        context.EnvironmentVariable(slackChannelVariable));
+        context.EnvironmentVariable(Environment.SlackTokenVariable),
+        context.EnvironmentVariable(Environment.SlackChannelVariable));
 }
 
 public static TwitterCredentials GetTwitterCredentials(ICakeContext context)
 {
     return new TwitterCredentials(
-        context.EnvironmentVariable(twitterConsumerKeyVariable),
-        context.EnvironmentVariable(twitterConsumerSecretVariable),
-        context.EnvironmentVariable(twitterAccessTokenVariable),
-        context.EnvironmentVariable(twitterAccessTokenSecretVariable));
+        context.EnvironmentVariable(Environment.TwitterConsumerKeyVariable),
+        context.EnvironmentVariable(Environment.TwitterConsumerSecretVariable),
+        context.EnvironmentVariable(Environment.TwitterAccessTokenVariable),
+        context.EnvironmentVariable(Environment.TwitterAccessTokenSecretVariable));
 }
 
 public static MyGetCredentials GetMyGetCredentials(ICakeContext context)
 {
     return new MyGetCredentials(
-        context.EnvironmentVariable(myGetApiKeyVariable),
-        context.EnvironmentVariable(myGetSourceUrlVariable));
+        context.EnvironmentVariable(Environment.MyGetApiKeyVariable),
+        context.EnvironmentVariable(Environment.MyGetSourceUrlVariable));
 }
 
 public static NuGetCredentials GetNuGetCredentials(ICakeContext context)
 {
     return new NuGetCredentials(
-        context.EnvironmentVariable(nuGetApiKeyVariable),
-        context.EnvironmentVariable(nuGetSourceUrlVariable));
+        context.EnvironmentVariable(Environment.NuGetApiKeyVariable),
+        context.EnvironmentVariable(Environment.NuGetSourceUrlVariable));
 }
 
 public static ChocolateyCredentials GetChocolateyCredentials(ICakeContext context)
 {
     return new ChocolateyCredentials(
-        context.EnvironmentVariable(chocolateyApiKeyVariable),
-        context.EnvironmentVariable(chocolateySourceUrlVariable));
+        context.EnvironmentVariable(Environment.ChocolateyApiKeyVariable),
+        context.EnvironmentVariable(Environment.ChocolateySourceUrlVariable));
 }
 
 public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)
 {
     return new AppVeyorCredentials(
-        context.EnvironmentVariable(appVeyorApiTokenVariable));
+        context.EnvironmentVariable(Environment.AppVeyorApiTokenVariable));
+}
+
+public static CodecovCredentials GetCodecovCredentials(ICakeContext context)
+{
+    return new CodecovCredentials(
+        context.EnvironmentVariable(Environment.CodecovRepoTokenVariable));
 }
 
 public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)
 {
     return new CoverallsCredentials(
-        context.EnvironmentVariable(coverallsRepoTokenVariable));
+        context.EnvironmentVariable(Environment.CoverallsRepoTokenVariable));
+}
+
+public static TransifexCredentials GetTransifexCredentials(ICakeContext context)
+{
+    return new TransifexCredentials(
+        context.EnvironmentVariable(Environment.TransifexApiTokenVariable)
+    );
+}
+
+public static WyamCredentials GetWyamCredentials(ICakeContext context)
+{
+    return new WyamCredentials(
+        context.EnvironmentVariable(Environment.WyamAccessTokenVariable),
+        context.EnvironmentVariable(Environment.WyamDeployRemoteVariable),
+        context.EnvironmentVariable(Environment.WyamDeployBranchVariable));
 }

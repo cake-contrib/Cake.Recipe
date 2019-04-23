@@ -1,24 +1,90 @@
-Task("Create-NuGet-Packages")
-    .IsDependentOn("Build")
-    .WithCriteria(() => DirectoryExists(parameters.Paths.Directories.NugetNuspecDirectory))
+BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
+    .IsDependentOn("DotNetCore-Build")
+    .WithCriteria(() => BuildParameters.ShouldRunDotNetCorePack)
     .Does(() =>
 {
-    var nuspecFiles = GetFiles(parameters.Paths.Directories.NugetNuspecDirectory + "/**/*.nuspec");
+    var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
+        - GetFiles(BuildParameters.RootDirectoryPath + "/tools/**/*.csproj")
+        - GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.Tests.csproj")
+        - GetFiles(BuildParameters.SourceDirectoryPath + "/packages/**/*.csproj");
 
-    EnsureDirectoryExists(parameters.Paths.Directories.NuGetPackages);
+    var msBuildSettings = new DotNetCoreMSBuildSettings()
+                            .WithProperty("Version", BuildParameters.Version.SemVersion)
+                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
+                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
+                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+
+    if(!IsRunningOnWindows())
+    {
+        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+
+        // Use FrameworkPathOverride when not running on Windows.
+        Information("Pack will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
+        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+    }
+
+    var settings = new DotNetCorePackSettings {
+        NoBuild = true,
+        Configuration = BuildParameters.Configuration,
+        OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+        MSBuildSettings = msBuildSettings,
+        ArgumentCustomization = (args) => {
+            if (BuildParameters.ShouldBuildNugetSourcePackage)
+            {
+                args.Append("--include-source");
+            }
+            return args;
+        }
+    };
+
+    foreach (var project in projects)
+    {
+        DotNetCorePack(project.ToString(), settings);
+    }
+});
+
+BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
+    .IsDependentOn("Clean")
+    .Does(() =>
+{
+    if(BuildParameters.NuSpecFilePath != null) {
+        EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
+
+        // Create packages.
+        NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
+            Version = BuildParameters.Version.SemVersion,
+            OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+            Symbols = false,
+            NoPackageAnalysis = true
+        });
+    }
+    else
+    {
+        throw new Exception("NuSpecFilePath has not been set");
+    }
+});
+
+BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
+    .IsDependentOn("Clean")
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NugetNuspecDirectory))
+    .Does(() =>
+{
+    var nuspecFiles = GetFiles(BuildParameters.Paths.Directories.NugetNuspecDirectory + "/**/*.nuspec");
+
+    EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
     foreach(var nuspecFile in nuspecFiles)
     {
         // TODO: Addin the release notes
-        // ReleaseNotes = parameters.ReleaseNotes.Notes.ToArray(),
+        // ReleaseNotes = BuildParameters.ReleaseNotes.Notes.ToArray(),
 
-        if(DirectoryExists(parameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
+        if(DirectoryExists(BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
         {
             // Create packages.
             NuGetPack(nuspecFile, new NuGetPackSettings {
-                Version = parameters.Version.SemVersion,
-                BasePath = parameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString()),
-                OutputDirectory = parameters.Paths.Directories.NuGetPackages,
+                Version = BuildParameters.Version.SemVersion,
+                BasePath = BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString()),
+                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
                 Symbols = false,
                 NoPackageAnalysis = true
             });
@@ -26,13 +92,13 @@ Task("Create-NuGet-Packages")
             continue;
         }
 
-        if(DirectoryExists(parameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
+        if(DirectoryExists(BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
         {
             // Create packages.
             NuGetPack(nuspecFile, new NuGetPackSettings {
-                Version = parameters.Version.SemVersion,
-                BasePath = parameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString()),
-                OutputDirectory = parameters.Paths.Directories.NuGetPackages,
+                Version = BuildParameters.Version.SemVersion,
+                BasePath = BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString()),
+                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
                 Symbols = false,
                 NoPackageAnalysis = true
             });
@@ -42,90 +108,83 @@ Task("Create-NuGet-Packages")
 
             // Create packages.
             NuGetPack(nuspecFile, new NuGetPackSettings {
-                Version = parameters.Version.SemVersion,
-                OutputDirectory = parameters.Paths.Directories.NuGetPackages,
+                Version = BuildParameters.Version.SemVersion,
+                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
                 Symbols = false,
                 NoPackageAnalysis = true
             });
     }
 });
 
-Task("Publish-MyGet-Packages")
+BuildParameters.Tasks.PublishMyGetPackagesTask = Task("Publish-MyGet-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(() => !parameters.IsLocalBuild)
-    .WithCriteria(() => !parameters.IsPullRequest)
-    .WithCriteria(() => parameters.IsMainRepository)
-    .WithCriteria(() => parameters.IsTagged || !parameters.IsMasterBranch)
-    .WithCriteria(() => DirectoryExists(parameters.Paths.Directories.NuGetPackages) || DirectoryExists(parameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => BuildParameters.ShouldPublishMyGet)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
-    if(string.IsNullOrEmpty(parameters.MyGet.ApiKey)) {
-        throw new InvalidOperationException("Could not resolve MyGet API key.");
-    }
-
-    if(string.IsNullOrEmpty(parameters.MyGet.SourceUrl)) {
-        throw new InvalidOperationException("Could not resolve MyGet API url.");
-    }
-
-    var nupkgFiles = GetFiles(parameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    if(BuildParameters.CanPublishToMyGet)
     {
-        // Push the package.
-        NuGetPush(nupkgFile, new NuGetPushSettings {
-            Source = parameters.MyGet.SourceUrl,
-            ApiKey = parameters.MyGet.ApiKey
-        });
+        var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            NuGetPush(nupkgFile, new NuGetPushSettings {
+                Source = BuildParameters.MyGet.SourceUrl,
+                ApiKey = BuildParameters.MyGet.ApiKey
+            });
+        }
+
+        nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            NuGetPush(nupkgFile, new NuGetPushSettings {
+                Source = BuildParameters.MyGet.SourceUrl,
+                ApiKey = BuildParameters.MyGet.ApiKey
+            });
+        }
     }
-
-    nupkgFiles = GetFiles(parameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    else
     {
-        // Push the package.
-        NuGetPush(nupkgFile, new NuGetPushSettings {
-            Source = parameters.MyGet.SourceUrl,
-            ApiKey = parameters.MyGet.ApiKey
-        });
+        Warning("Unable to publish to MyGet, as necessary credentials are not available");
     }
 })
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-MyGet-Packages Task failed, but continuing with next Task...");
     publishingError = true;
 });
 
-Task("Publish-Nuget-Packages")
+BuildParameters.Tasks.PublishNuGetPackagesTask = Task("Publish-Nuget-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(() => !parameters.IsLocalBuild)
-    .WithCriteria(() => !parameters.IsPullRequest)
-    .WithCriteria(() => parameters.IsMainRepository)
-    .WithCriteria(() => parameters.IsMasterBranch)
-    .WithCriteria(() => parameters.IsTagged)
-    .WithCriteria(() => DirectoryExists(parameters.Paths.Directories.NuGetPackages))
+    .WithCriteria(() => BuildParameters.ShouldPublishNuGet)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
     .Does(() =>
 {
-    if(string.IsNullOrEmpty(parameters.NuGet.ApiKey)) {
-        throw new InvalidOperationException("Could not resolve NuGet API key.");
-    }
-
-    if(string.IsNullOrEmpty(parameters.NuGet.SourceUrl)) {
-        throw new InvalidOperationException("Could not resolve NuGet API url.");
-    }
-
-    var nupkgFiles = GetFiles(parameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
-
-    foreach(var nupkgFile in nupkgFiles)
+    if(BuildParameters.CanPublishToNuGet)
     {
-        // Push the package.
-        NuGetPush(nupkgFile, new NuGetPushSettings {
-            Source = parameters.NuGet.SourceUrl,
-            ApiKey = parameters.NuGet.ApiKey
-        });
+        var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
+
+        foreach(var nupkgFile in nupkgFiles)
+        {
+            // Push the package.
+            NuGetPush(nupkgFile, new NuGetPushSettings {
+                Source = BuildParameters.NuGet.SourceUrl,
+                ApiKey = BuildParameters.NuGet.ApiKey
+            });
+        }
+    }
+    else
+    {
+        Warning("Unable to publish to NuGet, as necessary credentials are not available");
     }
 })
 .OnError(exception =>
 {
+    Error(exception.Message);
     Information("Publish-Nuget-Packages Task failed, but continuing with next Task...");
     publishingError = true;
 });

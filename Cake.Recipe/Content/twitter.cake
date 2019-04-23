@@ -2,29 +2,17 @@
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToTwitter(string message)
+public void SendMessageToTwitter()
 {
     try
     {
         Information("Sending message to Twitter...");
 
-        if(string.IsNullOrEmpty(parameters.Twitter.ConsumerKey)) {
-            throw new InvalidOperationException("Could not resolve Twitter ConsumerKey.");
-        }
-
-        if(string.IsNullOrEmpty(parameters.Twitter.ConsumerSecret)) {
-            throw new InvalidOperationException("Could not resolve Twitter ConsumerSecret.");
-        }
-
-        if(string.IsNullOrEmpty(parameters.Twitter.AccessToken)) {
-            throw new InvalidOperationException("Could not resolve Twitter AccessToken.");
-        }
-
-        if(string.IsNullOrEmpty(parameters.Twitter.AccessTokenSecret)) {
-            throw new InvalidOperationException("Could not resolve Twitter AccessTokenSecret.");
-        }
-
-        TwitterSendTweet(parameters.Twitter.ConsumerKey, parameters.Twitter.ConsumerSecret, parameters.Twitter.AccessToken, parameters.Twitter.AccessTokenSecret, message);
+        TwitterSendTweet(BuildParameters.Twitter.ConsumerKey,
+                         BuildParameters.Twitter.ConsumerSecret,
+                         BuildParameters.Twitter.AccessToken,
+                         BuildParameters.Twitter.AccessTokenSecret,
+                         BuildParameters.TwitterMessage);
 
         Information("Message succcessfully sent.");
     }

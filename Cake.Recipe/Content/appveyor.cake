@@ -2,8 +2,8 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-Task("Print-AppVeyor-Environment-Variables")
-    .WithCriteria(AppVeyor.IsRunningOnAppVeyor)
+BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVeyor-Environment-Variables")
+    .WithCriteria(() => AppVeyor.IsRunningOnAppVeyor)
     .Does(() =>
 {
     Information("CI: {0}", EnvironmentVariable("CI"));
@@ -34,25 +34,98 @@ Task("Print-AppVeyor-Environment-Variables")
     Information("CONFIGURATION: {0}", EnvironmentVariable("CONFIGURATION"));
 });
 
-Task("Upload-AppVeyor-Artifacts")
+BuildParameters.Tasks.UploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
-    .WithCriteria(() => parameters.IsRunningOnAppVeyor)
-    .WithCriteria(() => DirectoryExists(parameters.Paths.Directories.NuGetPackages) || DirectoryExists(parameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     .Does(() =>
 {
-    foreach(var package in GetFiles(parameters.Paths.Directories.NuGetPackages + "/*"))
-    {
-        AppVeyor.UploadArtifact(package);
-    }
-
-    foreach(var package in GetFiles(parameters.Paths.Directories.ChocolateyPackages + "/*"))
+    // Concatenating FilePathCollections should make sure we get unique FilePaths
+    foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+                           GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
+                           GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
     {
         AppVeyor.UploadArtifact(package);
     }
 });
 
-Task("Clear-AppVeyor-Cache")
+BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
+        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=3.0.0&loaddependencies=true
+        AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
+            EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
+            EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
+        ",
+        new Dictionary<string, string> {{"TEMP_APPVEYOR_TOKEN", BuildParameters.AppVeyor.ApiToken},
+            {"TEMP_APPVEYOR_ACCOUNT_NAME", BuildParameters.AppVeyorAccountName},
+            {"TEMP_APPVEYOR_PROJECT_SLUG", BuildParameters.AppVeyorProjectSlug}}
+));
+
+///////////////////////////////////////////////////////////////////////////////
+// BUILD PROVIDER
+///////////////////////////////////////////////////////////////////////////////
+
+public class AppVeyorTagInfo : ITagInfo
 {
-    AppVeyorClearCache(new AppVeyorSettings() { ApiToken = parameters.AppVeyor.ApiToken }, appVeyorAccountName, appVeyorProjectSlug);
-});
+    public AppVeyorTagInfo(IAppVeyorProvider appVeyor)
+    {
+        IsTag = appVeyor.Environment.Repository.Tag.IsTag;
+        Name = appVeyor.Environment.Repository.Tag.Name;
+    }
+
+    public bool IsTag { get; }
+
+    public string Name { get; }    
+}
+
+public class AppVeyorRepositoryInfo : IRepositoryInfo
+{
+    public AppVeyorRepositoryInfo(IAppVeyorProvider appVeyor)
+    {
+        Branch = appVeyor.Environment.Repository.Branch;
+        Name = appVeyor.Environment.Repository.Name;
+        Tag = new AppVeyorTagInfo(appVeyor);
+    }
+
+    public string Branch { get; }
+
+    public string Name { get; }
+
+    public ITagInfo Tag { get; }    
+}
+
+public class AppVeyorPullRequestInfo : IPullRequestInfo
+{
+    public AppVeyorPullRequestInfo(IAppVeyorProvider appVeyor)
+    {
+        IsPullRequest = appVeyor.Environment.PullRequest.IsPullRequest;
+    }
+
+    public bool IsPullRequest { get; }    
+}
+
+public class AppVeyorBuildInfo : IBuildInfo
+{
+    public AppVeyorBuildInfo(IAppVeyorProvider appVeyor)
+    {
+        Number = appVeyor.Environment.Build.Number;
+    }
+
+    public int Number { get; }    
+}
+
+public class AppVeyorBuildProvider : IBuildProvider
+{
+    public AppVeyorBuildProvider(IAppVeyorProvider appVeyor)
+    {
+        Repository = new AppVeyorRepositoryInfo(appVeyor);
+        PullRequest = new AppVeyorPullRequestInfo(appVeyor);
+        Build = new AppVeyorBuildInfo(appVeyor);
+    }
+
+    public IRepositoryInfo Repository { get; }
+
+    public IPullRequestInfo PullRequest { get; }
+
+    public IBuildInfo Build { get; }
+}
