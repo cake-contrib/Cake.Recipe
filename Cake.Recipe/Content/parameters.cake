@@ -391,7 +391,7 @@ public static class BuildParameters
         bool shouldPublishChocolatey = true,
         bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
-        bool shouldDeployGraphDocumentation = true,
+        bool shouldDeployGraphDocumentation = false,
         bool shouldGenerateDocumentation = true,
         bool shouldExecuteGitLink = true,
         bool shouldRunDupFinder = true,
