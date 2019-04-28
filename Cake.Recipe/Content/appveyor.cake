@@ -75,7 +75,7 @@ public class AppVeyorTagInfo : ITagInfo
 
     public bool IsTag { get; }
 
-    public string Name { get; }    
+    public string Name { get; }
 }
 
 public class AppVeyorRepositoryInfo : IRepositoryInfo
@@ -101,7 +101,7 @@ public class AppVeyorPullRequestInfo : IPullRequestInfo
         IsPullRequest = appVeyor.Environment.PullRequest.IsPullRequest;
     }
 
-    public bool IsPullRequest { get; }    
+    public bool IsPullRequest { get; }
 }
 
 public class AppVeyorBuildInfo : IBuildInfo
@@ -111,7 +111,7 @@ public class AppVeyorBuildInfo : IBuildInfo
         Number = appVeyor.Environment.Build.Number.ToString();
     }
 
-    public string Number { get; }    
+    public string Number { get; }
 }
 
 public class AppVeyorBuildProvider : IBuildProvider
