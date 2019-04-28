@@ -21,7 +21,7 @@ public interface IPullRequestInfo
 
 public interface IBuildInfo
 {
-    int Number { get; }
+    string Number { get; }
 }
 
 public interface IBuildProvider
@@ -35,6 +35,12 @@ public interface IBuildProvider
 
 public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)
 {
+    //todo: need to be replaced to `IsRunningOnAzurePipelines || IsRunningOnAzurePipelinesHosted` after update to Cake 0.33.0
+    if (buildSystem.IsRunningOnTFS || buildSystem.IsRunningOnVSTS)
+    {
+        return new AzurePipelinesBuildProvider(buildSystem.TFBuild);
+    }
+
     // always fallback to AppVeyor
     return new AppVeyorBuildProvider(buildSystem.AppVeyor);
 }
