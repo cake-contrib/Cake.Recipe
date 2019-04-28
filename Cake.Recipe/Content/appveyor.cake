@@ -108,10 +108,10 @@ public class AppVeyorBuildInfo : IBuildInfo
 {
     public AppVeyorBuildInfo(IAppVeyorProvider appVeyor)
     {
-        Number = appVeyor.Environment.Build.Number;
+        Number = appVeyor.Environment.Build.Number.ToString();
     }
 
-    public int Number { get; }    
+    public string Number { get; }    
 }
 
 public class AppVeyorBuildProvider : IBuildProvider
