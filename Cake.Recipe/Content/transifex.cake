@@ -20,9 +20,9 @@ public static bool TransifexIsConfiguredForRepository(ICakeContext context)
 // Because we expect the repository to already be configured to use
 // transifex, we cannot run tx init, or it would replace the repository configuration file.
 BuildParameters.Tasks.TransifexSetupTask = Task("Transifex-Setup")
-    .WithCriteria(() => BuildParameters.TransifexEnabled)
-    .WithCriteria(() => !TransifexUserSettingsExists(Context))
-    .WithCriteria(() => BuildParameters.Transifex.HasCredentials)
+    .WithCriteria(() => BuildParameters.TransifexEnabled, "Transifex is not enabled")
+    .WithCriteria(() => !TransifexUserSettingsExists(Context), "Transifex user settings already exist")
+    .WithCriteria(() => BuildParameters.Transifex.HasCredentials, "Missing transifex credentials")
     .Does(() =>
     {
         var path = GetTransifexUserSettingsPath();

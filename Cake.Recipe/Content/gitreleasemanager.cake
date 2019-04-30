@@ -21,12 +21,12 @@ BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
 );
 
 BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
-    .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes)
-    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease)
+    .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes, "Exporting Release notes have been disabled")
+    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.PrepareLocalRelease, "Is local build, and is not preparing local release")
+    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.PrepareLocalRelease, "Is pull request, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease, "Is not main repository, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease, "Is not a releasable branch, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease, "Is not a tagged build, and is not preparing local release")
     .Does(() => RequireTool(GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
