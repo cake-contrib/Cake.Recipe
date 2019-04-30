@@ -1,7 +1,7 @@
 BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Packages")
     .IsDependentOn("Clean")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory))
+    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping because not running a Windows")
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory), "Skipping because chocolatey nuspec diroctory is missing")
     .Does(() =>
 {
     var nuspecFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory + "/**/*.nuspec");
@@ -24,9 +24,9 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
 
 BuildParameters.Tasks.PublishChocolateyPackagesTask = Task("Publish-Chocolatey-Packages")
     .IsDependentOn("Package")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows)
-    .WithCriteria(() => BuildParameters.ShouldPublishChocolatey)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping because not running a Windows")
+    .WithCriteria(() => BuildParameters.ShouldPublishChocolatey, "Publishing to chocolatey have been disabled")
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages), "Skipping because no chocolatey package(s) have been created")
     .Does(() =>
 {
     if(BuildParameters.CanPublishToChocolatey)

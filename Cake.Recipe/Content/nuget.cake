@@ -1,6 +1,6 @@
 BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
     .IsDependentOn("DotNetCore-Build")
-    .WithCriteria(() => BuildParameters.ShouldRunDotNetCorePack)
+    .WithCriteria(() => BuildParameters.ShouldRunDotNetCorePack, "Packaging through .NET Core is disabled")
     .Does(() =>
 {
     var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
@@ -66,7 +66,7 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
 
 BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
     .IsDependentOn("Clean")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NugetNuspecDirectory))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NugetNuspecDirectory), "NuGet nuspec directory does not exist")
     .Does(() =>
 {
     var nuspecFiles = GetFiles(BuildParameters.Paths.Directories.NugetNuspecDirectory + "/**/*.nuspec");
@@ -119,7 +119,7 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
 BuildParameters.Tasks.PublishMyGetPackagesTask = Task("Publish-MyGet-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishMyGet)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages), "No packages have been created")
     .Does(() =>
 {
     if(BuildParameters.CanPublishToMyGet)
@@ -161,7 +161,7 @@ BuildParameters.Tasks.PublishMyGetPackagesTask = Task("Publish-MyGet-Packages")
 BuildParameters.Tasks.PublishNuGetPackagesTask = Task("Publish-Nuget-Packages")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishNuGet)
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages), "No packages have been created")
     .Does(() =>
 {
     if(BuildParameters.CanPublishToNuGet)

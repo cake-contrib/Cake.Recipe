@@ -9,8 +9,8 @@ BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
 });
 
 BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation)
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
+    .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation, "Graph directory have been disabled")
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
     .Does(() => {
         Graph(Tasks).Deploy();
     });
@@ -18,8 +18,8 @@ BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentatio
 BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
+    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation, "Wyam documentation have been disabled")
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
     .Does(() => RequireTool(WyamTool, () => {
         // Check to see if any documentation has changed
         var sourceCommit = GitLogTip("./");
@@ -83,7 +83,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
     .Does(() => RequireTool(WyamTool, () => {
         Wyam(new WyamSettings
         {
@@ -111,7 +111,7 @@ BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
 BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
     .Does(() => RequireTool(WyamTool, () => {
         Wyam(new WyamSettings
         {
