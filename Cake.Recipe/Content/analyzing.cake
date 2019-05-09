@@ -64,9 +64,9 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
             BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
             outputHtmlFile);
 
-        if(BuildParameters.IsRunningOnAppVeyor && FileExists(outputHtmlFile))
+        if(!BuildParameters.IsLocalBuild && FileExists(outputHtmlFile))
         {
-            AppVeyor.UploadArtifact(outputHtmlFile);
+            BuildParameters.BuildProvider.UploadArtifact(outputHtmlFile);
         }
 
         if(BuildParameters.IsLocalBuild)
@@ -114,9 +114,9 @@ BuildParameters.Tasks.InspectCodeTask = Task("CreateIssuesReport")
             "./",
             issueReportFile);
 
-        if(BuildParameters.IsRunningOnAppVeyor && FileExists(issueReportFile))
+        if(!BuildParameters.IsLocalBuild && FileExists(issueReportFile))
         {
-            AppVeyor.UploadArtifact(issueReportFile);
+            BuildParameters.BuildProvider.UploadArtifact(issueReportFile);
         }
     });
 

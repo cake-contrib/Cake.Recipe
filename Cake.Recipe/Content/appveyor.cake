@@ -49,22 +49,6 @@ if (BuildSystem.IsRunningOnAppVeyor && !BuildParameters.IsNuGetBuild) {
     });
 }
 
-BuildParameters.Tasks.UploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Package")
-    .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor, "Skipping because not running an AppVeyor")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages),
-                  "Skipping because no artifacts is available")
-    .Does(() =>
-{
-    // Concatenating FilePathCollections should make sure we get unique FilePaths
-    foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
-                           GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
-                           GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
-    {
-        AppVeyor.UploadArtifact(package);
-    }
-});
-
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
         RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=4.0.0&loaddependencies=true
@@ -137,6 +121,8 @@ public class AppVeyorBuildProvider : IBuildProvider
         Repository = new AppVeyorRepositoryInfo(appVeyor);
         PullRequest = new AppVeyorPullRequestInfo(appVeyor);
         Build = new AppVeyorBuildInfo(appVeyor);
+
+        _appVeyor = appVeyor;
     }
 
     public IRepositoryInfo Repository { get; }
@@ -144,4 +130,11 @@ public class AppVeyorBuildProvider : IBuildProvider
     public IPullRequestInfo PullRequest { get; }
 
     public IBuildInfo Build { get; }
+
+    private readonly IAppVeyorProvider _appVeyor;
+
+    public void UploadArtifact(FilePath file)
+    {
+        _appVeyor.UploadArtifact(file);    
+    }
 }

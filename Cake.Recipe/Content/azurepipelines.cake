@@ -67,6 +67,8 @@ public class AzurePipelinesBuildProvider : IBuildProvider
         Build = new AzurePipelinesBuildInfo(tfBuild);
         PullRequest = new AzurePipelinesPullRequestInfo(tfBuild, environment);
         Repository = new AzurePipelinesRepositoryInfo(tfBuild);
+
+        _tfBuild = tfBuild;
     }
 
     public IRepositoryInfo Repository { get; }
@@ -74,4 +76,11 @@ public class AzurePipelinesBuildProvider : IBuildProvider
     public IPullRequestInfo PullRequest { get; }
 
     public IBuildInfo Build { get; }
+
+    private readonly ITFBuildProvider _tfBuild;
+
+    public void UploadArtifact(FilePath file)
+    {
+        _tfBuild.Commands.UploadArtifact("artifacts", file);    
+    }
 }
