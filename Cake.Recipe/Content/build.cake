@@ -408,8 +408,23 @@ BuildParameters.Tasks.PackageTask = Task("Package")
 BuildParameters.Tasks.DefaultTask = Task("Default")
     .IsDependentOn("Package");
 
+BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
+    .IsDependentOn("Package")
+    .WithCriteria(() => !BuildParameters.IsLocalBuild)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    .Does(() =>
+{
+    // Concatenating FilePathCollections should make sure we get unique FilePaths
+    foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+                           GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
+                           GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
+    {
+        BuildParameters.BuildProvider.UploadArtifact(package);
+    }
+});
+
 BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
-    .IsDependentOn("Upload-AppVeyor-Artifacts")
+    .IsDependentOn("Upload-Artifacts")
     .IsDependentOn("Publish-MyGet-Packages")
     .IsDependentOn("Publish-Nuget-Packages")
     .IsDependentOn("Publish-GitHub-Release")

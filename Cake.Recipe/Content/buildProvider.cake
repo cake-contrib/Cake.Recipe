@@ -31,6 +31,8 @@ public interface IBuildProvider
     IPullRequestInfo PullRequest { get; }
 
     IBuildInfo Build { get; }
+
+    void UploadArtifact(FilePath file);
 }
 
 public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)
