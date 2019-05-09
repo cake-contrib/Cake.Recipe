@@ -6,10 +6,11 @@ public class AzurePipelinesTagInfo : ITagInfo
 {
     public AzurePipelinesTagInfo(ITFBuildProvider tfBuild)
     {
+        const string refTags = "refs/tags/";
         // at the moment, there is no ability to know is it tag or not
-        IsTag = tfBuild.Environment.Repository.Branch.StartsWith("refs/tags/");
+        IsTag = tfBuild.Environment.Repository.Branch.StartsWith(refTags);
         Name = IsTag
-            ? tfBuild.Environment.Repository.Branch.Substring(10)
+            ? tfBuild.Environment.Repository.Branch.Substring(refTags.Length)
             : string.Empty;
     }
 
@@ -36,10 +37,14 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 
 public class AzurePipelinesPullRequestInfo : IPullRequestInfo
 {
-    public AzurePipelinesPullRequestInfo(ITFBuildProvider tfBuild)
+    public AzurePipelinesPullRequestInfo(ITFBuildProvider tfBuild, ICakeEnvironment environment)
     {
         //todo: update to `tfBuild.Environment.PullRequest.IsPullRequest` after upgrade to 0.33.0
-        IsPullRequest = false;
+        var value = environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_PULLREQUESTID");
+
+        IsPullRequest = !string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var id)
+            ? id > 0
+            : false;
     }
 
     public bool IsPullRequest { get; }
@@ -57,10 +62,10 @@ public class AzurePipelinesBuildInfo : IBuildInfo
 
 public class AzurePipelinesBuildProvider : IBuildProvider
 {
-    public AzurePipelinesBuildProvider(ITFBuildProvider tfBuild)
+    public AzurePipelinesBuildProvider(ITFBuildProvider tfBuild, ICakeEnvironment environment)
     {
         Build = new AzurePipelinesBuildInfo(tfBuild);
-        PullRequest = new AzurePipelinesPullRequestInfo(tfBuild);
+        PullRequest = new AzurePipelinesPullRequestInfo(tfBuild, environment);
         Repository = new AzurePipelinesRepositoryInfo(tfBuild);
     }
 
