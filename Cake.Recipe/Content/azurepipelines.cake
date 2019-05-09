@@ -81,6 +81,6 @@ public class AzurePipelinesBuildProvider : IBuildProvider
 
     public void UploadArtifact(FilePath file)
     {
-        _tfBuild.Commands.UploadArtifact("artifacts", file);    
+        _tfBuild.Commands.UploadArtifact("artifacts", file, file.GetFilename().FullPath);    
     }
 }
