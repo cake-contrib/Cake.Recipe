@@ -318,7 +318,8 @@ public void CopyBuildOutput()
                         OutputDirectory = outputFolder.Combine(targetFramework),
                         Framework = targetFramework,
                         Configuration = BuildParameters.Configuration,
-                        MSBuildSettings = msBuildSettings
+                        MSBuildSettings = msBuildSettings,
+                        SelfContained = BuildParameters.IsDotNetCoreSelfContained
                     });
                 }
             }

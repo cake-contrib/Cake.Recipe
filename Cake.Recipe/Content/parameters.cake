@@ -22,6 +22,7 @@ public static class BuildParameters
     public static bool IsPublishBuild { get; private set; }
     public static bool IsReleaseBuild { get; private set; }
     public static bool IsDotNetCoreBuild { get; set; }
+    public static bool IsDotNetCoreSelfContained { get; set; }
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
     public static bool PrepareLocalRelease { get; set; }
