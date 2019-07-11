@@ -170,44 +170,32 @@ BuildParameters.Tasks.BuildTask = Task("Build")
     .Does<BuildData>(data => RequireTool(MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        if(BuildParameters.IsRunningOnWindows)
-        {
-            var msbuildSettings = new MSBuildSettings()
-                .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
-                .UseToolVersion(ToolSettings.BuildMSBuildToolVersion)
-                .WithProperty("TreatWarningsAsErrors", BuildParameters.TreatWarningsAsErrors.ToString())
-                .WithTarget("Build")
-                .SetMaxCpuCount(ToolSettings.MaxCpuCount)
-                .SetConfiguration(BuildParameters.Configuration)
-                .WithLogger(
-                    Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
-                    "XmlFileLogger",
-                    string.Format(
-                        "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
-                        BuildParameters.Paths.Files.BuildLogFilePath)
-                );
+        var msbuildSettings = new MSBuildSettings()
+            .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
+            .UseToolVersion(ToolSettings.BuildMSBuildToolVersion)
+            .WithProperty("TreatWarningsAsErrors", BuildParameters.TreatWarningsAsErrors.ToString())
+            .WithTarget("Build")
+            .SetMaxCpuCount(ToolSettings.MaxCpuCount)
+            .SetConfiguration(BuildParameters.Configuration)
+            .WithLogger(
+                Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
+                "XmlFileLogger",
+                string.Format(
+                    "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
+                    BuildParameters.Paths.Files.BuildLogFilePath)
+            );
 
-            MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
+        MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
-            // Parse warnings.
-            var issues = ReadIssues(
-                MsBuildIssuesFromFilePath(
-                    BuildParameters.Paths.Files.BuildLogFilePath,
-                    MsBuildXmlFileLoggerFormat),
-                data.RepositoryRoot);
+        // Parse warnings.
+        var issues = ReadIssues(
+            MsBuildIssuesFromFilePath(
+                BuildParameters.Paths.Files.BuildLogFilePath,
+                MsBuildXmlFileLoggerFormat),
+            data.RepositoryRoot);
 
-            Information("{0} MsBuild warnings are found.", issues.Count());
-            data.AddIssues(issues);
-        }
-        else
-        {
-            var xbuildSettings = new XBuildSettings()
-                .SetConfiguration(BuildParameters.Configuration)
-                .WithTarget("Build")
-                .WithProperty("TreatWarningsAsErrors", "true");
-
-            XBuild(BuildParameters.SolutionFilePath, xbuildSettings);
-        }
+        Information("{0} MsBuild warnings are found.", issues.Count());
+        data.AddIssues(issues);
 
         if(BuildParameters.ShouldExecuteGitLink)
         {
