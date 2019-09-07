@@ -4,6 +4,8 @@ public static class Environment
     public static string GithubPasswordVariable { get; private set; }
     public static string MyGetApiKeyVariable { get; private set; }
     public static string MyGetSourceUrlVariable { get; private set; }
+    public static string MyGetUserVariable { get; private set; }
+    public static string MyGetPasswordVariable { get; private set; }
     public static string NuGetApiKeyVariable { get; private set; }
     public static string NuGetSourceUrlVariable { get; private set; }
     public static string ChocolateyApiKeyVariable { get; private set; }
@@ -29,9 +31,11 @@ public static class Environment
         string githubUserNameVariable = null,
         string githubPasswordVariable = null,
         string myGetApiKeyVariable = null,
-        string myGetSourceUrlVariable = null, 
+        string myGetSourceUrlVariable = null,
+        string myGetUserVariable = null,
+        string myGetPasswordVariable = null,
         string nuGetApiKeyVariable = null,
-        string nuGetSourceUrlVariable = null, 
+        string nuGetSourceUrlVariable = null,
         string chocolateyApiKeyVariable = null,
         string chocolateySourceUrlVariable = null,
         string gitterTokenVariable = null,
@@ -55,6 +59,8 @@ public static class Environment
         GithubPasswordVariable = githubPasswordVariable ?? "GITHUB_PASSWORD";
         MyGetApiKeyVariable = myGetApiKeyVariable ?? "MYGET_API_KEY";
         MyGetSourceUrlVariable = myGetSourceUrlVariable ?? "MYGET_SOURCE";
+        MyGetUserVariable = myGetUserVariable ?? "MYGET_USER";
+        MyGetPasswordVariable = myGetPasswordVariable ?? "MYGET_PASSWORD";
         NuGetApiKeyVariable = nuGetApiKeyVariable ?? "NUGET_API_KEY";
         NuGetSourceUrlVariable = nuGetSourceUrlVariable ?? "NUGET_SOURCE";
         ChocolateyApiKeyVariable = chocolateyApiKeyVariable ?? "CHOCOLATEY_API_KEY";

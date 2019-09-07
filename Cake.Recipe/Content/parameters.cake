@@ -26,6 +26,7 @@ public static class BuildParameters
     public static bool TransifexEnabled { get; set; }
     public static bool PrepareLocalRelease { get; set; }
     public static bool TreatWarningsAsErrors { get; set; }
+    public static bool ShouldPublishToMyGetWithApiKey { get; set; }
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
 
@@ -238,8 +239,12 @@ public static class BuildParameters
     {
         get
         {
-            return !string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey) &&
-                !string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl);
+            return (!string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey) &&
+                !string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl)) || (
+                    !string.IsNullOrEmpty(BuildParameters.MyGet.User) &&
+                    !string.IsNullOrEmpty(BuildParameters.MyGet.Password) &&
+                    !string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl)
+                );
         }
     }
 
@@ -318,6 +323,7 @@ public static class BuildParameters
         context.Information("IsReleaseBranch: {0}", IsReleaseBranch);
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
+        context.Information("ShouldPublishToMyGetWithApiKey: {0}", ShouldPublishToMyGetWithApiKey);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
@@ -422,7 +428,8 @@ public static class BuildParameters
         ICollection<string> nuGetSources = null,
         bool treatWarningsAsErrors = true,
         string masterBranchName = "master",
-        string developBranchName = "develop"
+        string developBranchName = "develop",
+        string shouldPublishToMyGetWithApiKey = true
         )
     {
         if (context == null)
@@ -530,6 +537,7 @@ public static class BuildParameters
             !string.IsNullOrWhiteSpace(BuildProvider.Repository.Tag.Name)
         );
         TreatWarningsAsErrors = treatWarningsAsErrors;
+        ShouldPublishToMyGetWithApiKey = shouldPublishToMyGetWithApiKey;
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
         Gitter = GetGitterCredentials(context);
