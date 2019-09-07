@@ -429,7 +429,7 @@ public static class BuildParameters
         bool treatWarningsAsErrors = true,
         string masterBranchName = "master",
         string developBranchName = "develop",
-        string shouldPublishToMyGetWithApiKey = true
+        bool shouldPublishToMyGetWithApiKey = true
         )
     {
         if (context == null)
