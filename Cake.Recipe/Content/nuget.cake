@@ -143,7 +143,7 @@ BuildParameters.Tasks.PublishMyGetPackagesTask = Task("Publish-MyGet-Packages")
                     Password = BuildParameters.MyGet.Password
                 };
 
-            Information("Adding NuGet source with user/pass...")
+            Information("Adding NuGet source with user/pass...");
             NuGetAddSource("PreReleaseSource", BuildParameters.MyGet.SourceUrl, nugetSourceSettings);
         }
 
