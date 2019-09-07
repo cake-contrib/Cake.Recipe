@@ -64,11 +64,15 @@ public class MyGetCredentials
 {
     public string ApiKey { get; private set; }
     public string SourceUrl { get; private set; }
+    public string User { get; private set; }
+    public string Password { get; private set; }
 
-    public MyGetCredentials(string apiKey, string sourceUrl)
+    public MyGetCredentials(string apiKey, string sourceUrl, string user, string password)
     {
         ApiKey = apiKey;
         SourceUrl = sourceUrl;
+        User = user;
+        Password = password;
     }
 }
 
@@ -189,7 +193,9 @@ public static MyGetCredentials GetMyGetCredentials(ICakeContext context)
 {
     return new MyGetCredentials(
         context.EnvironmentVariable(Environment.MyGetApiKeyVariable),
-        context.EnvironmentVariable(Environment.MyGetSourceUrlVariable));
+        context.EnvironmentVariable(Environment.MyGetSourceUrlVariable),
+        context.EnvironmentVariable(Environment.MyGetUserVariable),
+        context.EnvironmentVariable(Environment.MyGetPasswordVariable));
 }
 
 public static NuGetCredentials GetNuGetCredentials(ICakeContext context)
