@@ -1,5 +1,7 @@
 public static class BuildParameters
 {
+	private static string _standardMessage = "Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
+
     private static string _gitterMessage;
     private static string _microsoftTeamsMessage;
     private static string _twitterMessage;
@@ -32,61 +34,20 @@ public static class BuildParameters
 
     public static string GitterMessage
     {
-        get
-        {
-            if(_gitterMessage == null)
-            {
-                return "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
-            }
-            else
-            {
-                return _gitterMessage;
-            }
-        }
-
-        set {
-            _gitterMessage = value;
-        }
+        get { return _gitterMessage ?? "@/all " + _standardMessage; }
+        set { _gitterMessage = value; }
     }
 
     public static string MicrosoftTeamsMessage
     {
-        get
-        {
-            if(_microsoftTeamsMessage == null)
-            {
-                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
-            }
-            else
-            {
-                return _microsoftTeamsMessage;
-            }
-        }
-
-        set
-        {
-            _microsoftTeamsMessage = value;
-        }
+        get { return _microsoftTeamsMessage ?? _standardMessage; }
+        set { _microsoftTeamsMessage = value; }
     }
 
     public static string TwitterMessage
     {
-        get
-        {
-            if(_twitterMessage == null)
-            {
-                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
-            }
-            else
-            {
-                return _twitterMessage;
-            }
-        }
-
-        set
-        {
-            _twitterMessage = value;
-        }
+        get { return _twitterMessage ?? _standardMessage; }
+        set { _twitterMessage = value; }
     }
 
     public static GitHubCredentials GitHub { get; private set; }
