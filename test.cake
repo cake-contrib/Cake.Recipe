@@ -13,12 +13,12 @@ var testRepos                     = new [] {
                                       new {
                                           Path = testReposRootPath.Combine("Cake.Gulp"),
                                           Url = "https://github.com/cake-contrib/Cake.Gulp.git",
-                                          BuildScriptName = "setup.cake"
+                                          BuildScriptName = "recipe.cake"
                                       },
                                       new {
                                           Path = testReposRootPath.Combine("Cake.Http"),
                                           Url = "https://github.com/cake-contrib/Cake.Http.git",
-                                          BuildScriptName = "setup.cake"
+                                          BuildScriptName = "recipe.cake"
                                       },
                                       new {
                                           Path = testReposRootPath.Combine("Cake.Twitter"),
