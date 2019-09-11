@@ -20,6 +20,28 @@ public class MicrosoftTeamsCredentials
     }
 }
 
+public class EmailCredentials
+{
+    public string SmtpHost { get; private set; }
+    public int Port { get; private set; }
+    public bool EnableSsl { get; private set; }
+    public string Username { get; private set; }
+    public string Password { get; private set; }
+	public string SenderName { get; private set; }
+	public string SenderAddress { get; private set; }
+
+    public EmailCredentials(string smtpHost, int port, bool enableSsl, string username, string password, string senderName, string senderAddress)
+    {
+        SmtpHost = smtpHost;
+        Port = port;
+        EnableSsl = enableSsl;
+        Username = username;
+        Password = password;
+		SenderName  = senderName;
+		SenderAddress = senderAddress;
+    }
+}
+
 public class GitterCredentials
 {
     public string Token { get; private set; }
@@ -158,6 +180,18 @@ public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
     return new GitHubCredentials(
         context.EnvironmentVariable(Environment.GithubUserNameVariable),
         context.EnvironmentVariable(Environment.GithubPasswordVariable));
+}
+
+public static EmailCredentials GetEmailCredentials(ICakeContext context)
+{
+    return new EmailCredentials(
+        context.EnvironmentVariable(Environment.EmailSmtpHost),
+        int.Parse(context.EnvironmentVariable(Environment.EmailPort) ?? "0"),
+        bool.Parse(context.EnvironmentVariable(Environment.EmailEnableSsl) ?? "false"),
+        context.EnvironmentVariable(Environment.EmailUserName),
+        context.EnvironmentVariable(Environment.EmailPassword),
+        context.EnvironmentVariable(Environment.EmailSenderName),
+        context.EnvironmentVariable(Environment.EmailSenderAddress));
 }
 
 public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
