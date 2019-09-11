@@ -89,6 +89,7 @@ public static class BuildParameters
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToTwitter { get; private set; }
     public static bool ShouldPostToMicrosoftTeams { get; private set; }
+    public static bool ShouldSendEmail { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
     public static bool ShouldNotifyBetaReleases { get; private set; }
@@ -140,6 +141,14 @@ public static class BuildParameters
                 !string.IsNullOrEmpty(BuildParameters.GitHub.Password);
         }
     }
+
+	public static bool CanSendEmail
+	{
+		get
+		{
+            return !string.IsNullOrEmpty(BuildParameters.Email.SmtpHost);
+		}
+	}
 
     public static bool CanPostToGitter
     {
@@ -286,6 +295,7 @@ public static class BuildParameters
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
         context.Information("ShouldPublishToMyGetWithApiKey: {0}", ShouldPublishToMyGetWithApiKey);
+        context.Information("ShouldSendEmail: {0}", ShouldSendEmail);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
@@ -350,6 +360,7 @@ public static class BuildParameters
         bool shouldPostToSlack = true,
         bool shouldPostToTwitter = true,
         bool shouldPostToMicrosoftTeams = false,
+        bool shouldSendEmail = true,
         bool shouldDownloadMilestoneReleaseNotes = false,
         bool shouldDownloadFullReleaseNotes = false,
         bool shouldNotifyBetaReleases = false,
@@ -437,6 +448,7 @@ public static class BuildParameters
         ShouldPostToSlack = shouldPostToSlack;
         ShouldPostToTwitter = shouldPostToTwitter;
         ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
+        ShouldSendEmail = shouldSendEmail;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
