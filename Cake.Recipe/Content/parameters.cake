@@ -52,6 +52,7 @@ public static class BuildParameters
 
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
+    public static EmailCredentials Email { get; private set; }
     public static GitterCredentials Gitter { get; private set; }
     public static SlackCredentials Slack { get; private set; }
     public static TwitterCredentials Twitter { get; private set; }
@@ -501,6 +502,7 @@ public static class BuildParameters
         ShouldPublishToMyGetWithApiKey = shouldPublishToMyGetWithApiKey;
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
+        Email = GetEmailCredentials(context);
         Gitter = GetGitterCredentials(context);
         Slack = GetSlackCredentials(context);
         Twitter = GetTwitterCredentials(context);
