@@ -66,6 +66,23 @@ Teardown(context =>
             {
                 SendMessageToMicrosoftTeams();
             }
+
+            if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            {
+				var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
+				var message = new StringBuilder();
+				message.AppendLine(BuildParameters.StandardMessage);
+				message.AppendLine();
+				message.AppendLine($"Name: {BuildParameters.Title}");
+				message.AppendLine($"Version: {BuildParameters.Version.SemVersion}");
+				message.AppendLine($"Configuration: {BuildParameters.Configuration}");
+				message.AppendLine($"Target: {BuildParameters.Target}");
+				message.AppendLine($"Cake version: {BuildParameters.Version.CakeVersion}");
+				message.AppendLine($"Cake.Recipe version: {BuildMetaData.Version}");
+				message.AppendLine($"IsTagged: {BuildParameters.IsTagged}");
+
+                SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient);
+            }
         }
     }
     else
@@ -75,6 +92,13 @@ Teardown(context =>
             if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
                 SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
+            }
+
+            if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            {
+				var subject = $"Continuous Integration Build of {BuildParameters.Title} failed";
+				var message = context.ThrownException.ToString();
+                SendEmail(subject, message, BuildParameters.EmailRecipient);
             }
         }
     }
