@@ -27,18 +27,14 @@ public class EmailCredentials
     public bool EnableSsl { get; private set; }
     public string Username { get; private set; }
     public string Password { get; private set; }
-	public string SenderName { get; private set; }
-	public string SenderAddress { get; private set; }
 
-    public EmailCredentials(string smtpHost, int port, bool enableSsl, string username, string password, string senderName, string senderAddress)
+    public EmailCredentials(string smtpHost, int port, bool enableSsl, string username, string password)
     {
         SmtpHost = smtpHost;
         Port = port;
         EnableSsl = enableSsl;
         Username = username;
         Password = password;
-		SenderName  = senderName;
-		SenderAddress = senderAddress;
     }
 }
 
@@ -189,9 +185,7 @@ public static EmailCredentials GetEmailCredentials(ICakeContext context)
         int.Parse(context.EnvironmentVariable(Environment.EmailPort) ?? "0"),
         bool.Parse(context.EnvironmentVariable(Environment.EmailEnableSsl) ?? "false"),
         context.EnvironmentVariable(Environment.EmailUserName),
-        context.EnvironmentVariable(Environment.EmailPassword),
-        context.EnvironmentVariable(Environment.EmailSenderName),
-        context.EnvironmentVariable(Environment.EmailSenderAddress));
+        context.EnvironmentVariable(Environment.EmailPassword));
 }
 
 public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
