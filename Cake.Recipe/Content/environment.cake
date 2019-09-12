@@ -89,7 +89,7 @@ public static class Environment
         TwitterAccessTokenSecretVariable = twitterAccessTokenSecretVariable ?? "TWITTER_ACCESS_TOKEN_SECRET";
         EmailSmtpHost = emailSmtpHost ?? "EMAIL_SMTPHOST";
         EmailPort = emailPort ?? "EMAIL_PORT";
-		EmailEnableSsl = emailEnableSsl ?? "EMAIL_ENABLESSL";
+        EmailEnableSsl = emailEnableSsl ?? "EMAIL_ENABLESSL";
         EmailUserName = emailUserName ?? "EMAIL_USERNAME";
         EmailPassword = emailPassword ?? "EMAIL_PASSWORD";
         AppVeyorApiTokenVariable = appVeyorApiTokenVariable ?? "APPVEYOR_API_TOKEN";

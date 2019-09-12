@@ -29,14 +29,14 @@ public static class BuildParameters
     public static bool ShouldPublishToMyGetWithApiKey { get; set; }
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
-	public static string EmailRecipient { get; private set; }
-	public static string EmailSenderName { get; private set; }
-	public static string EmailSenderAddress { get; private set; }
+    public static string EmailRecipient { get; private set; }
+    public static string EmailSenderName { get; private set; }
+    public static string EmailSenderAddress { get; private set; }
 
-	public static string StandardMessage
-	{
-		get { return $"Version {Version.SemVersion} of the {Title} Addin has just been released, this will be available here https://www.nuget.org/packages/{Title}, once package indexing is complete."; }
-	}
+    public static string StandardMessage
+    {
+        get { return $"Version {Version.SemVersion} of the {Title} Addin has just been released, this will be available here https://www.nuget.org/packages/{Title}, once package indexing is complete."; }
+    }
 
     public static string GitterMessage
     {
@@ -148,13 +148,13 @@ public static class BuildParameters
         }
     }
 
-	public static bool CanSendEmail
-	{
-		get
-		{
+    public static bool CanSendEmail
+    {
+        get
+        {
             return !string.IsNullOrEmpty(BuildParameters.Email.SmtpHost);
-		}
-	}
+        }
+    }
 
     public static bool CanPostToGitter
     {
@@ -344,9 +344,9 @@ public static class BuildParameters
         context.Information("NuSpecFilePath: {0}", NuSpecFilePath);
         context.Information("NugetConfig: {0} ({1})", NugetConfig, context.FileExists(NugetConfig));
         context.Information("NuGetSources: {0}", string.Join(", ", NuGetSources));
-		context.Information("EmailRecipient: {0}", EmailRecipient);
-		context.Information("EmailSenderName: {0}", EmailSenderName);
-		context.Information("EmailSenderAddress: {0}", EmailSenderAddress);
+        context.Information("EmailRecipient: {0}", EmailRecipient);
+        context.Information("EmailSenderName: {0}", EmailSenderName);
+        context.Information("EmailSenderAddress: {0}", EmailSenderAddress);
     }
 
     public static void SetParameters(
@@ -411,9 +411,9 @@ public static class BuildParameters
         bool treatWarningsAsErrors = true,
         string masterBranchName = "master",
         string developBranchName = "develop",
-		string emailRecipient = null,
-		string emailSenderName = null,
-		string emailSenderAddress = null,
+        string emailRecipient = null,
+        string emailSenderName = null,
+        string emailSenderAddress = null,
         bool shouldPublishToMyGetWithApiKey = true
         )
     {
@@ -424,9 +424,9 @@ public static class BuildParameters
 
         BuildProvider = GetBuildProvider(context, buildSystem);
 
-		EmailRecipient = emailRecipient;
-		EmailSenderName = emailSenderName;
-		EmailSenderAddress = emailSenderAddress;
+        EmailRecipient = emailRecipient;
+        EmailSenderName = emailSenderName;
+        EmailSenderAddress = emailSenderAddress;
 
         SourceDirectoryPath = sourceDirectoryPath;
         Title = title;
