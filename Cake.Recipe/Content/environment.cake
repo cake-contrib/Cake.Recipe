@@ -92,8 +92,6 @@ public static class Environment
 		EmailEnableSsl = emailEnableSsl ?? "EMAIL_ENABLESSL";
         EmailUserName = emailUserName ?? "EMAIL_USERNAME";
         EmailPassword = emailPassword ?? "EMAIL_PASSWORD";
-        EmailSenderName = emailSenderName ?? "EMAIL_SENDERNAME";
-        EmailSenderAddress = emailSenderAddress ?? "EMAIL_SENDERADDRESS";
         AppVeyorApiTokenVariable = appVeyorApiTokenVariable ?? "APPVEYOR_API_TOKEN";
         CodecovRepoTokenVariable = codecovRepoTokenVariable ?? "CODECOV_REPO_TOKEN";
         CoverallsRepoTokenVariable = coverallsRepoTokenVariable ?? "COVERALLS_REPO_TOKEN";
