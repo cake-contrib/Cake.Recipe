@@ -8,11 +8,11 @@ public void SendEmail(string subject, string message, string recipient, string s
 {
     Information("Sending email...");
 
-	// The recipient parameter can contain a single email address or a comma/semi-colon separated list of email addresses
+    // The recipient parameter can contain a single email address or a comma/semi-colon separated list of email addresses
     var recipients = recipient
-		.Split(new[] { ',', ';' })
-		.Select(emailAddress => new MailAddress(emailAddress))
-		.ToArray();
+        .Split(new[] { ',', ';' })
+        .Select(emailAddress => new MailAddress(emailAddress))
+        .ToArray();
 
     try
     {
