@@ -4,7 +4,7 @@ using Cake.Email.Common;
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendEmail(string subject, string message, string recipient)
+public void SendEmail(string subject, string message, string recipient, string senderName, string senderAddress)
 {
     Information("Sending email...");
 
@@ -17,8 +17,8 @@ public void SendEmail(string subject, string message, string recipient)
     try
     {
         var result = Email.SendEmail(
-            senderName: BuildParameters.Email.SenderName,
-            senderAddress: BuildParameters.Email.SenderAddress,
+            senderName: senderName,
+            senderAddress: senderAddress,
             recipients: recipients,
             subject: subject,
             htmlContent: message,

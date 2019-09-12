@@ -80,7 +80,7 @@ Teardown(context =>
 				message.AppendLine($"<strong>Cake version</strong>: {BuildParameters.Version.CakeVersion}<br/>");
 				message.AppendLine($"<strong>Cake.Recipe version</strong>: {BuildMetaData.Version}<br/>");
 
-                SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient);
+                SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
             }
         }
     }
@@ -97,7 +97,8 @@ Teardown(context =>
             {
 				var subject = $"Continuous Integration Build of {BuildParameters.Title} failed";
 				var message = context.ThrownException.ToString().Replace(System.Environment.NewLine, "<br/>");
-                SendEmail(subject, message, BuildParameters.EmailRecipient);
+
+                SendEmail(subject, message, BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
             }
         }
     }
