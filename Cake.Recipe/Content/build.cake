@@ -71,15 +71,14 @@ Teardown(context =>
             {
 				var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
 				var message = new StringBuilder();
-				message.AppendLine(BuildParameters.StandardMessage);
-				message.AppendLine();
-				message.AppendLine($"Name: {BuildParameters.Title}");
-				message.AppendLine($"Version: {BuildParameters.Version.SemVersion}");
-				message.AppendLine($"Configuration: {BuildParameters.Configuration}");
-				message.AppendLine($"Target: {BuildParameters.Target}");
-				message.AppendLine($"Cake version: {BuildParameters.Version.CakeVersion}");
-				message.AppendLine($"Cake.Recipe version: {BuildMetaData.Version}");
-				message.AppendLine($"IsTagged: {BuildParameters.IsTagged}");
+				message.AppendLine(BuildParameters.StandardMessage + "<br/>");
+				message.AppendLine("<br/>");
+				message.AppendLine($"<strong>Name</strong>: {BuildParameters.Title}<br/>");
+				message.AppendLine($"<strong>Version</strong>: {BuildParameters.Version.SemVersion}<br/>");
+				message.AppendLine($"<strong>Configuration</strong>: {BuildParameters.Configuration}<br/>");
+				message.AppendLine($"<strong>Target</strong>: {BuildParameters.Target}<br/>");
+				message.AppendLine($"<strong>Cake version</strong>: {BuildParameters.Version.CakeVersion}<br/>");
+				message.AppendLine($"<strong>Cake.Recipe version</strong>: {BuildMetaData.Version}<br/>");
 
                 SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient);
             }
@@ -97,7 +96,7 @@ Teardown(context =>
             if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
             {
 				var subject = $"Continuous Integration Build of {BuildParameters.Title} failed";
-				var message = context.ThrownException.ToString();
+				var message = context.ThrownException.ToString().Replace(System.Environment.NewLine, "<br/>");
                 SendEmail(subject, message, BuildParameters.EmailRecipient);
             }
         }
