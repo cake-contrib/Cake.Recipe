@@ -55,4 +55,5 @@ public class BuildTasks
     public CakeTaskBuilder PublishDocumentationTask { get; set; }
     public CakeTaskBuilder PreviewDocumentationTask { get; set; }
     public CakeTaskBuilder ForcePublishDocumentationTask { get; set; }
+    public CakeTaskBuilder ReportMessagesToCi {get; set; }
 }

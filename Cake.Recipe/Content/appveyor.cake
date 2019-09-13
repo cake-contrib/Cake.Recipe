@@ -34,6 +34,21 @@ BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVey
     Information("CONFIGURATION: {0}", EnvironmentVariable("CONFIGURATION"));
 });
 
+if (BuildSystem.IsRunningOnAppVeyor && !BuildParameters.IsNuGetBuild) {
+    BuildParameters.Tasks.ReportMessagesToCi = Task("Report-Messages-To-CI")
+        .IsDependentOn("InspectCode")
+        .IsDependeeOf("AppVeyor")
+        .WithCriteria<BuildData>((context, data) => data.Issues.Any(), "No issues to report.")
+        .Does<BuildData>((data) =>
+    {
+        ReportIssuesToPullRequest(
+            data.Issues,
+            AppVeyorBuilds(),
+            data.RepositoryRoot.FullPath
+        );
+    });
+}
+
 BuildParameters.Tasks.UploadAppVeyorArtifactsTask = Task("Upload-AppVeyor-Artifacts")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.IsRunningOnAppVeyor, "Skipping because not running an AppVeyor")
