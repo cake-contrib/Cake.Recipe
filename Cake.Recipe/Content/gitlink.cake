@@ -15,7 +15,7 @@ public void ExecuteGitLink()
         if(ToolSettings.BuildPlatformTarget == PlatformTarget.x64)
         {
             gitLinkSettings.Platform = "x64";
-        } 
+        }
         else if(ToolSettings.BuildPlatformTarget == PlatformTarget.x86)
         {
             gitLinkSettings.Platform = "x86";

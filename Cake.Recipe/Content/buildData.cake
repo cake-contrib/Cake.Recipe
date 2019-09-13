@@ -4,12 +4,12 @@ public class BuildData
 
 	public DirectoryPath RepositoryRoot { get; }
 
-	public IEnumerable<IIssue> Issues 
-	{ 
+	public IEnumerable<IIssue> Issues
+	{
 		get
 		{
 			return issues.AsReadOnly();
-		} 
+		}
 	}
 
 	public BuildData(ICakeContext context)
