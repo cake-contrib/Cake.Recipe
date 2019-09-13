@@ -18,6 +18,13 @@ public static class Environment
     public static string TwitterConsumerSecretVariable { get; private set; }
     public static string TwitterAccessTokenVariable { get; private set; }
     public static string TwitterAccessTokenSecretVariable { get; private set; }
+    public static string EmailSmtpHost { get; private set; }
+    public static string EmailPort { get; private set; }
+    public static string EmailEnableSsl { get; private set; }
+    public static string EmailUserName { get; private set; }
+    public static string EmailPassword { get; private set; }
+    public static string EmailSenderName { get; private set; }
+    public static string EmailSenderAddress { get; private set; }
     public static string AppVeyorApiTokenVariable { get; private set; }
     public static string CodecovRepoTokenVariable { get; private set; }
     public static string CoverallsRepoTokenVariable { get; private set; }
@@ -46,6 +53,13 @@ public static class Environment
         string twitterConsumerSecretVariable = null,
         string twitterAccessTokenVariable = null,
         string twitterAccessTokenSecretVariable = null,
+        string emailSmtpHost = null,
+        string emailPort = null,
+        string emailEnableSsl = null,
+        string emailUserName = null,
+        string emailPassword = null,
+        string emailSenderName = null,
+        string emailSenderAddress = null,
         string appVeyorApiTokenVariable = null,
         string codecovRepoTokenVariable = null,
         string coverallsRepoTokenVariable = null,
@@ -73,6 +87,11 @@ public static class Environment
         TwitterConsumerSecretVariable = twitterConsumerSecretVariable ?? "TWITTER_CONSUMER_SECRET";
         TwitterAccessTokenVariable = twitterAccessTokenVariable ?? "TWITTER_ACCESS_TOKEN";
         TwitterAccessTokenSecretVariable = twitterAccessTokenSecretVariable ?? "TWITTER_ACCESS_TOKEN_SECRET";
+        EmailSmtpHost = emailSmtpHost ?? "EMAIL_SMTPHOST";
+        EmailPort = emailPort ?? "EMAIL_PORT";
+        EmailEnableSsl = emailEnableSsl ?? "EMAIL_ENABLESSL";
+        EmailUserName = emailUserName ?? "EMAIL_USERNAME";
+        EmailPassword = emailPassword ?? "EMAIL_PASSWORD";
         AppVeyorApiTokenVariable = appVeyorApiTokenVariable ?? "APPVEYOR_API_TOKEN";
         CodecovRepoTokenVariable = codecovRepoTokenVariable ?? "CODECOV_REPO_TOKEN";
         CoverallsRepoTokenVariable = coverallsRepoTokenVariable ?? "COVERALLS_REPO_TOKEN";

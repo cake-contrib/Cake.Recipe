@@ -66,6 +66,22 @@ Teardown(context =>
             {
                 SendMessageToMicrosoftTeams();
             }
+
+            if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            {
+                var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
+                var message = new StringBuilder();
+                message.AppendLine(BuildParameters.StandardMessage + "<br/>");
+                message.AppendLine("<br/>");
+                message.AppendLine($"<strong>Name</strong>: {BuildParameters.Title}<br/>");
+                message.AppendLine($"<strong>Version</strong>: {BuildParameters.Version.SemVersion}<br/>");
+                message.AppendLine($"<strong>Configuration</strong>: {BuildParameters.Configuration}<br/>");
+                message.AppendLine($"<strong>Target</strong>: {BuildParameters.Target}<br/>");
+                message.AppendLine($"<strong>Cake version</strong>: {BuildParameters.Version.CakeVersion}<br/>");
+                message.AppendLine($"<strong>Cake.Recipe version</strong>: {BuildMetaData.Version}<br/>");
+
+                SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
+            }
         }
     }
     else
@@ -75,6 +91,14 @@ Teardown(context =>
             if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
                 SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
+            }
+
+            if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            {
+                var subject = $"Continuous Integration Build of {BuildParameters.Title} failed";
+                var message = context.ThrownException.ToString().Replace(System.Environment.NewLine, "<br/>");
+
+                SendEmail(subject, message, BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
             }
         }
     }

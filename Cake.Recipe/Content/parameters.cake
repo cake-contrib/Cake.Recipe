@@ -29,68 +29,36 @@ public static class BuildParameters
     public static bool ShouldPublishToMyGetWithApiKey { get; set; }
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
+    public static string EmailRecipient { get; private set; }
+    public static string EmailSenderName { get; private set; }
+    public static string EmailSenderAddress { get; private set; }
+
+    public static string StandardMessage
+    {
+        get { return $"Version {Version.SemVersion} of the {Title} Addin has just been released, this will be available here https://www.nuget.org/packages/{Title}, once package indexing is complete."; }
+    }
 
     public static string GitterMessage
     {
-        get
-        {
-            if(_gitterMessage == null)
-            {
-                return "@/all Version " + Version.SemVersion + " of the " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
-            }
-            else
-            {
-                return _gitterMessage;
-            }
-        }
-
-        set {
-            _gitterMessage = value;
-        }
+        get { return _gitterMessage ?? "@/all " + StandardMessage; }
+        set { _gitterMessage = value; }
     }
 
     public static string MicrosoftTeamsMessage
     {
-        get
-        {
-            if(_microsoftTeamsMessage == null)
-            {
-                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
-            }
-            else
-            {
-                return _microsoftTeamsMessage;
-            }
-        }
-
-        set
-        {
-            _microsoftTeamsMessage = value;
-        }
+        get { return _microsoftTeamsMessage ?? StandardMessage; }
+        set { _microsoftTeamsMessage = value; }
     }
 
     public static string TwitterMessage
     {
-        get
-        {
-            if(_twitterMessage == null)
-            {
-                return "Version " + Version.SemVersion + " of " + Title + " Addin has just been released, this will be available here https://www.nuget.org/packages/" + Title + ", once package indexing is complete.";
-            }
-            else
-            {
-                return _twitterMessage;
-            }
-        }
-
-        set
-        {
-            _twitterMessage = value;
-        }
+        get { return _twitterMessage ?? StandardMessage; }
+        set { _twitterMessage = value; }
     }
 
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
+    public static EmailCredentials Email { get; private set; }
     public static GitterCredentials Gitter { get; private set; }
     public static SlackCredentials Slack { get; private set; }
     public static TwitterCredentials Twitter { get; private set; }
@@ -127,6 +95,7 @@ public static class BuildParameters
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToTwitter { get; private set; }
     public static bool ShouldPostToMicrosoftTeams { get; private set; }
+    public static bool ShouldSendEmail { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
     public static bool ShouldNotifyBetaReleases { get; private set; }
@@ -176,6 +145,14 @@ public static class BuildParameters
         {
             return !string.IsNullOrEmpty(BuildParameters.GitHub.UserName) &&
                 !string.IsNullOrEmpty(BuildParameters.GitHub.Password);
+        }
+    }
+
+    public static bool CanSendEmail
+    {
+        get
+        {
+            return !string.IsNullOrEmpty(BuildParameters.Email.SmtpHost);
         }
     }
 
@@ -324,6 +301,7 @@ public static class BuildParameters
         context.Information("IsHotFixBranch: {0}", IsHotFixBranch);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
         context.Information("ShouldPublishToMyGetWithApiKey: {0}", ShouldPublishToMyGetWithApiKey);
+        context.Information("ShouldSendEmail: {0}", ShouldSendEmail);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
@@ -366,6 +344,9 @@ public static class BuildParameters
         context.Information("NuSpecFilePath: {0}", NuSpecFilePath);
         context.Information("NugetConfig: {0} ({1})", NugetConfig, context.FileExists(NugetConfig));
         context.Information("NuGetSources: {0}", string.Join(", ", NuGetSources));
+        context.Information("EmailRecipient: {0}", EmailRecipient);
+        context.Information("EmailSenderName: {0}", EmailSenderName);
+        context.Information("EmailSenderAddress: {0}", EmailSenderAddress);
     }
 
     public static void SetParameters(
@@ -388,6 +369,7 @@ public static class BuildParameters
         bool shouldPostToSlack = true,
         bool shouldPostToTwitter = true,
         bool shouldPostToMicrosoftTeams = false,
+        bool shouldSendEmail = true,
         bool shouldDownloadMilestoneReleaseNotes = false,
         bool shouldDownloadFullReleaseNotes = false,
         bool shouldNotifyBetaReleases = false,
@@ -429,6 +411,9 @@ public static class BuildParameters
         bool treatWarningsAsErrors = true,
         string masterBranchName = "master",
         string developBranchName = "develop",
+        string emailRecipient = null,
+        string emailSenderName = null,
+        string emailSenderAddress = null,
         bool shouldPublishToMyGetWithApiKey = true
         )
     {
@@ -438,6 +423,10 @@ public static class BuildParameters
         }
 
         BuildProvider = GetBuildProvider(context, buildSystem);
+
+        EmailRecipient = emailRecipient;
+        EmailSenderName = emailSenderName;
+        EmailSenderAddress = emailSenderAddress;
 
         SourceDirectoryPath = sourceDirectoryPath;
         Title = title;
@@ -475,6 +464,7 @@ public static class BuildParameters
         ShouldPostToSlack = shouldPostToSlack;
         ShouldPostToTwitter = shouldPostToTwitter;
         ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
+        ShouldSendEmail = shouldSendEmail;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
@@ -540,6 +530,7 @@ public static class BuildParameters
         ShouldPublishToMyGetWithApiKey = shouldPublishToMyGetWithApiKey;
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
+        Email = GetEmailCredentials(context);
         Gitter = GetGitterCredentials(context);
         Slack = GetSlackCredentials(context);
         Twitter = GetTwitterCredentials(context);
