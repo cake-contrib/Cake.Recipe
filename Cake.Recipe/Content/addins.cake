@@ -22,7 +22,7 @@
 #addin nuget:?package=Cake.Issues.Reporting&version=0.7.0
 #addin nuget:?package=Cake.Issues.Reporting.Generic&version=0.7.0
 
-// TODO: Conditionally decide wether to install packages or not
+// TODO: Conditionally decide whether to install packages or not
 #addin nuget:?package=Cake.Issues.PullRequests&version=0.6.2
 #addin nuget:?package=Cake.Issues.PullRequests.AppVeyor&version=0.6.0
 
