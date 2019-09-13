@@ -3,9 +3,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
-    .WithCriteria(() => FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
-    .WithCriteria(() => BuildParameters.IsMainRepository)
-    .WithCriteria(() => BuildParameters.CanPublishToCodecov)
+    .WithCriteria(() => FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath), "Skipping because no coverage report has been generated")
+    .WithCriteria(() => BuildParameters.IsMainRepository, "Skipping because not running from the main repository")
+    .WithCriteria(() => BuildParameters.ShouldRunCodecov, "Skipping because uploading to codecov is disabled")
+    .WithCriteria(() => BuildParameters.CanPublishToCodecov, "Skipping because repo token is missing, or not running on appveyor")
     .Does(() => RequireTool(CodecovTool, () => {
         var settings = new CodecovSettings {
             Files = new[] { BuildParameters.Paths.Files.TestCoverageOutputFilePath.ToString() },

@@ -12,13 +12,13 @@ BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
     }));
 
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows)
+    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Not running on windows")
     .Does(() => RequireTool(OpenCoverTool, () => {
     }));
 
 BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
     .IsDependentOn("Install-OpenCover")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedNUnitTests))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedNUnitTests), "No published NUnit tests")
     .Does(() => RequireTool(NUnitTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
 
@@ -47,7 +47,7 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
 
 BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
     .IsDependentOn("Install-OpenCover")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedxUnitTests))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedxUnitTests), "No published xUnit tests")
     .Does(() => RequireTool(XUnitTool, () => {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.xUnitTestResults);
 
@@ -81,7 +81,7 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
 
 BuildParameters.Tasks.TestMSTestTask = Task("Test-MSTest")
     .IsDependentOn("Install-OpenCover")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedMSTestTests))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedMSTestTests), "No published MSTest tests")
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.MSTestTestResults);
@@ -94,7 +94,7 @@ BuildParameters.Tasks.TestMSTestTask = Task("Test-MSTest")
 
 BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
     .IsDependentOn("Install-OpenCover")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedVSTestTests))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedVSTestTests), "No published VSTest tests")
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.VSTestTestResults);
@@ -133,7 +133,7 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
 
 BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
     .IsDependentOn("Install-OpenCover")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests))
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests), "No published Fixie tests")
     .Does(() => RequireTool(FixieTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
 
@@ -212,7 +212,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
 });
 
 BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
-    .WithCriteria(() => BuildParameters.ShouldRunIntegrationTests)
+    .WithCriteria(() => BuildParameters.ShouldRunIntegrationTests, "Cake script integration tests have been disabled")
     .IsDependentOn("Default")
     .Does(() =>
     {
