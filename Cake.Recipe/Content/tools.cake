@@ -15,7 +15,7 @@ private const string MSBuildExtensionPackTool = "#tool nuget:?package=MSBuild.Ex
 private const string XUnitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1";
 private const string NUnitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0";
 private const string OpenCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922";
-private const string ReportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.1.1";
+private const string ReportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.2.19";
 private const string ReportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1";
 private const string FixieTool = "#tool nuget:?package=Fixie&version=2.1.1";
 
