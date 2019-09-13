@@ -13,27 +13,27 @@ public class BuildPaths
         // Directories
         var buildDirectoryPath             = "./BuildArtifacts";
         var tempBuildDirectoryPath         = buildDirectoryPath + "/temp";
-        var publishedNUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedNUnitTests";
-        var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";
-        var publishedMSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedMSTestTests";
-        var publishedVSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedVSTestTests";
-        var publishedFixieTestsDirectory   = tempBuildDirectoryPath + "/_PublishedFixieTests";
-        var publishedWebsitesDirectory     = tempBuildDirectoryPath + "/_PublishedWebsites";
-        var publishedApplicationsDirectory = tempBuildDirectoryPath + "/_PublishedApplications";
+        var publishedNUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedNUnitTests";
+        var publishedxUnitTestsDirectory   = tempBuildDirectoryPath + "/_PublishedxUnitTests";
+        var publishedMSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedMSTestTests";
+        var publishedVSTestTestsDirectory  = tempBuildDirectoryPath + "/_PublishedVSTestTests";
+        var publishedFixieTestsDirectory   = tempBuildDirectoryPath + "/_PublishedFixieTests";
+        var publishedWebsitesDirectory     = tempBuildDirectoryPath + "/_PublishedWebsites";
+        var publishedApplicationsDirectory = tempBuildDirectoryPath + "/_PublishedApplications";
         var publishedLibrariesDirectory    = tempBuildDirectoryPath + "/_PublishedLibraries";
         var publishedDocumentationDirectory= buildDirectoryPath + "/Documentation";
 
         var nugetNuspecDirectory = "./nuspec/nuget";
         var chocolateyNuspecDirectory = "./nuspec/chocolatey";
 
-        var testResultsDirectory = buildDirectoryPath + "/TestResults";
-        var inspectCodeResultsDirectory = testResultsDirectory + "/InspectCode";
-        var dupFinderResultsDirectory = testResultsDirectory + "/DupFinder";
-        var NUnitTestResultsDirectory = testResultsDirectory + "/NUnit";
-        var xUnitTestResultsDirectory = testResultsDirectory + "/xUnit";
-        var MSTestTestResultsDirectory = testResultsDirectory + "/MSTest";
-        var VSTestTestResultsDirectory = testResultsDirectory + "/VSTest";
-        var FixieTestResultsDirectory = testResultsDirectory + "/Fixie";
+        var testResultsDirectory = buildDirectoryPath + "/TestResults";
+        var inspectCodeResultsDirectory = testResultsDirectory + "/InspectCode";
+        var dupFinderResultsDirectory = testResultsDirectory + "/DupFinder";
+        var NUnitTestResultsDirectory = testResultsDirectory + "/NUnit";
+        var xUnitTestResultsDirectory = testResultsDirectory + "/xUnit";
+        var MSTestTestResultsDirectory = testResultsDirectory + "/MSTest";
+        var VSTestTestResultsDirectory = testResultsDirectory + "/VSTest";
+        var FixieTestResultsDirectory = testResultsDirectory + "/Fixie";
 
         var testCoverageDirectory = buildDirectoryPath + "/TestCoverage";
 
