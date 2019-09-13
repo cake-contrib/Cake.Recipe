@@ -26,7 +26,7 @@ public void LaunchDefaultProgram(FilePath file) {
 
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
     .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping due to not running on Windows")
-    .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder have been disabled")
+    .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder has been disabled")
     .Does(() => RequireTool(ReSharperTools, () => {
         var settings = new DupFinderSettings() {
             ShowStats = true,
@@ -78,7 +78,7 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping due to not running on Windows")
-    .WithCriteria(() => BuildParameters.ShouldRunInspectCode, "Skipping becasue InspectCode have been disabled")
+    .WithCriteria(() => BuildParameters.ShouldRunInspectCode, "Skipping because InspectCode has been disabled")
     .Does<BuildData>(data => RequireTool(ReSharperTools, () => {
         var inspectCodeLogFilePath = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml");
 

@@ -9,7 +9,7 @@ BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
 });
 
 BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation, "Graph directory have been disabled")
+    .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation, "Graph Documentation publishing has been disabled")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
     .Does(async () => {
         await Graph(Tasks).DeployAsync();
@@ -18,7 +18,7 @@ BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentatio
 BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation, "Wyam documentation have been disabled")
+    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation, "Wyam documentation has been disabled")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
     .Does(() => RequireTool(WyamTool, () => {
         // Check to see if any documentation has changed

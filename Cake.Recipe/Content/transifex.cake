@@ -15,7 +15,7 @@ public static bool TransifexIsConfiguredForRepository(ICakeContext context)
     return context.FileExists("./.tx/config");
 }
 
-// Before we do anything with transifex, we must make sure that it have been properly
+// Before we do anything with transifex, we must make sure that it has been properly
 // Initialized, this is mostly related to running on appveyor or other CI.
 // Because we expect the repository to already be configured to use
 // transifex, we cannot run tx init, or it would replace the repository configuration file.
