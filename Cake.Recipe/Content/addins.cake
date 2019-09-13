@@ -16,11 +16,11 @@
 #addin nuget:?package=Cake.Transifex&version=0.7.0
 #addin nuget:?package=Cake.Twitter&version=0.9.0
 #addin nuget:?package=Cake.Wyam&version=2.2.4
-#addin nuget:?package=Cake.Issues&version=0.6.2
-#addin nuget:?package=Cake.Issues.MsBuild&version=0.6.3
-#addin nuget:?package=Cake.Issues.InspectCode&version=0.6.1
-#addin nuget:?package=Cake.Issues.Reporting&version=0.6.1
-#addin nuget:?package=Cake.Issues.Reporting.Generic&version=0.6.2
+#addin nuget:?package=Cake.Issues&version=0.7.0
+#addin nuget:?package=Cake.Issues.MsBuild&version=0.7.0
+#addin nuget:?package=Cake.Issues.InspectCode&version=0.7.1
+#addin nuget:?package=Cake.Issues.Reporting&version=0.7.0
+#addin nuget:?package=Cake.Issues.Reporting.Generic&version=0.7.0
 
 Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
