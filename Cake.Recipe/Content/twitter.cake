@@ -14,7 +14,7 @@ public void SendMessageToTwitter()
                          BuildParameters.Twitter.AccessTokenSecret,
                          BuildParameters.TwitterMessage);
 
-        Information("Message succcessfully sent.");
+        Information("Message successfully sent.");
     }
     catch(Exception ex)
     {
