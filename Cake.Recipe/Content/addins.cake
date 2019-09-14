@@ -16,7 +16,7 @@
 #addin nuget:?package=Cake.Slack&version=0.13.0
 #addin nuget:?package=Cake.Transifex&version=0.8.0
 #addin nuget:?package=Cake.Twitter&version=0.10.0
-#addin nuget:?package=Cake.Wyam&version=2.2.5
+#addin nuget:?package=Cake.Wyam&version=2.2.7
 #addin nuget:?package=Cake.Issues&version=0.7.1
 #addin nuget:?package=Cake.Issues.MsBuild&version=0.7.2
 #addin nuget:?package=Cake.Issues.InspectCode&version=0.7.1
