@@ -258,9 +258,6 @@ BuildArtifacts/
 tests/integration/repos/
 Cake.Recipe/Content/version.cake
 
-# Cake.Graph related
-docs/input/tasks/*
-
 # Wyam related
 docs/config.wyam.dll
 docs/config.wyam.hash
