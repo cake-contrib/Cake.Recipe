@@ -112,7 +112,6 @@ public static class BuildParameters
     public static bool ShouldPublishNuGet { get; private set; }
     public static bool ShouldPublishGitHub { get; private set; }
     public static bool ShouldGenerateDocumentation { get; private set; }
-    public static bool ShouldExecuteGitLink { get; private set; }
     public static bool ShouldRunIntegrationTests { get; private set; }
     public static bool ShouldRunGitVersion { get; private set; }
 
@@ -309,7 +308,6 @@ public static class BuildParameters
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
         context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
-        context.Information("ShouldExecuteGitLink: {0}", ShouldExecuteGitLink);
         context.Information("ShouldRunIntegrationTests: {0}", ShouldRunIntegrationTests);
         context.Information("ShouldRunGitVersion: {0}", ShouldRunGitVersion);
         context.Information("IsRunningOnUnix: {0}", IsRunningOnUnix);
@@ -378,7 +376,6 @@ public static class BuildParameters
         bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
-        bool shouldExecuteGitLink = true,
         bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
         bool shouldRunCodecov = false,
@@ -586,12 +583,6 @@ public static class BuildParameters
                                 IsMainRepository &&
                                 (IsMasterBranch || IsDevelopBranch) &&
                                 shouldGenerateDocumentation);
-
-        ShouldExecuteGitLink = (!IsLocalBuild &&
-                            !IsPullRequest &&
-                            IsMainRepository &&
-                            (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
-                            shouldExecuteGitLink);
 
         ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&
                                         (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&

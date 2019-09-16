@@ -233,11 +233,6 @@ BuildParameters.Tasks.BuildTask = Task("Build")
             XBuild(BuildParameters.SolutionFilePath, xbuildSettings);
         }
 
-        if(BuildParameters.ShouldExecuteGitLink)
-        {
-            ExecuteGitLink();
-        }
-
         CopyBuildOutput();
     }));
 
@@ -268,11 +263,6 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
             Configuration = BuildParameters.Configuration,
             MSBuildSettings = msBuildSettings
         });
-
-        if(BuildParameters.ShouldExecuteGitLink)
-        {
-            ExecuteGitLink();
-        }
 
         CopyBuildOutput();
     });
