@@ -99,6 +99,7 @@ public static class BuildParameters
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
     public static bool ShouldNotifyBetaReleases { get; private set; }
+    public static bool ShouldDeleteCachedFiles { get; private set; }
 
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
@@ -307,6 +308,7 @@ public static class BuildParameters
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
         context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
+        context.Information("ShouldDeleteCachedFiles: {0}", ShouldDeleteCachedFiles);
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("ShouldRunIntegrationTests: {0}", ShouldRunIntegrationTests);
         context.Information("ShouldRunGitVersion: {0}", ShouldRunGitVersion);
@@ -369,6 +371,7 @@ public static class BuildParameters
         bool shouldDownloadMilestoneReleaseNotes = false,
         bool shouldDownloadFullReleaseNotes = false,
         bool shouldNotifyBetaReleases = false,
+        bool shouldDeleteCachedFiles = false,
         FilePath milestoneReleaseNotesFilePath = null,
         FilePath fullReleaseNotesFilePath = null,
         bool shouldPublishMyGet = true,
@@ -462,6 +465,7 @@ public static class BuildParameters
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
+        ShouldDeleteCachedFiles = shouldDeleteCachedFiles;
         ShouldRunDupFinder = shouldRunDupFinder;
         ShouldRunInspectCode = shouldRunInspectCode;
         ShouldRunCodecov = shouldRunCodecov;
