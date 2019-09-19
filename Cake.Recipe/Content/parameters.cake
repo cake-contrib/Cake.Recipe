@@ -108,6 +108,7 @@ public static class BuildParameters
     public static bool ShouldRunInspectCode { get; private set; }
     public static bool ShouldRunCodecov { get; private set; }
     public static bool ShouldRunDotNetCorePack { get; private set; }
+    public static bool ShouldRunChocolatey { get; private set; }
     public static bool ShouldPublishMyGet { get; private set; }
     public static bool ShouldPublishChocolatey { get; private set; }
     public static bool ShouldPublishNuGet { get; private set; }
@@ -375,6 +376,7 @@ public static class BuildParameters
         FilePath milestoneReleaseNotesFilePath = null,
         FilePath fullReleaseNotesFilePath = null,
         bool shouldPublishMyGet = true,
+        bool shouldRunChocolatey = true,
         bool shouldPublishChocolatey = true,
         bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
@@ -567,6 +569,8 @@ public static class BuildParameters
                                 (IsMasterBranch || IsReleaseBranch || IsHotFixBranch) &&
                                 IsTagged &&
                                 shouldPublishNuGet);
+
+        ShouldRunChocolatey = shouldRunChocolatey;
 
         ShouldPublishChocolatey = (!IsLocalBuild &&
                                     !IsPullRequest &&
