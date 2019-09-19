@@ -264,3 +264,5 @@ docs/config.wyam.hash
 docs/config.wyam.packages.xml
 
 *.orig
+
+.DS_Store
