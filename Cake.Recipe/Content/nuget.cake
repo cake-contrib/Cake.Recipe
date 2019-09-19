@@ -25,6 +25,7 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
 
     var settings = new DotNetCorePackSettings {
         NoBuild = true,
+        NoRestore = true,
         Configuration = BuildParameters.Configuration,
         OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
         MSBuildSettings = msBuildSettings,

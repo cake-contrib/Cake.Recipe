@@ -261,7 +261,8 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
         DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
         {
             Configuration = BuildParameters.Configuration,
-            MSBuildSettings = msBuildSettings
+            MSBuildSettings = msBuildSettings,
+            NoRestore = true
         });
 
         CopyBuildOutput();
@@ -332,7 +333,9 @@ public void CopyBuildOutput()
                         OutputDirectory = outputFolder.Combine(targetFramework),
                         Framework = targetFramework,
                         Configuration = BuildParameters.Configuration,
-                        MSBuildSettings = msBuildSettings
+                        MSBuildSettings = msBuildSettings,
+                        NoRestore = true
+                        NoBuild = true
                     });
                 }
             }
