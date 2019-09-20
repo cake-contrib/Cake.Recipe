@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+    .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
             GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, new GitReleaseManagerCreateSettings {
@@ -27,7 +27,7 @@ BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
     .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease, "Is not main repository, and is not preparing local release")
     .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease, "Is not a releasable branch, and is not preparing local release")
     .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease, "Is not a tagged build, and is not preparing local release")
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+    .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
             if(BuildParameters.ShouldDownloadMilestoneReleaseNotes)
@@ -52,7 +52,7 @@ BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
 BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishGitHub)
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+    .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
             // Concatenating FilePathCollections should make sure we get unique FilePaths
@@ -79,7 +79,7 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
 });
 
 BuildParameters.Tasks.CreateDefaultLabelsTask = Task("Create-Default-Labels")
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
+    .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
         if(BuildParameters.CanUseGitReleaseManager)
         {
             GitReleaseManagerLabel(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);

@@ -27,7 +27,7 @@ public void LaunchDefaultProgram(FilePath file) {
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
     .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder has been disabled")
-    .Does(() => RequireTool(ReSharperTools, () => {
+    .Does(() => RequireTool(ToolSettings.ReSharperTools, () => {
         var settings = new DupFinderSettings() {
             ShowStats = true,
             ShowText = true,
@@ -56,7 +56,7 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 )
 .ReportError(exception =>
 {
-    RequireTool(ReSharperReportsTool, () => {
+    RequireTool(ToolSettings.ReSharperReportsTool, () => {
         var outputHtmlFile = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.html");
 
         Information("Duplicates were found in your codebase, creating HTML report...");
@@ -79,7 +79,7 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunInspectCode, "Skipping because InspectCode has been disabled")
-    .Does<BuildData>(data => RequireTool(ReSharperTools, () => {
+    .Does<BuildData>(data => RequireTool(ToolSettings.ReSharperTools, () => {
         var inspectCodeLogFilePath = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml");
 
         var settings = new InspectCodeSettings() {

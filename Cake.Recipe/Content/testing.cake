@@ -3,23 +3,23 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
-    .Does(() => RequireTool(ReportGeneratorTool, () => {
+    .Does(() => RequireTool(ToolSettings.ReportGeneratorTool, () => {
     }));
 
 BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
     .IsDependentOn("Install-ReportGenerator")
-    .Does(() => RequireTool(ReportUnitTool, () => {
+    .Does(() => RequireTool(ToolSettings.ReportUnitTool, () => {
     }));
 
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
     .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Not running on windows")
-    .Does(() => RequireTool(OpenCoverTool, () => {
+    .Does(() => RequireTool(ToolSettings.OpenCoverTool, () => {
     }));
 
 BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedNUnitTests), "No published NUnit tests")
-    .Does(() => RequireTool(NUnitTool, () => {
+    .Does(() => RequireTool(ToolSettings.NUnitTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
 
         if(BuildParameters.IsRunningOnWindows)
@@ -48,7 +48,7 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
 BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedxUnitTests), "No published xUnit tests")
-    .Does(() => RequireTool(XUnitTool, () => {
+    .Does(() => RequireTool(ToolSettings.XUnitTool, () => {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.xUnitTestResults);
 
         if(BuildParameters.IsRunningOnWindows)
@@ -134,7 +134,7 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
 BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
     .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests), "No published Fixie tests")
-    .Does(() => RequireTool(FixieTool, () => {
+    .Does(() => RequireTool(ToolSettings.FixieTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
 
         if(BuildParameters.IsRunningOnWindows)

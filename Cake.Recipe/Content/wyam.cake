@@ -12,7 +12,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation, "Wyam documentation has been disabled")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
-    .Does(() => RequireTool(WyamTool, () => {
+    .Does(() => RequireTool(ToolSettings.WyamTool, () => {
         // Check to see if any documentation has changed
         var sourceCommit = GitLogTip("./");
         Information("Source Commit Sha: {0}", sourceCommit.Sha);
@@ -75,7 +75,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
-    .Does(() => RequireTool(WyamTool, () => {
+    .Does(() => RequireTool(ToolSettings.WyamTool, () => {
         Wyam(new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
@@ -102,7 +102,7 @@ BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
 BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
-    .Does(() => RequireTool(WyamTool, () => {
+    .Does(() => RequireTool(ToolSettings.WyamTool, () => {
         Wyam(new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
@@ -128,7 +128,7 @@ BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Docume
 
 public void PublishDocumentation()
 {
-    RequireTool(KuduSyncTool, () => {
+    RequireTool(ToolSettings.KuduSyncTool, () => {
         if(BuildParameters.CanUseWyam)
         {
             var sourceCommit = GitLogTip("./");

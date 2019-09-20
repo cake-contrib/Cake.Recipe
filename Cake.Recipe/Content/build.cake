@@ -20,7 +20,7 @@ Setup<BuildData>(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    RequireTool(GitVersionTool, () => {
+    RequireTool(ToolSettings.GitVersionTool, () => {
         BuildParameters.SetBuildVersion(
             BuildVersion.CalculatingSemanticVersion(
                 context: Context
@@ -191,7 +191,7 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does<BuildData>(data => RequireTool(MSBuildExtensionPackTool, () => {
+    .Does<BuildData>(data => RequireTool(ToolSettings.MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         if(BuildParameters.IsRunningOnWindows)
