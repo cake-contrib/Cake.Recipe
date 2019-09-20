@@ -1,5 +1,10 @@
 public static class ToolSettings
 {
+    static ToolSettings()
+    {
+        SetToolPreprocessorDirectives();
+    }
+
     public static string[] DupFinderExcludePattern { get; private set; }
     public static string[] DupFinderExcludeFilesByStartingCommentSubstring { get; private set; }
     public static int? DupFinderDiscardCost { get; private set; }
