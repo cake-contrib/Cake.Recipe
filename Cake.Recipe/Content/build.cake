@@ -334,7 +334,7 @@ public void CopyBuildOutput()
                         Framework = targetFramework,
                         Configuration = BuildParameters.Configuration,
                         MSBuildSettings = msBuildSettings,
-                        NoRestore = true
+                        NoRestore = true,
                         NoBuild = true
                     });
                 }
