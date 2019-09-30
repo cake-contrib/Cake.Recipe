@@ -8,7 +8,7 @@ public class GitHubCredentials
     {
         UserName = userName;
         Password = password;
-		Token = token;
+        Token = token;
     }
 }
 
