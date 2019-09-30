@@ -37,7 +37,7 @@ public interface IBuildProvider
 
 public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)
 {
-    if (IsRunningOnAzurePipelines || IsRunningOnAzurePipelinesHosted)
+    if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
     {
         return new AzurePipelinesBuildProvider(buildSystem.TFBuild, context.Environment);
     }

@@ -39,11 +39,7 @@ public class AzurePipelinesPullRequestInfo : IPullRequestInfo
 {
     public AzurePipelinesPullRequestInfo(ITFBuildProvider tfBuild, ICakeEnvironment environment)
     {
-        var value = tfBuild.Environment.PullRequest.IsPullRequest;
-
-        IsPullRequest = !string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var id)
-            ? id > 0
-            : false;
+        IsPullRequest = tfBuild.Environment.PullRequest.IsPullRequest;
     }
 
     public bool IsPullRequest { get; }
