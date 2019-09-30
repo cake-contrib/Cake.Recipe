@@ -2,6 +2,7 @@ public static class Environment
 {
     public static string GithubUserNameVariable { get; private set; }
     public static string GithubPasswordVariable { get; private set; }
+    public static string GithubTokenVariable { get; private set; }
     public static string MyGetApiKeyVariable { get; private set; }
     public static string MyGetSourceUrlVariable { get; private set; }
     public static string MyGetUserVariable { get; private set; }
@@ -37,6 +38,7 @@ public static class Environment
     public static void SetVariableNames(
         string githubUserNameVariable = null,
         string githubPasswordVariable = null,
+        string githubTokenVariable = null,
         string myGetApiKeyVariable = null,
         string myGetSourceUrlVariable = null,
         string myGetUserVariable = null,
@@ -71,6 +73,7 @@ public static class Environment
     {
         GithubUserNameVariable = githubUserNameVariable ?? "GITHUB_USERNAME";
         GithubPasswordVariable = githubPasswordVariable ?? "GITHUB_PASSWORD";
+        GithubTokenVariable = githubTokenVariable ?? "GITHUB_TOKEN";
         MyGetApiKeyVariable = myGetApiKeyVariable ?? "MYGET_API_KEY";
         MyGetSourceUrlVariable = myGetSourceUrlVariable ?? "MYGET_SOURCE";
         MyGetUserVariable = myGetUserVariable ?? "MYGET_USER";

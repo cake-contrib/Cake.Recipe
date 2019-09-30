@@ -144,7 +144,7 @@ public static class BuildParameters
         get
         {
             return !string.IsNullOrEmpty(BuildParameters.GitHub.UserName) &&
-                !string.IsNullOrEmpty(BuildParameters.GitHub.Password);
+                (!string.IsNullOrEmpty(BuildParameters.GitHub.Password) || !string.IsNullOrEmpty(BuildParameters.GitHub.Token));
         }
     }
 
