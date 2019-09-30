@@ -440,7 +440,7 @@ BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
     }
 });
 
-BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
+BuildParameters.Tasks.ContinuousIntegrationTask = Task("ContinuousIntegration")
     .IsDependentOn("Upload-Artifacts")
     .IsDependentOn("Publish-MyGet-Packages")
     .IsDependentOn("Publish-Nuget-Packages")
@@ -537,8 +537,8 @@ public class Builder
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
         BuildParameters.Tasks.UploadCodecovReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
-        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
-        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
+        BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Upload-Coverage-Report");
+        BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
 
         if (!isDotNetCoreBuild)

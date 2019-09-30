@@ -37,7 +37,7 @@ BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVey
 if (BuildSystem.IsRunningOnAppVeyor && !BuildParameters.IsNuGetBuild) {
     BuildParameters.Tasks.ReportMessagesToCi = Task("Report-Messages-To-CI")
         .IsDependentOn("InspectCode")
-        .IsDependeeOf("AppVeyor")
+        .IsDependeeOf("ContinuousIntegration")
         .WithCriteria<BuildData>((context, data) => data.Issues.Any(), "No issues to report.")
         .Does<BuildData>((data) =>
     {

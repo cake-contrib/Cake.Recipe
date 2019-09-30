@@ -155,7 +155,7 @@ public void PublishDocumentation()
                         publishFolder,
                         sourceCommit.Committer.Name,
                         sourceCommit.Committer.Email,
-                        string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
+                        string.Format("Continuous Integration Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
                     );
 
                     Information("Pushing all changes...");

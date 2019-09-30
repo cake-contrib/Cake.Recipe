@@ -15,7 +15,7 @@ public class BuildTasks
     public CakeTaskBuilder DotNetCoreBuildTask { get; set; }
     public CakeTaskBuilder PackageTask { get; set; }
     public CakeTaskBuilder DefaultTask { get; set; }
-    public CakeTaskBuilder AppVeyorTask { get; set; }
+    public CakeTaskBuilder ContinuousIntegrationTask { get; set; }
     public CakeTaskBuilder ReleaseNotesTask { get; set; }
     public CakeTaskBuilder LabelsTask { get; set; }
     public CakeTaskBuilder ClearCacheTask { get; set; }
