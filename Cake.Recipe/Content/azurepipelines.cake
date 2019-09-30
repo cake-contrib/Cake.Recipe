@@ -39,8 +39,7 @@ public class AzurePipelinesPullRequestInfo : IPullRequestInfo
 {
     public AzurePipelinesPullRequestInfo(ITFBuildProvider tfBuild, ICakeEnvironment environment)
     {
-        //todo: update to `tfBuild.Environment.PullRequest.IsPullRequest` after upgrade to 0.33.0
-        var value = environment.GetEnvironmentVariable("SYSTEM_PULLREQUEST_PULLREQUESTID");
+        var value = tfBuild.Environment.PullRequest.IsPullRequest;
 
         IsPullRequest = !string.IsNullOrWhiteSpace(value) && int.TryParse(value, out var id)
             ? id > 0
