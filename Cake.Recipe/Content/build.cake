@@ -184,7 +184,8 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
     DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
     {
         Sources = BuildParameters.NuGetSources,
-        MSBuildSettings = msBuildSettings
+        MSBuildSettings = msBuildSettings,
+        PackagesDirectory = BuildParameters.RestorePackagesDirectory
     });
 });
 
