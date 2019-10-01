@@ -1,7 +1,8 @@
 # Cake.Recipe
 
 `Cake.Recipe` is a set of convention based Cake scripts.
-More about Cake at http://cakebuild.net
+
+More about Cake at the [Cake website](http://cakebuild.net).
 
 [![License](http://img.shields.io/:license-mit-blue.svg)](https://github.com/cake-contrib/Cake.Recipe/blob/develop/LICENSE)
 
@@ -18,14 +19,13 @@ More about Cake at http://cakebuild.net
 |:--:|:--:|
 |[![Build status](https://ci.appveyor.com/api/projects/status/uofoe54t82jvovaf/branch/develop?svg=true)](https://ci.appveyor.com/project/cakecontrib/cake-recipe/branch/develop)|[![Build status](https://ci.appveyor.com/api/projects/status/uofoe54t82jvovaf/branch/develop?svg=true)](https://ci.appveyor.com/project/cakecontrib/cake-recipe/branch/master)|
 
-
 ## Quick Links
 
 - [Documentation](https://cake-contrib.github.io/Cake.Recipe)
 
 ## Chat Room
 
-Come join in the conversation about Cake Recipe in our Gitter Chat Room
+Come join in the conversation about Cake Recipe in our Gitter Chat Room.
 
 [![Join the chat at https://gitter.im/cake-contrib/Lobby](https://badges.gitter.im/cake-contrib/Lobby.svg)](https://gitter.im/cake-contrib/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
