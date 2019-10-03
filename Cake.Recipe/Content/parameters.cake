@@ -131,6 +131,7 @@ public static class BuildParameters
 
     public static FilePath NugetConfig { get; private set; }
     public static ICollection<string> NuGetSources { get; private set; }
+    public static DirectoryPath RestorePackagesDirectory { get; private set; }
 
     public static IBuildProvider BuildProvider { get; private set; }
 
@@ -343,6 +344,7 @@ public static class BuildParameters
         context.Information("NuSpecFilePath: {0}", NuSpecFilePath);
         context.Information("NugetConfig: {0} ({1})", NugetConfig, context.FileExists(NugetConfig));
         context.Information("NuGetSources: {0}", string.Join(", ", NuGetSources));
+        context.Information("RestorePackagesDirectory: {0}", RestorePackagesDirectory);
         context.Information("EmailRecipient: {0}", EmailRecipient);
         context.Information("EmailSenderName: {0}", EmailSenderName);
         context.Information("EmailSenderAddress: {0}", EmailSenderAddress);
@@ -413,7 +415,8 @@ public static class BuildParameters
         string emailRecipient = null,
         string emailSenderName = null,
         string emailSenderAddress = null,
-        bool shouldPublishToMyGetWithApiKey = true
+        bool shouldPublishToMyGetWithApiKey = true,
+        DirectoryPath RestorePackagesDirectory = null
         )
     {
         if (context == null)
@@ -504,6 +507,8 @@ public static class BuildParameters
                 };
             }
         }
+
+        RestorePackagesDirectory = restorePackagesDirectory;
 
         Target = context.Argument("target", "Default");
         Configuration = context.Argument("configuration", "Release");
