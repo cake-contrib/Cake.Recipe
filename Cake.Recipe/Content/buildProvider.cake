@@ -39,9 +39,11 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
 {
     if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
     {
+        context.Information("Using Azure DevOps Pipelines Provider...");
         return new AzurePipelinesBuildProvider(buildSystem.TFBuild, context.Environment);
     }
 
     // always fallback to AppVeyor
+    context.Information("Using AppVeyor Provider...");
     return new AppVeyorBuildProvider(buildSystem.AppVeyor);
 }
