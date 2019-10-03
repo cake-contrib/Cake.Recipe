@@ -416,7 +416,7 @@ public static class BuildParameters
         string emailSenderName = null,
         string emailSenderAddress = null,
         bool shouldPublishToMyGetWithApiKey = true,
-        DirectoryPath RestorePackagesDirectory = null
+        DirectoryPath restorePackagesDirectory = null
         )
     {
         if (context == null)
