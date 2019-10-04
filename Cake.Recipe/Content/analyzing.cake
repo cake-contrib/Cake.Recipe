@@ -104,7 +104,8 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     })
 );
 
-BuildParameters.Tasks.InspectCodeTask = Task("CreateIssuesReport")
+BuildParameters.Tasks.CreateIssuesReportTask = Task("CreateIssuesReport")
+    .IsDependentOn("InspectCode")
     .Does<BuildData>(data => {
         var issueReportFile = BuildParameters.Paths.Directories.TestResults.CombineWithFilePath("issues-report.html");
 

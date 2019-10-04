@@ -2,6 +2,7 @@ public class BuildTasks
 {
     public CakeTaskBuilder DupFinderTask { get; set; }
     public CakeTaskBuilder InspectCodeTask { get; set; }
+    public CakeTaskBuilder CreateIssuesReportTask { get; set; }
     public CakeTaskBuilder AnalyzeTask { get; set; }
     public CakeTaskBuilder PrintAppVeyorEnvironmentVariablesTask { get; set; }
     public CakeTaskBuilder UploadArtifactsTask { get; set; }
