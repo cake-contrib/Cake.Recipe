@@ -443,8 +443,7 @@ BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
 
 BuildParameters.Tasks.ContinuousIntegrationTask = Task("ContinuousIntegration")
     .IsDependentOn("Upload-Artifacts")
-    .IsDependentOn("Publish-MyGet-Packages")
-    .IsDependentOn("Publish-Nuget-Packages")
+    .IsDependentOn("Publish-Packages")
     .IsDependentOn("Publish-GitHub-Release")
     .IsDependentOn("Publish-Documentation")
     .Finally(() =>
@@ -539,7 +538,6 @@ public class Builder
         BuildParameters.Tasks.UploadCodecovReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Upload-Coverage-Report");
-        BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Publish-Chocolatey-Packages");
         BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
 
         if (!isDotNetCoreBuild)

@@ -33,6 +33,8 @@ public static class BuildParameters
     public static string EmailSenderName { get; private set; }
     public static string EmailSenderAddress { get; private set; }
 
+    public static List<PackageSourceData> PackageSources { get; private set; }
+
     public static string StandardMessage
     {
         get { return $"Version {Version.SemVersion} of the {Title} Addin has just been released, this will be available here https://www.nuget.org/packages/{Title}, once package indexing is complete."; }
@@ -62,9 +64,6 @@ public static class BuildParameters
     public static GitterCredentials Gitter { get; private set; }
     public static SlackCredentials Slack { get; private set; }
     public static TwitterCredentials Twitter { get; private set; }
-    public static MyGetCredentials MyGet { get; private set; }
-    public static NuGetCredentials NuGet { get; private set; }
-    public static ChocolateyCredentials Chocolatey { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
@@ -201,37 +200,6 @@ public static class BuildParameters
             return !string.IsNullOrEmpty(BuildParameters.Wyam.AccessToken) &&
                 !string.IsNullOrEmpty(BuildParameters.Wyam.DeployRemote) &&
                 !string.IsNullOrEmpty(BuildParameters.Wyam.DeployBranch);
-        }
-    }
-
-    public static bool CanPublishToChocolatey
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Chocolatey.ApiKey) &&
-                !string.IsNullOrEmpty(BuildParameters.Chocolatey.SourceUrl);
-        }
-    }
-
-    public static bool CanPublishToMyGet
-    {
-        get
-        {
-            return (!string.IsNullOrEmpty(BuildParameters.MyGet.ApiKey) &&
-                !string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl)) || (
-                    !string.IsNullOrEmpty(BuildParameters.MyGet.User) &&
-                    !string.IsNullOrEmpty(BuildParameters.MyGet.Password) &&
-                    !string.IsNullOrEmpty(BuildParameters.MyGet.SourceUrl)
-                );
-        }
-    }
-
-    public static bool CanPublishToNuGet
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.NuGet.ApiKey) &&
-                !string.IsNullOrEmpty(BuildParameters.NuGet.SourceUrl);
         }
     }
 
@@ -416,7 +384,8 @@ public static class BuildParameters
         string emailSenderName = null,
         string emailSenderAddress = null,
         bool shouldPublishToMyGetWithApiKey = true,
-        DirectoryPath restorePackagesDirectory = null
+        DirectoryPath restorePackagesDirectory = null,
+        List<PackageSourceData> packageSourceDatas = null
         )
     {
         if (context == null)
@@ -539,9 +508,6 @@ public static class BuildParameters
         Gitter = GetGitterCredentials(context);
         Slack = GetSlackCredentials(context);
         Twitter = GetTwitterCredentials(context);
-        MyGet = GetMyGetCredentials(context);
-        NuGet = GetNuGetCredentials(context);
-        Chocolatey = GetChocolateyCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
@@ -553,8 +519,7 @@ public static class BuildParameters
             releaseTarget => StringComparer.OrdinalIgnoreCase.Equals(releaseTarget, Target)
         );
         IsReleaseBuild = new [] {
-            "Publish-NuGet-Packages",
-            "Publish-Chocolatey-Packages",
+            "Publish-Packages",
             "Publish-GitHub-Release"
         }.Any(
             publishTarget => StringComparer.OrdinalIgnoreCase.Equals(publishTarget, Target)
@@ -601,5 +566,34 @@ public static class BuildParameters
                                         (IsMasterBranch || IsDevelopBranch || IsReleaseBranch || IsHotFixBranch) &&
                                         context.FileExists(context.MakeAbsolute(BuildParameters.IntegrationTestScriptPath))) ||
                                         shouldRunIntegrationTests);
+
+        if(packageSourceDatas?.Any() ?? false)
+        {
+            PackageSources = packageSourceDatas;
+        }
+        else
+        {
+            PackageSources = new List<PackageSourceData>();
+
+            // Try to get the deprecated way of doing things, set them as default sources
+            var myGetUrl = context.EnvironmentVariable(Environment.MyGetSourceUrlVariable);
+            if(!string.IsNullOrEmpty(myGetUrl))
+            {
+                PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl));
+                PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.Chocolatey));
+            }
+
+            var nuGetUrl = context.EnvironmentVariable(Environment.NuGetSourceUrlVariable);
+            if(!string.IsNullOrEmpty(nuGetUrl))
+            {
+                PackageSources.Add(new PackageSourceData(context, "NUGET", nuGetUrl));
+            }
+
+            var chocolateyUrl = context.EnvironmentVariable(Environment.ChocolateySourceUrlVariable);
+            if(!string.IsNullOrEmpty(chocolateyUrl))
+            {
+                PackageSources.Add(new PackageSourceData(context, "CHOCOLATEY", myGetUrl, FeedType.Chocolatey));
+            }
+        }
     }
 }
