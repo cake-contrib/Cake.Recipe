@@ -33,11 +33,11 @@ Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
         System.IO.File.WriteAllText(script.FullPath, code);
         var arguments = new Dictionary<string, string>();
 
-        if(BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient") != null) {
+        if (BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient") != null) {
             arguments.Add("nuget_useinprocessclient", BuildParameters.CakeConfiguration.GetValue("NuGet_UseInProcessClient"));
         }
 
-        if(BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification") != null) {
+        if (BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification") != null) {
             arguments.Add("settings_skipverification", BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification"));
         }
 

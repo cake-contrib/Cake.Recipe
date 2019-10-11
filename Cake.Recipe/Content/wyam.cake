@@ -22,11 +22,11 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
         var wyamDocsFolderDirectoryName = BuildParameters.WyamRootDirectoryPath.GetDirectoryName();
 
-        foreach(var file in filesChanged)
+        foreach (var file in filesChanged)
         {
             var forwardSlash = '/';
             Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-            if(file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
+            if (file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
                 file.Path.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
                 file.Path.Contains("config.wyam"))
             {
@@ -35,7 +35,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
             }
         }
 
-        if(docFileChanged)
+        if (docFileChanged)
         {
             Information("Detected that documentation files have changed, so running Wyam...");
 
@@ -129,7 +129,7 @@ BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Docume
 public void PublishDocumentation()
 {
     RequireTool(ToolSettings.KuduSyncTool, () => {
-        if(BuildParameters.CanUseWyam)
+        if (BuildParameters.CanUseWyam)
         {
             var sourceCommit = GitLogTip("./");
 
@@ -148,7 +148,7 @@ public void PublishDocumentation()
                 Information("Stage all changes...");
                 GitAddAll(publishFolder);
 
-                if(GitHasStagedChanges(publishFolder))
+                if (GitHasStagedChanges(publishFolder))
                 {
                     Information("Commit all changes...");
                     GitCommit(

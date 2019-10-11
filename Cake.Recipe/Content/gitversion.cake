@@ -31,7 +31,7 @@ public class BuildVersion
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
             {
-                if(!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
+                if (!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
                 {
                     context.GitVersion(new GitVersionSettings{
                         UpdateAssemblyInfoFilePath = BuildParameters.Paths.Files.SolutionInfoFilePath,
@@ -53,7 +53,7 @@ public class BuildVersion
                 milestone = string.Concat(version);
             }
 
-            if(!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
+            if (!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
             {
                 assertedVersions = context.GitVersion(new GitVersionSettings{
                         OutputType = GitVersionOutput.Json,
@@ -103,7 +103,7 @@ public class BuildVersion
         var libgitPath = GetLibGit2Path(context);
         if (string.IsNullOrEmpty(libgitPath)) { return; }
 
-        foreach(var config in configFiles) {
+        foreach (var config in configFiles) {
             var xml = System.Xml.Linq.XDocument.Load(config.ToString());
 
             if (xml.Element("configuration").Elements("dllmap")

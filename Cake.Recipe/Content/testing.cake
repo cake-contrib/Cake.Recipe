@@ -12,7 +12,7 @@ BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
     }));
 
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Not running on windows")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Not running on windows")
     .Does(() => RequireTool(ToolSettings.OpenCoverTool, () => {
     }));
 
@@ -22,7 +22,7 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
     .Does(() => RequireTool(ToolSettings.NUnitTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
 
-        if(BuildParameters.IsRunningOnWindows)
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
         {
             OpenCover(tool => {
                 tool.NUnit3(GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new NUnit3Settings {
@@ -51,7 +51,7 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
     .Does(() => RequireTool(ToolSettings.XUnitTool, () => {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.xUnitTestResults);
 
-        if(BuildParameters.IsRunningOnWindows)
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
         {
             OpenCover(tool => {
                 tool.XUnit2(GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new XUnit2Settings {
@@ -109,7 +109,7 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
         vsTestSettings.WithAppVeyorLogger();
     }
 
-    if(BuildParameters.IsRunningOnWindows)
+    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
     {
         OpenCover(
             tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), vsTestSettings); },
@@ -137,7 +137,7 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
     .Does(() => RequireTool(ToolSettings.FixieTool, () => {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
 
-        if(BuildParameters.IsRunningOnWindows)
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
         {
             OpenCover(tool => {
                 tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new FixieSettings  {
@@ -181,13 +181,13 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             tool.DotNetCoreTest(project.FullPath, settings);
         };
 
-        if (BuildParameters.IsRunningOnUnix)
+        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
             testAction(Context);
         }
         else
         {
-            if(BuildParameters.IsRunningOnWindows)
+            if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
             {
                 OpenCover(testAction,
                     BuildParameters.Paths.Files.TestCoverageOutputFilePath,

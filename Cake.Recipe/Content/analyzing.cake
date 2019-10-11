@@ -36,17 +36,17 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
             ThrowExceptionOnFindingDuplicates = ToolSettings.DupFinderThrowExceptionOnFindingDuplicates ?? true
         };
 
-        if(ToolSettings.DupFinderExcludePattern != null)
+        if (ToolSettings.DupFinderExcludePattern != null)
         {
             settings.ExcludePattern = ToolSettings.DupFinderExcludePattern;
         }
 
-        if(ToolSettings.DupFinderExcludeFilesByStartingCommentSubstring != null)
+        if (ToolSettings.DupFinderExcludeFilesByStartingCommentSubstring != null)
         {
             settings.ExcludeFilesByStartingCommentSubstring = ToolSettings.DupFinderExcludeFilesByStartingCommentSubstring;
         }
 
-        if(ToolSettings.DupFinderDiscardCost != null)
+        if (ToolSettings.DupFinderDiscardCost != null)
         {
             settings.DiscardCost = ToolSettings.DupFinderDiscardCost.Value;
         }
@@ -64,12 +64,12 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
             BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
             outputHtmlFile);
 
-        if(!BuildParameters.IsLocalBuild && FileExists(outputHtmlFile))
+        if (!BuildParameters.IsLocalBuild && FileExists(outputHtmlFile))
         {
             BuildParameters.BuildProvider.UploadArtifact(outputHtmlFile);
         }
 
-        if(BuildParameters.IsLocalBuild)
+        if (BuildParameters.IsLocalBuild)
         {
             LaunchDefaultProgram(outputHtmlFile);
         }
@@ -87,7 +87,7 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
             OutputFile = inspectCodeLogFilePath
         };
 
-        if(FileExists(BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName)))
+        if (FileExists(BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName)))
         {
             settings.Profile = BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName);
         }
@@ -115,7 +115,7 @@ BuildParameters.Tasks.CreateIssuesReportTask = Task("CreateIssuesReport")
             "./",
             issueReportFile);
 
-        if(!BuildParameters.IsLocalBuild && FileExists(issueReportFile))
+        if (!BuildParameters.IsLocalBuild && FileExists(issueReportFile))
         {
             BuildParameters.BuildProvider.UploadArtifact(issueReportFile);
         }

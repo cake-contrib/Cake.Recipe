@@ -15,7 +15,7 @@ Setup<BuildData>(context =>
 
     Information("Starting Setup...");
 
-    if(BuildParameters.IsMasterBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
+    if (BuildParameters.BranchType == BranchType.Master && (context.Log.Verbosity != Verbosity.Diagnostic)) {
         Information("Increasing verbosity to diagnostic.");
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
@@ -36,7 +36,7 @@ Setup<BuildData>(context =>
         BuildMetaData.Version,
         BuildParameters.IsTagged);
 
-    if(BuildParameters.Version.CakeVersion != currentSupportedCakeVersionNumber)
+    if (BuildParameters.Version.CakeVersion != currentSupportedCakeVersionNumber)
     {
         throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", currentSupportedCakeVersionNumber));
     }
@@ -48,26 +48,26 @@ Teardown(context =>
 {
     Information("Starting Teardown...");
 
-    if(context.Successful)
+    if (context.Successful)
     {
-        if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.IsMasterBranch || ((BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch) && BuildParameters.ShouldNotifyBetaReleases)) && BuildParameters.IsTagged)
+        if (!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.BranchType == BranchType.Master || ((BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) && BuildParameters.ShouldNotifyBetaReleases)) && BuildParameters.IsTagged)
         {
-            if(BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
+            if (BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
                 SendMessageToTwitter();
             }
 
-            if(BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
+            if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
                 SendMessageToGitterRoom();
             }
 
-            if(BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
+            if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
                 SendMessageToMicrosoftTeams();
             }
 
-            if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
             {
                 var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
                 var message = new StringBuilder();
@@ -86,14 +86,14 @@ Teardown(context =>
     }
     else
     {
-        if(!BuildParameters.IsLocalBuild && BuildParameters.IsMainRepository)
+        if (!BuildParameters.IsLocalBuild && BuildParameters.IsMainRepository)
         {
-            if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
+            if (BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
                 SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
             }
 
-            if(BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
             {
                 var subject = $"Continuous Integration Build of {BuildParameters.Title} failed";
                 var message = context.ThrownException.ToString().Replace(System.Environment.NewLine, "<br/>");
@@ -104,7 +104,7 @@ Teardown(context =>
     }
 
     // Clear nupkg files from tools directory
-    if((!BuildParameters.IsLocalBuild || BuildParameters.ShouldDeleteCachedFiles) && DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
+    if ((!BuildParameters.IsLocalBuild || BuildParameters.ShouldDeleteCachedFiles) && DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
     {
         Information("Deleting nupkg files...");
         var nupkgFiles = GetFiles(Context.Environment.WorkingDirectory.Combine("tools") + "/**/*.nupkg");
@@ -172,7 +172,7 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
                             .WithProperty("FileVersion",  BuildParameters.Version.Version)
                             .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
 
-    if(!IsRunningOnWindows())
+    if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
     {
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
 
@@ -195,7 +195,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
     .Does<BuildData>(data => RequireTool(ToolSettings.MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        if(BuildParameters.IsRunningOnWindows)
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
         {
             var msbuildSettings = new MSBuildSettings()
                 .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
@@ -250,7 +250,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
                             .WithProperty("FileVersion",  BuildParameters.Version.Version)
                             .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
 
-        if(!IsRunningOnWindows())
+        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
             var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
 
@@ -273,7 +273,7 @@ public void CopyBuildOutput()
 {
     Information("Copying build output...");
 
-    foreach(var project in ParseSolution(BuildParameters.SolutionFilePath).GetProjects())
+    foreach (var project in ParseSolution(BuildParameters.SolutionFilePath).GetProjects())
     {
         // There is quite a bit of duplication in this function, that really needs to be tidied Upload
 
@@ -282,19 +282,19 @@ public void CopyBuildOutput()
         Information("Using BuildPlatformTarget: {0}", platformTarget);
         var parsedProject = ParseProject(project.Path, BuildParameters.Configuration, platformTarget);
 
-        if(project.Path.FullPath.ToLower().Contains("wixproj"))
+        if (project.Path.FullPath.ToLower().Contains("wixproj"))
         {
             Warning("Skipping wix project");
             continue;
         }
 
-        if(project.Path.FullPath.ToLower().Contains("shproj"))
+        if (project.Path.FullPath.ToLower().Contains("shproj"))
         {
             Warning("Skipping shared project");
             continue;
         }
 
-        if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
+        if (parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
         {
             Information("OutputPath: {0}", parsedProject.OutputPath);
             Information("RootNameSpace: {0}", parsedProject.RootNameSpace);
@@ -303,7 +303,7 @@ public void CopyBuildOutput()
         }
 
         // If the project is an exe, then simply copy all of the contents to the correct output folder
-        if(!parsedProject.IsLibrary())
+        if (!parsedProject.IsLibrary())
         {
             Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
@@ -311,7 +311,7 @@ public void CopyBuildOutput()
 
             // If .NET SDK project, copy using dotnet publish for each target framework
             // Otherwise just copy
-            if(parsedProject.IsVS2017ProjectFormat)
+            if (parsedProject.IsVS2017ProjectFormat)
             {
                 var msBuildSettings = new DotNetCoreMSBuildSettings()
                             .WithProperty("Version", BuildParameters.Version.SemVersion)
@@ -319,7 +319,7 @@ public void CopyBuildOutput()
                             .WithProperty("FileVersion",  BuildParameters.Version.Version)
                             .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
 
-                if(!IsRunningOnWindows())
+                if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
                 {
                     var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
 
@@ -328,7 +328,7 @@ public void CopyBuildOutput()
                     msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
                 }
 
-                foreach(var targetFramework in parsedProject.NetCore.TargetFrameworks)
+                foreach (var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
                     DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings {
                         OutputDirectory = outputFolder.Combine(targetFramework),
@@ -350,7 +350,7 @@ public void CopyBuildOutput()
 
         // Now we need to test for whether this is a unit test project.
         // If this is found, move the output to the unit test folder, otherwise, simply copy to normal output folder
-        if(!BuildParameters.IsDotNetCoreBuild)
+        if (!BuildParameters.IsDotNetCoreBuild)
         {
             Information("Not a .Net Core Build");
         }
@@ -359,7 +359,7 @@ public void CopyBuildOutput()
             Information("Is a .Net Core Build");
         }
 
-        if(parsedProject.IsLibrary() && (parsedProject.HasPackage("xunit") || parsedProject.HasReference("xunit.core")))
+        if (parsedProject.IsLibrary() && (parsedProject.HasPackage("xunit") || parsedProject.HasReference("xunit.core")))
         {
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
@@ -367,7 +367,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.IsLibrary() && (parsedProject.HasPackage("fixie") || parsedProject.HasReference("fixie")))
+        else if (parsedProject.IsLibrary() && (parsedProject.HasPackage("fixie") || parsedProject.HasReference("fixie")))
         {
             Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
@@ -375,7 +375,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.IsLibrary() && (parsedProject.HasPackage("nunit") || parsedProject.HasReference("nunit.framework")))
+        else if (parsedProject.IsLibrary() && (parsedProject.HasPackage("nunit") || parsedProject.HasReference("nunit.framework")))
         {
             Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
@@ -383,7 +383,7 @@ public void CopyBuildOutput()
             CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
             continue;
         }
-        else if(parsedProject.IsLibrary() && parsedProject.IsMSTestProject())
+        else if (parsedProject.IsLibrary() && parsedProject.IsMSTestProject())
         {
             // We will use vstest.console.exe by default for MSTest Projects
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
@@ -398,9 +398,9 @@ public void CopyBuildOutput()
 
             // If .NET SDK project, copy for each output path
             // Otherwise just copy
-            if(parsedProject.IsVS2017ProjectFormat)
+            if (parsedProject.IsVS2017ProjectFormat)
             {
-                foreach(var outputPath in parsedProject.OutputPaths)
+                foreach (var outputPath in parsedProject.OutputPaths)
                 {
                     var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace).Combine(outputPath.GetDirectoryName());
                     EnsureDirectoryExists(outputFolder);
@@ -433,7 +433,7 @@ BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
     .Does(() =>
 {
     // Concatenating FilePathCollections should make sure we get unique FilePaths
-    foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/*") +
+    foreach (var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/*") +
                            GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
                            GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
     {
@@ -448,7 +448,7 @@ BuildParameters.Tasks.ContinuousIntegrationTask = Task("ContinuousIntegration")
     .IsDependentOn("Publish-Documentation")
     .Finally(() =>
 {
-    if(publishingError)
+    if (publishingError)
     {
         throw new Exception("An error occurred during the publishing of " + BuildParameters.Title + ".  All publishing tasks have been attempted.");
     }

@@ -124,7 +124,7 @@ public class BuildFiles
         // Not a perfect solution, but we need to filter PDB files
         // when building on an OS that's not Windows (since they don't exist there).
 
-        if(!context.IsRunningOnWindows())
+        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
             return files.Where(f => !f.FullPath.EndsWith("pdb")).ToArray();
         }

@@ -8,7 +8,7 @@ BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report"
     .WithCriteria(() => !BuildParameters.IsPullRequest)
     .WithCriteria(() => BuildParameters.IsMainRepository)
     .Does(() => RequireTool(ToolSettings.CoverallsTool, () => {
-        if(BuildParameters.CanPublishToCoveralls)
+        if (BuildParameters.CanPublishToCoveralls)
         {
             CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
             {

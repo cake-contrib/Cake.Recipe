@@ -85,7 +85,7 @@ var testsTask = Task("Tests")
 
 Information("Setting up integration tests...");
 
-foreach(var testRepo in testRepos)
+foreach (var testRepo in testRepos)
 {
     var url = testRepo.Url;
     var path = testRepo.Path;

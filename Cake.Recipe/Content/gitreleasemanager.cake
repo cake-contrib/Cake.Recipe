@@ -4,7 +4,7 @@
 
 BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
     .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+        if (BuildParameters.CanUseGitReleaseManager)
         {
             var settings = new GitReleaseManagerCreateSettings
             {
@@ -38,9 +38,9 @@ BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
     .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease, "Is not a releasable branch, and is not preparing local release")
     .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease, "Is not a tagged build, and is not preparing local release")
     .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+        if (BuildParameters.CanUseGitReleaseManager)
         {
-            if(BuildParameters.ShouldDownloadMilestoneReleaseNotes)
+            if (BuildParameters.ShouldDownloadMilestoneReleaseNotes)
             {
                 var settings = new GitReleaseManagerExportSettings
                 {
@@ -57,7 +57,7 @@ BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
                 }
             }
 
-            if(BuildParameters.ShouldDownloadFullReleaseNotes)
+            if (BuildParameters.ShouldDownloadFullReleaseNotes)
             {
                 if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
                 {
@@ -80,10 +80,10 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishGitHub)
     .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+        if (BuildParameters.CanUseGitReleaseManager)
         {
             // Concatenating FilePathCollections should make sure we get unique FilePaths
-            foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+            foreach (var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
                                    GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
                                    GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
             {
@@ -121,7 +121,7 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
 
 BuildParameters.Tasks.CreateDefaultLabelsTask = Task("Create-Default-Labels")
     .Does(() => RequireTool(ToolSettings.GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+        if (BuildParameters.CanUseGitReleaseManager)
         {
             if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
             {

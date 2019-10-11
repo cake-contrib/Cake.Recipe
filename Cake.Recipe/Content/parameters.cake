@@ -567,7 +567,7 @@ public static class BuildParameters
                                         context.FileExists(context.MakeAbsolute(BuildParameters.IntegrationTestScriptPath))) ||
                                         shouldRunIntegrationTests);
 
-        if(packageSourceDatas?.Any() ?? false)
+        if (packageSourceDatas?.Any() ?? false)
         {
             PackageSources = packageSourceDatas;
         }
@@ -577,20 +577,20 @@ public static class BuildParameters
 
             // Try to get the deprecated way of doing things, set them as default sources
             var myGetUrl = context.EnvironmentVariable(Environment.MyGetSourceUrlVariable);
-            if(!string.IsNullOrEmpty(myGetUrl))
+            if (!string.IsNullOrEmpty(myGetUrl))
             {
                 PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl));
                 PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.Chocolatey));
             }
 
             var nuGetUrl = context.EnvironmentVariable(Environment.NuGetSourceUrlVariable);
-            if(!string.IsNullOrEmpty(nuGetUrl))
+            if (!string.IsNullOrEmpty(nuGetUrl))
             {
                 PackageSources.Add(new PackageSourceData(context, "NUGET", nuGetUrl));
             }
 
             var chocolateyUrl = context.EnvironmentVariable(Environment.ChocolateySourceUrlVariable);
-            if(!string.IsNullOrEmpty(chocolateyUrl))
+            if (!string.IsNullOrEmpty(chocolateyUrl))
             {
                 PackageSources.Add(new PackageSourceData(context, "CHOCOLATEY", myGetUrl, FeedType.Chocolatey));
             }

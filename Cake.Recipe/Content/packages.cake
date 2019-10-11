@@ -9,7 +9,7 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
 
     EnsureDirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages);
 
-    foreach(var nuspecFile in nuspecFiles)
+    foreach (var nuspecFile in nuspecFiles)
     {
         // TODO: Addin the release notes
         // ReleaseNotes = BuildParameters.ReleaseNotes.Notes.ToArray(),
@@ -39,7 +39,7 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
                             .WithProperty("FileVersion",  BuildParameters.Version.Version)
                             .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
 
-    if(!IsRunningOnWindows())
+    if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
     {
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
 
@@ -73,7 +73,7 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-    if(BuildParameters.NuSpecFilePath != null) {
+    if (BuildParameters.NuSpecFilePath != null) {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
         // Create packages.
@@ -99,12 +99,12 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
 
     EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
-    foreach(var nuspecFile in nuspecFiles)
+    foreach (var nuspecFile in nuspecFiles)
     {
         // TODO: Addin the release notes
         // ReleaseNotes = BuildParameters.ReleaseNotes.Notes.ToArray(),
 
-        if(DirectoryExists(BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
+        if (DirectoryExists(BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
         {
             // Create packages.
             NuGetPack(nuspecFile, new NuGetPackSettings {
@@ -118,7 +118,7 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
             continue;
         }
 
-        if(DirectoryExists(BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
+        if (DirectoryExists(BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
         {
             // Create packages.
             NuGetPack(nuspecFile, new NuGetPackSettings {
