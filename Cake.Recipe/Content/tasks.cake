@@ -33,7 +33,8 @@ public class BuildTasks
     public CakeTaskBuilder DotNetCorePackTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackageTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackagesTask { get; set; }
-    public CakeTaskBuilder PublishPackagesTask { get; set; }
+    public CakeTaskBuilder PublishPreReleasePackagesTask { get; set; }
+    public CakeTaskBuilder PublishReleasePackagesTask { get; set; }
     public CakeTaskBuilder InstallReportGeneratorTask { get; set; }
     public CakeTaskBuilder InstallReportUnitTask { get; set; }
     public CakeTaskBuilder InstallOpenCoverTask { get; set; }

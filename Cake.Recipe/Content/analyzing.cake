@@ -7,7 +7,7 @@ public void LaunchDefaultProgram(FilePath file) {
     FilePath program;
     string arguments = "";
 
-    if (BuildParameters.IsRunningOnWindows)
+    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
     {
         program = "cmd";
         arguments = "/c start ";
@@ -25,7 +25,7 @@ public void LaunchDefaultProgram(FilePath file) {
 }
 
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping due to not running on Windows")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder has been disabled")
     .Does(() => RequireTool(ToolSettings.ReSharperTools, () => {
         var settings = new DupFinderSettings() {
@@ -77,7 +77,7 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 });
 
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping due to not running on Windows")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunInspectCode, "Skipping because InspectCode has been disabled")
     .Does<BuildData>(data => RequireTool(ToolSettings.ReSharperTools, () => {
         var inspectCodeLogFilePath = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml");

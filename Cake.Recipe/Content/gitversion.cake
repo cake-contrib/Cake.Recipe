@@ -24,7 +24,7 @@ public class BuildVersion
 
         if (BuildParameters.ShouldRunGitVersion)
         {
-            if (context.IsRunningOnUnix()) {
+            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows) {
                 PatchGitLibConfigFiles(context);
             }
 

@@ -1,7 +1,7 @@
 BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Packages")
     .IsDependentOn("Clean")
     .WithCriteria(() => BuildParameters.ShouldRunChocolatey, "Skipping because execution of Chocolatey has been disabled")
-    .WithCriteria(() => BuildParameters.IsRunningOnWindows, "Skipping because not running on Windows")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping because not running on Windows")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory), "Skipping because Chocolatey nuspec directory is missing")
     .Does(() =>
 {
@@ -142,68 +142,170 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
     }
 });
 
-BuildParameters.Tasks.PublishPackagesTask = Task("Publish-Packages")
+BuildParameters.Tasks.PublishPreReleasePackagesTask = Task("Publish-PreRelease-Packages")
+    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.ForceContinuousIntegration, "Skipping because this is a local build, and force isn't being applied")
     .IsDependentOn("Package")
     .Does(() =>
 {
-    var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey);
-    var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet);
+    var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey && p.IsRelease == false).ToList();
+    var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == false).ToList();
 
-    if(BuildParameters.ShouldRunChocolatey && BuildParameters.IsRunningOnWindows && BuildParameters.ShouldPublishChocolatey && DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    PushChocolateyPackages(Context, false, chocolateySources);
+
+    PushNuGetPackages(Context, false, nugetSources);
+})
+.OnError(exception =>
+{
+    Error(exception.Message);
+    Information("Publish-PreRelease-Packages Task failed, but continuing with next Task...");
+    publishingError = true;
+});
+
+BuildParameters.Tasks.PublishReleasePackagesTask = Task("Publish-Release-Packages")
+    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.ForceContinuousIntegration, "Skipping because this is a local build, and force isn't being applied")
+    .WithCriteria(() => BuildParameters.IsTagged, "Skipping because current commit is not tagged")
+    .IsDependentOn("Package")
+    .Does(() =>
+{
+    var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey && p.IsRelease == true).ToList();
+    var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == true).ToList();
+
+    PushChocolateyPackages(Context, true, chocolateySources);
+
+    PushNuGetPackages(Context, true, nugetSources);
+})
+.OnError(exception =>
+{
+    Error(exception.Message);
+    Information("Publish-Release-Packages Task failed, but continuing with next Task...");
+    publishingError = true;
+});
+
+
+public void PushChocolateyPackages(ICakeContext context, bool isRelease, List<PackageSourceData> chocolateySources)
+{
+    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows && DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     {
-        foreach(var chocolateySource in chocolateySources)
+        Information("Number of configured {0} Chocolatey Sources: {1}", isRelease ? "Release" : "PreRelease", chocolateySources.Count());
+
+        foreach (var chocolateySource in chocolateySources)
         {
             var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
 
-            foreach(var nupkgFile in nupkgFiles)
-            {
-                // Push the package.
-                ChocolateyPush(nupkgFile, new ChocolateyPushSettings {
-                    ApiKey = chocolateySource.Credentials.ApiKey,
+            var chocolateyPushSettings = new ChocolateyPushSettings
+                {
                     Source = chocolateySource.PushUrl
-                });
+                };
+
+            var canPushToChocolateySource = false;
+            if (!string.IsNullOrEmpty(chocolateySource.Credentials.ApiKey))
+            {
+                context.Information("Setting ApiKey in Chocolatey Push Settings...");
+                chocolateyPushSettings.ApiKey = chocolateySource.Credentials.ApiKey;
+                canPushToChocolateySource = true;
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(chocolateySource.Credentials.User) && !string.IsNullOrEmpty(chocolateySource.Credentials.Password))
+                {
+                    var chocolateySourceSettings = new ChocolateySourcesSettings
+                    {
+                        UserName = chocolateySource.Credentials.User,
+                        Password = chocolateySource.Credentials.Password
+                    };
+
+                    context.Information("Adding Chocolatey source with user/pass...");
+                    context.ChocolateyAddSource(isRelease ? "ReleaseSource" : "PreReleaseSource", chocolateySource.PushUrl, chocolateySourceSettings);
+                    canPushToChocolateySource = true;
+                }
+                else
+                {
+                    context.Warning("User and Password are missing for {0} Chocolatey Source with Url {1}", isRelease ? "Release" : "PreRelease", chocolateySource.PushUrl);
+                }
+            }
+
+            if (canPushToChocolateySource)
+            {
+                foreach (var nupkgFile in nupkgFiles)
+                {
+                    context.Information("Pushing {0} to {1} Source with Url {2}...", nupkgFile, isRelease ? "Release" : "PreRelease", chocolateySource.PushUrl);
+
+                    // Push the package.
+                    context.ChocolateyPush(nupkgFile, chocolateyPushSettings);
+                }
+            }
+            else
+            {
+                context.Warning("Unable to push Chocolatey Packages to {0} Source with Url {1} as necessary credentials haven't been provided.", isRelease ? "Release" : "PreRelease", chocolateySource.PushUrl);
             }
         }
     }
-
-    if(DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
+    else
     {
-        foreach(var nugetSource in nugetSources)
+        context.Information("Unable to publish Chocolatey packages. IsRunningOnWindows: {0} Chocolatey Packages Directory Exists: {0}", BuildParameters.BuildAgentOperatingSystem, DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages));
+    }
+}
+
+public void PushNuGetPackages(ICakeContext context, bool isRelease, List<PackageSourceData> nugetSources)
+{
+    if (DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages))
+    {
+        context.Information("Number of configured {0} NuGet Sources: {1}", isRelease ? "Release" : "PreRelease", nugetSources.Count());
+
+        foreach (var nugetSource in nugetSources)
         {
             var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
+
             var nugetPushSettings = new NuGetPushSettings
                 {
                     Source = nugetSource.PushUrl
                 };
 
-            if(!string.IsNullOrEmpty(nugetSource.Credentials.ApiKey))
+            var canPushToNuGetSource = false;
+            if (!string.IsNullOrEmpty(nugetSource.Credentials.ApiKey))
             {
-                Information("Setting ApiKey in NuGet Push Settings...");
+                context.Information("Setting ApiKey in NuGet Push Settings...");
                 nugetPushSettings.ApiKey = nugetSource.Credentials.ApiKey;
+                canPushToNuGetSource = true;
             }
             else
             {
-                var nugetSourceSettings = new NuGetSourcesSettings
-                    {
-                        UserName = nugetSource.Credentials.User,
-                        Password = nugetSource.Credentials.Password
-                    };
+                if (!string.IsNullOrEmpty(nugetSource.Credentials.User) && !string.IsNullOrEmpty(nugetSource.Credentials.Password))
+                {
+                    var nugetSourceSettings = new NuGetSourcesSettings
+                        {
+                            UserName = nugetSource.Credentials.User,
+                            Password = nugetSource.Credentials.Password
+                        };
 
-                Information("Adding NuGet source with user/pass...");
-                NuGetAddSource("PreReleaseSource", nugetSource.PushUrl, nugetSourceSettings);
+                    context.Information("Adding NuGet source with user/pass...");
+                    context.NuGetAddSource(isRelease ? "ReleaseSource" : "PreReleaseSource", nugetSource.PushUrl, nugetSourceSettings);
+                    canPushToNuGetSource = true;
+                }
+                else
+                {
+                    context.Warning("User and Password are missing for {0} NuGet Source with Url {1}", isRelease ? "Release" : "PreRelease", nugetSource.PushUrl);
+                }
             }
 
-            foreach(var nupkgFile in nupkgFiles)
+            if (canPushToNuGetSource)
             {
-                // Push the package.
-                NuGetPush(nupkgFile, nugetPushSettings);
+                foreach (var nupkgFile in nupkgFiles)
+                {
+                    context.Information("Pushing {0} to {1} Source with Url {2}...", nupkgFile, isRelease ? "Release" : "PreRelease", nugetSource.PushUrl);
+
+                    // Push the package.
+                    context.NuGetPush(nupkgFile, nugetPushSettings);
+                }
+            }
+            else
+            {
+                 context.Warning("Unable to push NuGet Packages to {0} Source with Url {1} as necessary credentials haven't been provided.", isRelease ? "Release" : "PreRelease", nugetSource.PushUrl);
             }
         }
     }
-})
-.OnError(exception =>
-{
-    Error(exception.Message);
-    Information("Publish-Packages Task failed, but continuing with next Task...");
-    publishingError = true;
-});
+    else
+    {
+        context.Information("Unable to publish NuGet Packages as NuGet Packages Directory doesn't exist.");
+    }
+}

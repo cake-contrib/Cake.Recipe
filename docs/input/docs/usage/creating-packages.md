@@ -39,7 +39,7 @@ With that added, it will push that to MyGet. I am going to guess that you may no
 shouldPublishMyGet = (!IsLocalBuild &&
                         !IsPullRequest &&
                         IsMainRepository &&
-                        (IsTagged || !IsMasterBranch) &&
+                        (IsTagged || BuildParameters.BranchType != BranchType.Master) &&
                         shouldPublishMyGet);
 ```
 

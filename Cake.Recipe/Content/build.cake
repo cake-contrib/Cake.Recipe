@@ -129,9 +129,6 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     Information("IsLocalBuild: {0}", BuildParameters.IsLocalBuild);
     Information("IsPullRequest: {0}", BuildParameters.IsPullRequest);
     Information("IsMainRepository: {0}", BuildParameters.IsMainRepository);
-    Information("IsMasterBranch: {0}", BuildParameters.IsMasterBranch);
-    Information("IsReleaseBranch: {0}", BuildParameters.IsReleaseBranch);
-    Information("IsHotFixBranch: {0}", BuildParameters.IsHotFixBranch);
     Information("IsTagged: {0}", BuildParameters.IsTagged);
 
     Information("Solution FilePath: {0}", MakeAbsolute((FilePath)BuildParameters.SolutionFilePath));
@@ -443,7 +440,8 @@ BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
 
 BuildParameters.Tasks.ContinuousIntegrationTask = Task("ContinuousIntegration")
     .IsDependentOn("Upload-Artifacts")
-    .IsDependentOn("Publish-Packages")
+    .IsDependentOn("Publish-PreRelease-Packages")
+    .IsDependentOn("Publish-Release-Packages")
     .IsDependentOn("Publish-GitHub-Release")
     .IsDependentOn("Publish-Documentation")
     .Finally(() =>
