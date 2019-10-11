@@ -23,7 +23,6 @@ public class BuildTasks
     public CakeTaskBuilder PreviewTask { get; set; }
     public CakeTaskBuilder PublishDocsTask { get; set; }
     public CakeTaskBuilder CreateChocolateyPackagesTask { get; set; }
-    public CakeTaskBuilder PublishChocolateyPackagesTask { get; set; }
     public CakeTaskBuilder UploadCodecovReportTask { get; set; }
     public CakeTaskBuilder UploadCoverallsReportTask { get; set; }
     public CakeTaskBuilder UploadCoverageReportTask { get; set; }
@@ -34,8 +33,7 @@ public class BuildTasks
     public CakeTaskBuilder DotNetCorePackTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackageTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackagesTask { get; set; }
-    public CakeTaskBuilder PublishMyGetPackagesTask { get; set; }
-    public CakeTaskBuilder PublishNuGetPackagesTask { get; set; }
+    public CakeTaskBuilder PublishPackagesTask { get; set; }
     public CakeTaskBuilder InstallReportGeneratorTask { get; set; }
     public CakeTaskBuilder InstallReportUnitTask { get; set; }
     public CakeTaskBuilder InstallOpenCoverTask { get; set; }
