@@ -153,7 +153,7 @@ var chocolateyNuspecDirectory = &quot;./nuspec/chocolatey&quot;;
 <pre><code>shouldPublishMyGet = (!IsLocalBuild &amp;&amp;
                         !IsPullRequest &amp;&amp;
                         IsMainRepository &amp;&amp;
-                        (IsTagged || !IsMasterBranch) &amp;&amp;
+                        (IsTagged || BuildParameters.BranchType != BranchType.Master) &amp;&amp;
                         shouldPublishMyGet);
 </code></pre>
 <p>Above, you can tell that it cannot be local build, pull request, not the master branch, and that it should publish to MyGet. Now the last piece of the puzzle is located in the <a href="https://github.com/cake-contrib/Cake.Recipe/blob/develop/Cake.Recipe/Content/nuget.cake">nuget.cake</a> file. That is the Cake file that contains the tasks that create and publish packages. The <em>Publish-MyGet-Packages</em> task has two criteria, that you want to publish a MyGet package and that packages have actually been created. This task also contains the check for the environment variables we set above and will record that error and continue to execute the next task.</p>
