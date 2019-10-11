@@ -43,6 +43,13 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
         return new AzurePipelinesBuildProvider(buildSystem.TFBuild, context.Environment);
     }
 
+    if (buildSystem.IsRunningOnTeamCity)
+    {
+        context.Information("Using TeamCity Provider...");
+        return new TeamCityBuildProvider(buildSystem.TeamCity, context);
+    }
+
+
     // always fallback to AppVeyor
     context.Information("Using AppVeyor Provider...");
     return new AppVeyorBuildProvider(buildSystem.AppVeyor);
