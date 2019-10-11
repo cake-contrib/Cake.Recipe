@@ -49,8 +49,13 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
         return new TeamCityBuildProvider(buildSystem.TeamCity, context);
     }
 
+    if (buildSystem.IsRunningOnAppVeyor)
+    {
+        context.Information("Using AppVeyor Provider...");
+        return new AppVeyorBuildProvider(buildSystem.AppVeyor);
+    }
 
-    // always fallback to AppVeyor
-    context.Information("Using AppVeyor Provider...");
-    return new AppVeyorBuildProvider(buildSystem.AppVeyor);
+    // always fallback to Local Build
+    context.Information("Using Local Build Provider...");
+    return new LocalBuildBuildProvider(context);
 }
