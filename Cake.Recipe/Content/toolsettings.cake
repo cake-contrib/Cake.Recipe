@@ -41,7 +41,7 @@ public static class ToolSettings
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.2.2",
         string reSharperReportsTool = "#tool nuget:?package=ReSharperReports&version=0.4.0",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.2",
-        string wyamTool = "#tool nuget:?package=Wyam&version=2.2.8",
+        string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string msbuildExtensionPackTool = "#tool nuget:?package=MSBuild.Extension.Pack&version=1.9.1",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0",
