@@ -41,6 +41,11 @@ Setup<BuildData>(context =>
         throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", currentSupportedCakeVersionNumber));
     }
 
+    // Make sure build and linters run before issues task.
+    IssuesBuildTasks.ReadIssuesTask
+        .IsDependentOn("Build")
+        .IsDependentOn("InspectCode");
+
     return new BuildData(context);
 });
 
@@ -211,15 +216,8 @@ BuildParameters.Tasks.BuildTask = Task("Build")
 
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
-            // Parse warnings.
-            var issues = ReadIssues(
-                MsBuildIssuesFromFilePath(
-                    BuildParameters.Paths.Files.BuildLogFilePath,
-                    MsBuildXmlFileLoggerFormat),
-                data.RepositoryRoot);
-
-            Information("{0} MsBuild warnings are found.", issues.Count());
-            data.AddIssues(issues);
+            // Pass path to MsBuild log file to Cake.Issues.Recipe
+            IssuesParameters.InputFiles.MsBuildXmlFileLoggerLogFilePath = BuildParameters.Paths.Files.BuildLogFilePath;
         }
         else
         {
@@ -421,7 +419,9 @@ BuildParameters.Tasks.PackageTask = Task("Package")
     .IsDependentOn("Export-Release-Notes");
 
 BuildParameters.Tasks.DefaultTask = Task("Default")
-    .IsDependentOn("Package");
+    .IsDependentOn("Package")
+    // Run issues task from Cake.Issues.Recipe by default.
+    .IsDependentOn("Issues");
 
 BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
     .IsDependentOn("Package")
