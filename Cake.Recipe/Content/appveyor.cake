@@ -34,21 +34,6 @@ BuildParameters.Tasks.PrintAppVeyorEnvironmentVariablesTask = Task("Print-AppVey
     Information("CONFIGURATION: {0}", EnvironmentVariable("CONFIGURATION"));
 });
 
-if (BuildSystem.IsRunningOnAppVeyor && !BuildParameters.IsNuGetBuild) {
-    BuildParameters.Tasks.ReportMessagesToCi = Task("Report-Messages-To-CI")
-        .IsDependentOn("CreateIssuesReport")
-        .IsDependeeOf("ContinuousIntegration")
-        .WithCriteria<BuildData>((context, data) => data.Issues.Any(), "No issues to report.")
-        .Does<BuildData>((data) =>
-    {
-        ReportIssuesToPullRequest(
-            data.Issues,
-            AppVeyorBuilds(),
-            data.RepositoryRoot.FullPath
-        );
-    });
-}
-
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
         RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=4.0.0&loaddependencies=true

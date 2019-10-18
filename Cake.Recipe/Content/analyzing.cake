@@ -94,34 +94,11 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
 
         InspectCode(BuildParameters.SolutionFilePath, settings);
 
-        // Parse issues.
-        var issues =
-            ReadIssues(
-                InspectCodeIssuesFromFilePath(inspectCodeLogFilePath),
-                data.RepositoryRoot);
-        Information("{0} InspectCode issues are found.", issues.Count());
-        data.AddIssues(issues);
+        // Pass path to InspectCode log file to Cake.Issues.Recipe
+        IssuesParameters.InputFiles.InspectCodeLogFilePath = inspectCodeLogFilePath;
     })
 );
 
-BuildParameters.Tasks.CreateIssuesReportTask = Task("CreateIssuesReport")
-    .IsDependentOn("InspectCode")
-    .Does<BuildData>(data => {
-        var issueReportFile = BuildParameters.Paths.Directories.TestResults.CombineWithFilePath("issues-report.html");
-
-        CreateIssueReport(
-            data.Issues,
-            GenericIssueReportFormatFromEmbeddedTemplate(GenericIssueReportTemplate.HtmlDxDataGrid),
-            "./",
-            issueReportFile);
-
-        if (!BuildParameters.IsLocalBuild && FileExists(issueReportFile))
-        {
-            BuildParameters.BuildProvider.UploadArtifact(issueReportFile);
-        }
-    });
-
 BuildParameters.Tasks.AnalyzeTask = Task("Analyze")
     .IsDependentOn("DupFinder")
-    .IsDependentOn("InspectCode")
-    .IsDependentOn("CreateIssuesReport");
+    .IsDependentOn("InspectCode");
