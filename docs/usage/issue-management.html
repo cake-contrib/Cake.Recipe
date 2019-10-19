@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Documentation</title>
+        <title>Cake.Recipe - Issue management</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -73,7 +73,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/index.cshtml"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/issue-management.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -101,13 +101,13 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
@@ -130,108 +130,13 @@
 
 
 		<section class="content-header">
-			<h1>Documentation</h1>
+			<h1>Issue management</h1>
 		</section>
 	<section class="content">
-		<p>This user guide, like Cake.Recipe itself, is under very active development. Some parts of it aren't 
-documented as completely as they need to be, but we gladly accept your contributions.</p>
-
-<p>We need your help to improve the documentation for Cake.Recipe, so if there is something that you 
-would like to add then you can edit the content directly on GitHub.</p>
-
-    <h1>Fundamentals</h1>
-        <p>The following contains all the pieces of core information that you will need in order to use Cake.Recipe.</p>
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></strong></td>
-									<td>
-									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
-    <h1>Requirements</h1>
-        <p>The following contains all information regarding the requirements for running Cake.Recipe.</p>
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/requirements/posix">Posix</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/requirements/windows">Windows</a></strong></td>
-									<td>
-									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
-    <h1>Usage</h1>
-        <p>How to obtain, configure, and execute Cake.Recipe.</p>
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></strong></td>
-									<td>
-									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
+		<p>Cake.Recipe integrates <a href="https://cakeissues.net/docs/recipe/overview">Cake.Issues.Recipe</a> for issue management.
+It integrates code analysis with build and pull request systems.</p>
+<p>See <a href="https://cakeissues.net/docs/recipe/supported-tools">supported tools</a> for a list of supported build servers and pull request systems
+and <a href="https://cakeissues.net/docs/recipe/configuration">configuration</a> for possible configuration options.</p>
 
 	</section>
                 
