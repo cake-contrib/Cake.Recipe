@@ -6,6 +6,7 @@ public class BuildVersion
     public string CakeVersion { get; private set; }
     public string InformationalVersion { get; private set; }
     public string FullSemVersion { get; private set; }
+    public string AssemblySemVer { get; private set; }
 
     public static BuildVersion CalculatingSemanticVersion(
         ICakeContext context)
@@ -19,6 +20,7 @@ public class BuildVersion
         string semVersion = null;
         string milestone = null;
         string informationalVersion = null;
+        string assemblySemVer = null;
         string fullSemVersion = null;
         GitVersion assertedVersions = null;
 
@@ -50,7 +52,9 @@ public class BuildVersion
                 version = context.EnvironmentVariable("GitVersion_MajorMinorPatch");
                 semVersion = context.EnvironmentVariable("GitVersion_LegacySemVerPadded");
                 informationalVersion = context.EnvironmentVariable("GitVersion_InformationalVersion");
+                assemblySemVer = context.EnvironmentVariable("GitVersion_AssemblySemVer");
                 milestone = string.Concat(version);
+                fullSemVersion = context.EnvironmentVariable("GitVersion_FullSemVer");
             }
 
             if(!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
@@ -68,6 +72,7 @@ public class BuildVersion
             version = assertedVersions.MajorMinorPatch;
             semVersion = assertedVersions.LegacySemVerPadded;
             informationalVersion = assertedVersions.InformationalVersion;
+            assemblySemVer = assertedVersions.AssemblySemVer;
             milestone = string.Concat(version);
             fullSemVersion = assertedVersions.FullSemVer;
 
@@ -93,7 +98,8 @@ public class BuildVersion
             Milestone = milestone,
             CakeVersion = cakeVersion,
             InformationalVersion = informationalVersion,
-            FullSemVersion = fullSemVersion
+            FullSemVersion = fullSemVersion,
+            AssemblySemVer = assemblySemVer
         };
     }
 
