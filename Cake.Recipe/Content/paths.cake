@@ -220,6 +220,7 @@ public class BuildDirectories
             Build,
             TempBuild,
             TestResults,
+            TestCoverage.Combine("coverlet"),
             TestCoverage
         };
     }
