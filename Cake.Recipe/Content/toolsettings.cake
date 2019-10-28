@@ -46,7 +46,7 @@ public static class ToolSettings
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.10.0",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
-        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.3.2",
+        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.3.3",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string fixieTool = "#tool nuget:?package=Fixie&version=2.2.0"
     )
