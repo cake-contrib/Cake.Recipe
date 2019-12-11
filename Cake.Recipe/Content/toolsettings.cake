@@ -38,7 +38,7 @@ public static class ToolSettings
         string coverallsTool = "#tool nuget:?package=coveralls.io&version=1.4.2",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
-        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.2.3",
+        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.0",
         string reSharperReportsTool = "#tool nuget:?package=ReSharperReports&version=0.4.0",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
