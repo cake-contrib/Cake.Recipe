@@ -172,7 +172,8 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
                             .WithProperty("Version", BuildParameters.Version.SemVersion)
                             .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
                             .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion)
+                            .WithProperty("Configuration", BuildParameters.Configuration);
 
     if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
     {
