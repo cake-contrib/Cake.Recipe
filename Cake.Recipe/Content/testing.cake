@@ -168,20 +168,49 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .Does(() => {
 
     var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
+    // We create the coverlet settings here so we don't have to create the filters several times
+    var coverletSettings = new CoverletSettings
+    {
+        CollectCoverage         = true,
+        // It is problematic to merge the reports into one, as such we use a custom directory for coverage results
+        CoverletOutputDirectory = BuildParameters.Paths.Directories.TestCoverage.Combine("coverlet"),
+        CoverletOutputFormat    = CoverletOutputFormat.opencover,
+        ExcludeByFile           = ToolSettings.TestCoverageExcludeByFile.Split(';').ToList(),
+        ExcludeByAttribute      = ToolSettings.TestCoverageExcludeByAttribute.Split(';').ToList()
+    };
+
+    foreach (var filter in ToolSettings.TestCoverageFilter.Split(' '))
+    {
+        if (filter[0] == '+')
+        {
+            coverletSettings.WithInclusion(filter.TrimStart('+'));
+        }
+        else if (filter[0] == '-')
+        {
+            coverletSettings.WithFilter(filter.TrimStart('-'));
+        }
+    }
 
     foreach (var project in projects)
     {
+        var settings = new DotNetCoreTestSettings
+        {
+            Configuration = BuildParameters.Configuration,
+            NoBuild = true
+        };
         Action<ICakeContext> testAction = tool =>
         {
-            var settings = new DotNetCoreTestSettings
-            {
-                Configuration = BuildParameters.Configuration,
-                NoBuild = true
-            };
             tool.DotNetCoreTest(project.FullPath, settings);
         };
 
-        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+        var parsedProject = ParseProject(project, BuildParameters.Configuration);
+
+        if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
+        {
+            coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
+            DotNetCoreTest(project.FullPath, settings, coverletSettings);
+        }
+        else if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
             testAction(Context);
         }
@@ -204,10 +233,16 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         }
     }
 
+    var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
     if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
     {
+        coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
+    }
+
+    if (coverageFiles.Any())
+    {
         // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage);
     }
 });
 
