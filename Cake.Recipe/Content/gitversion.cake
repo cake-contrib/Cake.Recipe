@@ -94,12 +94,12 @@ public class BuildVersion
         return new BuildVersion
         {
             Version = version,
-            SemVersion = semVersion,
+            SemVersion = semVersion?.ToLowerInvariant(),
             Milestone = milestone,
             CakeVersion = cakeVersion,
-            InformationalVersion = informationalVersion,
-            FullSemVersion = fullSemVersion,
-            AssemblySemVer = assemblySemVer
+            InformationalVersion = informationalVersion?.ToLowerInvariant(),
+            FullSemVersion = fullSemVersion?.ToLowerInvariant(),
+            AssemblySemVer = assemblySemVer?.ToLowerInvariant()
         };
     }
 
