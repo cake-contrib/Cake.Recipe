@@ -19,6 +19,7 @@ public static class BuildParameters
     public static bool IsLocalBuild { get; private set; }
     public static PlatformFamily BuildAgentOperatingSystem { get; private set; }
     public static bool IsRunningOnAppVeyor { get; private set; }
+    public static bool IsRunningOnTravisCI { get; private set; }
     public static bool IsPullRequest { get; private set; }
     public static bool IsMainRepository { get; private set; }
     public static bool IsPublicRepository {get; private set; }
@@ -216,7 +217,7 @@ public static class BuildParameters
         {
             return ShouldRunCodecov &&
                 (!string.IsNullOrEmpty(BuildParameters.Codecov.RepoToken) ||
-                BuildParameters.IsRunningOnAppVeyor);
+                BuildParameters.IsRunningOnAppVeyor || BuildParameters.IsRunningOnTravisCI);
         }
     }
 
@@ -496,6 +497,7 @@ public static class BuildParameters
         DevelopBranchName = developBranchName;
         IsLocalBuild = buildSystem.IsLocalBuild;
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
+        IsRunningOnTravisCI = buildSystem.IsRunningOnTravisCI;
         IsPullRequest = BuildProvider.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), BuildProvider.Repository.Name);
         IsPublicRepository = isPublicRepository;
