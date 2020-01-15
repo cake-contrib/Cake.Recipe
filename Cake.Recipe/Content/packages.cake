@@ -144,6 +144,7 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
 
 BuildParameters.Tasks.PublishPreReleasePackagesTask = Task("Publish-PreRelease-Packages")
     .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.ForceContinuousIntegration, "Skipping because this is a local build, and force isn't being applied")
+    .WithCriteria(() => !BuildParameters.IsTagged, "Skipping because current commit is tagged")
     .IsDependentOn("Package")
     .Does(() =>
 {
