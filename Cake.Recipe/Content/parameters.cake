@@ -119,6 +119,7 @@ public static class BuildParameters
     public static bool ShouldPublishNuGet { get; private set; }
     public static bool ShouldPublishGitHub { get; private set; }
     public static bool ShouldGenerateDocumentation { get; private set; }
+    public static bool ShouldDocumentSourceFiles { get; private set; }
     public static bool ShouldRunIntegrationTests { get; private set; }
     public static bool ShouldRunGitVersion { get; private set; }
 
@@ -283,6 +284,7 @@ public static class BuildParameters
         context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
         context.Information("ShouldDeleteCachedFiles: {0}", ShouldDeleteCachedFiles);
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
+        context.Information("ShouldDocumentSourceFiles: {0}", ShouldDocumentSourceFiles);
         context.Information("ShouldRunIntegrationTests: {0}", ShouldRunIntegrationTests);
         context.Information("ShouldRunGitVersion: {0}", ShouldRunGitVersion);
         context.Information("BuildAgentOperatingSystem: {0}", BuildAgentOperatingSystem);
@@ -355,6 +357,7 @@ public static class BuildParameters
         bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
+        bool shouldDocumentSourceFiles = true,
         bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
         bool shouldRunCodecov = false,
@@ -588,6 +591,7 @@ public static class BuildParameters
                                 IsMainRepository &&
                                 (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Develop) &&
                                 shouldGenerateDocumentation);
+        ShouldDocumentSourceFiles = ShouldGenerateDocumentation && shouldDocumentSourceFiles;
 
         ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&
                                         (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Develop || BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
