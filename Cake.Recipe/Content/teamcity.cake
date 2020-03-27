@@ -41,7 +41,7 @@ public class TeamCityRepositoryInfo : IRepositoryInfo
 {
     public TeamCityRepositoryInfo(ITeamCityProvider teamCity, ICakeContext context)
     {
-        Branch = context.Environment.GetEnvironmentVariable("vcsroot.branch");
+        Branch = context.Environment.GetEnvironmentVariable("vcsroot.branch").Replace("refs/heads/", string.Empty);
         Name = teamCity.Environment.Build.BuildConfName;
         Tag = new TeamCityTagInfo(context);
     }
