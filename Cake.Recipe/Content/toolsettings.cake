@@ -48,7 +48,7 @@ public static class ToolSettings
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.3.3",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string fixieTool = "#tool nuget:?package=Fixie&version=2.2.0"
+        string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1"
     )
     {
         CodecovTool = codecovTool;
