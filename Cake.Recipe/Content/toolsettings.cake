@@ -34,7 +34,7 @@ public static class ToolSettings
     public static string FixieTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives( 
-        string codecovTool = "#tool nuget:?package=codecov&version=1.8.0",
+        string codecovTool = "#tool nuget:?package=codecov&version=1.9.0",
         string coverallsTool = "#tool nuget:?package=coveralls.io&version=1.4.2",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
