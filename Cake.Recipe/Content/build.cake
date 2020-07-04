@@ -257,7 +257,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
         // package is generated
         if(!BuildParameters.IsLocalBuild)
         {
-            msbuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
+            msBuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
         }
 
         if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
