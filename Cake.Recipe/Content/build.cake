@@ -215,6 +215,13 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                         BuildParameters.Paths.Files.BuildLogFilePath)
                 );
 
+            // This is used in combination with SourceLink to ensure a deterministic
+            // package is generated
+            if(!BuildParameters.IsLocalBuild)
+            {
+                msbuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
+            }
+
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
             // Pass path to MsBuild log file to Cake.Issues.Recipe
@@ -245,6 +252,13 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
                             .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
                             .WithProperty("FileVersion",  BuildParameters.Version.Version)
                             .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+
+        // This is used in combination with SourceLink to ensure a deterministic
+        // package is generated
+        if(!BuildParameters.IsLocalBuild)
+        {
+            msbuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
+        }
 
         if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
