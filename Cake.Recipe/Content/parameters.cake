@@ -639,7 +639,7 @@ public static class BuildParameters
             var gprUrl = context.EnvironmentVariable("GPR_SOURCE");
             if(!string.IsNullOrEmpty(gprUrl))
             {
-                PackageSourceDatas.Add(new PackageSourceData(Context, "GPR", gprUrl, FeedType.NuGet, false));
+                PackageSources.Add(new PackageSourceData(Context, "GPR", gprUrl, FeedType.NuGet, false));
             }
         }
     }
