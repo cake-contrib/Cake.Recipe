@@ -627,6 +627,20 @@ public static class BuildParameters
             {
                 PackageSources.Add(new PackageSourceData(context, "CHOCOLATEY", chocolateyUrl, FeedType.Chocolatey));
             }
+
+            // The following aren't deprecated sources, but rather suggested defaults going forward, so check
+            // for the environment variables being set, if they are, add them to the list
+            var azureUrl = context.EnvironmentVariable("AZURE_SOURCE");
+            if (!string.IsNullOrEmpty(azureUrl))
+            {
+                PackageSources.Add(new PackageSourceData(context, "AZURE", azureUrl, FeedType.NuGet, false));
+            }
+
+            var gprUrl = context.EnvironmentVariable("GPR_SOURCE");
+            if(!string.IsNullOrEmpty(gprUrl))
+            {
+                PackageSourceDatas.Add(new PackageSourceData(Context, "GPR", gprUrl, FeedType.NuGet, false));
+            }
         }
     }
 }
