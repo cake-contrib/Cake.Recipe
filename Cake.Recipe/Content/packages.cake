@@ -216,7 +216,7 @@ public void PushChocolateyPackages(ICakeContext context, bool isRelease, List<Pa
                     };
 
                     context.Information("Adding Chocolatey source with user/pass...");
-                    context.ChocolateyAddSource(isRelease ? "ReleaseSource" : "PreReleaseSource", chocolateySource.PushUrl, chocolateySourceSettings);
+                    context.ChocolateyAddSource(isRelease ? string.Format("ReleaseSource_{0}", chocolateySource.Name) : string.Format("PreReleaseSource_{0}", chocolateySource.Name), chocolateySource.PushUrl, chocolateySourceSettings);
                     canPushToChocolateySource = true;
                 }
                 else
@@ -280,7 +280,7 @@ public void PushNuGetPackages(ICakeContext context, bool isRelease, List<Package
                         };
 
                     context.Information("Adding NuGet source with user/pass...");
-                    context.NuGetAddSource(isRelease ? "ReleaseSource" : "PreReleaseSource", nugetSource.PushUrl, nugetSourceSettings);
+                    context.NuGetAddSource(isRelease ? string.Format("ReleaseSource_{0}", nugetSource.Name) : string.Format("PreReleaseSource_{0}", nugetSource.Name), nugetSource.PushUrl, nugetSourceSettings);
                     canPushToNuGetSource = true;
                 }
                 else
