@@ -33,7 +33,9 @@ public static class ToolSettings
     public static string ReportUnitTool { get; private set; }
     public static string FixieTool { get; private set; }
 
-    public static void SetToolPreprocessorDirectives( 
+    public static string ReportGeneratorGlobalTool { get; private set; }
+
+    public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.9.0",
         string coverallsTool = "#tool nuget:?package=coveralls.io&version=1.4.2",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
@@ -46,9 +48,10 @@ public static class ToolSettings
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.11.1",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
-        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.3.4",
+        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.1",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1"
+        string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1",
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1",
     )
     {
         CodecovTool = codecovTool;
@@ -66,6 +69,7 @@ public static class ToolSettings
         ReportGeneratorTool = reportGeneratorTool;
         ReportUnitTool = reportUnitTool;
         FixieTool = fixieTool;
+        ReportGeneratorGlobalTool = reportGeneratorGlobalTool;
     }
 
     public static void SetToolSettings(

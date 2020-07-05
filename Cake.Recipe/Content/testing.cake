@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
-    .Does(() => RequireTool(ToolSettings.ReportGeneratorTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool ToolSettings.ReportGeneratorTool, () => {
     }));
 
 BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
