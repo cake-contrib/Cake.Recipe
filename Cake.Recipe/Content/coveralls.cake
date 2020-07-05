@@ -17,7 +17,7 @@ BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report"
 
             foreach(var coverageFile in coverageFiles)
             {
-                CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+                CoverallsIo(coverageFile, new CoverallsIoSettings()
                 {
                     RepoToken = BuildParameters.Coveralls.RepoToken
                 });
