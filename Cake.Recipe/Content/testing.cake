@@ -207,6 +207,11 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
 
         if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
         {
+            if (parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
+            {
+                settings.ArgumentCustomization = args => args.Append("/p:UseSourceLink=true");
+            }
+
             coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
             DotNetCoreTest(project.FullPath, settings, coverletSettings);
         }
