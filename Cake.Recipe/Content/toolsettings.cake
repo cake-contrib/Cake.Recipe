@@ -51,7 +51,7 @@ public static class ToolSettings
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.1",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1",
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1"
     )
     {
         CodecovTool = codecovTool;
