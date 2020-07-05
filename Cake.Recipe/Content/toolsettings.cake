@@ -34,13 +34,16 @@ public static class ToolSettings
     public static string FixieTool { get; private set; }
 
     public static string ReportGeneratorGlobalTool { get; private set; }
+    public static string GitVersionGlobalTool { get; private set; }
+    public static string GitReleaseManagerGlobalTool { get; private set; }
+    public static string CodecovGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
-        string codecovTool = "#tool nuget:?package=codecov&version=1.9.0",
+        string codecovTool = "#tool nuget:?package=codecov&version=1.12.0",
         string coverallsTool = "#tool nuget:?package=coveralls.io&version=1.4.2",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
-        string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
-        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.0",
+        string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.3.4",
+        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.4",
         string reSharperReportsTool = "#tool nuget:?package=ReSharperReports&version=0.4.0",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
@@ -51,7 +54,10 @@ public static class ToolSettings
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.1",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1"
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1",
+        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.4",
+        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
+        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.0"
     )
     {
         CodecovTool = codecovTool;
@@ -70,6 +76,9 @@ public static class ToolSettings
         ReportUnitTool = reportUnitTool;
         FixieTool = fixieTool;
         ReportGeneratorGlobalTool = reportGeneratorGlobalTool;
+        GitVersionGlobalTool = gitVersionGlobalTool;
+        GitReleaseManagerGlobalTool = gitReleaseManagerGlobalTool;
+        CodecovGlobalTool = codecovGlobalTool;
     }
 
     public static void SetToolSettings(

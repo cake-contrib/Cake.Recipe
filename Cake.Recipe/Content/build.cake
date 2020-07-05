@@ -20,7 +20,7 @@ Setup<BuildData>(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    RequireTool(ToolSettings.GitVersionTool, () => {
+    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
         BuildParameters.SetBuildVersion(
             BuildVersion.CalculatingSemanticVersion(
                 context: Context
