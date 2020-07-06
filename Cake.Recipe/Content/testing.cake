@@ -207,10 +207,14 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
 
         if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
         {
-            if (parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
-            {
-                settings.ArgumentCustomization = args => args.Append("/p:UseSourceLink=true");
-            }
+            // NOTE: This currently causes an exception during the build on AppVeyor, and is
+            // related to this issue:
+            // https://github.com/coverlet-coverage/coverlet/issues/882
+            // Once this issue is fixed, would be good to come back here to re-enable this.
+            //if (parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
+            //{
+            //    settings.ArgumentCustomization = args => args.Append("/p:UseSourceLink=true");
+            //}
 
             coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
             DotNetCoreTest(project.FullPath, settings, coverletSettings);
