@@ -33,10 +33,11 @@ public static class ToolSettings
     public static string ReportUnitTool { get; private set; }
     public static string FixieTool { get; private set; }
 
-    public static string ReportGeneratorGlobalTool { get; private set; }
-    public static string GitVersionGlobalTool { get; private set; }
-    public static string GitReleaseManagerGlobalTool { get; private set; }
     public static string CodecovGlobalTool { get; private set; }
+    public static string CoverallsGlobalTool { get; private set; }
+    public static string GitReleaseManagerGlobalTool { get; private set; }
+    public static string GitVersionGlobalTool { get; private set; }
+    public static string ReportGeneratorGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.0",
