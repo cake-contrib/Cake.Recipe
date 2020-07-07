@@ -1,3 +1,22 @@
+BuildParameters.Tasks.PrintCiProviderEnvironmentVariablesTask = Task("Print-CI-Provider-Environment-Variables")
+    .Does(() =>
+{
+        var variables = BuildParameters.BuildProvider.PrintVariables ?? Enumerable.Empty<string>();
+        if (!variables.Any())
+        {
+            Information("No environment variables is available for current provider.");
+            return;
+        }
+
+        var maxlen = variables.Max(v => v.Length);
+
+        foreach (var variable in variables.OrderBy(v => v.Length).ThenBy(v => v))
+        {
+            var padKey = variable.PadLeft(maxlen);
+            Information("{0}: {1}", padKey, EnvironmentVariable(variable));
+        }
+});
+
 public interface ITagInfo
 {
     bool IsTag { get; }
@@ -31,6 +50,8 @@ public interface IBuildProvider
     IPullRequestInfo PullRequest { get; }
 
     IBuildInfo Build { get; }
+
+    IEnumerable<string> PrintVariables { get; }
 
     void UploadArtifact(FilePath file);
 }
