@@ -4,6 +4,7 @@ public class BuildTasks
     public CakeTaskBuilder InspectCodeTask { get; set; }
     public CakeTaskBuilder AnalyzeTask { get; set; }
     public CakeTaskBuilder PrintAppVeyorEnvironmentVariablesTask { get; set; }
+    public CakeTaskBuilder PrintTravisCiEnvironmentVariablesTask { get; set; }
     public CakeTaskBuilder UploadArtifactsTask { get; set; }
     public CakeTaskBuilder ClearAppVeyorCacheTask { get; set; }
     public CakeTaskBuilder ShowInfoTask { get; set; }

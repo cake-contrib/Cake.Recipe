@@ -145,6 +145,7 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
 BuildParameters.Tasks.CleanTask = Task("Clean")
     .IsDependentOn("Show-Info")
     .IsDependentOn("Print-AppVeyor-Environment-Variables")
+    .IsDependentOn("Print-Travis-Ci-Environment-Variables")
     .Does(() =>
 {
     Information("Cleaning...");
