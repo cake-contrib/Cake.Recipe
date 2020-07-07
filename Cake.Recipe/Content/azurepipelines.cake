@@ -72,6 +72,19 @@ public class AzurePipelinesBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
+    public IEnumerable<string> PrintVariables { get; } = new[] {
+        "BUILD_BUILDID",
+        "BUILD_BUILDNUMBER",
+        "BUILD_REPOSITORY_NAME",
+        "BUILD_SOURCEBRANCHNAME",
+        "BUILD_SOURCEVERSION",
+        "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER",
+        "SYSTEM_PULLREQUEST_TARGETBRANCH",
+        "SYSTEM_TEAMFOUNDATIONSERVERURI",
+        "SYSTEM_TEAMPROJECT",
+        "TF_BUILD",
+    };
+
     private readonly ITFBuildProvider _tfBuild;
 
     public void UploadArtifact(FilePath file)

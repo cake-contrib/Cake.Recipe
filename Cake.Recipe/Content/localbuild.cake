@@ -120,6 +120,8 @@ public class LocalBuildBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
+    public IEnumerable<string> PrintVariables { get; }
+
     private readonly ICakeContext _context;
 
     public void UploadArtifact(FilePath file)
