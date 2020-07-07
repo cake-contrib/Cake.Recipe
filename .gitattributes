@@ -4,6 +4,9 @@
 # Custom for Visual Studio
 *.cs     diff=csharp
 
+# Shellscripts on Unix is required to use LF line endings
+*.sh eol=LF
+
 # Standard to msysgit
 *.doc	 diff=astextplain
 *.DOC	 diff=astextplain

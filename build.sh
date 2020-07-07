@@ -113,5 +113,15 @@ if [ ! -f "$CAKE_EXE" ]; then
     exit 1
 fi
 
+if [ -f "./includes.cake" ]; then
+    rm -f "./includes.cake"
+fi
+
+for f in ./Cake.Recipe/Content/*.cake; do
+    if [ "$f" != "*/version.cake" ]; then
+        echo "#load \"local:?package=$f\"" >> ./includes.cake
+    fi
+done
+
 # Start Cake
 exec mono "$CAKE_EXE" $SCRIPT "${CAKE_ARGUMENTS[@]}"

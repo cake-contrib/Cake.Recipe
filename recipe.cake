@@ -1,4 +1,11 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load "./includes.cake"
+
+public class BuildMetaData
+{
+    public static string Date { get; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+    public static string Version { get; } = "DogFood";
+    public static string CakeVersion { get; } = typeof(ICakeContext).Assembly.GetName().Version.ToString();
+}
 
 Environment.SetVariableNames();
 
@@ -25,12 +32,14 @@ Task("Generate-Version-File")
         {
             public static string Date { get; } = ""<%date%>"";
             public static string Version { get; } = ""<%version%>"";
+            public static string CakeVersion { get; } = ""<%cakeversion%>"";
         }",
         "<%",
         "%>"
         )
-   .WithToken("date", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))
+   .WithToken("date", BuildMetaData.Date)
    .WithToken("version", BuildParameters.Version.SemVersion)
+   .WithToken("cakeversion", BuildMetaData.CakeVersion)
    .ToString();
 
     System.IO.File.WriteAllText(
