@@ -55,6 +55,12 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
         return new AppVeyorBuildProvider(buildSystem.AppVeyor);
     }
 
+    if (buildSystem.IsRunningOnTravisCI)
+    {
+        context.Information("Using Travis CI Provider...");
+        return new TravisCiBuildProvider(buildSystem.TravisCI, context);
+    }
+
     // always fallback to Local Build
     context.Information("Using Local Build Provider...");
     return new LocalBuildBuildProvider(context);
