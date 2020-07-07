@@ -6,7 +6,7 @@ BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report"
     .WithCriteria(() => !BuildParameters.IsLocalBuild)
     .WithCriteria(() => !BuildParameters.IsPullRequest)
     .WithCriteria(() => BuildParameters.IsMainRepository)
-    .Does(() => RequireTool(ToolSettings.CoverallsTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.CoverallsGlobalTool : ToolSettings.CoverallsTool, () => {
         if (BuildParameters.CanPublishToCoveralls)
         {
             var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
@@ -18,7 +18,7 @@ BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report"
             foreach(var coverageFile in coverageFiles)
             {
                 Information("Publishing coverage results from: {0}", coverageFile);
-                CoverallsIo(coverageFile, new CoverallsIoSettings()
+                CoverallsNet(coverageFile, CoverallsNetReportType.OpenCover, new CoverallsNetSettings()
                 {
                     RepoToken = BuildParameters.Coveralls.RepoToken
                 });

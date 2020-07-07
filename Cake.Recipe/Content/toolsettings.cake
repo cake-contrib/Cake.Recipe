@@ -40,7 +40,7 @@ public static class ToolSettings
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.0",
-        string coverallsTool = "#tool nuget:?package=coveralls.io&version=1.4.2",
+        string coverallsTool = "#tool nuget:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.3.4",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.4",
@@ -54,10 +54,11 @@ public static class ToolSettings
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.1",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1",
-        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.4",
+        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.0",
+        string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
-        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.0"
+        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.4",
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1"
     )
     {
         CodecovTool = codecovTool;
