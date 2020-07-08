@@ -65,7 +65,7 @@ try {
     }
   } catch {
     Write-Output 'Unable to set PowerShell to use TLS 1.2 and TLS 1.1 due to old .NET Framework installed. If you see underlying connection closed or trust errors, you may need to upgrade to .NET Framework 4.5+ and PowerShell v3'
-  }
+}
 
 [Reflection.Assembly]::LoadWithPartialName("System.Security") | Out-Null
 function MD5HashFile([string] $filePath)
@@ -173,7 +173,7 @@ if(-Not $SkipToolPackageRestore.IsPresent) {
     # Check for changes in packages.config and remove installed tools if true.
     [string] $md5Hash = MD5HashFile $PACKAGES_CONFIG
     if((!(Test-Path $PACKAGES_CONFIG_MD5)) -Or
-    ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
+        ($md5Hash -ne (Get-Content $PACKAGES_CONFIG_MD5 ))) {
         Write-Verbose -Message "Missing or changed package.config hash..."
         Get-ChildItem -Exclude packages.config,nuget.exe,Cake.Bakery |
         Remove-Item -Recurse
@@ -249,6 +249,10 @@ if ($Verbosity) { $cakeArguments += "-verbosity=$Verbosity" }
 if ($ShowDescription) { $cakeArguments += "-showdescription" }
 if ($DryRun) { $cakeArguments += "-dryrun" }
 $cakeArguments += $ScriptArgs
+
+Get-ChildItem "./Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
+    "#load `"local:?path=$($_.FullName -replace '\\','/')`""
+} | Out-File "./includes.cake"
 
 # Start Cake
 Write-Host "Running build script..."

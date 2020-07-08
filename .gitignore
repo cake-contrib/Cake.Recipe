@@ -257,6 +257,7 @@ BuildArtifacts/
 *.temp.nuspec
 tests/integration/repos/
 Cake.Recipe/Content/version.cake
+includes.cake
 
 # Wyam related
 docs/config.wyam.dll

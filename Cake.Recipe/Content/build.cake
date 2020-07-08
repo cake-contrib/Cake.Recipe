@@ -3,7 +3,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 var publishingError = false;
-var currentSupportedCakeVersionNumber = "0.33.0.0";
+
+///////////////////////////////////////////////////////////////////////////////
+// Support function for comparing cake version support
+///////////////////////////////////////////////////////////////////////////////
+public bool IsSupportedCakeVersion(string supportedVersion, string currentVersion)
+{
+    var twoPartSupported = Version.Parse(supportedVersion).ToString(2);
+    var twoPartCurrent = Version.Parse(currentVersion).ToString(2);
+
+    return twoPartCurrent == twoPartSupported;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // SETUP / TEARDOWN
@@ -36,9 +46,9 @@ Setup<BuildData>(context =>
         BuildMetaData.Version,
         BuildParameters.IsTagged);
 
-    if (BuildParameters.Version.CakeVersion != currentSupportedCakeVersionNumber)
+    if (!IsSupportedCakeVersion(BuildMetaData.CakeVersion, BuildParameters.Version.CakeVersion))
     {
-        throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", currentSupportedCakeVersionNumber));
+        throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", BuildMetaData.CakeVersion));
     }
 
     // Make sure build and linters run before issues task.
