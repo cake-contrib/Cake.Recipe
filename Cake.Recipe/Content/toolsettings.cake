@@ -38,6 +38,7 @@ public static class ToolSettings
     public static string GitReleaseManagerGlobalTool { get; private set; }
     public static string GitVersionGlobalTool { get; private set; }
     public static string ReportGeneratorGlobalTool { get; private set; }
+    public static string WyamGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.0",
@@ -59,7 +60,8 @@ public static class ToolSettings
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.4",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1"
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1",
+        string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9"
     )
     {
         CodecovTool = codecovTool;
@@ -81,6 +83,8 @@ public static class ToolSettings
         GitVersionGlobalTool = gitVersionGlobalTool;
         GitReleaseManagerGlobalTool = gitReleaseManagerGlobalTool;
         CodecovGlobalTool = codecovGlobalTool;
+        CoverallsGlobalTool = coverallsGlobalTool;
+        WyamGlobalTool = wyamGlobalTool;
     }
 
     public static void SetToolSettings(
