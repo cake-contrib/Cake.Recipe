@@ -99,7 +99,6 @@ public class AppVeyorBuildProvider : IBuildProvider
         "APPVEYOR_PULL_REQUEST_TITLE",
         "APPVEYOR_RE_BUILD",
         "APPVEYOR_REPO_COMMIT_AUTHOR",
-        "APPVEYOR_REPO_COMMIT_AUTHOR",
         "APPVEYOR_REPO_COMMIT_TIMESTAMP",
         "APPVEYOR_REPO_NAME",
         "APPVEYOR_REPO_PROVIDER",
@@ -116,6 +115,6 @@ public class AppVeyorBuildProvider : IBuildProvider
 
     public void UploadArtifact(FilePath file)
     {
-        _appVeyor.UploadArtifact(file);    
+        _appVeyor.UploadArtifact(file);
     }
 }
