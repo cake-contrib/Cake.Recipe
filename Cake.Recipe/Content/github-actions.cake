@@ -23,14 +23,22 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
     public GitHubActionRepositoryInfo(ICakeContext context)
     {
         Name = context.EnvironmentVariable("GITHUB_REPOSITORY");
-        // This trimming is not perfect, as it will remove part of a
-        // branch name if the branch name itself contains a '/'
-        var tempName = context.EnvironmentVariable("GITHUB_REF");
-        if (!string.IsNullOrEmpty(tempName) && tempName.IndexOf('/') >= 0)
+        var baseRef = context.EnvironmentVariable("GITHUB_BASE_REF");
+        if (!string.IsNullOrEmpty(baseRef))
         {
-            tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
+            Branch = baseRef;
         }
-        Branch = tempName;
+        else
+        {
+            // This trimming is not perfect, as it will remove part of a
+            // branch name if the branch name itself contains a '/'
+            var tempName = context.EnvironmentVariable("GITHUB_REF");
+            if (!string.IsNullOrEmpty(tempName) && tempName.IndexOf('/') >= 0)
+            {
+                tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
+            }
+            Branch = tempName;
+        }
         Tag = new GitHubActionTagInfo(context);
     }
 
