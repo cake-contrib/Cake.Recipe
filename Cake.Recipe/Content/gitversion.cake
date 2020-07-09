@@ -73,7 +73,7 @@ public class BuildVersion
             semVersion = assertedVersions.LegacySemVerPadded;
             informationalVersion = assertedVersions.InformationalVersion;
             assemblySemVer = assertedVersions.AssemblySemVer;
-            milestone = string.Concat(version);
+            milestone = assertedVersions.SemVer;
             fullSemVersion = assertedVersions.FullSemVer;
 
             context.Information("Calculated Semantic Version: {0}", semVersion);
