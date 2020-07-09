@@ -82,6 +82,12 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
         return new TravisCiBuildProvider(buildSystem.TravisCI, context);
     }
 
+    if (context.EnvironmentVariable("GITHUB_ACTIONS", false) || !string.IsNullOrEmpty(context.EnvironmentVariable("GITHUB_ACTION")))
+    {
+        context.Information("Using GitHub Action Provider...");
+        return new GitHubActionBuildProvider(context);
+    }
+
     // always fallback to Local Build
     context.Information("Using Local Build Provider...");
     return new LocalBuildBuildProvider(context);
