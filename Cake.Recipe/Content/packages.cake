@@ -47,6 +47,10 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
         Information("Pack will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
         msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
     }
+    if (BuildParameters.ShouldBuildNugetSourcePackage)
+    {
+        msBuildSettings.WithProperty("SymbolPackageFormat", "snupkg");
+    }
 
     var settings = new DotNetCorePackSettings {
         NoBuild = true,
@@ -54,13 +58,8 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
         Configuration = BuildParameters.Configuration,
         OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
         MSBuildSettings = msBuildSettings,
-        ArgumentCustomization = (args) => {
-            if (BuildParameters.ShouldBuildNugetSourcePackage)
-            {
-                args.Append("--include-source");
-            }
-            return args;
-        }
+        IncludeSource = BuildParameters.ShouldBuildNugetSourcePackage,
+        IncludeSymbols = BuildParameters.ShouldBuildNugetSourcePackage,
     };
 
     foreach (var project in projects)
@@ -80,8 +79,14 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
         NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
             Version = BuildParameters.Version.SemVersion,
             OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
-            Symbols = false,
-            NoPackageAnalysis = true
+            Symbols = BuildParameters.ShouldBuildNugetSourcePackage,
+            NoPackageAnalysis = true,
+            ArgumentCustomization = args => {
+                if (BuildParameters.ShouldBuildNugetSourcePackage)
+                    return args.AppendSwitch("-SymbolPackageFormat", "snupkg");
+                else
+                    return args;
+            }
         });
     }
     else
@@ -99,46 +104,34 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
 
     EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
+    var settings = new NuGetPackSettings {
+        Version = BuildParameters.Version.SemVersion,
+        OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+        Symbols = BuildParameters.ShouldBuildNugetSourcePackage,
+        NoPackageAnalysis = true
+    };
+    if (BuildParameters.ShouldBuildNugetSourcePackage)
+    {
+        settings.ArgumentCustomization = args => args.AppendSwitch("-SymbolPackageFormat", "snupkg");
+    }
+
     foreach (var nuspecFile in nuspecFiles)
     {
+        settings.BasePath = null; // First blank out the settings base path
         // TODO: Addin the release notes
         // ReleaseNotes = BuildParameters.ReleaseNotes.Notes.ToArray(),
 
         if (DirectoryExists(BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
         {
-            // Create packages.
-            NuGetPack(nuspecFile, new NuGetPackSettings {
-                Version = BuildParameters.Version.SemVersion,
-                BasePath = BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString()),
-                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
-                Symbols = false,
-                NoPackageAnalysis = true
-            });
-
-            continue;
+            settings.BasePath = BuildParameters.Paths.Directories.PublishedLibraries.Combine(nuspecFile.GetFilenameWithoutExtension().ToString());
         }
-
-        if (DirectoryExists(BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
+        else if (DirectoryExists(BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString())))
         {
-            // Create packages.
-            NuGetPack(nuspecFile, new NuGetPackSettings {
-                Version = BuildParameters.Version.SemVersion,
-                BasePath = BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString()),
-                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
-                Symbols = false,
-                NoPackageAnalysis = true
-            });
-
-            continue;
+            settings.BasePath = BuildParameters.Paths.Directories.PublishedApplications.Combine(nuspecFile.GetFilenameWithoutExtension().ToString());
         }
 
-            // Create packages.
-            NuGetPack(nuspecFile, new NuGetPackSettings {
-                Version = BuildParameters.Version.SemVersion,
-                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
-                Symbols = false,
-                NoPackageAnalysis = true
-            });
+        // Create packages.
+        NuGetPack(nuspecFile, settings);
     }
 });
 
