@@ -112,6 +112,7 @@ public static class BuildParameters
 
     public static bool ShouldRunDupFinder { get; private set; }
     public static bool ShouldRunInspectCode { get; private set; }
+    public static bool ShouldRunCoveralls { get; private set; }
     public static bool ShouldRunCodecov { get; private set; }
     public static bool ShouldRunDotNetCorePack { get; private set; }
     public static bool ShouldRunChocolatey { get; private set; }
@@ -225,7 +226,7 @@ public static class BuildParameters
     {
         get
         {
-            return !string.IsNullOrEmpty(BuildParameters.Coveralls.RepoToken);
+            return ShouldRunCoveralls && !string.IsNullOrEmpty(BuildParameters.Coveralls.RepoToken);
         }
     }
 
@@ -361,6 +362,7 @@ public static class BuildParameters
         bool shouldDocumentSourceFiles = true,
         bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
+        bool shouldRunCoveralls = true,
         bool shouldRunCodecov = false,
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
@@ -450,6 +452,7 @@ public static class BuildParameters
         ShouldDeleteCachedFiles = shouldDeleteCachedFiles;
         ShouldRunDupFinder = shouldRunDupFinder;
         ShouldRunInspectCode = shouldRunInspectCode;
+        ShouldRunCoveralls = shouldRunCoveralls;
         ShouldRunCodecov = shouldRunCodecov;
         ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
