@@ -224,7 +224,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
     .Does<BuildVersion>((context, buildVersion) => RequireTool(ToolSettings.MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows || Context.Tools.Resolve("msbuild") != null)
         {
             var msbuildSettings = new MSBuildSettings()
                 .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
