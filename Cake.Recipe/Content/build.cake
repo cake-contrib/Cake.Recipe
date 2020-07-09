@@ -48,7 +48,15 @@ Setup<BuildData>(context =>
 
     if (!IsSupportedCakeVersion(BuildMetaData.CakeVersion, BuildParameters.Version.CakeVersion))
     {
-        throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", BuildMetaData.CakeVersion));
+        if (HasArgument("ignore-cake-version"))
+        {
+            Warning("Currently running Cake version {0}. This version is not supported together with Cake.Recipe.", BuildParameters.Version.CakeVersion);
+            Warning("--ignore-cake-version Switch was found. Continuing execution of Cake.Recipe.");
+        }
+        else
+        {
+            throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version. Or use the --ignore-cake-version switch if you know what you are doing!", BuildMetaData.CakeVersion));
+        }
     }
 
     // Make sure build and linters run before issues task.
