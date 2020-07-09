@@ -1,0 +1,21 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        # Only windows is possible until supported cake version
+        # is bumped to 0.37.0.0+.
+        # See https://github.com/cake-build/cake/issues/2695
+        os: [windows-latest]
+
+    steps:
+      - uses: actions/checkout@v2.2.0
+        with:
+          fetch-depth: 0
+      - name: Build using bootstrapper
+        run: ./build.ps1 --verbosity=Diagnostic
+        shell: pwsh
