@@ -495,7 +495,8 @@ public static class BuildParameters
         CakeConfiguration = context.GetConfiguration();
         MasterBranchName = masterBranchName;
         DevelopBranchName = developBranchName;
-        IsLocalBuild = buildSystem.IsLocalBuild;
+        // Workaround until bumping to cake 0.37.0+
+        IsLocalBuild = buildSystem.IsLocalBuild && BuildProvider.GetType() != typeof(GitHubActionBuildProvider);
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
         IsRunningOnTravisCI = buildSystem.IsRunningOnTravisCI;
         IsPullRequest = BuildProvider.PullRequest.IsPullRequest;

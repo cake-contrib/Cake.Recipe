@@ -119,7 +119,7 @@ fi
 
 for f in ./Cake.Recipe/Content/*.cake; do
     if [ "$f" != "*/version.cake" ]; then
-        echo "#load \"local:?package=$f\"" >> ./includes.cake
+        echo "#load \"local:?path=$f\"" >> ./includes.cake
     fi
 done
 
