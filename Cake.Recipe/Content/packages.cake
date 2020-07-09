@@ -3,7 +3,7 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
     .WithCriteria(() => BuildParameters.ShouldRunChocolatey, "Skipping because execution of Chocolatey has been disabled")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping because not running on Windows")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory), "Skipping because Chocolatey nuspec directory is missing")
-    .Does(() =>
+    .Does<BuildVersion>((context, buildVersion) =>
 {
     var nuspecFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyNuspecDirectory + "/**/*.nuspec");
 
@@ -16,7 +16,7 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
 
         // Create package.
         ChocolateyPack(nuspecFile, new ChocolateyPackSettings {
-            Version = BuildParameters.Version.SemVersion,
+            Version = buildVersion.SemVersion,
             OutputDirectory = BuildParameters.Paths.Directories.ChocolateyPackages,
             WorkingDirectory = BuildParameters.Paths.Directories.PublishedApplications
         });
@@ -26,7 +26,7 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
 BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
     .IsDependentOn("DotNetCore-Build")
     .WithCriteria(() => BuildParameters.ShouldRunDotNetCorePack, "Packaging through .NET Core is disabled")
-    .Does(() =>
+    .Does<BuildVersion>((context, buildVersion) =>
 {
     var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
         - GetFiles(BuildParameters.RootDirectoryPath + "/tools/**/*.csproj")
@@ -34,10 +34,10 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
         - GetFiles(BuildParameters.SourceDirectoryPath + "/packages/**/*.csproj");
 
     var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+                            .WithProperty("Version", buildVersion.SemVersion)
+                            .WithProperty("AssemblyVersion", buildVersion.Version)
+                            .WithProperty("FileVersion",  buildVersion.Version)
+                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
 
     if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
     {
@@ -70,14 +70,14 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
 
 BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
     .IsDependentOn("Clean")
-    .Does(() =>
+    .Does<BuildVersion>((context, buildVersion) =>
 {
     if (BuildParameters.NuSpecFilePath != null) {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
         // Create packages.
         NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
-            Version = BuildParameters.Version.SemVersion,
+            Version = buildVersion.SemVersion,
             OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
             Symbols = BuildParameters.ShouldBuildNugetSourcePackage,
             NoPackageAnalysis = true,
@@ -98,14 +98,14 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
 BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
     .IsDependentOn("Clean")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NugetNuspecDirectory), "NuGet nuspec directory does not exist")
-    .Does(() =>
+    .Does<BuildVersion>((context, buildVersion) =>
 {
     var nuspecFiles = GetFiles(BuildParameters.Paths.Directories.NugetNuspecDirectory + "/**/*.nuspec");
 
     EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
     var settings = new NuGetPackSettings {
-        Version = BuildParameters.Version.SemVersion,
+        Version = buildVersion.SemVersion,
         OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
         Symbols = BuildParameters.ShouldBuildNugetSourcePackage,
         NoPackageAnalysis = true

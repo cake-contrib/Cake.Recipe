@@ -45,7 +45,7 @@ public static class BuildParameters
 
     public static string StandardMessage
     {
-        get { return $"Version {Version.SemVersion} of the {Title} Addin has just been released, this will be available here https://www.nuget.org/packages/{Title}, once package indexing is complete."; }
+        get { return "Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."; }
     }
 
     public static string GitterMessage
@@ -77,7 +77,6 @@ public static class BuildParameters
     public static CoverallsCredentials Coveralls { get; private set; }
     public static TransifexCredentials Transifex { get; private set; }
     public static WyamCredentials Wyam { get; private set; }
-    public static BuildVersion Version { get; private set; }
     public static BuildPaths Paths { get; private set; }
     public static BuildTasks Tasks { get; set; }
     public static DirectoryPath RootDirectoryPath { get; private set; }
@@ -249,11 +248,6 @@ public static class BuildParameters
                 && (BuildParameters.IsRunningOnAppVeyor
                     || string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase));
         }
-    }
-
-    public static void SetBuildVersion(BuildVersion version)
-    {
-        Version  = version;
     }
 
     public static void SetBuildPaths(BuildPaths paths)

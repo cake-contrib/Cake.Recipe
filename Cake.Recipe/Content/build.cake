@@ -19,6 +19,42 @@ public bool IsSupportedCakeVersion(string supportedVersion, string currentVersio
 // SETUP / TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
 
+#if !CUSTOM_VERSIONING
+Setup<BuildVersion>(context =>
+{
+    BuildVersion buildVersion = null;
+
+    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
+        buildVersion = BuildVersion.CalculatingSemanticVersion(
+                context: Context
+            );
+        });
+
+    Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake, and version {4} of Cake.Recipe. (IsTagged: {5})",
+        buildVersion.SemVersion,
+        BuildParameters.Configuration,
+        BuildParameters.Target,
+        buildVersion.CakeVersion,
+        BuildMetaData.Version,
+        BuildParameters.IsTagged);
+
+    if (!IsSupportedCakeVersion(BuildMetaData.CakeVersion, buildVersion.CakeVersion))
+    {
+        if (HasArgument("ignore-cake-version"))
+        {
+            Warning("Currently running Cake version {0}. This version is not supported together with Cake.Recipe.", buildVersion.CakeVersion);
+            Warning("--ignore-cake-version Switch was found. Continuing execution of Cake.Recipe.");
+        }
+        else
+        {
+            throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version. Or use the --ignore-cake-version switch if you know what you are doing!", BuildMetaData.CakeVersion));
+        }
+    }
+
+    return buildVersion;
+});
+#endif
+
 Setup<BuildData>(context =>
 {
     Information(Figlet(BuildParameters.Title));
@@ -30,35 +66,6 @@ Setup<BuildData>(context =>
         context.Log.Verbosity = Verbosity.Diagnostic;
     }
 
-    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
-        BuildParameters.SetBuildVersion(
-            BuildVersion.CalculatingSemanticVersion(
-                context: Context
-            )
-        );
-    });
-
-    Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake, and version {4} of Cake.Recipe. (IsTagged: {5})",
-        BuildParameters.Version.SemVersion,
-        BuildParameters.Configuration,
-        BuildParameters.Target,
-        BuildParameters.Version.CakeVersion,
-        BuildMetaData.Version,
-        BuildParameters.IsTagged);
-
-    if (!IsSupportedCakeVersion(BuildMetaData.CakeVersion, BuildParameters.Version.CakeVersion))
-    {
-        if (HasArgument("ignore-cake-version"))
-        {
-            Warning("Currently running Cake version {0}. This version is not supported together with Cake.Recipe.", BuildParameters.Version.CakeVersion);
-            Warning("--ignore-cake-version Switch was found. Continuing execution of Cake.Recipe.");
-        }
-        else
-        {
-            throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version. Or use the --ignore-cake-version switch if you know what you are doing!", BuildMetaData.CakeVersion));
-        }
-    }
-
     // Make sure build and linters run before issues task.
     IssuesBuildTasks.ReadIssuesTask
         .IsDependentOn("Build")
@@ -67,7 +74,7 @@ Setup<BuildData>(context =>
     return new BuildData(context);
 });
 
-Teardown(context =>
+Teardown<BuildVersion>((context, buildVersion) =>
 {
     Information("Starting Teardown...");
 
@@ -77,30 +84,30 @@ Teardown(context =>
         {
             if (BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
-                SendMessageToTwitter();
+                SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, buildVersion.Version, BuildParameters.Title));
             }
 
             if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
-                SendMessageToGitterRoom();
+                SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, buildVersion.Version, BuildParameters.Title));
             }
 
             if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
-                SendMessageToMicrosoftTeams();
+                SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, buildVersion.Version, BuildParameters.Title));
             }
 
             if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
             {
                 var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
                 var message = new StringBuilder();
-                message.AppendLine(BuildParameters.StandardMessage + "<br/>");
+                message.AppendLine(string.Format(BuildParameters.StandardMessage, buildVersion.Version, BuildParameters.Title) + "<br/>");
                 message.AppendLine("<br/>");
                 message.AppendLine($"<strong>Name</strong>: {BuildParameters.Title}<br/>");
-                message.AppendLine($"<strong>Version</strong>: {BuildParameters.Version.SemVersion}<br/>");
+                message.AppendLine($"<strong>Version</strong>: {buildVersion.SemVersion}<br/>");
                 message.AppendLine($"<strong>Configuration</strong>: {BuildParameters.Configuration}<br/>");
                 message.AppendLine($"<strong>Target</strong>: {BuildParameters.Target}<br/>");
-                message.AppendLine($"<strong>Cake version</strong>: {BuildParameters.Version.CakeVersion}<br/>");
+                message.AppendLine($"<strong>Cake version</strong>: {buildVersion.CakeVersion}<br/>");
                 message.AppendLine($"<strong>Cake.Recipe version</strong>: {BuildMetaData.Version}<br/>");
 
                 SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
@@ -185,13 +192,13 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
 });
 
 BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
-    .Does(() =>
+    .Does<BuildVersion>((context, buildVersion) =>
 {
     var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion)
+                            .WithProperty("Version", buildVersion.SemVersion)
+                            .WithProperty("AssemblyVersion", buildVersion.Version)
+                            .WithProperty("FileVersion",  buildVersion.Version)
+                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion)
                             .WithProperty("Configuration", BuildParameters.Configuration);
 
     if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
@@ -214,7 +221,7 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does<BuildData>(data => RequireTool(ToolSettings.MSBuildExtensionPackTool, () => {
+    .Does<BuildVersion>((context, buildVersion) => RequireTool(ToolSettings.MSBuildExtensionPackTool, () => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
@@ -256,21 +263,21 @@ BuildParameters.Tasks.BuildTask = Task("Build")
             XBuild(BuildParameters.SolutionFilePath, xbuildSettings);
         }
 
-        CopyBuildOutput();
+        CopyBuildOutput(buildVersion);
     }));
 
 
 BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .IsDependentOn("Clean")
     .IsDependentOn("DotNetCore-Restore")
-    .Does(() => {
+    .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+                            .WithProperty("Version", buildVersion.SemVersion)
+                            .WithProperty("AssemblyVersion", buildVersion.Version)
+                            .WithProperty("FileVersion",  buildVersion.Version)
+                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
 
         // This is used in combination with SourceLink to ensure a deterministic
         // package is generated
@@ -295,10 +302,10 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
             NoRestore = true
         });
 
-        CopyBuildOutput();
+        CopyBuildOutput(buildVersion);
     });
 
-public void CopyBuildOutput()
+public void CopyBuildOutput(BuildVersion buildVersion)
 {
     Information("Copying build output...");
 
@@ -343,10 +350,10 @@ public void CopyBuildOutput()
             if (parsedProject.IsVS2017ProjectFormat)
             {
                 var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+                            .WithProperty("Version", buildVersion.SemVersion)
+                            .WithProperty("AssemblyVersion", buildVersion.Version)
+                            .WithProperty("FileVersion",  buildVersion.Version)
+                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
 
                 if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
                 {
