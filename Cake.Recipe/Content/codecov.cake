@@ -6,7 +6,7 @@ BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
     .WithCriteria(() => BuildParameters.IsMainRepository, "Skipping because not running from the main repository")
     .WithCriteria(() => BuildParameters.ShouldRunCodecov, "Skipping because uploading to codecov is disabled")
     .WithCriteria(() => BuildParameters.CanPublishToCodecov, "Skipping because repo token is missing, or not running on appveyor")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.CodecovGlobalTool : ToolSettings.CodecovTool, () => {
+    .Does<BuildVersion>((context, buildVersion) => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.CodecovGlobalTool : ToolSettings.CodecovTool, () => {
         var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
         if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
         {
@@ -19,15 +19,15 @@ BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
                 Files = coverageFiles.Select(f => f.FullPath),
                 Required = true
             };
-            if (BuildParameters.Version != null &&
-                !string.IsNullOrEmpty(BuildParameters.Version.FullSemVersion) &&
+            if (buildVersion != null &&
+                !string.IsNullOrEmpty(buildVersion.FullSemVersion) &&
                 BuildParameters.IsRunningOnAppVeyor)
             {
                 // Required to work correctly with appveyor because environment changes isn't detected until cake is done running.
-                var buildVersion = string.Format("{0}.build.{1}",
-                    BuildParameters.Version.FullSemVersion,
+                var localBuildVersion = string.Format("{0}.build.{1}",
+                    buildVersion.FullSemVersion,
                     BuildSystem.AppVeyor.Environment.Build.Number);
-                settings.EnvironmentVariables = new Dictionary<string, string> { { "APPVEYOR_BUILD_VERSION", buildVersion }};
+                settings.EnvironmentVariables = new Dictionary<string, string> { { "APPVEYOR_BUILD_VERSION", localBuildVersion }};
             }
 
             Codecov(settings);

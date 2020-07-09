@@ -2,7 +2,7 @@
 // HELPER METHODS
 ///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToTwitter()
+public void SendMessageToTwitter(string message)
 {
     try
     {
@@ -12,7 +12,7 @@ public void SendMessageToTwitter()
                          BuildParameters.Twitter.ConsumerSecret,
                          BuildParameters.Twitter.AccessToken,
                          BuildParameters.Twitter.AccessTokenSecret,
-                         BuildParameters.TwitterMessage);
+                         message);
 
         Information("Message successfully sent.");
     }
