@@ -71,7 +71,7 @@ Teardown(context =>
 {
     Information("Starting Teardown...");
 
-    if (context.Successful)
+    if (BuildParameters.PublishReleasePackagesWasSuccessful)
     {
         if (!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.BranchType == BranchType.Master || ((BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) && BuildParameters.ShouldNotifyBetaReleases)) && BuildParameters.IsTagged)
         {
@@ -107,7 +107,8 @@ Teardown(context =>
             }
         }
     }
-    else
+
+    if(!context.Successful)
     {
         if (!BuildParameters.IsLocalBuild && BuildParameters.IsMainRepository)
         {
