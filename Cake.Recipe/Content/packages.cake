@@ -167,6 +167,8 @@ BuildParameters.Tasks.PublishReleasePackagesTask = Task("Publish-Release-Package
     PushChocolateyPackages(Context, true, chocolateySources);
 
     PushNuGetPackages(Context, true, nugetSources);
+
+    BuildParameters.PublishReleasePackagesWasSuccessful = true;
 })
 .OnError(exception =>
 {

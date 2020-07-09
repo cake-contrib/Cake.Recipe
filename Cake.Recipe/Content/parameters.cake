@@ -32,6 +32,7 @@ public static class BuildParameters
     public static bool TransifexEnabled { get; set; }
     public static bool PrepareLocalRelease { get; set; }
     public static bool TreatWarningsAsErrors { get; set; }
+    public static bool PublishReleasePackagesWasSuccessful { get; set; }
     public static bool ShouldPublishToMyGetWithApiKey { get; set; }
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
