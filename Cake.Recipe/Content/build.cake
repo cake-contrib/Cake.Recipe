@@ -25,6 +25,12 @@ Setup<BuildVersion>(context =>
     BuildVersion buildVersion = null;
 
     RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
+        if (!BuildParameters.IsDotNetCoreBuild && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+        {
+            var gitversionPath = context.Tools.Resolve("gitversion.exe");
+            context.Tools.RegisterFile(gitversionPath);
+        }
+
         buildVersion = BuildVersion.CalculatingSemanticVersion(
                 context: Context
             );
