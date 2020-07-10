@@ -468,7 +468,7 @@ BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
     }
 });
 
-BuildParameters.Tasks.ContinuousIntegrationTask = Task("ContinuousIntegration")
+BuildParameters.Tasks.ContinuousIntegrationTask = Task("CI")
     // Run issues task from Cake.Issues.Recipe by default.
     .IsDependentOn("Upload-Artifacts")
     .IsDependentOn("Issues")
