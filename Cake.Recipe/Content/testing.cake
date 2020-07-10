@@ -40,7 +40,14 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
             // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+            var settings = new ReportGeneratorSettings();
+            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            {
+                // Workaround until 0.38.5+ version of cake is released
+                // https://github.com/cake-build/cake/pull/2824
+                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            }
+            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -74,7 +81,14 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
             ReportUnit(BuildParameters.Paths.Directories.xUnitTestResults, BuildParameters.Paths.Directories.xUnitTestResults, new ReportUnitSettings());
 
             // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+            var settings = new ReportGeneratorSettings();
+            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            {
+                // Workaround until 0.38.5+ version of cake is released
+                // https://github.com/cake-build/cake/pull/2824
+                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            }
+            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -127,7 +141,14 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
         ReportUnit(BuildParameters.Paths.Directories.VSTestTestResults, BuildParameters.Paths.Directories.VSTestTestResults, new ReportUnitSettings());
 
         // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+            var settings = new ReportGeneratorSettings();
+            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            {
+                // Workaround until 0.38.5+ version of cake is released
+                // https://github.com/cake-build/cake/pull/2824
+                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            }
+            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
     }
 });
 
@@ -158,7 +179,14 @@ BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
             ReportUnit(BuildParameters.Paths.Directories.FixieTestResults, BuildParameters.Paths.Directories.FixieTestResults, new ReportUnitSettings());
 
             // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage);
+            var settings = new ReportGeneratorSettings();
+            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            {
+                // Workaround until 0.38.5+ version of cake is released
+                // https://github.com/cake-build/cake/pull/2824
+                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            }
+            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -251,7 +279,14 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     if (coverageFiles.Any())
     {
         // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage);
+        var settings = new ReportGeneratorSettings();
+        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+        {
+            // Workaround until 0.38.5+ version of cake is released
+            // https://github.com/cake-build/cake/pull/2824
+            settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+        }
+        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
     }
 });
 
