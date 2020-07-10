@@ -31,7 +31,6 @@ public static class ToolSettings
     public static string OpenCoverTool { get; private set; }
     public static string ReportGeneratorTool { get; private set; }
     public static string ReportUnitTool { get; private set; }
-    public static string FixieTool { get; private set; }
 
     public static string CodecovGlobalTool { get; private set; }
     public static string CoverallsGlobalTool { get; private set; }
@@ -55,7 +54,6 @@ public static class ToolSettings
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.1",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string fixieTool = "#tool nuget:?package=Fixie&version=2.2.1",
         string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.0",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
@@ -78,7 +76,6 @@ public static class ToolSettings
         OpenCoverTool = openCoverTool;
         ReportGeneratorTool = reportGeneratorTool;
         ReportUnitTool = reportUnitTool;
-        FixieTool = fixieTool;
         ReportGeneratorGlobalTool = reportGeneratorGlobalTool;
         GitVersionGlobalTool = gitVersionGlobalTool;
         GitReleaseManagerGlobalTool = gitReleaseManagerGlobalTool;

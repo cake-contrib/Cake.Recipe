@@ -152,45 +152,6 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
     }
 });
 
-BuildParameters.Tasks.TestFixieTask = Task("Test-Fixie")
-    .IsDependentOn("Install-OpenCover")
-    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedFixieTests), "No published Fixie tests")
-    .Does(() => RequireTool(ToolSettings.FixieTool, () => {
-        EnsureDirectoryExists(BuildParameters.Paths.Directories.FixieTestResults);
-
-        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
-        {
-            OpenCover(tool => {
-                tool.Fixie(GetFiles(BuildParameters.Paths.Directories.PublishedFixieTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new FixieSettings  {
-                    XUnitXml = BuildParameters.Paths.Directories.FixieTestResults + "TestResult.xml"
-                });
-            },
-            BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-            new OpenCoverSettings
-            {
-                OldStyle = true,
-                ReturnTargetCodeOffset = 0
-            }
-                .WithFilter(ToolSettings.TestCoverageFilter)
-                .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-                .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            ReportUnit(BuildParameters.Paths.Directories.FixieTestResults, BuildParameters.Paths.Directories.FixieTestResults, new ReportUnitSettings());
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
-        }
-    })
-);
-
 BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .IsDependentOn("Install-OpenCover")
     .Does(() => {

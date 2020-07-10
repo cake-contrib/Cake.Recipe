@@ -400,11 +400,6 @@ public void CopyBuildOutput(BuildVersion buildVersion)
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
             CopyMsBuildProjectOutput(BuildParameters.Paths.Directories.PublishedxUnitTests, parsedProject);
         }
-        else if (parsedProject.IsLibrary() && (parsedProject.HasPackage("fixie") || parsedProject.HasReference("fixie")))
-        {
-            Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
-            CopyMsBuildProjectOutput(BuildParameters.Paths.Directories.PublishedFixieTests, parsedProject);
-        }
         else if (parsedProject.IsLibrary() && (parsedProject.HasPackage("nunit") || parsedProject.HasReference("nunit.framework")))
         {
             Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
@@ -583,7 +578,6 @@ public class Builder
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-xUnit");
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-MSTest");
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-VSTest");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-Fixie");
             BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportUnit");
         }
         else

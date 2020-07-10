@@ -41,7 +41,6 @@ public class BuildTasks
     public CakeTaskBuilder TestxUnitTask { get; set; }
     public CakeTaskBuilder TestMSTestTask { get; set; }
     public CakeTaskBuilder TestVSTestTask { get; set; }
-    public CakeTaskBuilder TestFixieTask { get; set; }
     public CakeTaskBuilder TransifexPullTranslations { get; set; }
     public CakeTaskBuilder TransifexPushSourceResource { get; set; }
     public CakeTaskBuilder TransifexPushTranslations { get; set; }
