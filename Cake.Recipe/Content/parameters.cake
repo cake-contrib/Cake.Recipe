@@ -12,6 +12,7 @@ public static class BuildParameters
     private static string _gitterMessage;
     private static string _microsoftTeamsMessage;
     private static string _twitterMessage;
+    private static bool _shouldUseDeterministicBuilds;
 
     public static string Target { get; private set; }
     public static string Configuration { get; private set; }
@@ -124,6 +125,13 @@ public static class BuildParameters
     public static bool ShouldDocumentSourceFiles { get; private set; }
     public static bool ShouldRunIntegrationTests { get; private set; }
     public static bool ShouldRunGitVersion { get; private set; }
+    public static bool ShouldUseDeterministicBuilds
+    {
+        get
+        {
+            return !IsLocalBuild && _shouldUseDeterministicBuilds;
+        }
+    }
 
     public static DirectoryPath WyamRootDirectoryPath { get; private set; }
     public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
@@ -346,6 +354,7 @@ public static class BuildParameters
         bool shouldDownloadFullReleaseNotes = false,
         bool shouldNotifyBetaReleases = false,
         bool shouldDeleteCachedFiles = false,
+        bool shouldUseDeterministicBuilds = true,
         FilePath milestoneReleaseNotesFilePath = null,
         FilePath fullReleaseNotesFilePath = null,
         bool shouldPublishMyGet = true,
@@ -452,6 +461,7 @@ public static class BuildParameters
         ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
         ShouldRunGitVersion = shouldRunGitVersion ?? BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows;
+        _shouldUseDeterministicBuilds = shouldUseDeterministicBuilds;
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");

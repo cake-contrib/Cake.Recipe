@@ -243,7 +243,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
 
             // This is used in combination with SourceLink to ensure a deterministic
             // package is generated
-            if(!BuildParameters.IsLocalBuild)
+            if(BuildParameters.ShouldUseDeterministicBuilds)
             {
                 msbuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
             }
@@ -281,7 +281,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
 
         // This is used in combination with SourceLink to ensure a deterministic
         // package is generated
-        if(!BuildParameters.IsLocalBuild)
+        if(BuildParameters.ShouldUseDeterministicBuilds)
         {
             msBuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
         }
