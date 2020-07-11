@@ -367,7 +367,7 @@ public static class BuildParameters
         bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
         bool shouldRunCoveralls = true,
-        bool shouldRunCodecov = false,
+        bool shouldRunCodecov = true,
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
