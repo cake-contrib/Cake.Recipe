@@ -247,7 +247,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             // https://github.com/cake-build/cake/pull/2824
             settings.ToolPath = Context.Tools.Resolve("reportgenerator");
         }
-        ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
+        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, settings);
     }
 });
 
