@@ -154,10 +154,11 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             // related to this issue:
             // https://github.com/coverlet-coverage/coverlet/issues/882
             // Once this issue is fixed, would be good to come back here to re-enable this.
-            //if (parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
-            //{
-            //    settings.ArgumentCustomization = args => args.Append("/p:UseSourceLink=true");
-            //}
+            // Keeping the comment above until the next version of coverlet.msbuild is available
+            if (parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
+            {
+                args.Append("/p:UseSourceLink=true");
+            }
             return args;
         };
 
