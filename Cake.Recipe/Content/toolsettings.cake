@@ -22,7 +22,6 @@ public static class ToolSettings
     public static string GitReleaseManagerTool { get; private set; }
     public static string GitVersionTool { get; private set; }
     public static string ReSharperTools { get; private set; }
-    public static string ReSharperReportsTool { get; private set; }
     public static string KuduSyncTool { get; private set; }
     public static string WyamTool { get; private set; }
     public static string MSBuildExtensionPackTool { get; private set; }
@@ -45,7 +44,6 @@ public static class ToolSettings
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.4",
-        string reSharperReportsTool = "#tool nuget:?package=ReSharperReports&version=0.4.0",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string msbuildExtensionPackTool = "#tool nuget:?package=MSBuild.Extension.Pack&version=1.9.1",
@@ -67,7 +65,6 @@ public static class ToolSettings
         GitReleaseManagerTool = gitReleaseManagerTool;
         GitVersionTool = gitVersionTool;
         ReSharperTools = reSharperTools;
-        ReSharperReportsTool = reSharperReportsTool;
         KuduSyncTool = kuduSyncTool;
         WyamTool = wyamTool;
         MSBuildExtensionPackTool = msbuildExtensionPackTool;
