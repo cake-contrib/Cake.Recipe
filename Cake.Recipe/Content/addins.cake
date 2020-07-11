@@ -11,7 +11,6 @@
 #addin nuget:?package=Cake.Incubator&version=5.1.0
 #addin nuget:?package=Cake.Kudu&version=0.10.1
 #addin nuget:?package=Cake.MicrosoftTeams&version=0.9.0
-#addin nuget:?package=Cake.ReSharperReports&version=0.11.1
 #addin nuget:?package=Cake.Slack&version=0.13.0
 #addin nuget:?package=Cake.Transifex&version=0.8.0
 #addin nuget:?package=Cake.Twitter&version=0.10.1
