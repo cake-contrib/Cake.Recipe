@@ -41,7 +41,7 @@ public static class ToolSettings
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.0",
-        string coverallsTool = "#tool nuget:?package=coveralls.net&version=1.0.0",
+        string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.4",
