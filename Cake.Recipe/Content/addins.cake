@@ -2,7 +2,7 @@
 // ADDINS
 ///////////////////////////////////////////////////////////////////////////////
 
-#addin nuget:?package=Cake.Codecov&version=0.8.0
+#addin nuget:?package=Cake.Codecov&version=0.9.1
 #addin nuget:?package=Cake.Coveralls&version=0.10.2
 #addin nuget:?package=Cake.Coverlet&version=2.4.2
 #addin nuget:?package=Cake.Email&version=0.9.2&loaddependencies=true // loading dependencies is important to ensure Cake.Email.Common is loaded as well
