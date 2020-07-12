@@ -52,3 +52,30 @@ Setup<BuildData>(context =>
 
     return new BuildData(context);
 });
+
+Setup<DotNetCoreMSBuildSettings>(context =>
+{
+    var buildVersion = context.Data.Get<BuildVersion>();
+    var data = context.Data.Get<BuildData>(); // Future use
+
+    var settings = new DotNetCoreMSBuildSettings()
+                    .WithProperty("Version", buildVersion.SemVersion)
+                    .WithProperty("AssemblyVersion", buildVersion.Version)
+                    .WithProperty("FileVersion", buildVersion.Version)
+                    .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
+
+    if (BuildParameters.ShouldUseDeterministicBuilds)
+    {
+        settings.WithProperty("ContinuousIntegrationBuild", "true");
+    }
+    if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+    {
+        // This needs to be updated when/if we ever starts supporting Cake .NET Core edition.
+        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+
+        context.Information("Will use FrameworkPathOverride={0} on .NET Core build related tasks since not building on Windows.", frameworkPathOverride);
+        settings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+    }
+
+    return settings;
+});

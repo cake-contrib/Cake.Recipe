@@ -154,7 +154,7 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
 
 BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .IsDependentOn("Install-OpenCover")
-    .Does(() => {
+    .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => {
 
     var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
     // We create the coverlet settings here so we don't have to create the filters several times
@@ -179,23 +179,22 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             coverletSettings.WithFilter(filter.TrimStart('-'));
         }
     }
+    var settings = new DotNetCoreTestSettings
+    {
+        Configuration = BuildParameters.Configuration,
+        NoBuild = true
+    };
 
     foreach (var project in projects)
     {
-        var settings = new DotNetCoreTestSettings
-        {
-            Configuration = BuildParameters.Configuration,
-            NoBuild = true
-        };
         Action<ICakeContext> testAction = tool =>
         {
             tool.DotNetCoreTest(project.FullPath, settings);
         };
 
         var parsedProject = ParseProject(project, BuildParameters.Configuration);
-
-        if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
-        {
+        settings.ArgumentCustomization = args => {
+            args.AppendMSBuildSettings(msBuildSettings, context.Environment);
             // NOTE: This currently causes an exception during the build on AppVeyor, and is
             // related to this issue:
             // https://github.com/coverlet-coverage/coverlet/issues/882
@@ -204,7 +203,11 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             //{
             //    settings.ArgumentCustomization = args => args.Append("/p:UseSourceLink=true");
             //}
+            return args;
+        };
 
+        if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
+        {
             coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
             DotNetCoreTest(project.FullPath, settings, coverletSettings);
         }
@@ -216,6 +219,8 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         {
             if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
             {
+                // We can not use msbuild properties together with opencover
+                settings.ArgumentCustomization = null;
                 OpenCover(testAction,
                     BuildParameters.Paths.Files.TestCoverageOutputFilePath,
                     new OpenCoverSettings {
@@ -240,14 +245,14 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     if (coverageFiles.Any())
     {
         // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        var settings = new ReportGeneratorSettings();
+        var rpSettings = new ReportGeneratorSettings();
         if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
             // Workaround until 0.38.5+ version of cake is released
             // https://github.com/cake-build/cake/pull/2824
-            settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            rpSettings.ToolPath = Context.Tools.Resolve("reportgenerator");
         }
-        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, settings);
+        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, rpSettings);
     }
 });
 
