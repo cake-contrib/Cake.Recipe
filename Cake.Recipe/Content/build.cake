@@ -481,10 +481,8 @@ public class Builder
                 BuildParameters.Tasks.BuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-NUnit");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-xUnit");
             BuildParameters.Tasks.TestTask.IsDependentOn("Test-MSTest");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-VSTest");
-            BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportUnit");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-FriendlyTestReport");
         }
         else
         {
@@ -493,8 +491,8 @@ public class Builder
                 BuildParameters.Tasks.DotNetCoreBuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
             BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Test");
-            BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
             BuildParameters.Tasks.PackageTask.IsDependentOn(prefix + "Pack");
         }
+        BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
     }
 }

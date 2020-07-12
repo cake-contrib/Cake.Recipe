@@ -35,7 +35,6 @@ public class BuildTasks
     public CakeTaskBuilder PublishPreReleasePackagesTask { get; set; }
     public CakeTaskBuilder PublishReleasePackagesTask { get; set; }
     public CakeTaskBuilder InstallReportGeneratorTask { get; set; }
-    public CakeTaskBuilder InstallReportUnitTask { get; set; }
     public CakeTaskBuilder InstallOpenCoverTask { get; set; }
     public CakeTaskBuilder TestNUnitTask { get; set; }
     public CakeTaskBuilder TestxUnitTask { get; set; }
@@ -47,6 +46,7 @@ public class BuildTasks
     public CakeTaskBuilder TransifexSetupTask { get; set; }
     public CakeTaskBuilder DotNetCoreTestTask { get; set; }
     public CakeTaskBuilder IntegrationTestTask { get;set; }
+    public CakeTaskBuilder GenerateFriendlyTestReportTask { get; set; }
     public CakeTaskBuilder TestTask { get; set; }
     public CakeTaskBuilder CleanDocumentationTask { get; set; }
     public CakeTaskBuilder PublishDocumentationTask { get; set; }

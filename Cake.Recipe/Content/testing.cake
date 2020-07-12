@@ -6,11 +6,6 @@ BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator
     .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
     }));
 
-BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
-    .IsDependentOn("Install-ReportGenerator")
-    .Does(() => RequireTool(ToolSettings.ReportUnitTool, () => {
-    }));
-
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Not running on windows")
     .Does(() => RequireTool(ToolSettings.OpenCoverTool, () => {
@@ -78,9 +73,6 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
 
             // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            ReportUnit(BuildParameters.Paths.Directories.xUnitTestResults, BuildParameters.Paths.Directories.xUnitTestResults, new ReportUnitSettings());
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
             var settings = new ReportGeneratorSettings();
             if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
             {
@@ -136,9 +128,6 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        ReportUnit(BuildParameters.Paths.Directories.VSTestTestResults, BuildParameters.Paths.Directories.VSTestTestResults, new ReportUnitSettings());
 
         // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
             var settings = new ReportGeneratorSettings();
@@ -270,5 +259,23 @@ BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
                     }
                 });
     });
+
+BuildParameters.Tasks.GenerateFriendlyTestReportTask = Task("Generate-FriendlyTestReport")
+    .IsDependentOn("Test-VSTest")
+    .IsDependentOn("Test-xUnit")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
+    .Does(() => RequireTool(ToolSettings.ReportUnitTool, () =>
+    {
+        var possibleDirectories = new[] {
+            BuildParameters.Paths.Directories.xUnitTestResults,
+            BuildParameters.Paths.Directories.VSTestTestResults,
+        };
+
+        foreach (var directory in possibleDirectories.Where((d) => DirectoryExists(d)))
+        {
+            ReportUnit(directory, directory, new ReportUnitSettings());
+        }
+    })
+);
 
 BuildParameters.Tasks.TestTask = Task("Test");
