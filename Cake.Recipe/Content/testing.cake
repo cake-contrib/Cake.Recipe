@@ -2,15 +2,6 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
-    }));
-
-BuildParameters.Tasks.InstallReportUnitTask = Task("Install-ReportUnit")
-    .IsDependentOn("Install-ReportGenerator")
-    .Does(() => RequireTool(ToolSettings.ReportUnitTool, () => {
-    }));
-
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Not running on windows")
     .Does(() => RequireTool(ToolSettings.OpenCoverTool, () => {
@@ -38,16 +29,6 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -76,19 +57,6 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            ReportUnit(BuildParameters.Paths.Directories.xUnitTestResults, BuildParameters.Paths.Directories.xUnitTestResults, new ReportUnitSettings());
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -136,25 +104,12 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        ReportUnit(BuildParameters.Paths.Directories.VSTestTestResults, BuildParameters.Paths.Directories.VSTestTestResults, new ReportUnitSettings());
-
-        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
     }
 });
 
 BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     .IsDependentOn("Install-OpenCover")
-    .Does(() => {
+    .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => {
 
     var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
     // We create the coverlet settings here so we don't have to create the filters several times
@@ -179,23 +134,22 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             coverletSettings.WithFilter(filter.TrimStart('-'));
         }
     }
+    var settings = new DotNetCoreTestSettings
+    {
+        Configuration = BuildParameters.Configuration,
+        NoBuild = true
+    };
 
     foreach (var project in projects)
     {
-        var settings = new DotNetCoreTestSettings
-        {
-            Configuration = BuildParameters.Configuration,
-            NoBuild = true
-        };
         Action<ICakeContext> testAction = tool =>
         {
             tool.DotNetCoreTest(project.FullPath, settings);
         };
 
         var parsedProject = ParseProject(project, BuildParameters.Configuration);
-
-        if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
-        {
+        settings.ArgumentCustomization = args => {
+            args.AppendMSBuildSettings(msBuildSettings, context.Environment);
             // NOTE: This currently causes an exception during the build on AppVeyor, and is
             // related to this issue:
             // https://github.com/coverlet-coverage/coverlet/issues/882
@@ -204,7 +158,11 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             //{
             //    settings.ArgumentCustomization = args => args.Append("/p:UseSourceLink=true");
             //}
+            return args;
+        };
 
+        if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
+        {
             coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
             DotNetCoreTest(project.FullPath, settings, coverletSettings);
         }
@@ -216,6 +174,8 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         {
             if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
             {
+                // We can not use msbuild properties together with opencover
+                settings.ArgumentCustomization = null;
                 OpenCover(testAction,
                     BuildParameters.Paths.Files.TestCoverageOutputFilePath,
                     new OpenCoverSettings {
@@ -229,25 +189,6 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
                     .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
             }
         }
-    }
-
-    var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
-    if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
-    {
-        coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
-    }
-
-    if (coverageFiles.Any())
-    {
-        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        var settings = new ReportGeneratorSettings();
-        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-        {
-            // Workaround until 0.38.5+ version of cake is released
-            // https://github.com/cake-build/cake/pull/2824
-            settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-        }
-        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, settings);
     }
 });
 
@@ -265,5 +206,51 @@ BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
                     }
                 });
     });
+
+BuildParameters.Tasks.GenerateFriendlyTestReportTask = Task("Generate-FriendlyTestReport")
+    .IsDependentOn("Test-VSTest")
+    .IsDependentOn("Test-xUnit")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
+    .Does(() => RequireTool(ToolSettings.ReportUnitTool, () =>
+    {
+        var possibleDirectories = new[] {
+            BuildParameters.Paths.Directories.xUnitTestResults,
+            BuildParameters.Paths.Directories.VSTestTestResults,
+        };
+
+        foreach (var directory in possibleDirectories.Where((d) => DirectoryExists(d)))
+        {
+            ReportUnit(directory, directory, new ReportUnitSettings());
+        }
+    })
+);
+
+BuildParameters.Tasks.GenerateLocalCoverageReportTask = Task("Generate-LocalCoverageReport")
+    .WithCriteria(() => BuildParameters.IsLocalBuild, "Skipping due to not running a local build")
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
+        var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
+        if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
+        {
+            coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
+        }
+
+        if (coverageFiles.Any())
+        {
+            var settings = new ReportGeneratorSettings();
+            if (BuildParameters.IsDotNetCoreBuild && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            {
+                // Workaround until 0.38.5+ version of cake is released
+                // https://github.com/cake-build/cake/pull/2824
+                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            }
+
+            ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, settings);
+        }
+        else
+        {
+            Warning("No coverage files was found, no local report is generated!");
+        }
+    })
+);
 
 BuildParameters.Tasks.TestTask = Task("Test");

@@ -33,20 +33,15 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
         - GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.Tests.csproj")
         - GetFiles(BuildParameters.SourceDirectoryPath + "/packages/**/*.csproj");
 
-    var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", buildVersion.SemVersion)
-                            .WithProperty("AssemblyVersion", buildVersion.Version)
-                            .WithProperty("FileVersion",  buildVersion.Version)
-                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
-
-    if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+    // We need to clone the settings class, so we don't
+    // add additional properties to every other task.
+    var msBuildSettings = new DotNetCoreMSBuildSettings();
+    foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
     {
-        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-        // Use FrameworkPathOverride when not running on Windows.
-        Information("Pack will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+        string value = string.Join(" ", kv.Value);
+        msBuildSettings.WithProperty(kv.Key, value);
     }
+
     if (BuildParameters.ShouldBuildNugetSourcePackage)
     {
         msBuildSettings.WithProperty("SymbolPackageFormat", "snupkg");

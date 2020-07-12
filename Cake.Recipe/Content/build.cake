@@ -16,63 +16,8 @@ public bool IsSupportedCakeVersion(string supportedVersion, string currentVersio
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// SETUP / TEARDOWN
+// TEARDOWN
 ///////////////////////////////////////////////////////////////////////////////
-
-#if !CUSTOM_VERSIONING
-Setup<BuildVersion>(context =>
-{
-    BuildVersion buildVersion = null;
-
-    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
-        buildVersion = BuildVersion.CalculatingSemanticVersion(
-                context: Context
-            );
-        });
-
-    Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake, and version {4} of Cake.Recipe. (IsTagged: {5})",
-        buildVersion.SemVersion,
-        BuildParameters.Configuration,
-        BuildParameters.Target,
-        buildVersion.CakeVersion,
-        BuildMetaData.Version,
-        BuildParameters.IsTagged);
-
-    if (!IsSupportedCakeVersion(BuildMetaData.CakeVersion, buildVersion.CakeVersion))
-    {
-        if (HasArgument("ignore-cake-version"))
-        {
-            Warning("Currently running Cake version {0}. This version is not supported together with Cake.Recipe.", buildVersion.CakeVersion);
-            Warning("--ignore-cake-version Switch was found. Continuing execution of Cake.Recipe.");
-        }
-        else
-        {
-            throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version. Or use the --ignore-cake-version switch if you know what you are doing!", BuildMetaData.CakeVersion));
-        }
-    }
-
-    return buildVersion;
-});
-#endif
-
-Setup<BuildData>(context =>
-{
-    Information(Figlet(BuildParameters.Title));
-
-    Information("Starting Setup...");
-
-    if (BuildParameters.BranchType == BranchType.Master && (context.Log.Verbosity != Verbosity.Diagnostic)) {
-        Information("Increasing verbosity to diagnostic.");
-        context.Log.Verbosity = Verbosity.Diagnostic;
-    }
-
-    // Make sure build and linters run before issues task.
-    IssuesBuildTasks.ReadIssuesTask
-        .IsDependentOn("Build")
-        .IsDependentOn("InspectCode");
-
-    return new BuildData(context);
-});
 
 Teardown<BuildVersion>((context, buildVersion) =>
 {
@@ -194,21 +139,15 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
 BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
     .Does<BuildVersion>((context, buildVersion) =>
 {
-    var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", buildVersion.SemVersion)
-                            .WithProperty("AssemblyVersion", buildVersion.Version)
-                            .WithProperty("FileVersion",  buildVersion.Version)
-                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion)
-                            .WithProperty("Configuration", BuildParameters.Configuration);
-
-    if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+    // We need to clone the settings class, so we don't
+    // add additional properties to every other task.
+    var msBuildSettings = new DotNetCoreMSBuildSettings();
+    foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
     {
-        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-        // Use FrameworkPathOverride when not running on Windows.
-        Information("Restore will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+        string value = string.Join(" ", kv.Value);
+        msBuildSettings.WithProperty(kv.Key, value);
     }
+    msBuildSettings.WithProperty("Configuration", BuildParameters.Configuration);
 
     DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
     {
@@ -273,32 +212,10 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", buildVersion.SemVersion)
-                            .WithProperty("AssemblyVersion", buildVersion.Version)
-                            .WithProperty("FileVersion",  buildVersion.Version)
-                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
-
-        // This is used in combination with SourceLink to ensure a deterministic
-        // package is generated
-        if(BuildParameters.ShouldUseDeterministicBuilds)
-        {
-            msBuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
-        }
-
-        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-        {
-            var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-            // Use FrameworkPathOverride when not running on Windows.
-            Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-            msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
-        }
-
         DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
         {
             Configuration = BuildParameters.Configuration,
-            MSBuildSettings = msBuildSettings,
+            MSBuildSettings = context.Data.Get<DotNetCoreMSBuildSettings>(),
             NoRestore = true
         });
 
@@ -349,20 +266,7 @@ public void CopyBuildOutput(BuildVersion buildVersion)
             // Otherwise just copy
             if (parsedProject.IsVS2017ProjectFormat)
             {
-                var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", buildVersion.SemVersion)
-                            .WithProperty("AssemblyVersion", buildVersion.Version)
-                            .WithProperty("FileVersion",  buildVersion.Version)
-                            .WithProperty("AssemblyInformationalVersion", buildVersion.InformationalVersion);
-
-                if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-                {
-                    var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-                    // Use FrameworkPathOverride when not running on Windows.
-                    Information("Publish will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-                    msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
-                }
+                var msBuildSettings = Context.Data.Get<DotNetCoreMSBuildSettings>();
 
                 foreach (var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
@@ -568,7 +472,6 @@ public class Builder
         BuildParameters.Tasks.UploadCodecovReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Upload-Coverage-Report");
-        BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
 
         if (!isDotNetCoreBuild)
         {
@@ -576,11 +479,17 @@ public class Builder
             {
                 BuildParameters.Tasks.BuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-NUnit");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-xUnit");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-MSTest");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-VSTest");
-            BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportUnit");
+
+            BuildParameters.Tasks.TestMSTestTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestNUnitTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestVSTestTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestxUnitTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-MSTest");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-NUnit");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-VSTest");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-xUnit");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-FriendlyTestReport");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");
         }
         else
         {
@@ -588,8 +497,8 @@ public class Builder
             {
                 BuildParameters.Tasks.DotNetCoreBuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
-            BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Test");
-            BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn(prefix + "Test");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");
             BuildParameters.Tasks.PackageTask.IsDependentOn(prefix + "Pack");
         }
     }
