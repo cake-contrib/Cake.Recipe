@@ -2,10 +2,6 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-BuildParameters.Tasks.InstallReportGeneratorTask = Task("Install-ReportGenerator")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
-    }));
-
 BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Not running on windows")
     .Does(() => RequireTool(ToolSettings.OpenCoverTool, () => {
@@ -33,16 +29,6 @@ BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -71,16 +57,6 @@ BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-            // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
         }
     })
 );
@@ -128,16 +104,6 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
                 .WithFilter(ToolSettings.TestCoverageFilter)
                 .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
                 .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-
-        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-            var settings = new ReportGeneratorSettings();
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-            {
-                // Workaround until 0.38.5+ version of cake is released
-                // https://github.com/cake-build/cake/pull/2824
-                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
-            }
-            ReportGenerator(BuildParameters.Paths.Files.TestCoverageOutputFilePath, BuildParameters.Paths.Directories.TestCoverage, settings);
     }
 });
 
@@ -224,25 +190,6 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             }
         }
     }
-
-    var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
-    if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
-    {
-        coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
-    }
-
-    if (coverageFiles.Any())
-    {
-        // TODO: Need to think about how to bring this out in a generic way for all Test Frameworks
-        var rpSettings = new ReportGeneratorSettings();
-        if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-        {
-            // Workaround until 0.38.5+ version of cake is released
-            // https://github.com/cake-build/cake/pull/2824
-            rpSettings.ToolPath = Context.Tools.Resolve("reportgenerator");
-        }
-        ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, rpSettings);
-    }
 });
 
 BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
@@ -274,6 +221,34 @@ BuildParameters.Tasks.GenerateFriendlyTestReportTask = Task("Generate-FriendlyTe
         foreach (var directory in possibleDirectories.Where((d) => DirectoryExists(d)))
         {
             ReportUnit(directory, directory, new ReportUnitSettings());
+        }
+    })
+);
+
+BuildParameters.Tasks.GenerateLocalCoverageReportTask = Task("Generate-LocalCoverageReport")
+    .WithCriteria(() => BuildParameters.IsLocalBuild, "Skipping due to not running a local build")
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
+        var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
+        if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
+        {
+            coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
+        }
+
+        if (coverageFiles.Any())
+        {
+            var settings = new ReportGeneratorSettings();
+            if (BuildParameters.IsDotNetCoreBuild && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            {
+                // Workaround until 0.38.5+ version of cake is released
+                // https://github.com/cake-build/cake/pull/2824
+                settings.ToolPath = Context.Tools.Resolve("reportgenerator");
+            }
+
+            ReportGenerator(coverageFiles, BuildParameters.Paths.Directories.TestCoverage, settings);
+        }
+        else
+        {
+            Warning("No coverage files was found, no local report is generated!");
         }
     })
 );

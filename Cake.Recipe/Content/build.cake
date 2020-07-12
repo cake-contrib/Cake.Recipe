@@ -472,7 +472,6 @@ public class Builder
         BuildParameters.Tasks.UploadCodecovReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Upload-Coverage-Report");
-        BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
 
         if (!isDotNetCoreBuild)
         {
@@ -480,9 +479,17 @@ public class Builder
             {
                 BuildParameters.Tasks.BuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-NUnit");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-MSTest");
+
+            BuildParameters.Tasks.TestMSTestTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestNUnitTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestVSTestTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestxUnitTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-MSTest");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-NUnit");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-VSTest");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-xUnit");
             BuildParameters.Tasks.TestTask.IsDependentOn("Generate-FriendlyTestReport");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");
         }
         else
         {
@@ -490,9 +497,9 @@ public class Builder
             {
                 BuildParameters.Tasks.DotNetCoreBuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
-            BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Test");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn(prefix + "Test");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");
             BuildParameters.Tasks.PackageTask.IsDependentOn(prefix + "Pack");
         }
-        BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
     }
 }
