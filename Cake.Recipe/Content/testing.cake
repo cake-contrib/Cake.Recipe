@@ -148,21 +148,32 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         };
 
         var parsedProject = ParseProject(project, BuildParameters.Configuration);
+
+        var coverletPackage = parsedProject.GetPackage("coverlet.msbuild");
+        bool shouldAddSourceLinkArgument = false; // Set it to false by default due to OpenCover
+        if (coverletPackage != null)
+        {
+            // If the version is a pre-release, we will assume that it is a later
+            // version than what we need, and thus TryParse will return false.
+            // If TryParse is successful we need to compare the coverlet version
+            // to ensure it is higher or equal to the version that includes the fix
+            // for using the SourceLink argument.
+            // https://github.com/coverlet-coverage/coverlet/issues/882
+            Version coverletVersion;
+            shouldAddSourceLinkArgument = !Version.TryParse(coverletPackage.Version, out coverletVersion)
+                || coverletVersion >= Version.Parse("2.9.1");
+        }
+
         settings.ArgumentCustomization = args => {
             args.AppendMSBuildSettings(msBuildSettings, context.Environment);
-            // NOTE: This currently causes an exception during the build on AppVeyor, and is
-            // related to this issue:
-            // https://github.com/coverlet-coverage/coverlet/issues/882
-            // Once this issue is fixed, would be good to come back here to re-enable this.
-            // Keeping the comment above until the next version of coverlet.msbuild is available
-            if (parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
+            if (shouldAddSourceLinkArgument && parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
             {
                 args.Append("/p:UseSourceLink=true");
             }
             return args;
         };
 
-        if (parsedProject.IsNetCore && parsedProject.HasPackage("coverlet.msbuild"))
+        if (parsedProject.IsNetCore && coverletPackage != null)
         {
             coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
             DotNetCoreTest(project.FullPath, settings, coverletSettings);
