@@ -28,9 +28,9 @@ Teardown<BuildVersion>((context, buildVersion) =>
         if (!BuildParameters.IsLocalBuild &&
             !BuildParameters.IsPullRequest &&
             BuildParameters.IsMainRepository &&
-            (BuildParameters.IsMasterBranch ||
-                ((BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch)
-                && BuildParameters.ShouldNotifyBetaReleases)) &&
+            (BuildParameters.BranchType == BranchType.Master ||
+                ((BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
+                BuildParameters.ShouldNotifyBetaReleases)) &&
             BuildParameters.IsTagged &&
             !BuildParameters.IsRunningIntegrationTests)
         {
