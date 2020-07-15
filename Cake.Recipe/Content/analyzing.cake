@@ -55,6 +55,25 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     })
 );
 
+IssuesBuildTasks.IssuesTask.Does<IssuesData>(data => {
+    if (!BuildParameters.ShouldBreakOnIssues)
+    {
+        return;
+    }
+
+    var query = data.Issues.AsQueryable();
+    if (BuildParameters.IssueBreakPriority > 0)
+    {
+        query = query.Where(i => i.Priority != null && i.Priority >= BuildParameters.IssueBreakPriority);
+    }
+
+    if (query.Count() > 0) {
+        string errorMsg = string.Format("{0} issues was found that needs to be fixed. Breaking build!", query.Count());
+        Error(errorMsg);
+        throw new Exception(errorMsg);
+    }
+});
+
 BuildParameters.Tasks.AnalyzeTask = Task("Analyze")
     .IsDependentOn("DupFinder")
     .IsDependentOn("InspectCode");

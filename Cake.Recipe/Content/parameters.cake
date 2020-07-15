@@ -120,6 +120,9 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
+    public static bool ShouldBreakOnIssues { get; private set; }
+    public static int IssueBreakPriority { get; private set; }
+
     public static bool ShouldRunDupFinder { get; private set; }
     public static bool ShouldRunInspectCode { get; private set; }
     public static bool ShouldRunCoveralls { get; private set; }
@@ -408,7 +411,9 @@ public static class BuildParameters
         string emailSenderAddress = null,
         bool shouldPublishToMyGetWithApiKey = true,
         DirectoryPath restorePackagesDirectory = null,
-        List<PackageSourceData> packageSourceDatas = null
+        List<PackageSourceData> packageSourceDatas = null,
+        bool? shouldBreakOnIssues = null,
+        int issueBreakPriority = 0
         )
     {
         if (context == null)
@@ -549,6 +554,9 @@ public static class BuildParameters
         TreatWarningsAsErrors = treatWarningsAsErrors;
 
         BuildAgentOperatingSystem = context.Environment.Platform.Family;
+
+        ShouldBreakOnIssues = shouldBreakOnIssues ?? !(IsTagged || BranchType == BranchType.Master);
+        IssueBreakPriority = issueBreakPriority;
 
         ShouldPublishToMyGetWithApiKey = shouldPublishToMyGetWithApiKey;
         GitHub = GetGitHubCredentials(context);
