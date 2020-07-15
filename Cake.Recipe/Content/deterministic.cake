@@ -86,6 +86,53 @@ Task("Enable-Coverlet")
             }
         }
     }
+
+    var workaroundTemplate = @"
+<!-- This target must be imported into Directory.Build.targets -->
+<!-- Workaround. Remove once we're targeting the 3.1.300+ SDK
+https://github.com/dotnet/sourcelink/issues/572 -->
+<Project>
+  <PropertyGroup>
+    <!-- Uncomment the following if you want to have pdb files embedded inside a nupkg package -->
+    <!--<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>-->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <TargetFrameworkMonikerAssemblyAttributesPath>$([System.IO.Path]::Combine('$(IntermediateOutputPath)','$(TargetFrameworkMoniker).AssemblyAttributes$(DefaultLanguageSourceExtension)'))</TargetFrameworkMonikerAssemblyAttributesPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedFiles Include=""$(GeneratedAssemblyInfoFile)""/>
+  </ItemGroup>
+  <ItemGroup>
+    <SourceRoot Include=""$(NuGetPackageRoot)"" />
+  </ItemGroup>
+
+  <Target Name=""CoverletGetPathMap""
+          DependsOnTargets=""InitializeSourceRootMappedPaths""
+          Returns=""@(_LocalTopLevelSourceRoot)""
+          Condition=""'$(DeterministicSourcePaths)' == 'true'"">
+    <ItemGroup>
+      <_LocalTopLevelSourceRoot Include=""@(SourceRoot)"" Condition=""'%(SourceRoot.NestedRoot)' == ''""/>
+    </ItemGroup>
+  </Target>
+</Project>
+";
+    var targets = new List<FilePath> {
+        BuildParameters.SourceDirectoryPath.CombineWithFilePath("Directory.Build.targets")
+    };
+
+    if (BuildParameters.SourceDirectoryPath != BuildParameters.TestDirectoryPath)
+    {
+        targets.Add(BuildParameters.TestDirectoryPath.CombineWithFilePath("Directory.Build.targets"));
+    }
+
+    foreach (var target in targets)
+    {
+        if (force || !FileExists(target))
+        {
+            Information("Creating file '{0}'", target);
+            System.IO.File.WriteAllText(target.ToString(), workaroundTemplate, new UTF8Encoding(false));
+        }
+    }
 });
 
 Task("Enable-DeterministicBuild")
