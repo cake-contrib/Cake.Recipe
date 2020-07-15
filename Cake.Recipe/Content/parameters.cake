@@ -44,6 +44,15 @@ public static class BuildParameters
 
     public static List<PackageSourceData> PackageSources { get; private set; }
 
+        public static bool IsRunningIntegrationTests
+    {
+        get
+        {
+            return string.Equals(BuildParameters.Target, "Run-Integration-Tests", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+
     public static string StandardMessage
     {
         get { return "Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."; }
