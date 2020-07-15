@@ -30,6 +30,14 @@ public static class BuildParameters
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
 
+    public static bool IsRunningIntegrationTests
+    {
+        get
+        {
+            return string.Equals(BuildParameters.Target, "Run-Integration-Tests", StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
     public static string GitterMessage
     {
         get

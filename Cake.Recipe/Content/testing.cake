@@ -214,10 +214,10 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
 BuildParameters.Tasks.IntegrationTestTask = Task("Run-Integration-Tests")
     .WithCriteria(() => BuildParameters.ShouldRunIntegrationTests)
     .IsDependentOn("Default")
-    .Does(() => 
+    .Does(() =>
     {
             CakeExecuteScript(BuildParameters.IntegrationTestScriptPath,
-                new CakeSettings 
+                new CakeSettings
                 {
                     Arguments = new Dictionary<string, string>
                     {

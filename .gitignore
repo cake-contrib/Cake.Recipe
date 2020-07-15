@@ -265,3 +265,7 @@ docs/input/tasks/*
 docs/config.wyam.dll
 docs/config.wyam.hash
 docs/config.wyam.packages.xml
+
+*.orig
+
+.DS_Store

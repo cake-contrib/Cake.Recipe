@@ -50,7 +50,14 @@ Teardown(context =>
 
     if(context.Successful)
     {
-        if(!BuildParameters.IsLocalBuild && !BuildParameters.IsPullRequest && BuildParameters.IsMainRepository && (BuildParameters.IsMasterBranch || ((BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch) && BuildParameters.ShouldNotifyBetaReleases)) && BuildParameters.IsTagged)
+        if(!BuildParameters.IsLocalBuild &&
+            !BuildParameters.IsPullRequest &&
+            BuildParameters.IsMainRepository &&
+            (BuildParameters.IsMasterBranch ||
+                ((BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch)
+                && BuildParameters.ShouldNotifyBetaReleases)) &&
+            BuildParameters.IsTagged &&
+            !BuildParameters.IsRunningIntegrationTests)
         {
             if(BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
@@ -70,7 +77,9 @@ Teardown(context =>
     }
     else
     {
-        if(!BuildParameters.IsLocalBuild && BuildParameters.IsMainRepository)
+        if(!BuildParameters.IsLocalBuild &&
+            BuildParameters.IsMainRepository &&
+            !BuildParameters.IsRunningIntegrationTests)
         {
             if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
