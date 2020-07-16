@@ -219,12 +219,27 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
+        // We need to clone the settings class, so we don't
+        // add additional properties to every other task.
+        var msBuildSettings = new DotNetCoreMSBuildSettings();
+        foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
+        {
+            string value = string.Join(" ", kv.Value);
+            msBuildSettings.WithProperty(kv.Key, value);
+        }
+        msBuildSettings.WithLogger("BinaryLogger," + context.Tools.Resolve("Cake.Issues.MsBuild*/**/StructuredLogger.dll"),
+            "",
+            BuildParameters.Paths.Files.BuildBinLogFilePath.ToString());
+
         DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
         {
             Configuration = BuildParameters.Configuration,
-            MSBuildSettings = context.Data.Get<DotNetCoreMSBuildSettings>(),
+            MSBuildSettings = msBuildSettings,
             NoRestore = true
         });
+
+        // We set it this here, so we won't have a failure in case this task is never called
+        IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
 
         CopyBuildOutput(buildVersion);
     });
