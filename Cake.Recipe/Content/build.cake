@@ -291,7 +291,7 @@ public void CopyBuildOutput(BuildVersion buildVersion)
             }
             else
             {
-                CopyFiles(GetFiles(parsedProject.OutputPaths.First().FullPath + "/**/*"), outputFolder, true);
+                CopyMsBuildProjectOutput(outputFolder, parsedProject);
             }
 
             continue;
@@ -340,14 +340,31 @@ public void CopyMsBuildProjectOutput(DirectoryPath outputBase, CustomProjectPars
         {
             var outputFolder = outputBase.Combine(parsedProject.RootNameSpace).Combine(outputPath.GetDirectoryName());
             EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(outputPath + "/**/*"), outputFolder, true);
+            var files = GetFiles(outputPath + "/**/*");
+            if (files.Any())
+            {
+                CopyFiles(files, outputFolder, true);
+            }
+            else
+            {
+                Warning("No files was found in the project output directory '{0}'", outputPath);
+            }
         }
     }
     else
     {
         var outputFolder = outputBase.Combine(parsedProject.RootNameSpace);
         EnsureDirectoryExists(outputFolder);
-        CopyFiles(GetFiles(parsedProject.OutputPaths.First().FullPath + "/**/*"), outputFolder, true);
+        var outputPath = parsedProject.OutputPaths.First().FullPath;
+        var files = GetFiles(outputPath + "/**/*");
+        if (files.Any())
+        {
+            CopyFiles(files, outputFolder, true);
+        }
+        else
+        {
+            Warning("No files was found in the project output directory '{0}'", outputPath);
+        }
     }
 }
 
