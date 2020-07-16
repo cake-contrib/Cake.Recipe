@@ -347,7 +347,7 @@ public void CopyMsBuildProjectOutput(DirectoryPath outputBase, CustomProjectPars
             }
             else
             {
-                Warning("No files was found in the project output directory '{0}'", outputPath);
+                Warning("No files were found in the project output directory: '{0}'", outputPath);
             }
         }
     }
@@ -363,7 +363,7 @@ public void CopyMsBuildProjectOutput(DirectoryPath outputBase, CustomProjectPars
         }
         else
         {
-            Warning("No files was found in the project output directory '{0}'", outputPath);
+            Warning("No files were found in the project output directory: '{0}'", outputPath);
         }
     }
 }
