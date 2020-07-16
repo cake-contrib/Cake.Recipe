@@ -520,7 +520,7 @@ public static class BuildParameters
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), BuildProvider.Repository.Name);
         IsPublicRepository = isPublicRepository;
 
-        var branchName = BuildProvider.Repository.Branch;
+        var branchName = BuildProvider.Repository.Branch ?? string.Empty; // This is just to prevent any null reference exceptions
         if (StringComparer.OrdinalIgnoreCase.Equals(masterBranchName, branchName))
         {
             BranchType = BranchType.Master;
