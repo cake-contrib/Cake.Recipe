@@ -16,6 +16,29 @@ public class BuildVersion
             throw new ArgumentNullException("context");
         }
 
+        var cakeVersion = typeof(ICakeContext).Assembly.GetName().Version.ToString();
+
+        try
+        {
+            var rootPath = BuildParameters.RootDirectoryPath;
+            rootPath = context.GitFindRootFromPath(rootPath);
+        }
+        catch (LibGit2Sharp.RepositoryNotFoundException rnfe)
+        {
+            context.Warning("Unable to locate git repository, so GitVersion can't be executed, returning default version numbers...");
+
+            return new BuildVersion
+            {
+                Version = "0.1.0",
+                SemVersion = "0.1.0-alpha.0",
+                Milestone = "0.1.0",
+                CakeVersion = cakeVersion,
+                InformationalVersion = "0.1.0-alpha.0+Branch.develop.Sha.528f9bf572a52f0660cbe3f4d109599eab1e9866",
+                FullSemVersion = "0.1.0-alpha.0",
+                AssemblySemVer = "0.1.0.o"
+            };
+        }
+
         string version = null;
         string semVersion = null;
         string milestone = null;
@@ -88,8 +111,6 @@ public class BuildVersion
             informationalVersion = assemblyInfo.AssemblyInformationalVersion;
             milestone = string.Concat(version);
         }
-
-        var cakeVersion = typeof(ICakeContext).Assembly.GetName().Version.ToString();
 
         return new BuildVersion
         {
