@@ -238,7 +238,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
             NoRestore = true
         });
 
-        // We set it this here, so we won't have a failure in case this task is never called
+        // We set this here, so we won't have a failure in case this task is never called
         IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
 
         CopyBuildOutput(buildVersion);

@@ -54,7 +54,7 @@ Task("Enable-Coverlet")
 
     if (!packages.Any())
     {
-        Warning("We was unable to determine which package to add for supporting SourceLink");
+        Warning("We were unable to determine which package to add for supporting SourceLink");
         Warning("Please see <https://github.com/dotnet/sourcelink#using-source-link-in-net-projects> for adding this manually.");
         Warning("We are adding the common package instead, remove this if it is not appropriate.");
         packages.Add("Microsoft.SourceLink.Common");
