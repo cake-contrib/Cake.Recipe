@@ -169,7 +169,7 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does<BuildVersion>((context, buildVersion) => RequireTool(ToolSettings.MSBuildExtensionPackTool, () => {
+    .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows || Context.Tools.Resolve("msbuild") != null)
@@ -180,14 +180,12 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                 .WithProperty("TreatWarningsAsErrors", BuildParameters.TreatWarningsAsErrors.ToString())
                 .WithTarget("Build")
                 .SetMaxCpuCount(ToolSettings.MaxCpuCount)
-                .SetConfiguration(BuildParameters.Configuration)
-                .WithLogger(
-                    Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
-                    "XmlFileLogger",
-                    string.Format(
-                        "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
-                        BuildParameters.Paths.Files.BuildLogFilePath)
-                );
+                .SetConfiguration(BuildParameters.Configuration);
+
+            msbuildSettings.ArgumentCustomization = args =>
+                args.Append(string.Format("/logger:BinaryLogger,\"{0}\";\"{1}\"",
+                    context.Tools.Resolve("Cake.Issues.MsBuild*/**/StructuredLogger.dll"),
+                    BuildParameters.Paths.Files.BuildBinLogFilePath));
 
             // This is used in combination with SourceLink to ensure a deterministic
             // package is generated
@@ -199,7 +197,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
             // Pass path to MsBuild log file to Cake.Issues.Recipe
-            IssuesParameters.InputFiles.MsBuildXmlFileLoggerLogFilePath = BuildParameters.Paths.Files.BuildLogFilePath;
+            IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
         }
         else
         {
@@ -212,7 +210,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
         }
 
         CopyBuildOutput(buildVersion);
-    }));
+    });
 
 
 BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
