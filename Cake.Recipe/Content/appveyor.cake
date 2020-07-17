@@ -84,6 +84,8 @@ public class AppVeyorBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
+    public bool SupportsTokenlessCodecov { get; } = true;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "APPVEYOR_API_URL",
         "APPVEYOR_BUILD_FOLDER",

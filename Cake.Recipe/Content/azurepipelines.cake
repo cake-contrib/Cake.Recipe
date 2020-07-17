@@ -72,6 +72,8 @@ public class AzurePipelinesBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
+    public bool SupportsTokenlessCodecov { get; } = true;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "BUILD_BUILDID",
         "BUILD_BUILDNUMBER",
