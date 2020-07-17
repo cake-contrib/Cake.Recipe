@@ -1,21 +1,19 @@
-﻿<!DOCTYPE html>
-<html>
-    <head>
+﻿<!DOCTYPE html><html><head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-        <meta name="description" />
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+        <meta name="description">
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Issue management</title>
+        <title>Cake.Recipe - Posix</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
-        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
-        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet">
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet">
         <script src="/Cake.Recipe/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/Cake.Recipe/assets/js/bootstrap.min.js"></script>        
         <script src="/Cake.Recipe/assets/js/app.min.js"></script>         
@@ -74,8 +72,11 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/issue-management.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/overview/requirements/posix.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#required-framework-version">Required Framework Version</a></p>
+<p><a href="#required-cake-version">Required Cake Version</a></p>
+<hr class="infobar-hidden">
+</div>
 
                 </section>
                 <section class="sidebar">    
@@ -85,16 +86,16 @@
                     <ul class="sidebar-menu">
                         
 
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/overview">Overview</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/overview/features">Features</a></li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/overview/requirements">Requirements</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/overview/requirements/posix">Posix</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/overview/requirements/posix">Posix</a></li>
                 <li><a href="/Cake.Recipe/docs/overview/requirements/windows">Windows</a></li>
 
                     </ul>
@@ -111,13 +112,13 @@
 
                     </ul>
                 </li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
@@ -159,13 +160,15 @@
 
 
 		<section class="content-header">
-			<h1>Issue management</h1>
+			<h1>Posix</h1>
 		</section>
 	<section class="content">
-		<p>Cake.Recipe integrates <a href="https://cakeissues.net/docs/recipe/overview">Cake.Issues.Recipe</a> for issue management.
-It integrates code analysis with build and pull request systems.</p>
-<p>See <a href="https://cakeissues.net/docs/recipe/supported-tools">supported tools</a> for a list of supported build servers and pull request systems
-and <a href="https://cakeissues.net/docs/recipe/configuration">configuration</a> for possible configuration options.</p>
+		<h1 id="required-framework-version">Required Framework Version</h1>
+<p>In order to run Cake.Recipe on a Posix machine (i.e. Mac or Linux) it is necessary to have, as a minimum, mono 5.16.x.  This can be installed via homebrew using:</p>
+<pre><code>brew cask install mono-mdk
+</code></pre>
+<h1 id="required-cake-version">Required Cake Version</h1>
+<p>As a minimum, it is recommended that Cake.Recipe should be used in conjunction with Cake 0.32.0.</p>
 
 	</section>
                 
@@ -179,8 +182,8 @@ and <a href="https://cakeissues.net/docs/recipe/configuration">configuration</a>
         <div class="wrapper bottom-wrapper">
             <footer class="bottom-footer">
                 <p class="text-muted">
-    Copyright &copy; <a href="http://github.com/cake-contrib" target="_blank">Cake Contributions</a> and <a href="https://github.com/cake-contrib/Cake.Recipe/graphs/contributors" target="_blank">contributors</a>.
-    <br/>
+    Copyright © <a href="http://github.com/cake-contrib" target="_blank">Cake Contributions</a> and <a href="https://github.com/cake-contrib/Cake.Recipe/graphs/contributors" target="_blank">contributors</a>.
+    <br>
     Website generated by <a href="http://wyam.io" target="_blank">Wyam</a>
 </p>
 
@@ -195,7 +198,7 @@ and <a href="https://cakeissues.net/docs/recipe/configuration">configuration</a>
         room: 'cake-contrib/Lobby'
     };
 </script>
-<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async="" defer=""></script>
 
 <script type="text/javascript" src="/Cake.Recipe/assets/js/anchor.min.js"></script>
 <script type="text/javascript" src="/Cake.Recipe/assets/js/clipboard.min.js"></script>
@@ -312,5 +315,5 @@ and <a href="https://cakeissues.net/docs/recipe/configuration">configuration</a>
                 }, 500);
             });
         </script>
-    </body>
-</html>
+    
+</body></html>

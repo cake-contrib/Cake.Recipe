@@ -58,8 +58,9 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
                         <ul class="nav navbar-nav">                            
-                                    <li class="active"><a href="/Cake.Recipe/docs">Documentation</a></li>
-        <li><a href="/Cake.Recipe/tasks">Tasks</a></li>
+                            
+
+        <li class="active"><a href="/Cake.Recipe/docs">Documentation</a></li>
  
                         </ul>       
                     </div>
@@ -85,19 +86,28 @@
                         
 
                 <li class="treeview">
-                    <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
+                    <a href="/Cake.Recipe/docs/overview">Overview</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
+                <li><a href="/Cake.Recipe/docs/overview/features">Features</a></li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/overview/requirements">Requirements</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/overview/requirements/posix">Posix</a></li>
+                <li><a href="/Cake.Recipe/docs/overview/requirements/windows">Windows</a></li>
+
+                    </ul>
+                </li>
+                <li><a href="/Cake.Recipe/docs/overview/release-notes">Release Notes</a></li>
 
                     </ul>
                 </li>
                 <li class="treeview">
-                    <a href="/Cake.Recipe/docs/requirements">Requirements</a> <a href="#" class="expand"></a>
+                    <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/requirements/posix">Posix</a></li>
-                <li><a href="/Cake.Recipe/docs/requirements/windows">Windows</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
 
                     </ul>
                 </li>
@@ -117,6 +127,25 @@
 
                     </ul>
                 </li>
+                <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/resources">Resources</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/resources/blog-posts">Blog posts</a></li>
+
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/contributing">Contributing</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/contributing/how-to-contribute">How to contribute</a></li>
+                <li><a href="/Cake.Recipe/docs/contributing/how-to-build">How to build Cake.Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/contributing/how-to-release">How to release Cake.Recipe</a></li>
+
+                    </ul>
+                </li>
 
                     </ul>
                             
@@ -133,12 +162,36 @@
 			<h1>Documentation</h1>
 		</section>
 	<section class="content">
-		<p>This user guide, like Cake.Recipe itself, is under very active development. Some parts of it aren't 
-documented as completely as they need to be, but we gladly accept your contributions.</p>
+		<p>
+    We gladly accept your contributions. If there is something that you would like to add then you can send a pull request via GitHub.  Have a look at the <a href="docs/contributing/how-to-contribute">how to contribute</a> guide for more information.
+</p>
 
-<p>We need your help to improve the documentation for Cake.Recipe, so if there is something that you 
-would like to add then you can edit the content directly on GitHub.</p>
-
+    <h1>Overview</h1>
+        <p>Overview about features and requirements of the Cake Issues Addin.</p>
+			<div class="box">
+				<div class="box-body no-padding">
+					<table class="table table-striped table-hover two-cols-alt table-responsive">
+						
+						<tbody>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/overview/features">Features</a></strong></td>
+									<td>
+Overview about core features.									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/overview/requirements">Requirements</a></strong></td>
+									<td>
+The following contains all information regarding the requirements for running Cake.Recipe.									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/overview/release-notes">Release Notes</a></strong></td>
+									<td>
+Release notes for the Cake.Recipe.									</td>
+								</tr>
+						</tbody>				
+					</table>
+				</div>
+			</div> 
     <h1>Fundamentals</h1>
         <p>The following contains all the pieces of core information that you will need in order to use Cake.Recipe.</p>
 			<div class="box">
@@ -148,27 +201,6 @@ would like to add then you can edit the content directly on GitHub.</p>
 						<tbody>
 								<tr>
 									<td><strong><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></strong></td>
-									<td>
-									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
-    <h1>Requirements</h1>
-        <p>The following contains all information regarding the requirements for running Cake.Recipe.</p>
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/requirements/posix">Posix</a></strong></td>
-									<td>
-									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/requirements/windows">Windows</a></strong></td>
 									<td>
 									</td>
 								</tr>
@@ -232,6 +264,50 @@ would like to add then you can edit the content directly on GitHub.</p>
 					</table>
 				</div>
 			</div> 
+    <h1>Extending</h1>
+        <p>How to extend Cake.Recipe.</p>
+    <h1>Resources</h1>
+        <p>Resources for Cake.Recipe</p>
+			<div class="box">
+				<div class="box-body no-padding">
+					<table class="table table-striped table-hover two-cols-alt table-responsive">
+						
+						<tbody>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/resources/blog-posts">Blog posts</a></strong></td>
+									<td>
+Blog posts about Cake.Recipe.									</td>
+								</tr>
+						</tbody>				
+					</table>
+				</div>
+			</div> 
+    <h1>Contributing</h1>
+        <p>Contributing to Cake.Recipe.</p>
+			<div class="box">
+				<div class="box-body no-padding">
+					<table class="table table-striped table-hover two-cols-alt table-responsive">
+						
+						<tbody>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/contributing/how-to-contribute">How to contribute</a></strong></td>
+									<td>
+Instructions how to contribute to Cake.Recipe..									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/contributing/how-to-build">How to build Cake.Recipe</a></strong></td>
+									<td>
+Instructions how to build Cake.Recipe.									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/contributing/how-to-release">How to release Cake.Recipe</a></strong></td>
+									<td>
+Instructions how to release Cake.Recipe									</td>
+								</tr>
+						</tbody>				
+					</table>
+				</div>
+			</div> 
 
 	</section>
                 
@@ -244,11 +320,71 @@ would like to add then you can edit the content directly on GitHub.</p>
         </div>
         <div class="wrapper bottom-wrapper">
             <footer class="bottom-footer">
-                Generated by <a href="https://wyam.io">Wyam</a>
+                <p class="text-muted">
+    Copyright &copy; <a href="http://github.com/cake-contrib" target="_blank">Cake Contributions</a> and <a href="https://github.com/cake-contrib/Cake.Recipe/graphs/contributors" target="_blank">contributors</a>.
+    <br/>
+    Website generated by <a href="http://wyam.io" target="_blank">Wyam</a>
+</p>
+
             </footer>
         </div>
         <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
-        
+        <div class="github-button">
+    <a href="https://github.com/cake-contrib/Cake.Recipe" target="_blank"><i class="fa fa-github"></i> GitHub</a>
+</div>
+<script>
+    ((window.gitter = {}).chat = {}).options = {
+        room: 'cake-contrib/Lobby'
+    };
+</script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+<script type="text/javascript" src="/Cake.Recipe/assets/js/anchor.min.js"></script>
+<script type="text/javascript" src="/Cake.Recipe/assets/js/clipboard.min.js"></script>
+<script type="text/javascript">
+    anchors.options.placement = 'left';
+    anchors.add('#content h1:not(.no-anchor), #content h2:not(.no-anchor), #content h3:not(.no-anchor), #content h4:not(.no-anchor)');
+
+    var snippets = document.querySelectorAll("pre > code");
+    [].forEach.call(snippets, function(snippet) {
+        snippet.insertAdjacentHTML("beforebegin", "<button class='btn-copy' data-clipboard-snippet><img class='clippy' width=13 src='/Cake.Recipe/assets/images/clippy.svg' alt='Copy to clipboard'></button>");
+    });
+    var clipboardSnippets = new Clipboard('[data-clipboard-snippet]', {
+        target: function(trigger) {
+            return trigger.nextElementSibling;
+        }
+    });
+    clipboardSnippets.on('success', function(e) {
+        e.clearSelection();
+        showTooltip(e.trigger, "Copied!");
+    });
+    clipboardSnippets.on('error', function(e) {
+        showTooltip(e.trigger, fallbackMessage(e.action));
+    });
+    var btns = document.querySelectorAll('.btn-copy');
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener('mouseleave', function(e) {
+            e.currentTarget.setAttribute('class', 'btn-copy');
+            e.currentTarget.removeAttribute('aria-label');
+        });
+    }
+    function showTooltip(elem, msg) {
+        elem.setAttribute('class', 'btn-copy tooltipped tooltipped-s');
+        elem.setAttribute('aria-label', msg);
+    }
+    function fallbackMessage(action) {
+        var actionMsg = '';
+        var actionKey = (action === 'cut' ? 'X' : 'C');
+        if (/iPhone|iPad/i.test(navigator.userAgent)) {
+            actionMsg = 'No support :(';
+        } else if (/Mac/i.test(navigator.userAgent)) {
+            actionMsg = 'Press ⌘-' + actionKey + ' to ' + action;
+        } else {
+            actionMsg = 'Press Ctrl-' + actionKey + ' to ' + action;
+        }
+        return actionMsg;
+    }
+</script>
         <script>           
             // Close the sidebar if we select an anchor link
             $(".main-sidebar a[href^='#']:not('.expand')").click(function(){
