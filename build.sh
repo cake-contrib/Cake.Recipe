@@ -117,11 +117,7 @@ if [ -f "./includes.cake" ]; then
     rm -f "./includes.cake"
 fi
 
-for f in ./Cake.Recipe/Content/*.cake; do
-    if [ "$f" != "*/version.cake" ]; then
-        echo "#load \"local:?path=$f\"" >> ./includes.cake
-    fi
-done
+find ./Cake.Recipe/Content -type f \( -iname "*.cake" -and -not -iname "version.cake" \) -exec echo "#load \"local:?path={}\"" >> includes.cake \;
 
 # Start Cake
 exec mono "$CAKE_EXE" $SCRIPT "${CAKE_ARGUMENTS[@]}"
