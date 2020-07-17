@@ -88,6 +88,8 @@ public class GitHubActionBuildProvider : IBuildProvider
     public IPullRequestInfo PullRequest { get; }
     public IRepositoryInfo Repository { get; }
 
+    public bool SupportsTokenlessCodecov { get; } = true;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "CI",
         "HOME",

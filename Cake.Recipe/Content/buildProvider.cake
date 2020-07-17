@@ -51,6 +51,8 @@ public interface IBuildProvider
 
     IBuildInfo Build { get; }
 
+    bool SupportsTokenlessCodecov { get; }
+
     IEnumerable<string> PrintVariables { get; }
 
     void UploadArtifact(FilePath file);

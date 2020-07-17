@@ -233,9 +233,10 @@ public static class BuildParameters
     {
         get
         {
-            return ShouldRunCodecov &&
-                (!string.IsNullOrEmpty(BuildParameters.Codecov.RepoToken) ||
-                BuildParameters.IsRunningOnAppVeyor || BuildParameters.IsRunningOnTravisCI);
+            return ShouldRunCodecov && (
+                BuildProvider.SupportsTokenlessCodecov ||
+                !string.IsNullOrEmpty(Codecov.RepoToken)
+            );
         }
     }
 
