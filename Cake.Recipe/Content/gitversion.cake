@@ -20,6 +20,8 @@ public class BuildVersion
 
         try
         {
+            context.Information("Testing to see if valid git repository...");
+
             var rootPath = BuildParameters.RootDirectoryPath;
             rootPath = context.GitFindRootFromPath(rootPath);
         }
