@@ -82,8 +82,6 @@ public class TeamCityBuildProvider : IBuildProvider
         Repository = new TeamCityRepositoryInfo(teamCity, context);
 
         _teamCity = teamCity;
-
-        SupportsTokenlessCodecov = GetTokenlessSupport(context);
     }
 
     public IRepositoryInfo Repository { get; }
@@ -92,7 +90,7 @@ public class TeamCityBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
-    public bool SupportsTokenlessCodecov { get; }
+    public bool SupportsTokenlessCodecov { get; } = false;
 
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "TEAMCITY_BUILD_BRANCH",
@@ -109,26 +107,5 @@ public class TeamCityBuildProvider : IBuildProvider
     public void UploadArtifact(FilePath file)
     {
         _teamCity.PublishArtifacts(file.FullPath);
-    }
-
-    private static bool GetTokenlessSupport(ICakeContext context)
-    {
-        var neededVariables = new[] {
-            "TEAMCITY_BUILD_BRANCH",
-            "TEAMCITY_BUILD_ID",
-            "TEAMCITY_BUILD_COMMIT",
-            "TEAMCITY_BUILD_REPOSITORY"
-        };
-
-        bool supported = true;
-
-        foreach (var variable in neededVariables)
-        {
-            supported = context.HasEnvironmentVariable(variable);
-            if (!supported)
-                break;
-        }
-
-        return supported;
     }
 }
