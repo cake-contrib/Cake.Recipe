@@ -4,6 +4,12 @@
 
 public class LocalBuildTagInfo : ITagInfo
 {
+    public LocalBuildTagInfo(bool isTag, string name)
+    {
+        IsTag = isTag;
+        Name = name;
+    }
+
     public LocalBuildTagInfo(ICakeContext context)
     {
         // Test to see if current commit is a tag...
@@ -47,33 +53,60 @@ public class LocalBuildRepositoryInfo : IRepositoryInfo
 {
     public LocalBuildRepositoryInfo(ICakeContext context)
     {
-        context.Information("Getting current branch name...");
-        IEnumerable<string> redirectedStandardOutput;
-        IEnumerable<string> redirectedError;
-
-        var exitCode = context.StartProcess(
-            "git",
-            new ProcessSettings {
-                Arguments = "branch --show-current",
-                RedirectStandardOutput = true,
-                RedirectStandardError = true
-            },
-            out redirectedStandardOutput,
-            out redirectedError
-        );
-
-        if (exitCode == 0)
+        try
         {
-            var lines = redirectedStandardOutput.ToList();
-            if (lines.Any())
+            context.Information("Testing to see if valid git repository...");
+            var rootPath = BuildParameters.RootDirectoryPath;
+            rootPath = context.GitFindRootFromPath(rootPath);
+
+            var gitTool = context.Tools.Resolve("git");
+
+            if (gitTool == null)
             {
-                Branch = lines.FirstOrDefault();
-                context.Information("Branch name is {0}", Branch);
+                context.Warning("Unable to find git, setting default values for repository properties...");
+                Branch = "unknown";
+                Name = "Local";
+                Tag = new LocalBuildTagInfo(false, "unknown");
+            }
+            else
+            {
+                context.Information("Getting current branch name...");
+                IEnumerable<string> redirectedStandardOutput;
+                IEnumerable<string> redirectedError;
+
+                var exitCode = context.StartProcess(
+                    "git",
+                    new ProcessSettings {
+                        Arguments = "branch --show-current",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true
+                    },
+                    out redirectedStandardOutput,
+                    out redirectedError
+                );
+
+                if (exitCode == 0)
+                {
+                    var lines = redirectedStandardOutput.ToList();
+                    if (lines.Any())
+                    {
+                        Branch = lines.FirstOrDefault();
+                        context.Information("Branch name is {0}", Branch);
+                    }
+                }
+
+                Name = "Local";
+                Tag = new LocalBuildTagInfo(context);
             }
         }
+        catch (LibGit2Sharp.RepositoryNotFoundException rnfe)
+        {
+            context.Warning("Unable to locate git repository, setting default values for repository properties...");
 
-        Name = "Local";
-        Tag = new LocalBuildTagInfo(context);
+            Branch = "unknown";
+            Name = "Local";
+            Tag = new LocalBuildTagInfo(false, "unknown");
+        }
     }
 
     public string Branch { get; }
