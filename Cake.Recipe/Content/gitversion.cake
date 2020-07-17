@@ -23,7 +23,7 @@ public class BuildVersion
             var rootPath = BuildParameters.RootDirectoryPath;
             rootPath = context.GitFindRootFromPath(rootPath);
         }
-        catch (LibGit2Sharp.RepositoryNotFoundException rnfe)
+        catch (LibGit2Sharp.RepositoryNotFoundException)
         {
             context.Warning("Unable to locate git repository, so GitVersion can't be executed, returning default version numbers...");
 

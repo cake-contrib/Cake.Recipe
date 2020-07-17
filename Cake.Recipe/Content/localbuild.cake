@@ -99,7 +99,7 @@ public class LocalBuildRepositoryInfo : IRepositoryInfo
                 Tag = new LocalBuildTagInfo(context);
             }
         }
-        catch (LibGit2Sharp.RepositoryNotFoundException rnfe)
+        catch (LibGit2Sharp.RepositoryNotFoundException)
         {
             context.Warning("Unable to locate git repository, setting default values for repository properties...");
 
