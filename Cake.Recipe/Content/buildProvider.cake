@@ -84,6 +84,8 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
         return new TravisCiBuildProvider(buildSystem.TravisCI, context);
     }
 
+    // TODO: This can be switched to IsRunningOnGitHubActions once we support
+    // at least 0.36.0 of Cake.
     if (context.EnvironmentVariable("GITHUB_ACTIONS", false) || !string.IsNullOrEmpty(context.EnvironmentVariable("GITHUB_ACTION")))
     {
         context.Information("Using GitHub Action Provider...");
