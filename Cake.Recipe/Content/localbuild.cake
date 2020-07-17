@@ -56,8 +56,11 @@ public class LocalBuildRepositoryInfo : IRepositoryInfo
         try
         {
             context.Information("Testing to see if valid git repository...");
-            var rootPath = BuildParameters.RootDirectoryPath;
-            rootPath = context.GitFindRootFromPath(rootPath);
+
+            // Normally, would use BuildParameters.RootDirectoryPath here, but since
+            // BuildProvider is executed before the Setup Task has executed, this property
+            // is null.  Default to the current working directory for this test.
+            var rootPath = context.GitFindRootFromPath(context.MakeAbsolute(context.Environment.WorkingDirectory));
 
             var gitTool = context.Tools.Resolve("git");
 
