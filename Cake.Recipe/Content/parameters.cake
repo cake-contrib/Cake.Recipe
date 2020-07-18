@@ -628,20 +628,20 @@ public static class BuildParameters
             PackageSources = new List<PackageSourceData>();
 
             // Try to get the deprecated way of doing things, set them as default sources
-            var myGetUrl = context.EnvironmentVariable(Environment.MyGetSourceUrlVariable);
+            var myGetUrl = context.EnvironmentVariable("MYGET_SOURCE");
             if (!string.IsNullOrEmpty(myGetUrl))
             {
                 PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.NuGet, false));
                 PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.Chocolatey, false));
             }
 
-            var nuGetUrl = context.EnvironmentVariable(Environment.NuGetSourceUrlVariable);
+            var nuGetUrl = context.EnvironmentVariable("NUGET_SOURCE");
             if (!string.IsNullOrEmpty(nuGetUrl))
             {
                 PackageSources.Add(new PackageSourceData(context, "NUGET", nuGetUrl));
             }
 
-            var chocolateyUrl = context.EnvironmentVariable(Environment.ChocolateySourceUrlVariable);
+            var chocolateyUrl = context.EnvironmentVariable("CHOCOLATEY_SOURCE");
             if (!string.IsNullOrEmpty(chocolateyUrl))
             {
                 PackageSources.Add(new PackageSourceData(context, "CHOCOLATEY", chocolateyUrl, FeedType.Chocolatey));
