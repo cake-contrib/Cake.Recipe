@@ -2,7 +2,9 @@
 Order: 10
 ---
 
-The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.
+# Using Environment Variables in Cake.Recipe
+
+The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.  If they don't exist, it may mean that certain tasks are skipped, or portions of some tasks are skipped.  This will be communicated either through marking a task as skipped, or providing a warning during a task execution.
 
 The following are a list of the default environment variable names that are looked for during the build.
 
@@ -12,86 +14,96 @@ The following are a list of the default environment variable names that are look
 If required, the name of the environment variables can be modified to fit into your existing system/architecture.
 :::
 
-# GitHub
+## GitHub
 
-## GITHUB_USERNAME
+Using GitReleaseManager, Cake.Recipe makes it possible to create releases, add assets to the release, and also to close a milestone.  This is made possible using either the combination of username/password, or if using 2FA a token.
 
-User name of the GitHub account used to create and publish releases.
+:::{.alert .alert-info}
+**NOTE:**
 
-## GITHUB_PASSWORD
+A token will be checked for first, and if not provided, the username and password will be checked for.
+:::
 
-Password or [Personal Access Token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) of the GitHub account used to create and publish releases.
+### GITHUB_USERNAME
 
-## GITHUB_TOKEN
+User name of the GitHub account to be used.
 
-# Gitter
+### GITHUB_PASSWORD
 
-## GITTER_TOKEN
+Password of the GitHub account to be used.
 
-## GITTER_ROOM_ID
+### GITHUB_TOKEN
 
-# Slack
+The Personal Access Token of the GitHub account to be used.
 
-## SLACK_TOKEN
+## Gitter
 
-## SLACK_CHANNEL
+### GITTER_TOKEN
 
-# Twitter
+### GITTER_ROOM_ID
 
-## TWITTER_CONSUMER_KEY
+## Slack
 
-## TWITTER_CONSUMER_SECRET
+### SLACK_TOKEN
 
-## TWITTER_ACCESS_TOKEN
+### SLACK_CHANNEL
 
-## TWITTER_ACCESS_TOKEN_SECRET
+## Twitter
 
-# Email
+### TWITTER_CONSUMER_KEY
 
-## EMAIL_SMTPHOST
+### TWITTER_CONSUMER_SECRET
 
-## EMAIL_PORT
+### TWITTER_ACCESS_TOKEN
 
-## EMAIL_ENABLESSL
+### TWITTER_ACCESS_TOKEN_SECRET
 
-## EMAIL_USERNAME
+## Email
 
-## EMAIL_PASSWORD
+### EMAIL_SMTPHOST
 
-# AppVeyor
+### EMAIL_PORT
 
-## APPVEYOR_API_TOKEN
+### EMAIL_ENABLESSL
+
+### EMAIL_USERNAME
+
+### EMAIL_PASSWORD
+
+## AppVeyor
+
+### APPVEYOR_API_TOKEN
 
 API token for accessing AppVeyor. Used to [clean AppVeyor build cache](../usage/cleaning-cache).
 
-# Codecov
+## Codecov
 
-## CODECOV_REPO_TOKEN
+### CODECOV_REPO_TOKEN
 
 API token for uploading coverage reports to codecov.io. *This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories*
 
-# Coveralls
+## Coveralls
 
-## COVERALLS_REPO_TOKEN
+### COVERALLS_REPO_TOKEN
 
-# Microsoft Teams
+## Microsoft Teams
 
-## MICROSOFTTEAMS_WEBHOOKURL
+### MICROSOFTTEAMS_WEBHOOKURL
 
-# Transifex
+## Transifex
 
-## TRANSIFEX_API_TOKEN
+### TRANSIFEX_API_TOKEN
 
-# Wyam
+## Wyam
 
-## WYAM_ACCESS_TOKEN
+### WYAM_ACCESS_TOKEN
 
 Access token to use to publish the Wyam documentation. Used to [publish documentation](../usage/publishing-documentation).
 
-## WYAM_DEPLOY_REMOTE
+### WYAM_DEPLOY_REMOTE
 
 URI of the remote repository where the Wyam documentation is published to. Used to [publish documentation](../usage/publishing-documentation).
 
-## WYAM_DEPLOY_BRANCH
+### WYAM_DEPLOY_BRANCH
 
 Branch into which the Wyam documentation should be published. Used to [publish documentation](../usage/publishing-documentation).
