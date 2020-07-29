@@ -39,8 +39,10 @@ public static class ToolSettings
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.1",
+        // This is specifically pinned to 0.7.0 as later versions of same package publish .Net Global Tool, rather than full framework version
         string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
+        // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2019.3.4",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
