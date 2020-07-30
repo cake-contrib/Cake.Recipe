@@ -33,10 +33,19 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
             // This trimming is not perfect, as it will remove part of a
             // branch name if the branch name itself contains a '/'
             var tempName = context.EnvironmentVariable("GITHUB_REF");
-            if (!string.IsNullOrEmpty(tempName) && tempName.IndexOf('/') >= 0)
+            const string headPrefix = "refs/heads/";
+            if (!string.IsNullOrEmpty(tempName))
             {
-                tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
+                if (tempName.StartsWith(headPrefix))
+                {
+                    tempName = tempName.Substring(headPrefix.Length);
+                }
+                else if (tempName.IndexOf('/') >= 0)
+                {
+                    tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
+                }
             }
+
             Branch = tempName;
         }
         Tag = new GitHubActionTagInfo(context);
