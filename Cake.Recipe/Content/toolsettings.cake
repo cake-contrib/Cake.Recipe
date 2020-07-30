@@ -36,6 +36,7 @@ public static class ToolSettings
     public static string GitVersionGlobalTool { get; private set; }
     public static string ReportGeneratorGlobalTool { get; private set; }
     public static string WyamGlobalTool { get; private set; }
+    public static string KuduSyncGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.1",
@@ -57,7 +58,9 @@ public static class ToolSettings
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.4",
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.1",
-        string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9"
+        string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
+        // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
+        string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-gc5cc5a2a19"
     )
     {
         CodecovTool = codecovTool;
@@ -78,6 +81,7 @@ public static class ToolSettings
         CodecovGlobalTool = codecovGlobalTool;
         CoverallsGlobalTool = coverallsGlobalTool;
         WyamGlobalTool = wyamGlobalTool;
+        KuduSyncGlobalTool = kuduSyncGlobalTool;
     }
 
     public static void SetToolSettings(
