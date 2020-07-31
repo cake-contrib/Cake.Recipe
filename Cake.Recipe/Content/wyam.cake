@@ -145,7 +145,7 @@ BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Docume
 
 public void PublishDocumentation()
 {
-    RequireTool(ToolSettings.KuduSyncTool, () => {
+    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.KuduSyncGlobalTool : ToolSettings.KuduSyncTool, () => {
         if (BuildParameters.CanUseWyam)
         {
             var sourceCommit = GitLogTip("./");
