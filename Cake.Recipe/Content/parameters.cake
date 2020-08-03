@@ -325,9 +325,7 @@ public static class BuildParameters
         context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
         context.Information("WyamRecipe: {0}", WyamRecipe);
         context.Information("WyamTheme: {0}", WyamTheme);
-        // TODO: Speak to Patrik about why this is causing an error with latest Cake Release
-        // This is something to do with the new AnsiConsole Renderer
-        //context.Information("WyamSourceFiles: {0}", WyamSourceFiles);
+        context.Information("WyamSourceFiles: {0}", WyamSourceFiles);
         context.Information("Wyam Deploy Branch: {0}", Wyam.DeployBranch);
         context.Information("Wyam Deploy Remote: {0}", Wyam.DeployRemote);
         context.Information("WebHost: {0}", WebHost);
