@@ -22,4 +22,4 @@ branches:
 #  Build Cache                    #
 #---------------------------------#
 cache:
-- Tools -> build.ps1
+- tools -> build.ps1, tools/packages.config
