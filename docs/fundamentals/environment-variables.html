@@ -73,17 +73,7 @@
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
         <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/fundamentals/environment-variables.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#github">GitHub</a></p>
-<p><a href="#myget">MyGet</a></p>
-<p><a href="#nuget">NuGet</a></p>
-<p><a href="#chocolatey">Chocolatey</a></p>
-<p><a href="#gitter">Gitter</a></p>
-<p><a href="#slack">Slack</a></p>
-<p><a href="#twitter">Twitter</a></p>
-<p><a href="#codecov">Codecov</a></p>
-<p><a href="#coveralls">Coveralls</a></p>
-<p><a href="#appveyor">AppVeyor</a></p>
-<p><a href="#wyam">Wyam</a></p>
+    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#using-environment-variables-in-cake.recipe">Using Environment Variables in Cake.Recipe</a></p>
 <hr class="infobar-hidden">
 </div>
 
@@ -128,7 +118,8 @@
                 <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
@@ -172,50 +163,58 @@
 			<h1>Environment Variables</h1>
 		</section>
 	<section class="content">
-		<p>The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.</p>
+		<h1 id="using-environment-variables-in-cake.recipe">Using Environment Variables in Cake.Recipe</h1>
+<p>The various tasks within Cake.Recipe are driven, in part, by whether the correct environment variables exist on the system where the build is executing.  If they don't exist, it may mean that certain tasks are skipped, or portions of some tasks are skipped.  This will be communicated either through marking a task as skipped, or providing a warning during a task execution.</p>
 <p>The following are a list of the default environment variable names that are looked for during the build.</p>
-<p><strong>NOTE:</strong> If required, the name of the environment variables can be modified to fit into your existing system/architecture.</p>
-<h1 id="github">GitHub</h1>
-<h2 id="github_username">GITHUB_USERNAME</h2>
-<p>User name of the GitHub account used to create and publish releases.</p>
-<h2 id="github_password">GITHUB_PASSWORD</h2>
-<p>Password or <a href="https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/">Personal Access Token</a> of the GitHub account used to create and publish releases.</p>
-<h1 id="myget">MyGet</h1>
-<h2 id="myget_api_key">MYGET_API_KEY</h2>
-<h2 id="myget_source">MYGET_SOURCE</h2>
-<h1 id="nuget">NuGet</h1>
-<h2 id="nuget_api_key">NUGET_API_KEY</h2>
-<h2 id="nuget_source">NUGET_SOURCE</h2>
-<h1 id="chocolatey">Chocolatey</h1>
-<h2 id="chocolatey_api_key">CHOCOLATEY_API_KEY</h2>
-<p>API key for Chocolatey. Used to publish Chocolatey packages.</p>
-<h2 id="chocolatey_source">CHOCOLATEY_SOURCE</h2>
-<p>Source of the Chocolatey feed. Used to publish Chocolatey packages.</p>
-<h1 id="gitter">Gitter</h1>
-<h2 id="gitter_token">GITTER_TOKEN</h2>
-<h2 id="gitter_room_id">GITTER_ROOM_ID</h2>
-<h1 id="slack">Slack</h1>
-<h2 id="slack_token">SLACK_TOKEN</h2>
-<h2 id="slack_channel">SLACK_CHANNEL</h2>
-<h1 id="twitter">Twitter</h1>
-<h2 id="twitter_consumer_key">TWITTER_CONSUMER_KEY</h2>
-<h2 id="twitter_consumer_secret">TWITTER_CONSUMER_SECRET</h2>
-<h2 id="twitter_access_token">TWITTER_ACCESS_TOKEN</h2>
-<h2 id="twitter_access_token_secret">TWITTER_ACCESS_TOKEN_SECRET</h2>
-<h1 id="codecov">Codecov</h1>
-<h2 id="codecov_repo_token">CODECOV_REPO_TOKEN</h2>
-<p>API token for uploading coverage reports to codecov.io. <em>This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories</em></p>
-<h1 id="coveralls">Coveralls</h1>
-<h2 id="coveralls_repo_token">COVERALLS_REPO_TOKEN</h2>
-<h1 id="appveyor">AppVeyor</h1>
-<h2 id="appveyor_api_token">APPVEYOR_API_TOKEN</h2>
+<div class="alert alert-info"><p><strong>NOTE:</strong></p>
+<p>If required, the name of the environment variables can be modified to fit into your existing system/architecture.</p>
+</div>
+<h2 id="github">GitHub</h2>
+<p>Using GitReleaseManager, Cake.Recipe makes it possible to create releases, add assets to the release, and also to close a milestone.  This is made possible using either the combination of username/password, or if using 2FA a token.</p>
+<div class="alert alert-info"><p><strong>NOTE:</strong></p>
+<p>A token will be checked for first, and if not provided, the username and password will be checked for.</p>
+</div>
+<h3 id="github_username">GITHUB_USERNAME</h3>
+<p>User name of the GitHub account to be used.</p>
+<h3 id="github_password">GITHUB_PASSWORD</h3>
+<p>Password of the GitHub account to be used.</p>
+<h3 id="github_token">GITHUB_TOKEN</h3>
+<p>The Personal Access Token of the GitHub account to be used.</p>
+<h2 id="gitter">Gitter</h2>
+<h3 id="gitter_token">GITTER_TOKEN</h3>
+<h3 id="gitter_room_id">GITTER_ROOM_ID</h3>
+<h2 id="slack">Slack</h2>
+<h3 id="slack_token">SLACK_TOKEN</h3>
+<h3 id="slack_channel">SLACK_CHANNEL</h3>
+<h2 id="twitter">Twitter</h2>
+<h3 id="twitter_consumer_key">TWITTER_CONSUMER_KEY</h3>
+<h3 id="twitter_consumer_secret">TWITTER_CONSUMER_SECRET</h3>
+<h3 id="twitter_access_token">TWITTER_ACCESS_TOKEN</h3>
+<h3 id="twitter_access_token_secret">TWITTER_ACCESS_TOKEN_SECRET</h3>
+<h2 id="email">Email</h2>
+<h3 id="email_smtphost">EMAIL_SMTPHOST</h3>
+<h3 id="email_port">EMAIL_PORT</h3>
+<h3 id="email_enablessl">EMAIL_ENABLESSL</h3>
+<h3 id="email_username">EMAIL_USERNAME</h3>
+<h3 id="email_password">EMAIL_PASSWORD</h3>
+<h2 id="appveyor">AppVeyor</h2>
+<h3 id="appveyor_api_token">APPVEYOR_API_TOKEN</h3>
 <p>API token for accessing AppVeyor. Used to <a href="../usage/cleaning-cache">clean AppVeyor build cache</a>.</p>
-<h1 id="wyam">Wyam</h1>
-<h2 id="wyam_access_token">WYAM_ACCESS_TOKEN</h2>
+<h2 id="codecov">Codecov</h2>
+<h3 id="codecov_repo_token">CODECOV_REPO_TOKEN</h3>
+<p>API token for uploading coverage reports to codecov.io. <em>This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories</em></p>
+<h2 id="coveralls">Coveralls</h2>
+<h3 id="coveralls_repo_token">COVERALLS_REPO_TOKEN</h3>
+<h2 id="microsoft-teams">Microsoft Teams</h2>
+<h3 id="microsoftteams_webhookurl">MICROSOFTTEAMS_WEBHOOKURL</h3>
+<h2 id="transifex">Transifex</h2>
+<h3 id="transifex_api_token">TRANSIFEX_API_TOKEN</h3>
+<h2 id="wyam">Wyam</h2>
+<h3 id="wyam_access_token">WYAM_ACCESS_TOKEN</h3>
 <p>Access token to use to publish the Wyam documentation. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
-<h2 id="wyam_deploy_remote">WYAM_DEPLOY_REMOTE</h2>
+<h3 id="wyam_deploy_remote">WYAM_DEPLOY_REMOTE</h3>
 <p>URI of the remote repository where the Wyam documentation is published to. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
-<h2 id="wyam_deploy_branch">WYAM_DEPLOY_BRANCH</h2>
+<h3 id="wyam_deploy_branch">WYAM_DEPLOY_BRANCH</h3>
 <p>Branch into which the Wyam documentation should be published. Used to <a href="../usage/publishing-documentation">publish documentation</a>.</p>
 
 	</section>

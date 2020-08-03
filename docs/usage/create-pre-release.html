@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - How to release Cake.Recipe</title>
+        <title>Cake.Recipe - How to create a pre release (unstable release)</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/contributing/how-to-release.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/usage/create-pre-release.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -111,7 +111,7 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
@@ -119,7 +119,7 @@
                 <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
@@ -137,13 +137,13 @@
 
                     </ul>
                 </li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/contributing">Contributing</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/contributing/how-to-contribute">How to contribute</a></li>
                 <li><a href="/Cake.Recipe/docs/contributing/how-to-build">How to build Cake.Recipe</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/contributing/how-to-release">How to release Cake.Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/contributing/how-to-release">How to release Cake.Recipe</a></li>
 
                     </ul>
                 </li>
@@ -160,10 +160,37 @@
 
 
 		<section class="content-header">
-			<h1>How to release Cake.Recipe</h1>
+			<h1>How to create a pre release (unstable release)</h1>
 		</section>
 	<section class="content">
-		<p>See <a href="https://cake-contrib.github.io/Cake.Recipe/docs/usage/creating-release">creating a release</a> how to create a new release.</p>
+		<p>This document describes the suggested steps to release a new pre-release version using the <code>Cake.Recipe</code> script.</p>
+<div class="alert alert-info"><p>Please note that the following steps assume you're using <code>Cake.Recipe</code> on GitHub and with a GitFlow workflow.
+Both are not requirements though and you can adopt the steps to other environments.</p>
+<p>The process of creating pre-release versions are almost identical to the process of creating stable releases
+which are documented <a href="create-release" class="alert-link">here</a>.</p>
+</div>
+<div class="alert alert-warning"><p>Remember to enable the build parameter named <code>shouldRunGitVersion</code> when running these steps on Unix platforms.
+This will allow the version to be calculated correctly by using <a href="https://github.com/GitTools/GitVersion" class="alert-link">GitVersion</a>.</p>
+</div>
+<ol>
+<li>Create the branch where you want the drafted release notes to be based off (recommended to use release/hotfix branches for beta releases).</li>
+<li>Make sure that a GitHub milestone exists for this release.</li>
+<li>Make sure there were issues for all changes with the appropriate labels and the correct milestone set.</li>
+<li>Make sure that you have the following environment variables set in your local development environment:
+<ul>
+<li><a href="../fundamentals/environment-variables#github_token">GITHUB_TOKEN</a></li>
+</ul>
+</li>
+<li>Create a GitHub release draft by running:
+<ul>
+<li>On Windows: <code>.\build.ps1 --target=releasenotes --create-pre-release</code></li>
+<li>On MacOS/Linux<code>./build.sh --target=releasenotes --create-pre-release</code></li>
+</ul>
+</li>
+<li>Check the generated release notes and make required manual changes.</li>
+<li>Publish the draft release on GitHub.</li>
+</ol>
+<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.</p>
 
 	</section>
                 

@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - How to create a release</title>
+        <title>Cake.Recipe - How to create a stable release</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -118,7 +118,8 @@
                 <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/usage/creating-release">How to create a release</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
@@ -159,12 +160,15 @@
 
 
 		<section class="content-header">
-			<h1>How to create a release</h1>
+			<h1>How to create a stable release</h1>
 		</section>
 	<section class="content">
-		<p>This document describes the suggested steps to release a new version using the <code>Cake.Recipe</code> script.</p>
+		<p>This document describes the suggested steps to release a new stable version using the <code>Cake.Recipe</code> script.</p>
 <div class="alert alert-info"><p>Please note that the following steps assume you're using <code>Cake.Recipe</code> on GitHub and with a GitFlow workflow.
 Both are not requirements though and you can adopt the steps to other environments.</p>
+</div>
+<div class="alert alert-warning"><p>Remember to enable the build parameter named <code>shouldRunGitVersion</code> when running these steps on Unix platforms.
+This will allow the version to be calculated correctly by using <a href="https://github.com/GitTools/GitVersion" class="alert-link">GitVersion</a>.</p>
 </div>
 <ol>
 <li>Create a release branch (eg. release/1.2.3).</li>
@@ -172,11 +176,15 @@ Both are not requirements though and you can adopt the steps to other environmen
 <li>Make sure there were issues for all changes with the appropriate labels and the correct milestone set.</li>
 <li>Make sure that you have the following environment variables set in your local development environment:
 <ul>
-<li><a href="../fundamentals/environment-variables#github_username">GITHUB_USERNAME</a></li>
-<li><a href="../fundamentals/environment-variables#github_password">GITHUB_PASSWORD</a></li>
+<li><a href="../fundamentals/environment-variables#github_token">GITHUB_TOKEN</a></li>
 </ul>
 </li>
-<li>Create a GitHub release draft by running: <code>.\build.ps1 -target releasenotes</code> on Windows and on MacOS/Linux<code>./build.sh --target=releasenotes</code> (on unix build parameter <code>shouldRunGitVersion: true</code> needs to be set for version to be calculated by GitVersion).</li>
+<li>Create a GitHub release draft by running:
+<ul>
+<li>On Windows: <code>.\build.ps1 --target=releasenotes</code></li>
+<li>On MacOS/Linux<code>./build.sh --target=releasenotes</code></li>
+</ul>
+</li>
 <li>Check the generated release notes and make required manual changes.</li>
 <li>If release is ready finish release (merge back into <code>master</code> and <code>develop</code>) but don't tag the release yet.</li>
 <li>Publish the draft release on GitHub.</li>
