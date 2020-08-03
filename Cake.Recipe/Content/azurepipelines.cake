@@ -4,13 +4,13 @@
 
 public class AzurePipelinesTagInfo : ITagInfo
 {
-    public AzurePipelinesTagInfo(ITFBuildProvider tfBuild)
+    public AzurePipelinesTagInfo(IAzurePipelinesProvider azurePipelines)
     {
         const string refTags = "refs/tags/";
         // at the moment, there is no ability to know is it tag or not
-        IsTag = tfBuild.Environment.Repository.Branch.StartsWith(refTags);
+        IsTag = azurePipelines.Environment.Repository.SourceBranchName.StartsWith(refTags);
         Name = IsTag
-            ? tfBuild.Environment.Repository.Branch.Substring(refTags.Length)
+            ? azurePipelines.Environment.Repository.SourceBranchName.Substring(refTags.Length)
             : string.Empty;
     }
 
@@ -21,11 +21,11 @@ public class AzurePipelinesTagInfo : ITagInfo
 
 public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 {
-    public AzurePipelinesRepositoryInfo(ITFBuildProvider tfBuild)
+    public AzurePipelinesRepositoryInfo(IAzurePipelinesProvider azurePipelines)
     {
-        Branch = tfBuild.Environment.Repository.Branch;
-        Name = tfBuild.Environment.Repository.RepoName;
-        Tag = new AzurePipelinesTagInfo(tfBuild);
+        Branch = azurePipelines.Environment.Repository.SourceBranchName;
+        Name = azurePipelines.Environment.Repository.RepoName;
+        Tag = new AzurePipelinesTagInfo(azurePipelines);
     }
 
     public string Branch { get; }
@@ -37,9 +37,9 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 
 public class AzurePipelinesPullRequestInfo : IPullRequestInfo
 {
-    public AzurePipelinesPullRequestInfo(ITFBuildProvider tfBuild, ICakeEnvironment environment)
+    public AzurePipelinesPullRequestInfo(IAzurePipelinesProvider azurePipelines, ICakeEnvironment environment)
     {
-        IsPullRequest = tfBuild.Environment.PullRequest.IsPullRequest;
+        IsPullRequest = azurePipelines.Environment.PullRequest.IsPullRequest;
     }
 
     public bool IsPullRequest { get; }
@@ -47,9 +47,9 @@ public class AzurePipelinesPullRequestInfo : IPullRequestInfo
 
 public class AzurePipelinesBuildInfo : IBuildInfo
 {
-    public AzurePipelinesBuildInfo(ITFBuildProvider tfBuild)
+    public AzurePipelinesBuildInfo(IAzurePipelinesProvider azurePipelines)
     {
-        Number = tfBuild.Environment.Build.Number;
+        Number = azurePipelines.Environment.Build.Number;
     }
 
     public string Number { get; }
@@ -57,13 +57,13 @@ public class AzurePipelinesBuildInfo : IBuildInfo
 
 public class AzurePipelinesBuildProvider : IBuildProvider
 {
-    public AzurePipelinesBuildProvider(ITFBuildProvider tfBuild, ICakeEnvironment environment)
+    public AzurePipelinesBuildProvider(IAzurePipelinesProvider azurePipelines, ICakeEnvironment environment)
     {
-        Build = new AzurePipelinesBuildInfo(tfBuild);
-        PullRequest = new AzurePipelinesPullRequestInfo(tfBuild, environment);
-        Repository = new AzurePipelinesRepositoryInfo(tfBuild);
+        Build = new AzurePipelinesBuildInfo(azurePipelines);
+        PullRequest = new AzurePipelinesPullRequestInfo(azurePipelines, environment);
+        Repository = new AzurePipelinesRepositoryInfo(azurePipelines);
 
-        _tfBuild = tfBuild;
+        _azurePipelines = azurePipelines;
     }
 
     public IRepositoryInfo Repository { get; }
@@ -87,10 +87,10 @@ public class AzurePipelinesBuildProvider : IBuildProvider
         "TF_BUILD",
     };
 
-    private readonly ITFBuildProvider _tfBuild;
+    private readonly IAzurePipelinesProvider _azurePipelines;
 
     public void UploadArtifact(FilePath file)
     {
-        _tfBuild.Commands.UploadArtifact("", file, "artifacts");    
+        _azurePipelines.Commands.UploadArtifact("", file, "artifacts");    
     }
 }
