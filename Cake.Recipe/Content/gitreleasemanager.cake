@@ -11,8 +11,12 @@ BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
                 Milestone         = buildVersion.Milestone,
                 Name              = buildVersion.Milestone,
                 TargetCommitish   = BuildParameters.MasterBranchName,
-                Prerelease        = false
+                Prerelease        = context.HasArgument("create-pre-release")
             };
+            if (settings.Prerelease)
+            {
+                settings.TargetCommitish = BuildParameters.BuildProvider.Repository.Branch;
+            }
 
             if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
             {
