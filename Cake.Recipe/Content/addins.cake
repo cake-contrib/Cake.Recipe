@@ -16,7 +16,7 @@
 #addin nuget:?package=Cake.Twitter&version=0.10.1
 #addin nuget:?package=Cake.Wyam&version=2.2.9
 
-#load nuget:?package=Cake.Issues.Recipe&version=0.3.4
+#load nuget:?package=Cake.Issues.Recipe&version=0.4.0-beta0001&prerelease
 
 Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
