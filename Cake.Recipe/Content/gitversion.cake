@@ -118,7 +118,7 @@ public class BuildVersion
         {
             Version = version,
             SemVersion = semVersion?.ToLowerInvariant(),
-            Milestone = milestone,
+            Milestone = BuildParameters.IsTagged || context.HasArgument("create-pre-release") ? milestone : version,
             CakeVersion = cakeVersion,
             InformationalVersion = informationalVersion?.ToLowerInvariant(),
             FullSemVersion = fullSemVersion?.ToLowerInvariant(),
