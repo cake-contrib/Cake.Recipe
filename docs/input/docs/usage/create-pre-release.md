@@ -24,8 +24,8 @@ This will allow the version to be calculated correctly by using [GitVersion](htt
 4. Make sure that you have the following environment variables set in your local development environment:
    - [GITHUB_TOKEN](../fundamentals/environment-variables#github_token)
 5. Create a GitHub release draft by running:
-   - On Windows: `.\build.ps1 -target releasenotes`
-   - On MacOS/Linux`./build.sh --target=releasenotes`
+   - On Windows: `.\build.ps1 --target=releasenotes --create-pre-release`
+   - On MacOS/Linux`./build.sh --target=releasenotes --create-pre-release`
 6. Check the generated release notes and make required manual changes.
 7. Publish the draft release on GitHub.
 
