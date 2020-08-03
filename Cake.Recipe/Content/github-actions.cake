@@ -1,12 +1,8 @@
-// TODO: Change direct environment grabbing to use
-// IGitHubActionsProvider when Cake.Recipe starts
-// using Cake version 0.36.0 or higher.
-
 public class GitHubActionTagInfo : ITagInfo
 {
     public GitHubActionTagInfo(ICakeContext context)
     {
-        var tempName = context.EnvironmentVariable("GITHUB_REF");
+        var tempName = context.BuildSystem().GitHubActions.Environment.Workflow.Ref;
         if (!string.IsNullOrEmpty(tempName) && tempName.IndexOf("tags/") >= 0)
         {
             IsTag = true;
@@ -22,8 +18,8 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
 {
     public GitHubActionRepositoryInfo(ICakeContext context)
     {
-        Name = context.EnvironmentVariable("GITHUB_REPOSITORY");
-        var baseRef = context.EnvironmentVariable("GITHUB_BASE_REF");
+        Name = context.BuildSystem().GitHubActions.Environment.Workflow.Repository;
+        var baseRef = context.BuildSystem().GitHubActions.Environment.Workflow.BaseRef;
         if (!string.IsNullOrEmpty(baseRef))
         {
             Branch = baseRef;
@@ -32,7 +28,7 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
         {
             // This trimming is not perfect, as it will remove part of a
             // branch name if the branch name itself contains a '/'
-            var tempName = context.EnvironmentVariable("GITHUB_REF");
+            var tempName = context.BuildSystem().GitHubActions.Environment.Workflow.Ref;
             const string headPrefix = "refs/heads/";
             if (!string.IsNullOrEmpty(tempName))
             {
@@ -60,8 +56,8 @@ public class GitHubActionPullRequestInfo : IPullRequestInfo
 {
     public GitHubActionPullRequestInfo(ICakeContext context)
     {
-        var headRef = context.EnvironmentVariable("GITHUB_HEAD_REF");
-        var branchRef = context.EnvironmentVariable("GITHUB_REF");
+        var headRef = context.BuildSystem().GitHubActions.Environment.Workflow.HeadRef;
+        var branchRef = context.BuildSystem().GitHubActions.Environment.Workflow.Ref;
 
         IsPullRequest = !string.IsNullOrEmpty(headRef) && !string.IsNullOrEmpty(branchRef)
             && branchRef.IndexOf("refs/pull/") >= 0 && branchRef.IndexOf("/merge") >= 0;
@@ -74,7 +70,7 @@ public class GitHubActionBuildInfo : IBuildInfo
 {
     public GitHubActionBuildInfo(ICakeContext context)
     {
-        Number = context.EnvironmentVariable("GITHUB_RUN_NUMBER");
+        Number = context.BuildSystem().GitHubActions.Environment.Workflow.RunNumber.ToString();
     }
 
     public string Number { get; }
