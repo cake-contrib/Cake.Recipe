@@ -16,6 +16,7 @@ public static class ToolSettings
     public static MSBuildToolVersion BuildMSBuildToolVersion { get; private set; }
     public static int MaxCpuCount { get; private set; }
     public static DirectoryPath OutputDirectory { get; private set; }
+    public static string TargetFrameworkPathOverride { get; private set; }
 
     public static string CodecovTool { get; private set; }
     public static string CoverallsTool { get; private set; }
@@ -94,6 +95,7 @@ public static class ToolSettings
         MSBuildToolVersion buildMSBuildToolVersion = MSBuildToolVersion.Default,
         int? maxCpuCount = null,
         DirectoryPath outputDirectory = null,
+        DirectoryPath targetFrameworkPathOverride = null,
         string[] dupFinderExcludeFilesByStartingCommentSubstring = null,
         int? dupFinderDiscardCost = null,
         bool? dupFinderThrowExceptionOnFindingDuplicates = null
@@ -119,5 +121,22 @@ public static class ToolSettings
         BuildMSBuildToolVersion = buildMSBuildToolVersion;
         MaxCpuCount = maxCpuCount ?? 0;
         OutputDirectory = outputDirectory;
+        if (BuildParameters.ShouldUseTargetFrameworkPath && targetFrameworkPathOverride == null)
+        {
+            if (context.Environment.Runtime.IsCoreClr)
+            {
+                var path = context.Tools.Resolve("mono").GetDirectory();
+                path = path.Combine("../lib/mono/4.5");
+                TargetFrameworkPathOverride = path.FullPath + "/";
+            }
+            else
+            {
+                TargetFrameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
+            }
+        }
+        else
+        {
+            TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
+        }
     }
 }
