@@ -133,7 +133,7 @@ public static class BuildParameters
     public static bool ShouldGenerateDocumentation { get; private set; }
     public static bool ShouldDocumentSourceFiles { get; private set; }
     public static bool ShouldRunIntegrationTests { get; private set; }
-    public static bool ShouldRunGitVersion { get; private set; }
+    public static bool ShouldCalculateVersion { get; private set; }
     public static bool ShouldUseTargetFrameworkPath { get; private set; }
     public static bool ShouldUseDeterministicBuilds
     {
@@ -303,7 +303,7 @@ public static class BuildParameters
         context.Information("ShouldGenerateDocumentation: {0}", ShouldGenerateDocumentation);
         context.Information("ShouldDocumentSourceFiles: {0}", ShouldDocumentSourceFiles);
         context.Information("ShouldRunIntegrationTests: {0}", ShouldRunIntegrationTests);
-        context.Information("ShouldRunGitVersion: {0}", ShouldRunGitVersion);
+        context.Information("ShouldCalculateVersion: {0}", ShouldCalculateVersion);
         context.Information("BuildAgentOperatingSystem: {0}", BuildAgentOperatingSystem);
         context.Information("IsRunningOnAppVeyor: {0}", IsRunningOnAppVeyor);
         context.Information("RepositoryOwner: {0}", RepositoryOwner);
@@ -383,7 +383,7 @@ public static class BuildParameters
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
-        bool shouldRunGitVersion = true,
+        bool shouldCalculateVersion = true,
         bool shouldUseTargetFrameworkPath = true,
         bool? transifexEnabled = null,
         TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
@@ -473,7 +473,7 @@ public static class BuildParameters
         ShouldRunCodecov = shouldRunCodecov;
         ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
-        ShouldRunGitVersion = shouldRunGitVersion;
+        ShouldCalculateVersion = shouldCalculateVersion;
         _shouldUseDeterministicBuilds = shouldUseDeterministicBuilds;
         ShouldUseTargetFrameworkPath = shouldUseTargetFrameworkPath;
 

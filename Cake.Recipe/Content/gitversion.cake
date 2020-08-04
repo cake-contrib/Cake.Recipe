@@ -49,7 +49,7 @@ public class BuildVersion
         string fullSemVersion = null;
         GitVersion assertedVersions = null;
 
-        if (BuildParameters.ShouldRunGitVersion)
+        if (BuildParameters.ShouldCalculateVersion)
         {
             if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows) {
                 PatchGitLibConfigFiles(context);
