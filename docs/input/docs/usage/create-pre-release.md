@@ -13,11 +13,6 @@ The process of creating pre-release versions are almost identical to the process
 which are documented [here](create-release){.alert-link}.
 :::
 
-:::{.alert .alert-warning}
-Remember to enable the build parameter named `shouldRunGitVersion` when running these steps on Unix platforms.
-This will allow the version to be calculated correctly by using [GitVersion](https://github.com/GitTools/GitVersion){.alert-link}.
-:::
-
 1. Create the branch where you want the drafted release notes to be based off (recommended to use release/hotfix branches for beta releases).
 2. Make sure that a GitHub milestone exists for this release.
 3. Make sure there were issues for all changes with the appropriate labels and the correct milestone set.

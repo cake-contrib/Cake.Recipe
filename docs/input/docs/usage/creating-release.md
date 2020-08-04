@@ -10,11 +10,6 @@ Please note that the following steps assume you're using `Cake.Recipe` on GitHub
 Both are not requirements though and you can adopt the steps to other environments.
 :::
 
-:::{.alert .alert-warning}
-Remember to enable the build parameter named `shouldRunGitVersion` when running these steps on Unix platforms.
-This will allow the version to be calculated correctly by using [GitVersion](https://github.com/GitTools/GitVersion){.alert-link}.
-:::
-
 1. Create a release branch (eg. release/1.2.3).
 2. Make sure that a GitHub milestone exists for this release.
 3. Make sure there were issues for all changes with the appropriate labels and the correct milestone set.
