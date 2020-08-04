@@ -95,6 +95,8 @@ public class GitHubActionBuildProvider : IBuildProvider
 
     public bool SupportsTokenlessCodecov { get; } = true;
 
+    public BuildProviderType Type { get; } = BuildProviderType.GitHubActions;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "CI",
         "HOME",
