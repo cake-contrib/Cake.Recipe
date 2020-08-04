@@ -383,7 +383,7 @@ public static class BuildParameters
         bool shouldRunDotNetCorePack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
-        bool? shouldRunGitVersion = null,
+        bool shouldRunGitVersion = true,
         bool shouldUseTargetFrameworkPath = true,
         bool? transifexEnabled = null,
         TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
@@ -473,7 +473,7 @@ public static class BuildParameters
         ShouldRunCodecov = shouldRunCodecov;
         ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
-        ShouldRunGitVersion = shouldRunGitVersion ?? BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows;
+        ShouldRunGitVersion = shouldRunGitVersion;
         _shouldUseDeterministicBuilds = shouldUseDeterministicBuilds;
         ShouldUseTargetFrameworkPath = shouldUseTargetFrameworkPath;
 
