@@ -158,6 +158,8 @@ public class LocalBuildBuildProvider : IBuildProvider
 
     public bool SupportsTokenlessCodecov { get; } = false;
 
+    public BuildProviderType Type { get; } = BuildProviderType.Local;
+
     public IEnumerable<string> PrintVariables { get; }
 
     private readonly ICakeContext _context;

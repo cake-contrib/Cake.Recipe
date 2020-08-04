@@ -74,6 +74,8 @@ public class AzurePipelinesBuildProvider : IBuildProvider
 
     public bool SupportsTokenlessCodecov { get; } = true;
 
+    public BuildProviderType Type { get; } = BuildProviderType.AzurePipelines;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "BUILD_BUILDID",
         "BUILD_BUILDNUMBER",
@@ -91,6 +93,6 @@ public class AzurePipelinesBuildProvider : IBuildProvider
 
     public void UploadArtifact(FilePath file)
     {
-        _azurePipelines.Commands.UploadArtifact("", file, "artifacts");    
+        _azurePipelines.Commands.UploadArtifact("", file, "artifacts");
     }
 }

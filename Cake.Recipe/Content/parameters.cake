@@ -41,6 +41,8 @@ public static class BuildParameters
     public static string EmailSenderName { get; private set; }
     public static string EmailSenderAddress { get; private set; }
     public static bool ForceContinuousIntegration { get; private set; }
+    public static PlatformFamily PreferredBuildAgentOperatingSystem { get; private set;}
+    public static BuildProviderType PreferredBuildProviderType { get; private set; }
 
     public static List<PackageSourceData> PackageSources { get; private set; }
 
@@ -126,9 +128,6 @@ public static class BuildParameters
     public static bool ShouldRunCodecov { get; private set; }
     public static bool ShouldRunDotNetCorePack { get; private set; }
     public static bool ShouldRunChocolatey { get; private set; }
-    public static bool ShouldPublishMyGet { get; private set; }
-    public static bool ShouldPublishChocolatey { get; private set; }
-    public static bool ShouldPublishNuGet { get; private set; }
     public static bool ShouldPublishGitHub { get; private set; }
     public static bool ShouldGenerateDocumentation { get; private set; }
     public static bool ShouldDocumentSourceFiles { get; private set; }
@@ -314,6 +313,8 @@ public static class BuildParameters
         context.Information("PrepareLocalRelease: {0}", PrepareLocalRelease);
         context.Information("BuildAgentOperatingSystem: {0}", BuildAgentOperatingSystem);
         context.Information("ForceContinuousIntegration: {0}", ForceContinuousIntegration);
+        context.Information("PreferredBuildAgentOperatingSystem: {0}", PreferredBuildAgentOperatingSystem);
+        context.Information("PreferredBuildProviderType: {0}", PreferredBuildProviderType);
 
         if (TransifexEnabled)
         {
@@ -369,10 +370,7 @@ public static class BuildParameters
         bool shouldUseDeterministicBuilds = true,
         FilePath milestoneReleaseNotesFilePath = null,
         FilePath fullReleaseNotesFilePath = null,
-        bool shouldPublishMyGet = true,
         bool shouldRunChocolatey = true,
-        bool shouldPublishChocolatey = true,
-        bool shouldPublishNuGet = true,
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
         bool shouldDocumentSourceFiles = true,
@@ -412,13 +410,18 @@ public static class BuildParameters
         string emailSenderAddress = null,
         bool shouldPublishToMyGetWithApiKey = true,
         DirectoryPath restorePackagesDirectory = null,
-        List<PackageSourceData> packageSourceDatas = null
+        List<PackageSourceData> packageSourceDatas = null,
+        PlatformFamily preferredBuildAgentOperatingSystem = PlatformFamily.Windows,
+        BuildProviderType preferredBuildProviderType = BuildProviderType.AppVeyor
         )
     {
         if (context == null)
         {
             throw new ArgumentNullException("context");
         }
+
+        PreferredBuildAgentOperatingSystem = preferredBuildAgentOperatingSystem;
+        PreferredBuildProviderType = preferredBuildProviderType;
 
         BuildProvider = GetBuildProvider(context, buildSystem);
 
@@ -582,40 +585,25 @@ public static class BuildParameters
 
         SetBuildPaths(BuildPaths.GetPaths(context));
 
-        ShouldPublishMyGet = (!IsLocalBuild &&
-                                !IsPullRequest &&
-                                IsMainRepository &&
-                                (IsTagged || BuildParameters.BranchType != BranchType.Master) &&
-                                shouldPublishMyGet);
-
-        ShouldPublishNuGet = (!IsLocalBuild &&
-                                !IsPullRequest &&
-                                IsMainRepository &&
-                                (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
-                                IsTagged &&
-                                shouldPublishNuGet);
-
         ShouldRunChocolatey = shouldRunChocolatey;
-
-        ShouldPublishChocolatey = (!IsLocalBuild &&
-                                    !IsPullRequest &&
-                                    IsMainRepository &&
-                                    (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
-                                    IsTagged &&
-                                    shouldPublishChocolatey);
 
         ShouldPublishGitHub = (!IsLocalBuild &&
                                 !IsPullRequest &&
                                 IsMainRepository &&
                                 (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
                                 IsTagged &&
+                                BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem &&
+                                BuildParameters.PreferredBuildProviderType == BuildParameters.BuildProvider.Type &&
                                 shouldPublishGitHub);
 
         ShouldGenerateDocumentation = (!IsLocalBuild &&
                                 !IsPullRequest &&
                                 IsMainRepository &&
                                 (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Develop) &&
+                                BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem &&
+                                BuildParameters.PreferredBuildProviderType == BuildParameters.BuildProvider.Type &&
                                 shouldGenerateDocumentation);
+
         ShouldDocumentSourceFiles = ShouldGenerateDocumentation && shouldDocumentSourceFiles;
 
         ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&

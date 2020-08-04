@@ -56,6 +56,18 @@ public interface IBuildProvider
     IEnumerable<string> PrintVariables { get; }
 
     void UploadArtifact(FilePath file);
+
+    BuildProviderType Type { get; }
+}
+
+public enum BuildProviderType
+{
+    AzurePipelines,
+    TeamCity,
+    AppVeyor,
+    Travis,
+    GitHubActions,
+    Local
 }
 
 public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)

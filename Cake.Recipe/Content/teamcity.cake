@@ -92,6 +92,8 @@ public class TeamCityBuildProvider : IBuildProvider
 
     public bool SupportsTokenlessCodecov { get; } = false;
 
+    public BuildProviderType Type { get; } = BuildProviderType.TeamCity;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "TEAMCITY_BUILD_BRANCH",
         "TEAMCITY_BUILD_COMMIT",

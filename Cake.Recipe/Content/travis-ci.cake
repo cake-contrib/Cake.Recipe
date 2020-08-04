@@ -62,6 +62,8 @@ public class TravisCiBuildProvider : IBuildProvider
 
     public bool SupportsTokenlessCodecov { get; } = true;
 
+    public BuildProviderType Type { get; } = BuildProviderType.Travis;
+
     public IEnumerable<string> PrintVariables { get; } = new[] {
         "CI",
         "TRAVIS",
