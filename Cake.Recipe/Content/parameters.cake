@@ -134,6 +134,7 @@ public static class BuildParameters
     public static bool ShouldDocumentSourceFiles { get; private set; }
     public static bool ShouldRunIntegrationTests { get; private set; }
     public static bool ShouldRunGitVersion { get; private set; }
+    public static bool ShouldUseTargetFrameworkPath { get; private set; }
     public static bool ShouldUseDeterministicBuilds
     {
         get
@@ -383,6 +384,7 @@ public static class BuildParameters
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
         bool? shouldRunGitVersion = null,
+        bool shouldUseTargetFrameworkPath = true,
         bool? transifexEnabled = null,
         TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
         int transifexPullPercentage = 60,
@@ -473,6 +475,7 @@ public static class BuildParameters
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
         ShouldRunGitVersion = shouldRunGitVersion ?? BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows;
         _shouldUseDeterministicBuilds = shouldUseDeterministicBuilds;
+        ShouldUseTargetFrameworkPath = shouldUseTargetFrameworkPath;
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");

@@ -68,7 +68,7 @@ Setup<DotNetCoreMSBuildSettings>(context =>
     {
         settings.WithProperty("ContinuousIntegrationBuild", "true");
     }
-    if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+    if (BuildParameters.ShouldUseTargetFrameworkPath && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
     {
         // This needs to be updated when/if we ever starts supporting Cake .NET Core edition.
         var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
