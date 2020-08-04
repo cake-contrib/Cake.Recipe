@@ -68,7 +68,7 @@ Setup<DotNetCoreMSBuildSettings>(context =>
     {
         settings.WithProperty("ContinuousIntegrationBuild", "true");
     }
-    if (BuildParameters.ShouldUseTargetFrameworkPath && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+    if (BuildParameters.ShouldUseTargetFrameworkPath)
     {
         context.Information("Will use FrameworkPathOverride={0} on .NET Core build related tasks since not building on Windows.", ToolSettings.TargetFrameworkPathOverride);
         settings.WithProperty("FrameworkPathOverride", ToolSettings.TargetFrameworkPathOverride);

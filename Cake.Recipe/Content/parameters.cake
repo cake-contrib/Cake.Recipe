@@ -382,7 +382,7 @@ public static class BuildParameters
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
         bool shouldCalculateVersion = true,
-        bool shouldUseTargetFrameworkPath = true,
+        bool? shouldUseTargetFrameworkPath = null,
         bool? transifexEnabled = null,
         TransifexMode transifexPullMode = TransifexMode.OnlyTranslated,
         int transifexPullPercentage = 60,
@@ -478,7 +478,7 @@ public static class BuildParameters
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
         ShouldCalculateVersion = shouldCalculateVersion;
         _shouldUseDeterministicBuilds = shouldUseDeterministicBuilds;
-        ShouldUseTargetFrameworkPath = shouldUseTargetFrameworkPath;
+        ShouldUseTargetFrameworkPath = shouldUseTargetFrameworkPath ?? !context.IsRunningOnWindows();
 
         MilestoneReleaseNotesFilePath = milestoneReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("CHANGELOG.md");
         FullReleaseNotesFilePath = fullReleaseNotesFilePath ?? RootDirectoryPath.CombineWithFilePath("ReleaseNotes.md");
