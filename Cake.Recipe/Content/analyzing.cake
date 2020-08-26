@@ -5,10 +5,12 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder has been disabled")
     .Does(() => RequireTool(ToolSettings.ReSharperTools, () => {
+        var dupFinderLogFilePath = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml");
+
         var settings = new DupFinderSettings() {
             ShowStats = true,
             ShowText = true,
-            OutputFile = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml"),
+            OutputFile = dupFinderLogFilePath,
             ExcludeCodeRegionsByNameSubstring = new string [] { "DupFinder Exclusion" },
             ThrowExceptionOnFindingDuplicates = ToolSettings.DupFinderThrowExceptionOnFindingDuplicates ?? true
         };
@@ -29,6 +31,9 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
         }
 
         DupFinder(BuildParameters.SolutionFilePath, settings);
+
+        // Pass path to dupFinder log file to Cake.Issues.Recipe
+        IssuesParameters.InputFiles.DupFinderLogFilePath = dupFinderLogFilePath;
     })
 );
 
