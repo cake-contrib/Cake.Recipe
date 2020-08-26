@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - How to contribute</title>
+        <title>Cake.Recipe - Installation</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/contributing/how-to-contribute.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/vscode-extension/installation.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -134,11 +134,11 @@
                     </ul>
                 </li>
                 <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/vscode-extension/installation.md">Installation</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/vscode-extension/installation.md">Installation</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/commands.md">Commands</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/resources.md">Resources</a></li>
 
@@ -153,11 +153,11 @@
 
                     </ul>
                 </li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/contributing">Contributing</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li class="selected"><a href="/Cake.Recipe/docs/contributing/how-to-contribute">How to contribute</a></li>
+                <li><a href="/Cake.Recipe/docs/contributing/how-to-contribute">How to contribute</a></li>
                 <li><a href="/Cake.Recipe/docs/contributing/how-to-build">How to build Cake.Recipe</a></li>
                 <li><a href="/Cake.Recipe/docs/contributing/how-to-release">How to release Cake.Recipe</a></li>
 
@@ -184,21 +184,10 @@
 
 
 		<section class="content-header">
-			<h1>How to contribute</h1>
+			<h1>Installation</h1>
 		</section>
 	<section class="content">
-		<p>The repository is using <a href="(http://nvie.com/posts/a-successful-git-branching-model/)">GitFlow</a> with default configuration.
-Development is happening on <code>develop</code> branch.</p>
-<p>To contribute:</p>
-<ul>
-<li>Fork this repository.</li>
-<li>Create a feature branch from <code>develop</code>.</li>
-<li>Implement your changes.</li>
-<li>Push your feature branch.</li>
-<li>Create a pull request.</li>
-</ul>
-<p>For getting started see issues marked with <code>Up-for-grabs</code> in the repository.</p>
-
+		
 	</section>
                 
             </div>           
