@@ -5,7 +5,9 @@ Title: How to preview documentation
 
 This document describes how to preview the documentation in a local webserver using the `Cake.Recipe` script.
 
-1. Run `.\build.ps1 -target preview`.
+1. Run:
+   - On Windows: `.\build.ps1 --target=preview`
+   - On MacOS/Linux: `./build.sh --target=preview`.
 2. Open your browser at `http:\\localhost:5080\<BuildParameters.WebLinkRoot>`
 
 :::{.alert .alert-info}

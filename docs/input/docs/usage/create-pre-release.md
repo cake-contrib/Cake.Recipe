@@ -20,7 +20,7 @@ which are documented [here](create-release){.alert-link}.
    - [GITHUB_TOKEN](../fundamentals/environment-variables#github_token)
 5. Create a GitHub release draft by running:
    - On Windows: `.\build.ps1 --target=releasenotes --create-pre-release`
-   - On MacOS/Linux`./build.sh --target=releasenotes --create-pre-release`
+   - On MacOS/Linux: `./build.sh --target=releasenotes --create-pre-release`
 6. Check the generated release notes and make required manual changes.
 7. Publish the draft release on GitHub.
 

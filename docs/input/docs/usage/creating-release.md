@@ -17,7 +17,7 @@ Both are not requirements though and you can adopt the steps to other environmen
    - [GITHUB_TOKEN](../fundamentals/environment-variables#github_token)
 5. Create a GitHub release draft by running:
    - On Windows: `.\build.ps1 --target=releasenotes`
-   - On MacOS/Linux`./build.sh --target=releasenotes`
+   - On MacOS/Linux: `./build.sh --target=releasenotes`
 6. Check the generated release notes and make required manual changes.
 7. If release is ready finish release (merge back into `master` and `develop`) but don't tag the release yet.
 8. Publish the draft release on GitHub.
