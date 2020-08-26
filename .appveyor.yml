@@ -23,3 +23,10 @@ branches:
 #---------------------------------#
 cache:
 - 'tools -> build.ps1, tools/packages.config, Cake.Recipe/Content/addins.cake, Cake.Recipe/Content/tools.cake'
+
+#---------------------------------#
+#  Environment Variables          #
+#---------------------------------#
+
+environment:
+  MYGET_SOURCE:
