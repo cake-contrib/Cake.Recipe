@@ -40,7 +40,7 @@ public static class ToolSettings
     public static string KuduSyncGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
-        string codecovTool = "#tool :?package=codecov&version=1.12.2",
+        string codecovTool = "#tool nuget:?package=codecov&version=1.12.2",
         // This is specifically pinned to 0.7.0 as later versions of same package publish .Net Global Tool, rather than full framework version
         string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
@@ -54,7 +54,7 @@ public static class ToolSettings
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.4",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string codecovGlobalTool = "#tool :?package=Codecov.Tool&version=1.12.2",
+        string codecovGlobalTool = "#tool nuget:?package=Codecov.Tool&version=1.12.2",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.4",
