@@ -16,8 +16,6 @@ public static class Environment
     public static string EmailEnableSsl { get; private set; }
     public static string EmailUserName { get; private set; }
     public static string EmailPassword { get; private set; }
-    public static string EmailSenderName { get; private set; }
-    public static string EmailSenderAddress { get; private set; }
     public static string AppVeyorApiTokenVariable { get; private set; }
     public static string CodecovRepoTokenVariable { get; private set; }
     public static string CoverallsRepoTokenVariable { get; private set; }
@@ -44,8 +42,6 @@ public static class Environment
         string emailEnableSsl = null,
         string emailUserName = null,
         string emailPassword = null,
-        string emailSenderName = null,
-        string emailSenderAddress = null,
         string appVeyorApiTokenVariable = null,
         string codecovRepoTokenVariable = null,
         string coverallsRepoTokenVariable = null,
