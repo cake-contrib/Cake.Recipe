@@ -1,7 +1,7 @@
 ---
 Order: 20
 Title: How to release Cake.Recipe
-Description: Instructions how to release Cake.Recipe
+Description: Instructions on how to release Cake.Recipe
 ---
 
 See [creating a release] how to create a new release.

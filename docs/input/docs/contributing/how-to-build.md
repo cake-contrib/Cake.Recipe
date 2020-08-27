@@ -1,17 +1,17 @@
 ---
 Order: 20
 Title: How to build Cake.Recipe
-Description: Instructions how to build Cake.Recipe.
+Description: Instructions on how to build Cake.Recipe
 ---
-To build this we are using Cake.
+To build Cake.Recipe, we make use [Cake](https://cakebuild.net/).
 
-On Windows PowerShell run:
+On Windows, open a PowerShell window and run:
 
 ```powershell
 ./build.ps1
 ```
 
-On OSX/Linux run:
+On OSX/Linux, open a terminal window and run:
 
 ```bash
 ./build.sh
