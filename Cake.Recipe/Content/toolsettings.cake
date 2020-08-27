@@ -15,7 +15,6 @@ public static class ToolSettings
     public static PlatformTarget BuildPlatformTarget { get; private set; }
     public static MSBuildToolVersion BuildMSBuildToolVersion { get; private set; }
     public static int MaxCpuCount { get; private set; }
-    public static DirectoryPath OutputDirectory { get; private set; }
     public static string TargetFrameworkPathOverride { get; private set; }
 
     public static string CodecovTool { get; private set; }
@@ -94,7 +93,6 @@ public static class ToolSettings
         PlatformTarget? buildPlatformTarget = null,
         MSBuildToolVersion buildMSBuildToolVersion = MSBuildToolVersion.Default,
         int? maxCpuCount = null,
-        DirectoryPath outputDirectory = null,
         DirectoryPath targetFrameworkPathOverride = null,
         string[] dupFinderExcludeFilesByStartingCommentSubstring = null,
         int? dupFinderDiscardCost = null,
@@ -120,7 +118,6 @@ public static class ToolSettings
         BuildPlatformTarget = buildPlatformTarget ?? PlatformTarget.MSIL;
         BuildMSBuildToolVersion = buildMSBuildToolVersion;
         MaxCpuCount = maxCpuCount ?? 0;
-        OutputDirectory = outputDirectory;
         if (BuildParameters.ShouldUseTargetFrameworkPath && targetFrameworkPathOverride == null)
         {
             if (context.Environment.Runtime.IsCoreClr)
