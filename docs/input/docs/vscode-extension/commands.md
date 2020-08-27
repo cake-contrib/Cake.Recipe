@@ -17,6 +17,9 @@ To make use of these, do the following:
 * Select which one you need for the current project
 * You will be prompted to enter the name that you want to give the file, which defaults to `recipe.cake`
 * Press enter once you have the name that you want
+* You will then be prompted to specify the name of the folder where your source code resides within your repository, this defaults to `Source`.  Once entered, press enter.
+* Next, you need to provide the GitHub username (or Organisation name) for where the source code resides.  Once entered, press enter.
+* Followed by the name of the repository where the code resides.  Once entered, press enter.
 * A new recipe.cake file will be created with the default contents
 
 The typical contents of this file are explained in more detail in the [fundamentals section](../fundamentals/recipe-cake).

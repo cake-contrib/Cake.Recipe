@@ -1,5 +1,7 @@
 ---
-Order: 20
+Order: 70
+Title: Environment Variables
+Description: A list of all the environment variables used by Cake.Recipe
 ---
 
 # Using Environment Variables in Cake.Recipe
