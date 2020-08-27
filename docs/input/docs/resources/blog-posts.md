@@ -1,7 +1,7 @@
 ---
 Order: 10
 Title: Blog posts
-Description: Blog posts about Cake.Recipe.
+Description: Blog posts about Cake.Recipe
 ---
 
 :::{.alert .alert-info}
