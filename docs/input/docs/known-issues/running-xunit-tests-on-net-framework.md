@@ -14,7 +14,7 @@ The error that can appear is:
 
 The solution to this problem is to add the following package reference into your test project:
 
-```bash
+```xml
 <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.6.1" Condition="$(TargetFramework.StartsWith('net4')) AND '$(OS)' == 'Unix'" />
 ```
 
