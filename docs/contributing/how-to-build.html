@@ -107,12 +107,14 @@
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/fundamentals/recipe-cake.md">Recipe Cake</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/recipe-cake">recipe.cake file</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/preprocessor-directive">Pre-processor Directive</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-variable-names">SetVariableNames Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-parameters">SetParameters Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/print-parameters">PrintParameters Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-tool-settings">SetToolSettings Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/build">Build Method</a></li>
                 <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-parameters.md">Set Parameters</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-variable-names.md">Set Variable Names</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-tool-settings.md">Set Tool Settings</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/print-parameters.md">Print Parameters</a></li>
 
                     </ul>
                 </li>
@@ -138,9 +140,9 @@
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/vscode-extension/installation.md">Installation</a></li>
-                <li><a href="/Cake.Recipe/docs/vscode-extension/commands.md">Commands</a></li>
-                <li><a href="/Cake.Recipe/docs/vscode-extension/resources.md">Resources</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/commands">Commands</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/resources">Resources</a></li>
 
                     </ul>
                 </li>
@@ -149,7 +151,7 @@
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/resources/blog-posts">Blog posts</a></li>
-                <li><a href="/Cake.Recipe/docs/resources/videos.md">Videos</a></li>
+                <li><a href="/Cake.Recipe/docs/resources/videos">Videos</a></li>
 
                     </ul>
                 </li>
@@ -187,11 +189,11 @@
 			<h1>How to build Cake.Recipe</h1>
 		</section>
 	<section class="content">
-		<p>To build this we are using Cake.</p>
-<p>On Windows PowerShell run:</p>
+		<p>To build Cake.Recipe, we make use <a href="https://cakebuild.net/">Cake</a>.</p>
+<p>On Windows, open a PowerShell window and run:</p>
 <pre><code class="language-powershell">./build.ps1
 </code></pre>
-<p>On OSX/Linux run:</p>
+<p>On OSX/Linux, open a terminal window and run:</p>
 <pre><code class="language-bash">./build.sh
 </code></pre>
 <div class="alert alert-warning"><p>Cake.Recipe builds itself using the latest source files within the repository.  It does this by doing some additional setup within the bootstrapper files.  As such, you shouldn't run the recipe.cake file directly, as the build will not work correctly.</p>

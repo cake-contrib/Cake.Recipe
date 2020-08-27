@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Resources</title>
+        <title>Cake.Recipe - recipe.cake file</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/vscode-extension/resources.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/fundamentals/recipe-cake.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -103,16 +103,18 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/fundamentals/recipe-cake.md">Recipe Cake</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/fundamentals/recipe-cake">recipe.cake file</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/preprocessor-directive">Pre-processor Directive</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-variable-names">SetVariableNames Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-parameters">SetParameters Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/print-parameters">PrintParameters Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-tool-settings">SetToolSettings Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/build">Build Method</a></li>
                 <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-parameters.md">Set Parameters</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-variable-names.md">Set Variable Names</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-tool-settings.md">Set Tool Settings</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/print-parameters.md">Print Parameters</a></li>
 
                     </ul>
                 </li>
@@ -134,13 +136,13 @@
                     </ul>
                 </li>
                 <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/vscode-extension/installation.md">Installation</a></li>
-                <li><a href="/Cake.Recipe/docs/vscode-extension/commands.md">Commands</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/vscode-extension/resources.md">Resources</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/commands">Commands</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/resources">Resources</a></li>
 
                     </ul>
                 </li>
@@ -149,7 +151,7 @@
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/resources/blog-posts">Blog posts</a></li>
-                <li><a href="/Cake.Recipe/docs/resources/videos.md">Videos</a></li>
+                <li><a href="/Cake.Recipe/docs/resources/videos">Videos</a></li>
 
                     </ul>
                 </li>
@@ -184,10 +186,75 @@
 
 
 		<section class="content-header">
-			<h1>Resources</h1>
+			<h1>recipe.cake file</h1>
 		</section>
 	<section class="content">
-		
+		<p>In order to start with Cake.Recipe, you need an entry point, and typically, this is via a file called recipe.cake.  In its simplest form, all that is required within this file is the following:</p>
+<pre><code class="language-csharp">#load nuget:?package=Cake.Recipe&amp;version=2.0.0
+
+Environment.SetVariableNames();
+
+BuildParameters.SetParameters(context: Context,
+                            buildSystem: BuildSystem,
+                            sourceDirectoryPath: &quot;./Source&quot;,
+                            title: &quot;Cake.Example&quot;,
+                            repositoryOwner: &quot;gep13&quot;,
+                            repositoryName: &quot;Cake.Example&quot;,
+                            appVeyorAccountName: &quot;gep13&quot;);
+
+BuildParameters.PrintParameters(Context);
+
+ToolSettings.SetToolSettings(context: Context,
+                            dupFinderExcludePattern: new string[] {
+                            BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example.Tests/*.cs&quot;,
+                            BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example/**/*.AssemblyInfo.cs&quot; },
+                            testCoverageFilter: &quot;+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* &quot;,
+                            testCoverageExcludeByAttribute: &quot;*.ExcludeFromCodeCoverage*&quot;,
+                            testCoverageExcludeByFile: &quot;*/*Designer.cs;*/*.g.cs;*/*.g.i.cs&quot;);
+
+Build.RunDotNetCore();
+</code></pre>
+<p>The above content was generated using the <a href="../vscode-extension">Cake.Recipe extension for VSCode</a>, using the following input values:</p>
+<ul>
+<li>recipe.cake</li>
+<li>Source</li>
+<li>gep13</li>
+<li>Cake.Example</li>
+</ul>
+<p>This recipe.cake file is broken up to distinct sections, some of which have more information in linked documents:</p>
+<ul>
+<li>A <a href="./preprocessor-directive">pre-processor directive</a>
+<ul>
+<li>This is what is responsible for downloading the Cake.Recipe NuGet package, and loading the various script files into the current Cake execution</li>
+</ul>
+</li>
+<li>A call to the <a href="./set-variable-names">Environment.SetVariableNames</a> method
+<ul>
+<li>This is an opportunity to override the names for the environment variables used by Cake.Recipe</li>
+</ul>
+</li>
+<li>A call to the <a href="./set-parameters">BuildParameters.SetParameters</a> method
+<ul>
+<li>Cake.Recipe is driven by a set of build parameters.  Normally, the default values are all that is required, but you can override any that you would like</li>
+</ul>
+</li>
+<li>A call to the <a href="./print-parameters">BuildParameters.PrintParameters</a> method
+<ul>
+<li>It is really helpful, when running a build to know the value of the parameters that are being used.  Calling this method will cause them to be printed out to the build log.</li>
+</ul>
+</li>
+<li>A call to the <a href="./set-tool-settings">ToolSettings.SetToolSettings</a> method
+<ul>
+<li>Cake.Recipe uses a number of different tools, for example, DupFinder.  When required, you can override the settings that are passed to these tools.  Cake.Recipe attempts to provide sensible defaults for these tools.</li>
+</ul>
+</li>
+<li>A call to one of the three available <a href="./build">Build</a> methods
+<ul>
+<li>Cake.Recipe has three different build modes.  .NET Framework, .NET Core and NuGet.  Depending on what you are doing, you call the required one here.  This method is what causes the actual build to execute.</li>
+</ul>
+</li>
+</ul>
+
 	</section>
                 
             </div>           

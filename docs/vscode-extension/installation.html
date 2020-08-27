@@ -1,19 +1,21 @@
-﻿<!DOCTYPE html><html><head>
+﻿<!DOCTYPE html>
+<html>
+    <head>
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-        <meta name="description">
-        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML">
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="description" />
+        <meta name="keywords" content="static content generator,static site generator,static site,HTML,web development,.NET,C#,Razor,Markdown,YAML" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Features</title>
+        <title>Cake.Recipe - Installation</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
-        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
+        <link href="/Cake.Recipe/assets/css/theme/theme.css" rel="stylesheet" />
         <link href="//fonts.googleapis.com/css?family=Roboto+Mono:400,700|Roboto:400,400i,700,700i" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet">
+        <link href="/Cake.Recipe/assets/css/override.css" rel="stylesheet" />
         <script src="/Cake.Recipe/assets/js/jquery-2.2.3.min.js"></script>
         <script src="/Cake.Recipe/assets/js/bootstrap.min.js"></script>        
         <script src="/Cake.Recipe/assets/js/app.min.js"></script>         
@@ -72,10 +74,8 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/overview/features.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
-    <div id="infobar-headings"><h6>On This Page</h6><p><a href="#recipe-functionality">Recipe Functionality</a></p>
-<hr class="infobar-hidden">
-</div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/vscode-extension/installation.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+    <div id="infobar-headings"></div>
 
                 </section>
                 <section class="sidebar">    
@@ -85,11 +85,11 @@
                     <ul class="sidebar-menu">
                         
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/overview">Overview</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li class="selected"><a href="/Cake.Recipe/docs/overview/features">Features</a></li>
+                <li><a href="/Cake.Recipe/docs/overview/features">Features</a></li>
                 <li class="treeview">
                     <a href="/Cake.Recipe/docs/overview/requirements">Requirements</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
@@ -136,11 +136,11 @@
                     </ul>
                 </li>
                 <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/commands">Commands</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/resources">Resources</a></li>
 
@@ -186,12 +186,19 @@
 
 
 		<section class="content-header">
-			<h1>Features</h1>
+			<h1>Installation</h1>
 		</section>
 	<section class="content">
-		<p>Cake.Recipe is a set of convention based build scripts, which are delivered as a NuGet Package, which can then be consumed by Cake, via the <code>#load</code> preprocessor directive.</p>
-<h1 id="recipe-functionality">Recipe Functionality</h1>
-<p>TODO:// Put some information here...</p>
+		<p>There are three ways in which this VSCode extension can be installed.</p>
+<h2 id="by-navigating-to-the-marketplace">By navigating to the marketplace</h2>
+<p>Simply navigate to the following <a href="https://marketplace.visualstudio.com/items?itemName=gep13.cakerecipe-vscode">URL</a> and click the green <code>Install</code> button.</p>
+<h2 id="directly-through-vscode">Directly through VSCode</h2>
+<p>Open VSCode and click on the Extensions section.  In the search box, search for Cake.Recipe.  Click on the search result, ensuring that the publisher is <code>Gary Eway Park</code> and then click the <code>Install</code> button.</p>
+<h2 id="via-chocolatey">Via Chocolatey</h2>
+<p>If you have Chocolatey, the Windows Package Manager, installed you can simply type:</p>
+<pre><code class="language-PowerShell">choco install cakerecipe-vscode
+</code></pre>
+<p>This will ensure that both VSCode, and the Cake.Recipe extension, are installed.</p>
 
 	</section>
                 
@@ -205,8 +212,8 @@
         <div class="wrapper bottom-wrapper">
             <footer class="bottom-footer">
                 <p class="text-muted">
-    Copyright © <a href="http://github.com/cake-contrib" target="_blank">Cake Contributions</a> and <a href="https://github.com/cake-contrib/Cake.Recipe/graphs/contributors" target="_blank">contributors</a>.
-    <br>
+    Copyright &copy; <a href="http://github.com/cake-contrib" target="_blank">Cake Contributions</a> and <a href="https://github.com/cake-contrib/Cake.Recipe/graphs/contributors" target="_blank">contributors</a>.
+    <br/>
     Website generated by <a href="http://wyam.io" target="_blank">Wyam</a>
 </p>
 
@@ -221,7 +228,7 @@
         room: 'cake-contrib/Lobby'
     };
 </script>
-<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async="" defer=""></script>
+<script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
 
 <script type="text/javascript" src="/Cake.Recipe/assets/js/anchor.min.js"></script>
 <script type="text/javascript" src="/Cake.Recipe/assets/js/clipboard.min.js"></script>
@@ -338,5 +345,5 @@
                 }, 500);
             });
         </script>
-    
-</body></html>
+    </body>
+</html>

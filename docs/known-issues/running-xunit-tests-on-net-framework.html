@@ -107,12 +107,14 @@
                     <a href="/Cake.Recipe/docs/fundamentals">Fundamentals</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/fundamentals/recipe-cake.md">Recipe Cake</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/recipe-cake">recipe.cake file</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/preprocessor-directive">Pre-processor Directive</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-variable-names">SetVariableNames Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-parameters">SetParameters Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/print-parameters">PrintParameters Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/set-tool-settings">SetToolSettings Method</a></li>
+                <li><a href="/Cake.Recipe/docs/fundamentals/build">Build Method</a></li>
                 <li><a href="/Cake.Recipe/docs/fundamentals/environment-variables">Environment Variables</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-parameters.md">Set Parameters</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-variable-names.md">Set Variable Names</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/set-tool-settings.md">Set Tool Settings</a></li>
-                <li><a href="/Cake.Recipe/docs/fundamentals/print-parameters.md">Print Parameters</a></li>
 
                     </ul>
                 </li>
@@ -138,9 +140,9 @@
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/vscode-extension/installation.md">Installation</a></li>
-                <li><a href="/Cake.Recipe/docs/vscode-extension/commands.md">Commands</a></li>
-                <li><a href="/Cake.Recipe/docs/vscode-extension/resources.md">Resources</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/commands">Commands</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/resources">Resources</a></li>
 
                     </ul>
                 </li>
@@ -149,7 +151,7 @@
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/resources/blog-posts">Blog posts</a></li>
-                <li><a href="/Cake.Recipe/docs/resources/videos.md">Videos</a></li>
+                <li><a href="/Cake.Recipe/docs/resources/videos">Videos</a></li>
 
                     </ul>
                 </li>
@@ -192,7 +194,7 @@
 <pre><code class="language-bash">[xUnit.net 00:00:00.76] XUnitTests: Catastrophic failure: System.TypeLoadException: Could not load type of field 'Xunit.Runner.VisualStudio.VsExecutionSink:recorder' (4) due to: Could not load file or assembly 'Microsoft.VisualStudio.TestPlatform.ObjectModel, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a' or one of its dependencies.
 </code></pre>
 <p>The solution to this problem is to add the following package reference into your test project:</p>
-<pre><code class="language-bash">&lt;PackageReference Include=&quot;Microsoft.TestPlatform.ObjectModel&quot; Version=&quot;16.6.1&quot; Condition=&quot;$(TargetFramework.StartsWith('net4')) AND '$(OS)' == 'Unix'&quot; /&gt;
+<pre><code class="language-xml">&lt;PackageReference Include=&quot;Microsoft.TestPlatform.ObjectModel&quot; Version=&quot;16.6.1&quot; Condition=&quot;$(TargetFramework.StartsWith('net4')) AND '$(OS)' == 'Unix'&quot; /&gt;
 </code></pre>
 <div class="alert alert-info"><p><strong>NOTE:</strong>
 This package reference version should match the package reference version of the <code>Microsoft.NET.Test.Sdk</code> package.</p>
