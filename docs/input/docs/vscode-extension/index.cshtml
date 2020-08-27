@@ -3,13 +3,6 @@ Title: VSCode Extension
 Order: 40
 ---
 
-@foreach(IDocument child in Model.DocumentList(Keys.Children).OrderBy(x => x.Get<int>(DocsKeys.Order, 1000)))
-{
-    <h1>@(child.String(Keys.Title))</h1>
-    if(child.ContainsKey(DocsKeys.Description))
-    {
-        <p>@Html.Raw(child.String(DocsKeys.Description))</p>
-    }
+<p>There is a VSCode Extension for Cake.Recipe, which tries to help make it easier to get started using Cake.Recipe.  Here you will find information on how to install and use it.</p>
 
-    @Html.Partial("_ChildPages", child)
-}
+@Html.Partial("_ChildPages")
