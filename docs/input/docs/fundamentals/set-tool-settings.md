@@ -4,7 +4,27 @@ Title: SetToolSettings Method
 Description: Override the default tool settings used by Cake.Recipe
 ---
 
-## dupFinderExcludePattern
+Cake.Recipe makes use of a number of different tools, for example DupFinder, MSBuild, OpenCover, etc.  While Cake.Recipe attempts to provide sensible defaults for all of these tools, there are times when it is necessary to override these for specific project requirements.
+
+This can be done by calling the `SetToolSettings` method.
+
+As an example, you could override some tool settings using the following:
+
+```csharp
+ToolSettings.SetToolSettings(context: Context,
+                            dupFinderExcludePattern: new string[] {
+                            BuildParameters.RootDirectoryPath + "/Source/Cake.Example.Tests/*.cs",
+                            BuildParameters.RootDirectoryPath + "/Source/Cake.Example/**/*.AssemblyInfo.cs" },
+                            testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* ",
+                            testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
+                            testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
+```
+
+## Default Tool Setting Parameters
+
+The `SetToolSettings` method uses the concept of optional parameters, in fact, all but one of the parameters to the `SetToolSettings` method are optional.  To override a specific tool setting, you need to use a named parameter.  The following is a list of all the named parameters that can be used on the method.
+
+### dupFinderExcludePattern
 
 This is used when executing the DupFinder command line tool.  It provides a list of strings, representing file paths, which should be excluded from the DupFinder analysis.
 
@@ -22,7 +42,7 @@ new string[]
             }
 ```
 
-## testCoverageFilter
+### testCoverageFilter
 
 This is used in conjunction with both OpenCover and Coverlet.  It controls which assemblies/namespaces should be included within the Unit Test coverage.
 
@@ -34,7 +54,7 @@ Default Value:
 string.Format("+[{0}*]* -[*.Tests]*", BuildParameters.Title)
 ```
 
-## testCoverageExcludeByAttribute
+### testCoverageExcludeByAttribute
 
 This is used in conjunction with both OpenCover and Coverlet.  It controls which test should be excluded from coverage based on what attributes are assinged to the tests.
 
@@ -46,7 +66,7 @@ Default Value:
 "*.ExcludeFromCodeCoverage*"
 ```
 
-## testCoverageExcludeByFile
+### testCoverageExcludeByFile
 
 This is used in conjunction with both OpenCover and Coverlet.  It controls which tests should be excluded based on file name.
 
@@ -58,7 +78,7 @@ Default Value:
 "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs"
 ```
 
-## buildPlatformTarget
+### buildPlatformTarget
 
 This is passed into the execution of MSBuild when doing a full .Net Framework build.
 
@@ -70,7 +90,7 @@ Default Value:
 PlatformTarget.MSIL
 ```
 
-## buildMSBuildToolVersion
+### buildMSBuildToolVersion
 
 This is passed into the execution of MSBuild when doing a full .Net Framework build.
 
@@ -82,7 +102,7 @@ Default Value:
 MSBuildToolVersion.Default
 ```
 
-## maxCpuCount
+### maxCpuCount
 
 This is passed into the execution of MSBuild when doing a full .Net Framework build.
 
@@ -90,7 +110,7 @@ Type: `int?`
 
 Default Value: 0
 
-## targetFrameworkPathOverride
+### targetFrameworkPathOverride
 
 This is passed into the execution of any .Net Core build operation.
 
@@ -118,7 +138,7 @@ If a value for `targetFrameworkPathOverride` is provided, then the default value
 TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
 ```
 
-## dupFinderExcludeFilesByStartingCommentSubstring
+### dupFinderExcludeFilesByStartingCommentSubstring
 
 This is used when executing the DupFinder command line tool.  It provides a list of strings, which should be matched in the opening comments of a file, which should be excluded from the DupFinder analysis.
 
@@ -126,7 +146,7 @@ Type: `string[]`
 
 Default Value: `null`
 
-## dupFinderDiscardCost
+### dupFinderDiscardCost
 
 This is used when executing the DupFinder command line tool.  It allows setting a threshold for code complexity of the duplicated fragments. The fragments with lower complexity are discarded as non-duplicates.
 
@@ -134,7 +154,7 @@ Type: `int?`
 
 Default Value: `null`
 
-## dupFinderThrowExceptionOnFindingDuplicates
+### dupFinderThrowExceptionOnFindingDuplicates
 
 This is used when executing the DupFinder command line tool.  If set to true, an exception will be thrown is duplicates are found.
 
