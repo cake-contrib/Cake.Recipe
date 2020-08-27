@@ -1,6 +1,7 @@
 ---
 Order: 10
 Title: Running Xunit Tests when targeting .Net Framework
+Description: Can cause problems when running on a non-Windows Operating System
 ---
 
 There is a known issue that can occur when attempting to run Cake.Recipe (on a non Windows environment) against full .Net Framework when the solution that is being built includes an Xunit Test Project.
