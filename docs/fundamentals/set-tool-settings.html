@@ -189,7 +189,92 @@
 			<h1>SetToolSettings Method</h1>
 		</section>
 	<section class="content">
-		<p>TODO</p>
+		<p>Cake.Recipe makes use of a number of different tools, for example DupFinder, MSBuild, OpenCover, etc.  While Cake.Recipe attempts to provide sensible defaults for all of these tools, there are times when it is necessary to override these for specific project requirements.</p>
+<p>This can be done by calling the <code>SetToolSettings</code> method.</p>
+<p>As an example, you could override some tool settings using the following:</p>
+<pre><code class="language-csharp">ToolSettings.SetToolSettings(context: Context,
+                            dupFinderExcludePattern: new string[] {
+                            BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example.Tests/*.cs&quot;,
+                            BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example/**/*.AssemblyInfo.cs&quot; },
+                            testCoverageFilter: &quot;+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* &quot;,
+                            testCoverageExcludeByAttribute: &quot;*.ExcludeFromCodeCoverage*&quot;,
+                            testCoverageExcludeByFile: &quot;*/*Designer.cs;*/*.g.cs;*/*.g.i.cs&quot;);
+</code></pre>
+<h2 id="default-tool-setting-parameters">Default Tool Setting Parameters</h2>
+<p>The <code>SetToolSettings</code> method uses the concept of optional parameters, in fact, all but one of the parameters to the <code>SetToolSettings</code> method are optional.  To override a specific tool setting, you need to use a named parameter.  The following is a list of all the named parameters that can be used on the method.</p>
+<h3 id="dupfinderexcludepattern">dupFinderExcludePattern</h3>
+<p>This is used when executing the DupFinder command line tool.  It provides a list of strings, representing file paths, which should be excluded from the DupFinder analysis.</p>
+<p>Type: <code>string[]</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">var absoluteSourceDirectory = context.MakeAbsolute(BuildParameters.SolutionDirectoryPath);
+
+new string[]
+            {
+                string.Format(&quot;{0}/{1}.Tests/**/*.cs&quot;, absoluteTestDirectory, BuildParameters.Title),
+                string.Format(&quot;{0}/**/*.AssemblyInfo.cs&quot;, absoluteSourceDirectory)
+            }
+</code></pre>
+<h3 id="testcoveragefilter">testCoverageFilter</h3>
+<p>This is used in conjunction with both OpenCover and Coverlet.  It controls which assemblies/namespaces should be included within the Unit Test coverage.</p>
+<p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">string.Format(&quot;+[{0}*]* -[*.Tests]*&quot;, BuildParameters.Title)
+</code></pre>
+<h3 id="testcoverageexcludebyattribute">testCoverageExcludeByAttribute</h3>
+<p>This is used in conjunction with both OpenCover and Coverlet.  It controls which test should be excluded from coverage based on what attributes are assinged to the tests.</p>
+<p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">&quot;*.ExcludeFromCodeCoverage*&quot;
+</code></pre>
+<h3 id="testcoverageexcludebyfile">testCoverageExcludeByFile</h3>
+<p>This is used in conjunction with both OpenCover and Coverlet.  It controls which tests should be excluded based on file name.</p>
+<p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">&quot;*/*Designer.cs;*/*.g.cs;*/*.g.i.cs&quot;
+</code></pre>
+<h3 id="buildplatformtarget">buildPlatformTarget</h3>
+<p>This is passed into the execution of MSBuild when doing a full .Net Framework build.</p>
+<p>Type: <code>PlatformTarget?</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">PlatformTarget.MSIL
+</code></pre>
+<h3 id="buildmsbuildtoolversion">buildMSBuildToolVersion</h3>
+<p>This is passed into the execution of MSBuild when doing a full .Net Framework build.</p>
+<p>Type: <code>MSBuildToolVersion</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">MSBuildToolVersion.Default
+</code></pre>
+<h3 id="maxcpucount">maxCpuCount</h3>
+<p>This is passed into the execution of MSBuild when doing a full .Net Framework build.</p>
+<p>Type: <code>int?</code></p>
+<p>Default Value: 0</p>
+<h3 id="targetframeworkpathoverride">targetFrameworkPathOverride</h3>
+<p>This is passed into the execution of any .Net Core build operation.</p>
+<p>Type: <code>DirectoryPath</code></p>
+<p>Depending on what sort of build Cake.Recipe is executing, the default value changes.</p>
+<p>If <code>BuildParameters.ShouldUseTargetFrameworkPath</code> is true, and the <code>targetFrameworkPathOverride</code> is null, and it is a .Net Core build, then the default value is:</p>
+<pre><code class="language-csharp">var path = context.Tools.Resolve(&quot;mono&quot;).GetDirectory();
+path = path.Combine(&quot;../lib/mono/4.5&quot;);
+TargetFrameworkPathOverride = path.FullPath + &quot;/&quot;
+</code></pre>
+<p>If <code>BuildParameters.ShouldUseTargetFrameworkPath</code> is true, and the <code>targetFrameworkPathOverride</code> is null, and it is <em>NOT</em> a .Net Core build, then the default value is:</p>
+<pre><code class="language-csharp">TargetFrameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + &quot;/&quot;
+</code></pre>
+<p>If a value for <code>targetFrameworkPathOverride</code> is provided, then the default value is simply the FullPath of this DirectoryPath.</p>
+<pre><code class="language-csharp">TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
+</code></pre>
+<h3 id="dupfinderexcludefilesbystartingcommentsubstring">dupFinderExcludeFilesByStartingCommentSubstring</h3>
+<p>This is used when executing the DupFinder command line tool.  It provides a list of strings, which should be matched in the opening comments of a file, which should be excluded from the DupFinder analysis.</p>
+<p>Type: <code>string[]</code></p>
+<p>Default Value: <code>null</code></p>
+<h3 id="dupfinderdiscardcost">dupFinderDiscardCost</h3>
+<p>This is used when executing the DupFinder command line tool.  It allows setting a threshold for code complexity of the duplicated fragments. The fragments with lower complexity are discarded as non-duplicates.</p>
+<p>Type: <code>int?</code></p>
+<p>Default Value: <code>null</code></p>
+<h3 id="dupfinderthrowexceptiononfindingduplicates">dupFinderThrowExceptionOnFindingDuplicates</h3>
+<p>This is used when executing the DupFinder command line tool.  If set to true, an exception will be thrown is duplicates are found.</p>
+<p>Type: <code>bool?</code></p>
+<p>Default Value: <code>null</code></p>
 
 	</section>
                 
