@@ -34,7 +34,6 @@ public static class BuildParameters
     public static bool PrepareLocalRelease { get; set; }
     public static bool TreatWarningsAsErrors { get; set; }
     public static bool PublishReleasePackagesWasSuccessful { get; set; }
-    public static bool ShouldPublishToMyGetWithApiKey { get; set; }
     public static string MasterBranchName { get; private set; }
     public static string DevelopBranchName { get; private set; }
     public static string EmailRecipient { get; private set; }
@@ -289,7 +288,6 @@ public static class BuildParameters
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("BranchType: {0}", BranchType);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
-        context.Information("ShouldPublishToMyGetWithApiKey: {0}", ShouldPublishToMyGetWithApiKey);
         context.Information("ShouldSendEmail: {0}", ShouldSendEmail);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
@@ -408,7 +406,6 @@ public static class BuildParameters
         string emailRecipient = null,
         string emailSenderName = null,
         string emailSenderAddress = null,
-        bool shouldPublishToMyGetWithApiKey = true,
         DirectoryPath restorePackagesDirectory = null,
         List<PackageSourceData> packageSourceDatas = null,
         PlatformFamily preferredBuildAgentOperatingSystem = PlatformFamily.Windows,
@@ -558,7 +555,6 @@ public static class BuildParameters
 
         BuildAgentOperatingSystem = context.Environment.Platform.Family;
 
-        ShouldPublishToMyGetWithApiKey = shouldPublishToMyGetWithApiKey;
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
         Email = GetEmailCredentials(context);
