@@ -99,7 +99,6 @@
 
                     </ul>
                 </li>
-                <li><a href="/Cake.Recipe/docs/overview/release-notes">Release Notes</a></li>
 
                     </ul>
                 </li>
@@ -189,7 +188,148 @@
 			<h1>SetParameters Method</h1>
 		</section>
 	<section class="content">
-		<p>TODO</p>
+		<h2 id="required-parameters">Required Parameters</h2>
+<h3 id="context">context</h3>
+<p>Type: <code>ICakeContext</code></p>
+<h3 id="buildsystem">buildSystem</h3>
+<p>Type: <code>BuildSystem</code></p>
+<h3 id="sourcedirectorypath">sourceDirectoryPath</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="title">title</h3>
+<p>Type: <code>string</code></p>
+<h2 id="optional-parameters">Optional Parameters</h2>
+<h3 id="solutionfilepath">solutionFilePath</h3>
+<p>Type: <code>FilePath</code></p>
+<h3 id="solutiondirectorypath">solutionDirectoryPath</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="rootdirectorypath">rootDirectoryPath</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="testdirectorypath">testDirectoryPath</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="testfilepattern">testFilePattern</h3>
+<p>Type: <code>string</code></p>
+<h3 id="integrationtestscriptpath">integrationTestScriptPath</h3>
+<p>Type: <code>string</code></p>
+<h3 id="resharpersettingsfilename">resharperSettingsFileName</h3>
+<p>Type: <code>string</code></p>
+<h3 id="repositoryowner">repositoryOwner</h3>
+<p>Type: <code>string</code></p>
+<h3 id="repositoryname">repositoryName</h3>
+<p>Type: <code>string</code></p>
+<h3 id="appveyoraccountname">appVeyorAccountName</h3>
+<p>Type: <code>string</code></p>
+<h3 id="appveyorprojectslug">appVeyorProjectSlug</h3>
+<p>Type: <code>string</code></p>
+<h3 id="shouldposttogitter">shouldPostToGitter</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldposttoslack">shouldPostToSlack</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldposttotwitter">shouldPostToTwitter</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldposttomicrosoftteams">shouldPostToMicrosoftTeams</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldsendemail">shouldSendEmail</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shoulddownloadmilestonereleasenotes">shouldDownloadMilestoneReleaseNotes</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shoulddownloadfullreleasenotes">shouldDownloadFullReleaseNotes</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldnotifybetareleases">shouldNotifyBetaReleases</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shoulddeletecachedfiles">shouldDeleteCachedFiles</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldusedeterministicbuilds">shouldUseDeterministicBuilds</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="milestonereleasenotesfilepath">milestoneReleaseNotesFilePath</h3>
+<p>Type: <code>FilePath</code></p>
+<h3 id="fullreleasenotesfilepath">fullReleaseNotesFilePath</h3>
+<p>Type: <code>FilePath</code></p>
+<h3 id="shouldrunchocolatey">shouldRunChocolatey</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldpublishgithub">shouldPublishGitHub</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldgeneratedocumentation">shouldGenerateDocumentation</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shoulddocumentsourcefiles">shouldDocumentSourceFiles</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldrundupfinder">shouldRunDupFinder</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldruninspectcode">shouldRunInspectCode</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldruncoveralls">shouldRunCoveralls</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldruncodecov">shouldRunCodecov</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldrundotnetcorepack">shouldRunDotNetCorePack</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldbuildnugetsourcepackage">shouldBuildNugetSourcePackage</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldrunintegrationtests">shouldRunIntegrationTests</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldcalculateversion">shouldCalculateVersion</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="shouldusetargetframeworkpath">shouldUseTargetFrameworkPath</h3>
+<p>Type: <code>bool?</code></p>
+<h3 id="transifexenabled">transifexEnabled</h3>
+<p>Type: <code>bool?</code></p>
+<h3 id="transifexpullmode">transifexPullMode</h3>
+<p>Type: <code>TransifexMode</code></p>
+<h3 id="transifexpullpercentage">transifexPullPercentage</h3>
+<p>Type: <code>int</code></p>
+<h3 id="gittermessage">gitterMessage</h3>
+<p>Type: <code>string</code></p>
+<h3 id="microsoftteamsmessage">microsoftTeamsMessage</h3>
+<p>Type: <code>string</code></p>
+<h3 id="twittermessage">twitterMessage</h3>
+<p>Type: <code>string</code></p>
+<h3 id="wyamrootdirectorypath">wyamRootDirectoryPath</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="wyampublishdirectorypath">wyamPublishDirectoryPath</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="wyamconfigurationfile">wyamConfigurationFile</h3>
+<p>Type: <code>FilePath</code></p>
+<h3 id="wyamrecipe">wyamRecipe</h3>
+<p>Type: <code>string</code></p>
+<h3 id="wyamtheme">wyamTheme</h3>
+<p>Type: <code>string</code></p>
+<h3 id="wyamsourcefiles">wyamSourceFiles</h3>
+<p>Type: <code>string</code></p>
+<h3 id="webhost">webHost</h3>
+<p>Type: <code>string</code></p>
+<h3 id="weblinkroot">webLinkRoot</h3>
+<p>Type: <code>string</code></p>
+<h3 id="webbaseediturl">webBaseEditUrl</h3>
+<p>Type: <code>string</code></p>
+<h3 id="nuspecfilepath">nuspecFilePath</h3>
+<p>Type: <code>FilePath</code></p>
+<h3 id="ispublicrepository">isPublicRepository</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="nugetconfig">nugetConfig</h3>
+<p>Type: <code>FilePath</code></p>
+<h3 id="nugetsources">nuGetSources</h3>
+<p>Type: <code>ICollection&lt;string&gt;</code></p>
+<h3 id="treatwarningsaserrors">treatWarningsAsErrors</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="masterbranchname">masterBranchName</h3>
+<p>Type: <code>string</code></p>
+<h3 id="developbranchname">developBranchName</h3>
+<p>Type: <code>string</code></p>
+<h3 id="emailrecipient">emailRecipient</h3>
+<p>Type: <code>string</code></p>
+<h3 id="emailsendername">emailSenderName</h3>
+<p>Type: <code>string</code></p>
+<h3 id="emailsenderaddress">emailSenderAddress</h3>
+<p>Type: <code>string</code></p>
+<h3 id="shouldpublishtomygetwithapikey">shouldPublishToMyGetWithApiKey</h3>
+<p>Type: <code>bool</code></p>
+<h3 id="restorepackagesdirectory">restorePackagesDirectory</h3>
+<p>Type: <code>DirectoryPath</code></p>
+<h3 id="packagesourcedatas">packageSourceDatas</h3>
+<p>Type: <code>List&lt;PackageSourceData&gt;</code></p>
+<h3 id="preferredbuildagentoperatingsystem">preferredBuildAgentOperatingSystem</h3>
+<p>Type: <code>PlatformFamily</code></p>
+<h3 id="preferredbuildprovidertype">preferredBuildProviderType</h3>
+<p>Type: <code>BuildProviderType</code></p>
 
 	</section>
                 
