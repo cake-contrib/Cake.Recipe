@@ -188,148 +188,474 @@
 			<h1>SetParameters Method</h1>
 		</section>
 	<section class="content">
-		<h2 id="required-parameters">Required Parameters</h2>
+		<p>Cake.Recipe is very customizable, in terms of how builds are executed, where file are stored, what notifications should be sent out, etc.  All of this customization is done through the SetParameters method, which gives you fine grain control over all aspects of Cake.Recipe.</p>
+<p>As an example, you could do something like the following to override a number of the default parameter values (this example is taken from the Chocolatey GUI build):</p>
+<pre><code class="language-csharp">BuildParameters.SetParameters(context: Context,
+                            buildSystem: BuildSystem,
+                            sourceDirectoryPath: &quot;./Source&quot;,
+                            solutionFilePath: &quot;./Source/ChocolateyGui.sln&quot;,
+                            solutionDirectoryPath: &quot;./Source/ChocolateyGui&quot;,
+                            resharperSettingsFileName: &quot;ChocolateyGui.sln.DotSettings&quot;,
+                            title: &quot;Chocolatey GUI&quot;,
+                            repositoryOwner: &quot;chocolatey&quot;,
+                            repositoryName: &quot;ChocolateyGUI&quot;,
+                            appVeyorAccountName: &quot;chocolatey&quot;,
+                            appVeyorProjectSlug: &quot;chocolateygui&quot;,
+                            shouldDownloadFullReleaseNotes: true,
+                            shouldDownloadMilestoneReleaseNotes: true,
+                            shouldPublishChocolatey: false,
+                            shouldPublishNuGet: false,
+                            shouldPublishGitHub: false,
+                            shouldRunGitVersion: true,
+                            webLinkRoot: &quot;ChocolateyGUI&quot;,
+                            webBaseEditUrl: &quot;https://github.com/chocolatey/ChocolateyGUI/tree/develop/docs/input/&quot;);
+</code></pre>
+<h2 id="required-parameters">Required Parameters</h2>
+<p>The SetParameters method has four input parameters which have to be provided, with the remainder being optional parameters that have default values.  The following is a list of the values that have to be provided.</p>
 <h3 id="context">context</h3>
+<p>This is the current CakeContext, which can be provided directly as <code>Context</code>.</p>
 <p>Type: <code>ICakeContext</code></p>
 <h3 id="buildsystem">buildSystem</h3>
+<p>This again if provided directly from Cake, and can be passed directly as <code>BuildSystem</code>.</p>
 <p>Type: <code>BuildSystem</code></p>
 <h3 id="sourcedirectorypath">sourceDirectoryPath</h3>
+<p>This is the path to the directoy where your source code files are stored.  Cake.Recipe is convention driven, and expects all the source files to be located in a folder like <code>./Source</code> or <code>./src</code> or similar.</p>
 <p>Type: <code>DirectoryPath</code></p>
 <h3 id="title">title</h3>
+<p>This a essentially the name of the application that is being built within the repository.  For example, <code>Cake.Gem</code>, or <code>ChocolateyGUI</code>.  A number of the optional parameters will attempt to be derived from what you pass as the Title for your project, so depending on how you have named it, you might have to provide a value for some other parameters.</p>
 <p>Type: <code>string</code></p>
 <h2 id="optional-parameters">Optional Parameters</h2>
+<p>The SetParameters method uses the concept of optional parameters, in fact, all but four of the parameters to the SetParameters method are optional. To override a specific parameter, you need to use a named parameter. The following is a list of all the named parameters that can be used on the method.</p>
 <h3 id="solutionfilepath">solutionFilePath</h3>
+<p>Cake.Recipe assumes that it is only building a single .Net solution file, and it needs to know the location of it.  It will attempt to form that location using the SourceDirectoryPath and the Title that are passed into SetParameters.</p>
 <p>Type: <code>FilePath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">SourceDirectoryPath.CombineWithFilePath(Title + &quot;.sln&quot;)
+</code></pre>
 <h3 id="solutiondirectorypath">solutionDirectoryPath</h3>
+<p>This value is only used to feed into the default value for the DupFinderExcludePattern, which can be overridden in the SetToolSettings method.</p>
 <p>Type: <code>DirectoryPath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">SourceDirectoryPath.Combine(Title)
+</code></pre>
 <h3 id="rootdirectorypath">rootDirectoryPath</h3>
+<p>This is intended to store the root directory path for the repository that Cake.Recipe is running in.  This is derived from the WorkingDirectory of Cake by default.</p>
 <p>Type: <code>DirectoryPath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">context.MakeAbsolute(context.Environment.WorkingDirectory)
+</code></pre>
 <h3 id="testdirectorypath">testDirectoryPath</h3>
+<p>This is the directory where any test projects for the solution are located.  By default, Cake.Recipe assumes that this is the same location as the normal projects within the solution.</p>
 <p>Type: <code>DirectoryPath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">sourceDirectoryPath
+</code></pre>
 <h3 id="testfilepattern">testFilePattern</h3>
+<p>This is the pattern that is used to determine what files/projects should be run through unit testing.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value: <code>&quot;/**/*Tests.dll&quot;</code> or <code>&quot;/**/*Tests.csproj&quot;</code> depending on whether it is a .Net Framework or .Net Core execution.</p>
 <h3 id="integrationtestscriptpath">integrationTestScriptPath</h3>
+<p>Cake.Recipe has the concept of running a set of integration tests after the main portion of the build is finished.  This parameter stores the default location for the script that should be executed.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">context.MakeAbsolute((FilePath)&quot;test.cake&quot;);
+</code></pre>
 <h3 id="resharpersettingsfilename">resharperSettingsFileName</h3>
+<p>This is the location of the settings file which should be passed to the InspectCode tool.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">string.Format(&quot;{0}.sln.DotSettings&quot;, Title);
+</code></pre>
 <h3 id="repositoryowner">repositoryOwner</h3>
+<p>GitHub repository names are typically in the format of <code>repositoryOwner/repositoryName</code>.  These values are used by the GitReleaseManager tool to identify which repository should be communicated with.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">string.Empty
+</code></pre>
 <h3 id="repositoryname">repositoryName</h3>
+<p>GitHub repository names are typically in the format of <code>repositoryOwner/repositoryName</code>.  These values are used by the GitReleaseManager tool to identify which repository should be communicated with.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Title
+</code></pre>
 <h3 id="appveyoraccountname">appVeyorAccountName</h3>
+<p>This value is used when executing the <code>Clear-AppVeyor-Cache</code> task.  This task is useful when you need to ensure that the AppVeyor build cache is cleared out properly before running a build.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">RepositoryOwner.Replace(&quot;-&quot;, &quot;&quot;).ToLower();
+</code></pre>
 <h3 id="appveyorprojectslug">appVeyorProjectSlug</h3>
+<p>This value is used when executing the <code>Clear-AppVeyor-Cache</code> task.  This task is useful when you need to ensure that the AppVeyor build cache is cleared out properly before running a build.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Title.Replace(&quot;.&quot;, &quot;-&quot;).ToLower();
+</code></pre>
 <h3 id="shouldposttogitter">shouldPostToGitter</h3>
+<p>This is used as a final control variable for whether or not notification messages should be posted to Gitter when the a final release build (i.e. a tagged build) completes.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldposttoslack">shouldPostToSlack</h3>
+<p>This is used as a final control variable for whether or not notification messages should be posted to Slack when a build fails.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldposttotwitter">shouldPostToTwitter</h3>
+<p>This is used as a final control variable for whether or not notification messages should be posted to Twitter when the a final release build (i.e. a tagged build) completes.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldposttomicrosoftteams">shouldPostToMicrosoftTeams</h3>
+<p>This is used as a final control variable for whether or not notification messages should be posted to Microsoft Teams when the a final release build (i.e. a tagged build) completes.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shouldsendemail">shouldSendEmail</h3>
+<p>This is used as a final control variable for whether or not notification messages should be sent via email when the a final release build (i.e. a tagged build) completes, or when a build fails.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shoulddownloadmilestonereleasenotes">shouldDownloadMilestoneReleaseNotes</h3>
+<p>When executing the <code>Export-Release-Notes</code> task, this variable controls whether or not the release notes for the current milestone is exported by GitReleaseManager.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shoulddownloadfullreleasenotes">shouldDownloadFullReleaseNotes</h3>
+<p>When executing the <code>Export-Release-Notes</code> task, this variable controls whether or not the all release notes are exported by GitReleaseManager.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shouldnotifybetareleases">shouldNotifyBetaReleases</h3>
+<p>At the end of a build, Cake.Recipe determines what branch the build is executing on, and decides whether a notification should be sent out or not.  If the branch in question is a hotfix or a release branch, notifications will only be sent if this parameter is set to true.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shoulddeletecachedfiles">shouldDeleteCachedFiles</h3>
+<p>At the end of a build, Cake.Recipe decides whether or not cached files, such as nupkg files, are deleted or not.  This parameter controls whether this should happen or not, in additional to <em>where</em> the build is happening, i.e. locally or on a CI/CD platform.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shouldusedeterministicbuilds">shouldUseDeterministicBuilds</h3>
+<p>If this parameter is set to true, then during the execution of either MSBuild or the .Net Core CLI, a build property called <code>ContinuousIntegrationBuild</code> with the value of <code>true</code> will be added.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="milestonereleasenotesfilepath">milestoneReleaseNotesFilePath</h3>
+<p>This is the location of the file that milestone release notes are exported to by GitReleaseManager when running the <code>Export-Release-Notes</code> task.</p>
 <p>Type: <code>FilePath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">RootDirectoryPath.CombineWithFilePath(&quot;CHANGELOG.md&quot;);
+</code></pre>
 <h3 id="fullreleasenotesfilepath">fullReleaseNotesFilePath</h3>
+<p>This is the location of the file that the full release notes are exported to by GitReleaseManager when running the <code>Export-Release-Notes</code> task.</p>
 <p>Type: <code>FilePath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">RootDirectoryPath.CombineWithFilePath(&quot;ReleaseNotes.md&quot;);
+</code></pre>
 <h3 id="shouldrunchocolatey">shouldRunChocolatey</h3>
+<p>This is used as a final control variable for whether or not the Chocolatey tool should be executed as part of the build.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldpublishgithub">shouldPublishGitHub</h3>
+<p>This is used as a final control variable for whether or not a final set of artifacts from the build should be published to GitHub, via the GitReleaseManager tool.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldgeneratedocumentation">shouldGenerateDocumentation</h3>
+<p>This is used as a final control variable for whether or not Wyam should be executed to generate documentation for the project.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shoulddocumentsourcefiles">shouldDocumentSourceFiles</h3>
+<p>This is used as a final control variable for whether or not Wyam should be executed against the source files for the project to generate additional documentation.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldrundupfinder">shouldRunDupFinder</h3>
+<p>This is used as a final control variable for whether or not the DupFinder tool should be executed as part of the build.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldruninspectcode">shouldRunInspectCode</h3>
+<p>This is used as a final control variable for whether or not the InspectCode tool should be executed as part of the build.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldruncoveralls">shouldRunCoveralls</h3>
+<p>This is used as a final control variable for whether or not unit test coverage reports should be uploaded to Coveralls as part of the build.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldruncodecov">shouldRunCodecov</h3>
+<p>This is used as a final control variable for whether or not unit test coverage reports should be uploaded to CodeCov as part of the build.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldrundotnetcorepack">shouldRunDotNetCorePack</h3>
+<p>By default, Cake.Recipe assumes that any NuGet packages are generated via the presence of nuspec files in correct folder.  However, it is possible to force the execution of .Net Core pack by setting this parameter to true.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shouldbuildnugetsourcepackage">shouldBuildNugetSourcePackage</h3>
+<p>When this is set to true, a number of different settings are enabled, for example, during the execution of the .Net Core CLI or NuGet, a build property called
+<code>SymbolPackageFormat</code> is set to <code>true</code>, and also the DotNetCorePackSettings properties IncludeSource and IncludeSymbols are set to true, and finally the NuGetPackSettings property Symbols is set to true.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shouldrunintegrationtests">shouldRunIntegrationTests</h3>
+<p>This is used as a final control variable for whether or not integration tests are executed as part of the Cake.Recipe build.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">false
+</code></pre>
 <h3 id="shouldcalculateversion">shouldCalculateVersion</h3>
+<p>This is used as a final control variable for whether or not a version number for the repository is asserted as part of the build.  By default, the GitVersion tool is used to calculate this version number.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shouldusetargetframeworkpath">shouldUseTargetFrameworkPath</h3>
+<p>This is used as a final control variable for whether or not the Target Framework Path should be used.</p>
 <p>Type: <code>bool?</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">!context.IsRunningOnWindows();
+</code></pre>
 <h3 id="transifexenabled">transifexEnabled</h3>
+<p>This is the final control variable for whether or not the Transifex tool should be executed.  The default value is calculated based on the presense of this file in the repository <code>./.tx/config</code>.</p>
 <p>Type: <code>bool?</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">TransifexIsConfiguredForRepository(context)
+</code></pre>
 <h3 id="transifexpullmode">transifexPullMode</h3>
+<p>This controls what type of translation files are downloaded when executing the Transifex tool.</p>
 <p>Type: <code>TransifexMode</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">TransifexMode.OnlyTranslated
+</code></pre>
 <h3 id="transifexpullpercentage">transifexPullPercentage</h3>
+<p>When running the Transifex tool, this parameter controls the percentage completion level for a translation file, to know whether it should be downloaded or not.</p>
 <p>Type: <code>int</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">60
+</code></pre>
 <h3 id="gittermessage">gitterMessage</h3>
+<p>This is the message that is sent to Gitter at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">&#64;/all Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.&quot;
+</code></pre>
 <h3 id="microsoftteamsmessage">microsoftTeamsMessage</h3>
+<p>This is the message that is sent to Microsoft Teams at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.&quot;
+</code></pre>
 <h3 id="twittermessage">twitterMessage</h3>
+<p>This is the message that is sent to Twitter at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.&quot;
+</code></pre>
 <h3 id="wyamrootdirectorypath">wyamRootDirectoryPath</h3>
+<p>This is the directory that stores the documentation files that will be passed to the Wyam tool.</p>
 <p>Type: <code>DirectoryPath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">context.MakeAbsolute(context.Directory(&quot;docs&quot;));
+</code></pre>
 <h3 id="wyampublishdirectorypath">wyamPublishDirectoryPath</h3>
+<p>This is the directory that will be passed to Wyam for where the output documentation should be published to.</p>
 <p>Type: <code>DirectoryPath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">context.MakeAbsolute(context.Directory(&quot;BuildArtifacts/temp/_PublishedDocumentation&quot;));
+</code></pre>
 <h3 id="wyamconfigurationfile">wyamConfigurationFile</h3>
+<p>This is the location of the configuration file that will be passed to the Wyam tool.</p>
 <p>Type: <code>FilePath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">context.MakeAbsolute((FilePath)&quot;config.wyam&quot;)
+</code></pre>
 <h3 id="wyamrecipe">wyamRecipe</h3>
+<p>This is the name of the recipe that should be used by the Wyam tool.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Docs
+</code></pre>
 <h3 id="wyamtheme">wyamTheme</h3>
-<p>Type: <code>string</code></p>
+<p>This is the name of the them that should be used by the Wyam tool.
+Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Samson
+</code></pre>
 <h3 id="wyamsourcefiles">wyamSourceFiles</h3>
+<p>This is the location of all the source files that should be used to generate documentation by the Wyam tool.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">&quot;../../&quot; + SourceDirectoryPath.FullPath + &quot;/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs&quot;;
+</code></pre>
 <h3 id="webhost">webHost</h3>
+<p>The root URL for generating documentation via the Wyam tool.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">string.Format(&quot;{0}.github.io&quot;, repositoryOwner)
+</code></pre>
 <h3 id="weblinkroot">webLinkRoot</h3>
+<p>A value with is concatenated to the WebLinkRoot when generating documentation via the Wyam tool.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Title
+</code></pre>
 <h3 id="webbaseediturl">webBaseEditUrl</h3>
+<p>When generating documentation via Wyam, this value is used to create a clickable link for editing the documentation when published.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">string.Format(&quot;https://github.com/{0}/{1}/tree/{2}/docs/input/&quot;, repositoryOwner, title, developBranchName)
+</code></pre>
 <h3 id="nuspecfilepath">nuspecFilePath</h3>
+<p>When running the top level RunNuGet task, this parameter value is used to locate the nuspec file which should be packed.</p>
 <p>Type: <code>FilePath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">context.MakeAbsolute((FilePath)&quot;./Cake.Recipe/Cake.Recipe.nuspec&quot;)
+</code></pre>
 <h3 id="ispublicrepository">isPublicRepository</h3>
+<p>This parameter is used in the execution of GitVersion to determine whether actions should be taken.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="nugetconfig">nugetConfig</h3>
+<p>When this file exists, it is used to populate the NuGetSources parameter, which is ultimately used when executing nuget or dotnet restore.</p>
 <p>Type: <code>FilePath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">(FilePath)&quot;./NuGet.Config&quot;);
+</code></pre>
 <h3 id="nugetsources">nuGetSources</h3>
+<p>These are the sources used when executing nuget or dotnet restore.</p>
 <p>Type: <code>ICollection&lt;string&gt;</code></p>
+<p>Default Value:</p>
+<p>If a NuGet.Config file isn't located, the following URL's are used.</p>
+<pre><code class="language-csharp">new []{
+    &quot;https://api.nuget.org/v3/index.json&quot;,
+    &quot;https://www.myget.org/F/cake-contrib/api/v3/index.json&quot;
+};
+</code></pre>
 <h3 id="treatwarningsaserrors">treatWarningsAsErrors</h3>
+<p>This parameter is passed into the execution of MSBuild.</p>
 <p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="masterbranchname">masterBranchName</h3>
+<p>The name of the main branch used in the repository.  This is used during the execution of GitReleaseManager.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">master
+</code></pre>
 <h3 id="developbranchname">developBranchName</h3>
+<p>The name of the development branch used in the repository.  This is used in the generation of other parameters.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">develop
+</code></pre>
 <h3 id="emailrecipient">emailRecipient</h3>
+<p>The address of the person receiving the email.  Used when sending notification emails at the end of a build.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">null
+</code></pre>
 <h3 id="emailsendername">emailSenderName</h3>
+<p>The name of the person sending the email.  Used when sending notification emails at the end of a build.</p>
 <p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">null
+</code></pre>
 <h3 id="emailsenderaddress">emailSenderAddress</h3>
+<p>The email address of the person sending the email.  Used when sending notification emails at the end of a build.</p>
 <p>Type: <code>string</code></p>
-<h3 id="shouldpublishtomygetwithapikey">shouldPublishToMyGetWithApiKey</h3>
-<p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">null
+</code></pre>
 <h3 id="restorepackagesdirectory">restorePackagesDirectory</h3>
+<p>This is the directory passed to dotnet restore, to control where packages are restored to.</p>
 <p>Type: <code>DirectoryPath</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">null
+</code></pre>
 <h3 id="packagesourcedatas">packageSourceDatas</h3>
+<p>This is a list of both NuGet and Chocolatey sources that should be used when publishing via the NuGet, dotnet, or Chocolatey tools.  This includes the concept of both prerelease and release sources.</p>
+<p>By default, Cake.Recipe attempts to locate sources using the presence of deprecated environment variables on the system.</p>
+<p>In addition, it adds sources for both Azure Repos and GitHub Package Repository.</p>
+<p>These sources can be configured to either use UserName/Password combination, or an API Key.</p>
 <p>Type: <code>List&lt;PackageSourceData&gt;</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">PackageSources = new List&lt;PackageSourceData&gt;();
+
+// Try to get the deprecated way of doing things, set them as default sources
+var myGetUrl = context.EnvironmentVariable(&quot;MYGET_SOURCE&quot;);
+if (!string.IsNullOrEmpty(myGetUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, &quot;MYGET&quot;, myGetUrl, FeedType.NuGet, false));
+    PackageSources.Add(new PackageSourceData(context, &quot;MYGET&quot;, myGetUrl, FeedType.Chocolatey, false));
+}
+
+var nuGetUrl = context.EnvironmentVariable(&quot;NUGET_SOURCE&quot;);
+if (!string.IsNullOrEmpty(nuGetUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, &quot;NUGET&quot;, nuGetUrl));
+}
+
+var chocolateyUrl = context.EnvironmentVariable(&quot;CHOCOLATEY_SOURCE&quot;);
+if (!string.IsNullOrEmpty(chocolateyUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, &quot;CHOCOLATEY&quot;, chocolateyUrl, FeedType.Chocolatey));
+}
+
+// The following aren't deprecated sources, but rather suggested defaults going forward, so check
+// for the environment variables being set, if they are, add them to the list
+var azureUrl = context.EnvironmentVariable(&quot;AZURE_SOURCE&quot;);
+if (!string.IsNullOrEmpty(azureUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, &quot;AZURE&quot;, azureUrl, FeedType.NuGet, false));
+}
+
+var gprUrl = context.EnvironmentVariable(&quot;GPR_SOURCE&quot;);
+if(!string.IsNullOrEmpty(gprUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, &quot;GPR&quot;, gprUrl, FeedType.NuGet, false));
+}
+</code></pre>
 <h3 id="preferredbuildagentoperatingsystem">preferredBuildAgentOperatingSystem</h3>
+<p>It is possible to run Cake.Recipe on multiple CI/CD platforms and operating systems for the same project.  When doing this, it is essential to be able to specify what combination of CI/CD and operating system is the preferred one, so that artifacts are only published once.</p>
 <p>Type: <code>PlatformFamily</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">PlatformFamily.Windows
+</code></pre>
 <h3 id="preferredbuildprovidertype">preferredBuildProviderType</h3>
+<p>It is possible to run Cake.Recipe on multiple CI/CD platforms and operating systems for the same project.  When doing this, it is essential to be able to specify what combination of CI/CD and operating system is the preferred one, so that artifacts are only published once.</p>
 <p>Type: <code>BuildProviderType</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">BuildProviderType.AppVeyor
+</code></pre>
 
 	</section>
                 
