@@ -824,39 +824,39 @@ Default Value:
 ```csharp
 PackageSources = new List<PackageSourceData>();
 
-            // Try to get the deprecated way of doing things, set them as default sources
-            var myGetUrl = context.EnvironmentVariable("MYGET_SOURCE");
-            if (!string.IsNullOrEmpty(myGetUrl))
-            {
-                PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.NuGet, false));
-                PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.Chocolatey, false));
-            }
+// Try to get the deprecated way of doing things, set them as default sources
+var myGetUrl = context.EnvironmentVariable("MYGET_SOURCE");
+if (!string.IsNullOrEmpty(myGetUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.NuGet, false));
+    PackageSources.Add(new PackageSourceData(context, "MYGET", myGetUrl, FeedType.Chocolatey, false));
+}
 
-            var nuGetUrl = context.EnvironmentVariable("NUGET_SOURCE");
-            if (!string.IsNullOrEmpty(nuGetUrl))
-            {
-                PackageSources.Add(new PackageSourceData(context, "NUGET", nuGetUrl));
-            }
+var nuGetUrl = context.EnvironmentVariable("NUGET_SOURCE");
+if (!string.IsNullOrEmpty(nuGetUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, "NUGET", nuGetUrl));
+}
 
-            var chocolateyUrl = context.EnvironmentVariable("CHOCOLATEY_SOURCE");
-            if (!string.IsNullOrEmpty(chocolateyUrl))
-            {
-                PackageSources.Add(new PackageSourceData(context, "CHOCOLATEY", chocolateyUrl, FeedType.Chocolatey));
-            }
+var chocolateyUrl = context.EnvironmentVariable("CHOCOLATEY_SOURCE");
+if (!string.IsNullOrEmpty(chocolateyUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, "CHOCOLATEY", chocolateyUrl, FeedType.Chocolatey));
+}
 
-            // The following aren't deprecated sources, but rather suggested defaults going forward, so check
-            // for the environment variables being set, if they are, add them to the list
-            var azureUrl = context.EnvironmentVariable("AZURE_SOURCE");
-            if (!string.IsNullOrEmpty(azureUrl))
-            {
-                PackageSources.Add(new PackageSourceData(context, "AZURE", azureUrl, FeedType.NuGet, false));
-            }
+// The following aren't deprecated sources, but rather suggested defaults going forward, so check
+// for the environment variables being set, if they are, add them to the list
+var azureUrl = context.EnvironmentVariable("AZURE_SOURCE");
+if (!string.IsNullOrEmpty(azureUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, "AZURE", azureUrl, FeedType.NuGet, false));
+}
 
-            var gprUrl = context.EnvironmentVariable("GPR_SOURCE");
-            if(!string.IsNullOrEmpty(gprUrl))
-            {
-                PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
-            }
+var gprUrl = context.EnvironmentVariable("GPR_SOURCE");
+if(!string.IsNullOrEmpty(gprUrl))
+{
+    PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
+}
 ```
 
 ### preferredBuildAgentOperatingSystem
