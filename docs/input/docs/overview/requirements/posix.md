@@ -12,4 +12,9 @@ brew cask install mono-mdk
 
 # Required Cake Version
 
-As a minimum, it is recommended that Cake.Recipe should be used in conjunction with Cake 0.32.0.
+As a minimum, it is recommended that Cake.Recipe should be used in conjunction with the following versions of Cake:
+
+| Cake.Recipe Version | Cake Version |
+|---------------------|--------------|
+| 0.1.x               | 0.32.0       |
+| 0.2.x               | 0.38.4       |
