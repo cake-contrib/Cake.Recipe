@@ -121,20 +121,27 @@
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting started with Cake.Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/conventions">Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-release">Creating a release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">Creating a pre-release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-packages">Creating packages</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">Previewing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">Publishing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">Cleaning cache</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">Code coverage reports</a></li>
 
                     </ul>
                 </li>
-                <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
+
+                    </ul>
+                </li>
                 <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
@@ -188,7 +195,17 @@
 			<h1>Pre-processor Directive</h1>
 		</section>
 	<section class="content">
-		<p>TODO</p>
+		<p>The first line of the recipe.cake file should look something like the following:</p>
+<pre><code class="language-csharp">#load nuget:?package=Cake.Recipe&amp;version=2.0.0
+</code></pre>
+<p>This will instruct Cake to download the Cake.Recipe NuGet package, which includes the *.cake files which contain the core Cake.Recipe functionality, and loads them into the current Cake execution.</p>
+<p>Cake.Recipe is published in its released state to NuGet.org, but continuous integration builds are also published to both Azure Packages and GitHub Package Repository.</p>
+<p>As an example, to consume the latest prerelease Cake.Recipe package from Azure Packages, you could use the following pre-processor directive:</p>
+<pre><code class="language-csharp">#load nuget:https://pkgs.dev.azure.com/cake-contrib/Home/_packaging/addins/nuget/v3/index.json?package=Cake.Recipe&amp;prerelease
+</code></pre>
+<p>However, this isn't strictly recommended, as you should really pin to a specific version of this package from this feed.  As an example, you would want to use something like the following:</p>
+<pre><code class="language-csharp">#load nuget:https://pkgs.dev.azure.com/cake-contrib/Home/_packaging/addins/nuget/v3/index.json?package=Cake.Recipe&amp;version=2.0.0-alpha0338&amp;prerelease
+</code></pre>
 
 	</section>
                 

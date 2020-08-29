@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Getting Started With Cake Recipe</title>
+        <title>Cake.Recipe - Getting started with Cake.Recipe</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet">
@@ -126,20 +126,27 @@
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li class="selected"><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting started with Cake.Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/conventions">Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-release">Creating a release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">Creating a pre-release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-packages">Creating packages</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">Previewing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">Publishing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">Cleaning cache</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">Code coverage reports</a></li>
 
                     </ul>
                 </li>
-                <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
+
+                    </ul>
+                </li>
                 <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
@@ -190,7 +197,7 @@
 
 
 		<section class="content-header">
-			<h1>Getting Started With Cake Recipe</h1>
+			<h1>Getting started with Cake.Recipe</h1>
 		</section>
 	<section class="content">
 		<p>This guide will show you how to setup Cake.Recipe for a new project.</p>
@@ -235,14 +242,14 @@ BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
 </code></pre>
 <p>New actions, dependencies, criteria, etc. can be added at any time to Cake tasks. You can even have multiple calls to the <code>.Does(...)</code> method and each action will be executed.</p>
 <pre><code class="language-csharp">BuildParameters.Tasks.InspectCodeTask
-	.IsDependentOn("AnotherTask")
-	.Does(() =&gt; {
-		Information("Do something...");
-		...
-	})
-	.Does(() =&gt; {
-		Information("Do something else...");
-	});
+    .IsDependentOn("AnotherTask")
+    .Does(() =&gt; {
+        Information("Do something...");
+        ...
+    })
+    .Does(() =&gt; {
+        Information("Do something else...");
+    });
 </code></pre>
 <p>This should allow you to modify any of the tasks to suit your needs.</p>
 <h1 id="next-steps">6. Next steps</h1>

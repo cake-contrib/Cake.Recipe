@@ -121,20 +121,27 @@
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting started with Cake.Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/conventions">Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-release">Creating a release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">Creating a pre-release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-packages">Creating packages</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">Previewing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">Publishing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">Cleaning cache</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">Code coverage reports</a></li>
 
                     </ul>
                 </li>
-                <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
+
+                    </ul>
+                </li>
                 <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
@@ -188,7 +195,7 @@
 			<h1>SetParameters Method</h1>
 		</section>
 	<section class="content">
-		<p>Cake.Recipe is very customizable, in terms of how builds are executed, where file are stored, what notifications should be sent out, etc.  All of this customization is done through the SetParameters method, which gives you fine grain control over all aspects of Cake.Recipe.</p>
+		<p>Cake.Recipe is very customizable, in terms of how builds are executed, where files are stored, what notifications should be sent out, etc.  All of this customization is done through the SetParameters method, which gives you fine grain control over all aspects of Cake.Recipe.</p>
 <p>As an example, you could do something like the following to override a number of the default parameter values (this example is taken from the Chocolatey GUI build):</p>
 <pre><code class="language-csharp">BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
@@ -219,7 +226,7 @@
 <p>This again if provided directly from Cake, and can be passed directly as <code>BuildSystem</code>.</p>
 <p>Type: <code>BuildSystem</code></p>
 <h3 id="sourcedirectorypath">sourceDirectoryPath</h3>
-<p>This is the path to the directoy where your source code files are stored.  Cake.Recipe is convention driven, and expects all the source files to be located in a folder like <code>./Source</code> or <code>./src</code> or similar.</p>
+<p>This is the path to the directory where your source code files are stored.  Cake.Recipe is convention driven, and expects all the source files to be located in a folder like <code>./Source</code> or <code>./src</code> or similar.</p>
 <p>Type: <code>DirectoryPath</code></p>
 <h3 id="title">title</h3>
 <p>This a essentially the name of the application that is being built within the repository.  For example, <code>Cake.Gem</code>, or <code>ChocolateyGUI</code>.  A number of the optional parameters will attempt to be derived from what you pass as the Title for your project, so depending on how you have named it, you might have to provide a value for some other parameters.</p>
@@ -442,7 +449,7 @@
 <pre><code class="language-csharp">!context.IsRunningOnWindows();
 </code></pre>
 <h3 id="transifexenabled">transifexEnabled</h3>
-<p>This is the final control variable for whether or not the Transifex tool should be executed.  The default value is calculated based on the presense of this file in the repository <code>./.tx/config</code>.</p>
+<p>This is the final control variable for whether or not the Transifex tool should be executed.  The default value is calculated based on the presence of this file in the repository <code>./.tx/config</code>.</p>
 <p>Type: <code>bool?</code></p>
 <p>Default Value:</p>
 <pre><code class="language-csharp">TransifexIsConfiguredForRepository(context)
@@ -553,7 +560,7 @@ Type: <code>string</code></p>
 <p>These are the sources used when executing nuget or dotnet restore.</p>
 <p>Type: <code>ICollection&lt;string&gt;</code></p>
 <p>Default Value:</p>
-<p>If a NuGet.Config file isn't located, the following URL's are used.</p>
+<p>If a NuGet.Config file isn't located, the following URLs are used.</p>
 <pre><code class="language-csharp">new []{
     &quot;https://api.nuget.org/v3/index.json&quot;,
     &quot;https://www.myget.org/F/cake-contrib/api/v3/index.json&quot;
@@ -604,7 +611,7 @@ Type: <code>string</code></p>
 <h3 id="packagesourcedatas">packageSourceDatas</h3>
 <p>This is a list of both NuGet and Chocolatey sources that should be used when publishing via the NuGet, dotnet, or Chocolatey tools.  This includes the concept of both prerelease and release sources.</p>
 <p>By default, Cake.Recipe attempts to locate sources using the presence of deprecated environment variables on the system.</p>
-<p>In addition, it adds sources for both Azure Repos and GitHub Package Repository.</p>
+<p>In addition, it adds sources for both Azure Packages and GitHub Package Repository.</p>
 <p>These sources can be configured to either use UserName/Password combination, or an API Key.</p>
 <p>Type: <code>List&lt;PackageSourceData&gt;</code></p>
 <p>Default Value:</p>

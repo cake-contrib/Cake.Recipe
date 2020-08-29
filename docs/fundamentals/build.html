@@ -121,20 +121,27 @@
                     <a href="/Cake.Recipe/docs/usage">Usage</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting Started With Cake Recipe</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/conventions">A Note On Conventions</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/getting-started-with-cake-recipe">Getting started with Cake.Recipe</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/conventions">Conventions</a></li>
                 <li><a href="/Cake.Recipe/docs/usage/issue-management">Issue management</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-release">How to create a stable release</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">How to create a pre release (unstable release)</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/creating-packages">How to create a NuGet or Chocolatey Package</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">How to preview documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">How to publish documentation</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">How to clean AppVeyor cache</a></li>
-                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">How to publish code coverage reports</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-release">Creating a release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/create-pre-release">Creating a pre-release</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/creating-packages">Creating packages</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/previewing-documentation">Previewing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/publishing-documentation">Publishing documentation</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/cleaning-cache">Cleaning cache</a></li>
+                <li><a href="/Cake.Recipe/docs/usage/code-coverage-reports">Code coverage reports</a></li>
 
                     </ul>
                 </li>
-                <li><a href="/Cake.Recipe/docs/extending">Extending</a></li>
+                <li class="treeview">
+                    <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
+                    <ul class="treeview-menu">
+                        
+                <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
+
+                    </ul>
+                </li>
                 <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
@@ -188,7 +195,16 @@
 			<h1>Build Method</h1>
 		</section>
 	<section class="content">
-		<p>TODO</p>
+		<p>Cake.Recipe has three different entry points.  At the end of the recipe.cake file you can either run:</p>
+<pre><code class="language-csharp">Build.Run();
+</code></pre>
+<p>which will execute the Cake.Recipe steps including executing MSBuild, and .Net Framework unit testing libraries such as Xunit, and NUnit.</p>
+<pre><code class="language-csharp">Build.RunDotNetCore();
+</code></pre>
+<p>which will execute the Cake.Recipe steps including executing <code>dotnet build</code>, and <code>dotnet test</code>.</p>
+<pre><code class="language-csharp">Build.RunNuGet();
+</code></pre>
+<p>which will execute the Cake.Recipe steps without any compilation steps, but rather executing only <code>nuget pack</code>.</p>
 
 	</section>
                 
