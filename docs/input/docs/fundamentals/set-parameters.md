@@ -4,7 +4,7 @@ Title: SetParameters Method
 Description: Override the parameter values used by Cake.Recipe
 ---
 
-Cake.Recipe is very customizable, in terms of how builds are executed, where file are stored, what notifications should be sent out, etc.  All of this customization is done through the SetParameters method, which gives you fine grain control over all aspects of Cake.Recipe.
+Cake.Recipe is very customizable, in terms of how builds are executed, where files are stored, what notifications should be sent out, etc.  All of this customization is done through the SetParameters method, which gives you fine grain control over all aspects of Cake.Recipe.
 
 As an example, you could do something like the following to override a number of the default parameter values (this example is taken from the Chocolatey GUI build):
 
