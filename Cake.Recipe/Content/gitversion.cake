@@ -1,12 +1,12 @@
 public class BuildVersion
 {
-    public string Version { get; private set; }
-    public string SemVersion { get; private set; }
-    public string Milestone { get; private set; }
-    public string CakeVersion { get; private set; }
-    public string InformationalVersion { get; private set; }
-    public string FullSemVersion { get; private set; }
-    public string AssemblySemVer { get; private set; }
+    public string Version { get; set; }
+    public string SemVersion { get; set; }
+    public string Milestone { get; set; }
+    public string CakeVersion { get; set; }
+    public string InformationalVersion { get; set; }
+    public string FullSemVersion { get; set; }
+    public string AssemblySemVer { get; set; }
 
     public static BuildVersion CalculatingSemanticVersion(
         ICakeContext context)
