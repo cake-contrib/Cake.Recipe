@@ -3,6 +3,7 @@ Order: 30
 Title: Code coverage reports
 Description: How to publish code coverage reports with Cake.Recipe
 ---
+
 This document describes known issues pushing code coverage reports during Cake.Recipe builds.
 
 ## Coveralls Reports
