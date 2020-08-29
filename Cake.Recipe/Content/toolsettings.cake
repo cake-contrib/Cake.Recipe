@@ -51,7 +51,7 @@ public static class ToolSettings
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.11.1",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
-        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.4",
+        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.5",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.2",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
