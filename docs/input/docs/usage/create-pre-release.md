@@ -1,6 +1,7 @@
 ---
 Order: 11
-Title: How to create a pre release (unstable release)
+Title: Creating a pre-release
+Description: How to create a pre release (unstable release) using Cake.Recipe
 ---
 
 This document describes the suggested steps to release a new pre-release version using the `Cake.Recipe` script.

@@ -1,6 +1,7 @@
 ---
 Order: 6
-Title: A Note On Conventions
+Title: Conventions
+Description: Some notes about the conventions used by Cake.Recipe
 ---
 
 As set out in the introduction [Cake.Recipe is a set of convention based build scripts](../). The conventions are important, as they determine the defaults. But they are not set in stone and they can be changed in several ways

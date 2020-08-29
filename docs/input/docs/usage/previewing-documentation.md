@@ -1,6 +1,7 @@
 ---
 Order: 20
-Title: How to preview documentation
+Title: Previewing documentation
+Description: How to preview documentation with Cake.Recipe
 ---
 
 This document describes how to preview the documentation in a local webserver using the `Cake.Recipe` script.

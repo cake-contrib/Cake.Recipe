@@ -1,6 +1,7 @@
 ---
 Order: 25
-Title: How to clean AppVeyor cache
+Title: Cleaning cache
+Description: How to clean the AppVeyor cache with Cake.Recipe
 ---
 
 This document describes how to clear the AppVeyor build cache using the `Cake.Recipe` script.

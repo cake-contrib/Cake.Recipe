@@ -1,6 +1,7 @@
 ---
 Order: 15
-Title: How to create a NuGet or Chocolatey Package
+Title: Creating packages
+Description: How to create a NuGet or Chocolatey Package with Cake.Recipe
 ---
 
 This document describes how packaging works when using the `Cake.Recipe` script.

@@ -1,6 +1,7 @@
 ---
 Order: 10
-Title: How to create a stable release
+Title: Creating a release
+Description: How to create a release using Cake.Recipe
 ---
 
 This document describes the suggested steps to release a new stable version using the `Cake.Recipe` script.

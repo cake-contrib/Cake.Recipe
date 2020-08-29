@@ -1,6 +1,7 @@
 ---
 Order: 7
 Title: Issue management
+Description: How issues are collected and reported in Cake.Recipe
 ---
 
 Cake.Recipe integrates [Cake.Issues.Recipe] for issue management.
