@@ -1,4 +1,7 @@
+---
 Order: 5
+Title: Getting started with Cake.Recipe
+Description: How to get started
 ---
 
 This guide will show you how to setup Cake.Recipe for a new project.
@@ -18,6 +21,7 @@ Change the default values in the `recipe.cake` to suit your project.
 The sourceDirectoryPath should be the path to the folder containing your solution file.
 There are other properties that can be set in this method that will affect which tasks run and how they behave during the build.
 Look at the `parameters.cake` file to see the complete list of parameters.
+
 ```csharp
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
@@ -57,22 +61,26 @@ Once you have identified the task you wish to modify find the property it is ass
 You may wish to remove any existing actions before proceeding to give the task a new action.
 This can be done with the following code
 To clear existing actions from the task call `Tasks.Actions.Clear()` on the reference to the task.
+
 ```csharp
 // Clear the InspectCode tasks actions
 BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
 ```
+
 New actions, dependencies, criteria, etc. can be added at any time to Cake tasks. You can even have multiple calls to the `.Does(...)` method and each action will be executed.
+
 ```csharp
 BuildParameters.Tasks.InspectCodeTask
-	.IsDependentOn("AnotherTask")
-	.Does(() => {
-		Information("Do something...");
-		...
-	})
-	.Does(() => {
-		Information("Do something else...");
-	});
+    .IsDependentOn("AnotherTask")
+    .Does(() => {
+        Information("Do something...");
+        ...
+    })
+    .Does(() => {
+        Information("Do something else...");
+    });
 ```
+
 This should allow you to modify any of the tasks to suit your needs.
 
 # 6. Next steps

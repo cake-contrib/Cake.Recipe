@@ -22,7 +22,9 @@ OpenCover doesn't support the [portable debug type](https://github.com/dotnet/co
     <DebugType>full</DebugType>
   </PropertyGroup>
 ```
+
 or
+
 ``` xml
   <PropertyGroup>
     <DebugType>pdbonly</DebugType>

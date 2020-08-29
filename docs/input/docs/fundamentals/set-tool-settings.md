@@ -56,7 +56,7 @@ string.Format("+[{0}*]* -[*.Tests]*", BuildParameters.Title)
 
 ### testCoverageExcludeByAttribute
 
-This is used in conjunction with both OpenCover and Coverlet.  It controls which test should be excluded from coverage based on what attributes are assinged to the tests.
+This is used in conjunction with both OpenCover and Coverlet.  It controls which test should be excluded from coverage based on what attributes are assigned to the tests.
 
 Type: `string`
 

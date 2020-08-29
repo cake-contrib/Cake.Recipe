@@ -48,7 +48,7 @@ Type: `BuildSystem`
 
 ### sourceDirectoryPath
 
-This is the path to the directoy where your source code files are stored.  Cake.Recipe is convention driven, and expects all the source files to be located in a folder like `./Source` or `./src` or similar.
+This is the path to the directory where your source code files are stored.  Cake.Recipe is convention driven, and expects all the source files to be located in a folder like `./Source` or `./src` or similar.
 
 Type: `DirectoryPath`
 
@@ -493,7 +493,7 @@ Default Value:
 
 ### transifexEnabled
 
-This is the final control variable for whether or not the Transifex tool should be executed.  The default value is calculated based on the presense of this file in the repository `./.tx/config`.
+This is the final control variable for whether or not the Transifex tool should be executed.  The default value is calculated based on the presence of this file in the repository `./.tx/config`.
 
 Type: `bool?`
 
@@ -714,7 +714,7 @@ Type: `ICollection<string>`
 
 Default Value:
 
-If a NuGet.Config file isn't located, the following URL's are used.
+If a NuGet.Config file isn't located, the following URLs are used.
 
 ```csharp
 new []{
@@ -813,7 +813,7 @@ This is a list of both NuGet and Chocolatey sources that should be used when pub
 
 By default, Cake.Recipe attempts to locate sources using the presence of deprecated environment variables on the system.
 
-In addition, it adds sources for both Azure Repos and GitHub Package Repository.
+In addition, it adds sources for both Azure Packages and GitHub Package Repository.
 
 These sources can be configured to either use UserName/Password combination, or an API Key.
 
