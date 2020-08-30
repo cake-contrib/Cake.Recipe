@@ -1,5 +1,5 @@
 ---
-Order: 10
+Order: 30
 Title: Override generating version
 Description: How to replace the GitVersion version generation
 ---
