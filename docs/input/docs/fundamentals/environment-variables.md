@@ -29,7 +29,7 @@ A token will be checked for first, and if not provided, the username and passwor
 :::{.alert .alert-info}
 **NOTE:**
 
-In addition to these environment variables being present, and correct, the control variable [shouldPubishToGitHub](./set-parameters#shouldpublishtogithub) also needs to be set to true.
+In addition to these environment variables being present, and correct, the control variable [shouldPublishToGitHub](./set-parameters#shouldPublishToGitHub) also needs to be set to true.
 :::
 
 ### GITHUB_USERNAME
@@ -51,7 +51,7 @@ When a successful release build has been completed, Cake.Recipe can be configure
 :::{.alert .alert-info}
 **NOTE:**
 
-In addition to these environment variables being present, and correct, the control variable [shouldPostToGitter](./set-parameters#shouldposttogitter) also needs to be set to true.  The default value for this parameter is true.
+In addition to these environment variables being present, and correct, the control variable [shouldPostToGitter](./set-parameters#shouldPostToGitter) also needs to be set to true.  The default value for this parameter is true.
 :::
 
 ### GITTER_TOKEN
@@ -69,7 +69,7 @@ When a release build fails, Cake.Recipe can be configured to send out a notifica
 :::{.alert .alert-info}
 **NOTE:**
 
-In addition to these environment variables being present, and correct, the control variable [shouldPostToSlack](./set-parameters#shouldposttoslack) also needs to be set to true.  The default value for this parameter is true.
+In addition to these environment variables being present, and correct, the control variable [shouldPostToSlack](./set-parameters#shouldPostToSlack) also needs to be set to true.  The default value for this parameter is true.
 :::
 
 ### SLACK_TOKEN
@@ -87,7 +87,7 @@ When a successful release build has been completed, Cake.Recipe can be configure
 :::{.alert .alert-info}
 **NOTE:**
 
-In addition to these environment variables being present, and correct, the control variable [shouldPostToTwitter](./set-parameters#shouldposttotwitter) also needs to be set to true.  The default value for this parameter is true.
+In addition to these environment variables being present, and correct, the control variable [shouldPostToTwitter](./set-parameters#shouldPostToTwitter) also needs to be set to true.  The default value for this parameter is true.
 :::
 
 ### TWITTER_CONSUMER_KEY
@@ -113,7 +113,7 @@ When a successful release build has been completed, Cake.Recipe can be configure
 :::{.alert .alert-info}
 **NOTE:**
 
-In addition to this environment variable being present, and correct, the control variable [shouldPostToMicrosoftTeams](./set-parameters#shouldposttomicrosoftteams) also needs to be set to true.  The default value for this parameter is false.
+In addition to this environment variable being present, and correct, the control variable [shouldPostToMicrosoftTeams](./set-parameters#shouldPostToMicrosoftTeams) also needs to be set to true.  The default value for this parameter is false.
 :::
 
 ### MICROSOFTTEAMS_WEBHOOKURL
@@ -127,7 +127,7 @@ When a successful release build has been completed, or when a release build fail
 :::{.alert .alert-info}
 **NOTE:**
 
-In addition to these environment variables being present, and correct, the control variable [shouldSendEmail](./set-parameters#shouldsendemail) also needs to be set to true.  The default value for this parameter is false.
+In addition to these environment variables being present, and correct, the control variable [shouldSendEmail](./set-parameters#shouldSendEmail) also needs to be set to true.  The default value for this parameter is false.
 :::
 
 ### EMAIL_SMTPHOST
@@ -184,7 +184,6 @@ This token is entirely optional for public repositories building on AppVeyor, an
 :::
 
 ## Coveralls
-
 
 During the build process, Cake.Recipe can publish Unit Test coverage reports to Coveralls.
 
