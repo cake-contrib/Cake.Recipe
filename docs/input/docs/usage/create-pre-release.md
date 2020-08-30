@@ -11,7 +11,7 @@ Please note that the following steps assume you're using `Cake.Recipe` on GitHub
 Both are not requirements though and you can adopt the steps to other environments.
 
 The process of creating pre-release versions are almost identical to the process of creating stable releases
-which are documented [here](create-release){.alert-link}.
+which are documented [here](creating-release){.alert-link}.
 :::
 
 1. Create the branch where you want the drafted release notes to be based off (recommended to use release/hotfix branches for beta releases).
@@ -25,4 +25,4 @@ which are documented [here](create-release){.alert-link}.
 6. Check the generated release notes and make required manual changes.
 7. Publish the draft release on GitHub.
 
-The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.
+The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter ((by default, but it is also possbile to add notifications to [Microsoft Teams](../fundamentals/environment-variables#microsoft-teams) and [email](../fundamentals/environment-variables#email))), based on your specific settings.

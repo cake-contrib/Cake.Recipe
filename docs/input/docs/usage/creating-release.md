@@ -23,4 +23,4 @@ Both are not requirements though and you can adopt the steps to other environmen
 7. If release is ready finish release (merge back into `master` and `develop`) but don't tag the release yet.
 8. Publish the draft release on GitHub.
 
-The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.
+The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter (by default, but it is also possbile to add notifications to [Microsoft Teams](../fundamentals/environment-variables#microsoft-teams) and [email](../fundamentals/environment-variables#email)), based on your specific settings.
