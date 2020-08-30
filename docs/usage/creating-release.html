@@ -138,6 +138,8 @@
                     <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
+                <li><a href="/Cake.Recipe/docs/extending/loading-additional-scripts">Loading additional scripts</a></li>
+                <li><a href="/Cake.Recipe/docs/extending/modify-built-in-tasks">Modify built in tasks</a></li>
                 <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
 
                     </ul>
@@ -218,7 +220,7 @@ Both are not requirements though and you can adopt the steps to other environmen
 <li>If release is ready finish release (merge back into <code>master</code> and <code>develop</code>) but don't tag the release yet.</li>
 <li>Publish the draft release on GitHub.</li>
 </ol>
-<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.</p>
+<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter (by default, but it is also possbile to add notifications to <a href="../fundamentals/environment-variables#microsoft-teams">Microsoft Teams</a> and <a href="../fundamentals/environment-variables#email">email</a>), based on your specific settings.</p>
 
 	</section>
                 

@@ -143,6 +143,8 @@
                     <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
+                <li><a href="/Cake.Recipe/docs/extending/loading-additional-scripts">Loading additional scripts</a></li>
+                <li><a href="/Cake.Recipe/docs/extending/modify-built-in-tasks">Modify built in tasks</a></li>
                 <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
 
                     </ul>
@@ -228,30 +230,7 @@ This configuration is either set with parameters in the <code>BuildParameters.Se
 For more details on setting environment variables visit the <a href="../fundamentals/environment-variables">Cake.Recipe documentation</a>.</p>
 <p>More information on how to configure various tasks can be found in <a href="./">usage</a> section on this site</p>
 <h1 id="modifying-the-cake.recipe-build">5. Modifying the Cake.Recipe build</h1>
-<p>Cake.Recipes will not suit everyone out of the box, but it has been designed in an extensible way so you can still load your own cake scripts, or you can modify the tasks that come with Cake.Recipe.</p>
-<h2 id="loading-additional-scripts">5.1 Loading additional scripts</h2>
-<p>Once your additional cake script is ready add a <a href="https://www.cakebuild.net/docs/fundamentals/preprocessor-directives">load directive</a> to your recipe.cake script. That's it. The tasks can now be called from the command line by changing the target.</p>
-<h2 id="modifying-the-actions-of-cake.recipe-tasks">5.2 Modifying the actions of Cake.Recipe tasks</h2>
-<p>If there is a task that doesn't work how you need it to you can modify it in your <code>recipe.cake</code> file.
-Once you have identified the task you wish to modify find the property it is assigned to in the <code>BuildTasks</code> class in the <code>tasks.cake</code> file. This reference will be needed to modify the task.</p>
-<p>You may wish to remove any existing actions before proceeding to give the task a new action.
-This can be done with the following code
-To clear existing actions from the task call <code>Tasks.Actions.Clear()</code> on the reference to the task.</p>
-<pre><code class="language-csharp">// Clear the InspectCode tasks actions
-BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
-</code></pre>
-<p>New actions, dependencies, criteria, etc. can be added at any time to Cake tasks. You can even have multiple calls to the <code>.Does(...)</code> method and each action will be executed.</p>
-<pre><code class="language-csharp">BuildParameters.Tasks.InspectCodeTask
-    .IsDependentOn("AnotherTask")
-    .Does(() =&gt; {
-        Information("Do something...");
-        ...
-    })
-    .Does(() =&gt; {
-        Information("Do something else...");
-    });
-</code></pre>
-<p>This should allow you to modify any of the tasks to suit your needs.</p>
+<p>Cake.Recipe will not suit everyone out of the box, but it has been designed in an <a href="../extending">extensible</a> way so you can still load your own cake scripts, or you can modify the tasks that come with Cake.Recipe.</p>
 <h1 id="next-steps">6. Next steps</h1>
 <p>Try configuring the additional tasks by including configuration files for the tools that have been added, i.e. AppVeyor, GitVersion, Wyam, etc, and be sure to look around the <a href="../">Cake.Recipe</a> site for more information.</p>
 

@@ -138,6 +138,8 @@
                     <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
+                <li><a href="/Cake.Recipe/docs/extending/loading-additional-scripts">Loading additional scripts</a></li>
+                <li><a href="/Cake.Recipe/docs/extending/modify-built-in-tasks">Modify built in tasks</a></li>
                 <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
 
                     </ul>
@@ -199,7 +201,7 @@
 <div class="alert alert-info"><p>Please note that the following steps assume you're using <code>Cake.Recipe</code> on GitHub and with a GitFlow workflow.
 Both are not requirements though and you can adopt the steps to other environments.</p>
 <p>The process of creating pre-release versions are almost identical to the process of creating stable releases
-which are documented <a href="create-release" class="alert-link">here</a>.</p>
+which are documented <a href="creating-release" class="alert-link">here</a>.</p>
 </div>
 <ol>
 <li>Create the branch where you want the drafted release notes to be based off (recommended to use release/hotfix branches for beta releases).</li>
@@ -219,7 +221,7 @@ which are documented <a href="create-release" class="alert-link">here</a>.</p>
 <li>Check the generated release notes and make required manual changes.</li>
 <li>Publish the draft release on GitHub.</li>
 </ol>
-<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter, based on your specific settings.</p>
+<p>The last step will tag the release and trigger another build including the publishing. The build will automatically publish the build artifacts to the GitHub release, publish to NuGet and notify about the new release through Twitter and Gitter ((by default, but it is also possbile to add notifications to <a href="../fundamentals/environment-variables#microsoft-teams">Microsoft Teams</a> and <a href="../fundamentals/environment-variables#email">email</a>)), based on your specific settings.</p>
 
 	</section>
                 

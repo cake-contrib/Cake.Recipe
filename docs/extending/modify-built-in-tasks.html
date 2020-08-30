@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Requirements</title>
+        <title>Cake.Recipe - Modify built in tasks</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/overview/requirements/index.cshtml"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/extending/modify-built-in-tasks.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -85,12 +85,12 @@
                     <ul class="sidebar-menu">
                         
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/overview">Overview</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/overview/features">Features</a></li>
-                <li class="treeview active selected">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/overview/requirements">Requirements</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
@@ -134,12 +134,12 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/extending">Extending</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/extending/loading-additional-scripts">Loading additional scripts</a></li>
-                <li><a href="/Cake.Recipe/docs/extending/modify-built-in-tasks">Modify built in tasks</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/extending/modify-built-in-tasks">Modify built in tasks</a></li>
                 <li><a href="/Cake.Recipe/docs/extending/override-generating-version">Override generating version</a></li>
 
                     </ul>
@@ -194,31 +194,29 @@
 
 
 		<section class="content-header">
-			<h1>Requirements</h1>
+			<h1>Modify built in tasks</h1>
 		</section>
 	<section class="content">
-		<p>The following contains all information regarding the requirements for running Cake.Recipe</p>
-
-			<div class="box">
-				<div class="box-body no-padding">
-					<table class="table table-striped table-hover two-cols-alt table-responsive">
-						
-						<tbody>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/overview/requirements/posix">Posix</a></strong></td>
-									<td>
-Requirements for running Cake.Recipe on Posix									</td>
-								</tr>
-								<tr>
-									<td><strong><a href="/Cake.Recipe/docs/overview/requirements/windows">Windows</a></strong></td>
-									<td>
-Requirements for running Cake.Recipe on Windows									</td>
-								</tr>
-						</tbody>				
-					</table>
-				</div>
-			</div> 
-
+		<p>If there is a task that doesn't work how you need it to you can modify it in your <code>recipe.cake</code> file.
+Once you have identified the task you wish to modify find the property it is assigned to in the <code>BuildTasks</code> class in the <code>tasks.cake</code> file. This reference will be needed to modify the task.</p>
+<p>You may wish to remove any existing actions before proceeding to give the task a new action.
+This can be done with the following code
+To clear existing actions from the task call <code>Tasks.Actions.Clear()</code> on the reference to the task.</p>
+<pre><code class="language-csharp">// Clear the InspectCode tasks actions
+BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
+</code></pre>
+<p>New actions, dependencies, criteria, etc. can be added at any time to Cake tasks. You can even have multiple calls to the <code>.Does(...)</code> method and each action will be executed.</p>
+<pre><code class="language-csharp">BuildParameters.Tasks.InspectCodeTask
+    .IsDependentOn(&quot;AnotherTask&quot;)
+    .Does(() =&gt; {
+        Information(&quot;Do something...&quot;);
+        ...
+    })
+    .Does(() =&gt; {
+        Information(&quot;Do something else...&quot;);
+    });
+</code></pre>
+<p>This should allow you to modify any of the tasks to suit your needs.</p>
 
 	</section>
                 
