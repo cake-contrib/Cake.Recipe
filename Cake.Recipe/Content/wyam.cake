@@ -28,8 +28,8 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
         if (BuildParameters.ShouldDocumentSourceFiles)
         {
-            // include sources as relevant files
-            pathsToTestAgainst.AddRange(GetFiles(BuildParameters.WyamSourceFiles).Select(x => x.ToString()));
+            // BuildParameters.WyamSourceFiles can not be used - the wyam globs are different from globs in GetFiles().
+            pathsToTestAgainst.Add(string.Format("{0}{1}", BuildParameters.SourceDirectoryPath.FullPath, '/'));
         }
 
         Verbose("Comparing all file-changes to the following paths:");
