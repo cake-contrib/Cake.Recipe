@@ -51,7 +51,7 @@ public class BuildVersion
 
         if (BuildParameters.ShouldCalculateVersion)
         {
-            if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows) {
+            if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Linux) {
                 PatchGitLibConfigFiles(context);
             }
 
@@ -129,7 +129,7 @@ public class BuildVersion
     private static void PatchGitLibConfigFiles(ICakeContext context)
     {
         var configFiles = context.GetFiles("./tools/**/LibGit2Sharp.dll.config");
-        var libgitPath = GetLibGit2Path(context);
+        var libgitPath = BuildParameters.GetLibGit2Path(context);
         if (string.IsNullOrEmpty(libgitPath)) { return; }
 
         foreach (var config in configFiles) {
@@ -149,22 +149,5 @@ public class BuildVersion
                 xml.Save(config.ToString());
             }
         }
-    }
-
-    private static string GetLibGit2Path(ICakeContext context)
-    {
-        var possiblePaths = new[] {
-            "/usr/lib*/libgit2.so*",
-            "/usr/lib/*/libgit2.so*"
-        };
-
-        foreach (var path in possiblePaths) {
-            var file = context.GetFiles(path).FirstOrDefault();
-            if (file != null && !string.IsNullOrEmpty(file.ToString())) {
-                return file.ToString();
-            }
-        }
-
-        return null;
     }
 }

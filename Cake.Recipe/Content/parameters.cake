@@ -420,6 +420,13 @@ public static class BuildParameters
         PreferredBuildAgentOperatingSystem = preferredBuildAgentOperatingSystem;
         PreferredBuildProviderType = preferredBuildProviderType;
 
+        BuildAgentOperatingSystem = context.Environment.Platform.Family;
+
+        if (BuildAgentOperatingSystem == PlatformFamily.Linux)
+        {
+            CopyLibGit2Binaries(context, "./tools/Addins/**/netstandard*/**/libgit2*.so");
+        }
+
         BuildProvider = GetBuildProvider(context, buildSystem);
 
         EmailRecipient = emailRecipient;
@@ -553,8 +560,6 @@ public static class BuildParameters
         );
         TreatWarningsAsErrors = treatWarningsAsErrors;
 
-        BuildAgentOperatingSystem = context.Environment.Platform.Family;
-
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
         Email = GetEmailCredentials(context);
@@ -649,5 +654,44 @@ public static class BuildParameters
                 PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
             }
         }
+    }
+
+    private static void CopyLibGit2Binaries(ICakeContext context, params string[] copyToGlobs)
+    {
+        var copyToFiles = context.GetFiles(copyToGlobs);
+
+        string libgit2Path = GetLibGit2Path(context);
+
+        if (String.IsNullOrEmpty(libgit2Path))
+        {
+            return;
+        }
+
+        foreach (var file in copyToFiles)
+        {
+            if (context.FileExists(file))
+            {
+                context.DeleteFile(file);
+            }
+            context.Information("Copying system library from '{0}' to '{1}'", libgit2Path, file);
+            context.CopyFile(libgit2Path, file);
+        }
+    }
+
+    internal static string GetLibGit2Path(ICakeContext context)
+    {
+        var possiblePaths = new[] {
+            "/usr/lib*/libgit2.so*",
+            "/usr/lib/*/libgit2.so*"
+        };
+
+        foreach (var path in possiblePaths) {
+            var file = context.GetFiles(path).FirstOrDefault();
+            if (file != null && !string.IsNullOrEmpty(file.ToString())) {
+                return file.ToString();
+            }
+        }
+
+        return null;
     }
 }
