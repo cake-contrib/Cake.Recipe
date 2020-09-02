@@ -10,6 +10,10 @@ end_of_line = CRLF
 indent_style = space
 indent_size = 4
 
+[*.sh]
+# Shell scripts requires that line endings are LF
+end_of_line = lf
+
 [*.cs]
 indent_style = space
 indent_size = 4
