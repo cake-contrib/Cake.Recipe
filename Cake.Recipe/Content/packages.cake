@@ -70,18 +70,20 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
     if (BuildParameters.NuSpecFilePath != null) {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
-        // Create packages.
-        NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
-            Version = buildVersion.SemVersion,
-            OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
-            Symbols = BuildParameters.ShouldBuildNugetSourcePackage,
-            NoPackageAnalysis = true,
-            ArgumentCustomization = args => {
-                if (BuildParameters.ShouldBuildNugetSourcePackage)
-                    return args.AppendSwitch("-SymbolPackageFormat", "snupkg");
-                else
-                    return args;
-            }
+        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+            // Create packages.
+            NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
+                Version = buildVersion.SemVersion,
+                OutputDirectory = BuildParameters.Paths.Directories.NuGetPackages,
+                Symbols = BuildParameters.ShouldBuildNugetSourcePackage,
+                NoPackageAnalysis = true,
+                ArgumentCustomization = args => {
+                    if (BuildParameters.ShouldBuildNugetSourcePackage)
+                        return args.AppendSwitch("-SymbolPackageFormat", "snupkg");
+                    else
+                        return args;
+                }
+            });
         });
     }
     else
@@ -109,6 +111,8 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
     {
         settings.ArgumentCustomization = args => args.AppendSwitch("-SymbolPackageFormat", "snupkg");
     }
+
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => { });
 
     foreach (var nuspecFile in nuspecFiles)
     {
@@ -143,7 +147,9 @@ BuildParameters.Tasks.PublishPreReleasePackagesTask = Task("Publish-PreRelease-P
 
     PushChocolateyPackages(Context, false, chocolateySources);
 
-    PushNuGetPackages(Context, false, nugetSources);
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+        PushNuGetPackages(Context, false, nugetSources);
+    });
 })
 .OnError(exception =>
 {
@@ -165,7 +171,9 @@ BuildParameters.Tasks.PublishReleasePackagesTask = Task("Publish-Release-Package
 
     PushChocolateyPackages(Context, true, chocolateySources);
 
-    PushNuGetPackages(Context, true, nugetSources);
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+        PushNuGetPackages(Context, true, nugetSources);
+    });
 
     BuildParameters.PublishReleasePackagesWasSuccessful = true;
 })
