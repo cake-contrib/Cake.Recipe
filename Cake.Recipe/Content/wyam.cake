@@ -22,12 +22,26 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
         var wyamDocsFolderDirectoryName = BuildParameters.WyamRootDirectoryPath.GetDirectoryName();
 
+        var pathsToTestAgainst = new List<string>() {
+            string.Format("{0}{1}", wyamDocsFolderDirectoryName, '/')
+        };
+
+        if (BuildParameters.ShouldDocumentSourceFiles)
+        {
+            // BuildParameters.WyamSourceFiles can not be used - the wyam globs are different from globs in GetFiles().
+            pathsToTestAgainst.Add(string.Format("{0}{1}", BuildParameters.SourceDirectoryPath.FullPath, '/'));
+        }
+
+        Verbose("Comparing all file-changes to the following paths:");
+        foreach(var p in pathsToTestAgainst)
+        {
+            Verbose(" - "+p);
+        }
+
         foreach (var file in filesChanged)
         {
-            var forwardSlash = '/';
             Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-            if (file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
-                file.Path.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
+            if (pathsToTestAgainst.Any(x => file.OldPath.Contains(x) || file.Path.Contains(x)) ||
                 file.Path.Contains("config.wyam"))
             {
             docFileChanged = true;
