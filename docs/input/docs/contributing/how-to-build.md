@@ -19,5 +19,11 @@ On OSX/Linux, open a terminal window and run:
 ```
 
 :::{.alert .alert-warning}
-Cake.Recipe builds itself using the latest source files within the repository.  It does this by doing some additional setup within the bootstrapper files.  As such, you shouldn't run the recipe.cake file directly, as the build will not work correctly.
+Cake.Recipe builds itself using the latest source files within the repository. It does this by doing some additional setup within the bootstrapper files. As such, you shouldn't run the recipe.cake file directly, as the build will not work correctly.
 :::
+
+## Requirements
+
+To build Cake.Recipe you will need to meet the same requirements as using Cake.Recipe.
+
+These requirements can be seen [here](../overview/requirements/).
