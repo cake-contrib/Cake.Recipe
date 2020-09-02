@@ -18,7 +18,8 @@ public static class BuildParameters
     public static string Configuration { get; private set; }
     public static Cake.Core.Configuration.ICakeConfiguration CakeConfiguration { get; private set; }
     public static bool IsLocalBuild { get; private set; }
-    public static PlatformFamily BuildAgentOperatingSystem { get; private set; }
+    public static PlatformFamily BuildAgentOperatingSystem => Platform.OperatingSystem;
+    public static BuildPlatform Platform { get; private set; }
     public static bool IsRunningOnAppVeyor { get; private set; }
     public static bool IsRunningOnTravisCI { get; private set; }
     public static bool IsPullRequest { get; private set; }
@@ -420,6 +421,11 @@ public static class BuildParameters
         PreferredBuildAgentOperatingSystem = preferredBuildAgentOperatingSystem;
         PreferredBuildProviderType = preferredBuildProviderType;
 
+        Platform = BuildPlatform.Create(context);
+
+        Platform.CopyLibGit2Binaries("**/netstandard*/**/libgit2*.so", "**/linux-x64/libgit2*.so");
+        Platform.PatchGitLib2ConfigFiles();
+
         BuildProvider = GetBuildProvider(context, buildSystem);
 
         EmailRecipient = emailRecipient;
@@ -552,8 +558,6 @@ public static class BuildParameters
             !string.IsNullOrWhiteSpace(BuildProvider.Repository.Tag.Name)
         );
         TreatWarningsAsErrors = treatWarningsAsErrors;
-
-        BuildAgentOperatingSystem = context.Environment.Platform.Family;
 
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
