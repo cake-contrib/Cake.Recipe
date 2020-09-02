@@ -2,6 +2,25 @@
 // TOOLS
 ///////////////////////////////////////////////////////////////////////////////
 
+Action<string, string[], Action> RequireToolNotRegistered = (tool, toolNames, action) => {
+    bool found = false;
+
+    foreach (var name in toolNames)
+    {
+        if (found)
+        {
+            break;
+        }
+        var path = Context.Tools.Resolve(name);
+        found = path != null;
+    }
+
+    if (!found)
+    {
+        RequireTool(tool, action);
+    }
+};
+
 Action<string, Action> RequireTool = (tool, action) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
     try
