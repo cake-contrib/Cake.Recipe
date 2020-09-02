@@ -198,26 +198,66 @@
 		</section>
 	<section class="content">
 		<h2 id="required-framework-version">Required Framework Version</h2>
-<p>In order to run Cake.Recipe on a Posix machine (i.e. Mac or Linux) it is necessary to have, as a minimum, mono 5.16.x.  This can be installed via homebrew using:</p>
-<pre><code class="language-bash">brew cask install mono-mdk
+<p>In order to run Cake.Recipe on a Posix machine (i.e. Mac or Linux) it is necessary to have, as a minimum, mono 5.16.x.
+If you will be building .NET Core project, Cake.Recipe will automatically use .NET Core editions of tools when possible.
+In these cases there is a requirement of having .NET Core 3.1 installed.</p>
+<div><ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active">
+        <a href="#mac-osx" role="tab" data-toggle="tab">Mac OSX</a>
+    </li>
+    <li role="presentation">
+        <a href="#ubuntu" role="tab" data-toggle="tab">Ubuntu</a>
+    </li>
+    <li role="presentation">
+        <a href="#arch-linux" role="tab" data-toggle="tab">Arch Linux/Manjaro</a>
+    </li>
+</ul>
+<div class="tab-content">
+<div id="mac-osx" class="tab-pane fade in active" role="tabpanel"><p>To install the necessary requirements when running on Mac OSX, you can use homebrew with the following command:</p>
+<pre><code class="language-console">brew cask install mono-mdk
 </code></pre>
+<p>For installing .NET Core on OSX, please see the <a href="https://docs.microsoft.com/nb-no/dotnet/core/install/macos">Microsoft documentation</a></p>
+</div>
+<div id="ubuntu" class="tab-pane fade" role="tabpanel"><p>Most Ubuntu Versions do not have required mono version available in the official repositories.</p>
+<p>Please follow the <a href="https://www.mono-project.com/download/stable/#download-lin-ubuntu">Mono documentation</a> on how to install the latest mono version.</p>
+<p>Then call apt with the following command to install the necessary requirements:</p>
+<pre><code class="language-console">apt-get install mono-complete ca-certificates-mono
+</code></pre>
+<p><em>NOTE: The <code>ca-certificates-mono</code> package may be omitted on modern Ubuntu versions</em>.</p>
+<p>To install .NET Core on Ubuntu, please follow the <a href="https://docs.microsoft.com/nb-no/dotnet/core/install/macos">Microsoft documentation</a> for how
+to add the necessary repository.</p>
+<p>After adding the repository, run the following command to install .NET Core.</p>
+<pre><code class="language-shell">apt-get install dotnet-runtime-3.1 dotnet-sdk-3.1
+</code></pre>
+<p><em>NOTE: Optionally you may also install the <code>dotnet-sdk-2.1</code> package</em>.</p>
+</div>
+<div id="arch-linux" class="tab-pane fade" role="tabpanel"><p>To install the necessary requirements for Arch Linux and Manjaro, run the following command:</p>
+<pre><code class="language-console">pacman -S mono
+</code></pre>
+<p>To install .NET Core on Arch Linux, you can install the 3.1 version with the following command</p>
+<pre><code class="language-console">pacman -S dotnet-runtime dotnet-sdk
+</code></pre>
+<p><em>NOTE: .NET Core sdk 2.1 is available in <a href="https://aur.archlinux.org/packages/dotnet-sdk-2.1">AUR</a> under the name <code>dotnet-sdk-2.1</code></em>.</p>
+</div>
+</div>
+</div>
 <h2 id="required-cake-version">Required Cake Version</h2>
 <p>As a minimum, it is recommended that Cake.Recipe should be used in conjunction with the following versions of Cake:</p>
-<table class="table">
+<table class="table-bordered table-hover table">
 <thead>
 <tr>
-<th>Cake.Recipe Version</th>
-<th>Cake Version</th>
+<th style="text-align: center;">Cake.Recipe Version</th>
+<th style="text-align: center;">Cake Version</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0.1.x</td>
-<td>0.32.0</td>
+<td style="text-align: center;">1.x</td>
+<td style="text-align: center;">0.32.0</td>
 </tr>
 <tr>
-<td>0.2.x</td>
-<td>0.38.4</td>
+<td style="text-align: center;">2.x</td>
+<td style="text-align: center;">0.38.4</td>
 </tr>
 </tbody>
 </table>

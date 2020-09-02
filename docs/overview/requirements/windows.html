@@ -198,26 +198,31 @@
 		</section>
 	<section class="content">
 		<h2 id="required-framework-version">Required Framework Version</h2>
-<p>In order to run Cake.Recipe on a Windows machine it is necessary to have, as a minimum, .Net Framework 4.7.2.  This can be installed via Chocolatey using:</p>
+<p>In order to run Cake.Recipe on a Windows machine it is necessary to have, as a minimum, .Net Framework 4.7.2. This can be installed via Chocolatey using:</p>
 <pre><code class="language-bash">choco install dotnet4.7.2
+</code></pre>
+<p>If you will be building .NET Core project, Cake.Recipe will automatically use .NET Core editions of tools when possible.
+In these cases there is a requirement of having .NET Core 3.1 installed.</p>
+<p>This can easily be installed through Chocolatey using:</p>
+<pre><code class="language-console">choco install dotnetcore-runtime dotnetcore-sdk
 </code></pre>
 <h2 id="required-cake-version">Required Cake Version</h2>
 <p>As a minimum, it is recommended that Cake.Recipe should be used in conjunction with the following versions of Cake:</p>
-<table class="table">
+<table class="table-bordered table-hover table">
 <thead>
 <tr>
-<th>Cake.Recipe Version</th>
-<th>Cake Version</th>
+<th style="text-align: center;">Cake.Recipe Version</th>
+<th style="text-align: center;">Cake Version</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>0.1.x</td>
-<td>0.32.0</td>
+<td style="text-align: center;">1.x</td>
+<td style="text-align: center;">0.32.0</td>
 </tr>
 <tr>
-<td>0.2.x</td>
-<td>0.38.4</td>
+<td style="text-align: center;">2.x</td>
+<td style="text-align: center;">0.38.4</td>
 </tr>
 </tbody>
 </table>
