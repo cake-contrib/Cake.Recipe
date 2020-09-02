@@ -88,7 +88,9 @@ _NOTE: .NET Core sdk 2.1 is available in [AUR](https://aur.archlinux.org/package
 
 As a minimum, it is recommended that Cake.Recipe should be used in conjunction with the following versions of Cake:
 
+{.table-bordered .table-hover}
+
 | Cake.Recipe Version | Cake Version |
-| ------------------- | ------------ |
-| 0.1.x               | 0.32.0       |
-| 0.2.x               | 0.38.4       |
+| :-----------------: | :----------: |
+|         1.x         |    0.32.0    |
+|         2.x         |    0.38.4    |

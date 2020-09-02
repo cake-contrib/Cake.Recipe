@@ -25,7 +25,9 @@ choco install dotnetcore-runtime dotnetcore-sdk
 
 As a minimum, it is recommended that Cake.Recipe should be used in conjunction with the following versions of Cake:
 
+{.table-bordered .table-hover}
+
 | Cake.Recipe Version | Cake Version |
-| ------------------- | ------------ |
-| 0.1.x               | 0.32.0       |
-| 0.2.x               | 0.38.4       |
+| :-----------------: | :----------: |
+|         1.x         |    0.32.0    |
+|         2.x         |    0.38.4    |
