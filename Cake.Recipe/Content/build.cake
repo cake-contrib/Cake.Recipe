@@ -106,6 +106,7 @@ Teardown<BuildVersion>((context, buildVersion) =>
 BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     .Does(() =>
 {
+    Information("Build Platform: {0}", BuildParameters.Platform);
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
     Information("PrepareLocalRelease: {0}", BuildParameters.PrepareLocalRelease);

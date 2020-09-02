@@ -18,7 +18,8 @@ public static class BuildParameters
     public static string Configuration { get; private set; }
     public static Cake.Core.Configuration.ICakeConfiguration CakeConfiguration { get; private set; }
     public static bool IsLocalBuild { get; private set; }
-    public static PlatformFamily BuildAgentOperatingSystem { get; private set; }
+    public static PlatformFamily BuildAgentOperatingSystem => Platform.OperatingSystem;
+    public static BuildPlatform Platform { get; private set; }
     public static bool IsRunningOnAppVeyor { get; private set; }
     public static bool IsRunningOnTravisCI { get; private set; }
     public static bool IsPullRequest { get; private set; }
@@ -420,12 +421,10 @@ public static class BuildParameters
         PreferredBuildAgentOperatingSystem = preferredBuildAgentOperatingSystem;
         PreferredBuildProviderType = preferredBuildProviderType;
 
-        BuildAgentOperatingSystem = context.Environment.Platform.Family;
+        Platform = BuildPlatform.Create(context);
 
-        if (BuildAgentOperatingSystem == PlatformFamily.Linux)
-        {
-            CopyLibGit2Binaries(context, "./tools/Addins/**/netstandard*/**/libgit2*.so");
-        }
+        Platform.CopyLibGit2Binaries("**/netstandard*/**/libgit2*.so", "**/linux-x64/libgit2*.so");
+        Platform.PatchGitLib2ConfigFiles();
 
         BuildProvider = GetBuildProvider(context, buildSystem);
 
@@ -654,44 +653,5 @@ public static class BuildParameters
                 PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
             }
         }
-    }
-
-    private static void CopyLibGit2Binaries(ICakeContext context, params string[] copyToGlobs)
-    {
-        var copyToFiles = context.GetFiles(copyToGlobs);
-
-        string libgit2Path = GetLibGit2Path(context);
-
-        if (String.IsNullOrEmpty(libgit2Path))
-        {
-            return;
-        }
-
-        foreach (var file in copyToFiles)
-        {
-            if (context.FileExists(file))
-            {
-                context.DeleteFile(file);
-            }
-            context.Information("Copying system library from '{0}' to '{1}'", libgit2Path, file);
-            context.CopyFile(libgit2Path, file);
-        }
-    }
-
-    internal static string GetLibGit2Path(ICakeContext context)
-    {
-        var possiblePaths = new[] {
-            "/usr/lib*/libgit2.so*",
-            "/usr/lib/*/libgit2.so*"
-        };
-
-        foreach (var path in possiblePaths) {
-            var file = context.GetFiles(path).FirstOrDefault();
-            if (file != null && !string.IsNullOrEmpty(file.ToString())) {
-                return file.ToString();
-            }
-        }
-
-        return null;
     }
 }

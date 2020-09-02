@@ -51,9 +51,7 @@ public class BuildVersion
 
         if (BuildParameters.ShouldCalculateVersion)
         {
-            if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Linux) {
-                PatchGitLibConfigFiles(context);
-            }
+            BuildParameters.Platform.PatchGitLib2ConfigFiles("**/GitVersion*/**/LibGit2Sharp.dll.config");
 
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
@@ -124,30 +122,5 @@ public class BuildVersion
             FullSemVersion = fullSemVersion?.ToLowerInvariant(),
             AssemblySemVer = assemblySemVer?.ToLowerInvariant()
         };
-    }
-
-    private static void PatchGitLibConfigFiles(ICakeContext context)
-    {
-        var configFiles = context.GetFiles("./tools/**/LibGit2Sharp.dll.config");
-        var libgitPath = BuildParameters.GetLibGit2Path(context);
-        if (string.IsNullOrEmpty(libgitPath)) { return; }
-
-        foreach (var config in configFiles) {
-            var xml = System.Xml.Linq.XDocument.Load(config.ToString());
-
-            if (xml.Element("configuration").Elements("dllmap")
-                .All(e => e.Attribute("target").Value != libgitPath)) {
-
-                var dllName = xml.Element("configuration").Elements("dllmap").First(e => e.Attribute("os").Value == "linux").Attribute("dll").Value;
-                xml.Element("configuration")
-                    .Add(new System.Xml.Linq.XElement("dllmap",
-                        new System.Xml.Linq.XAttribute("os", "linux"),
-                        new System.Xml.Linq.XAttribute("dll", dllName),
-                        new System.Xml.Linq.XAttribute("target", libgitPath)));
-
-                context.Information($"Patching '{config}' to use fallback system path on Linux...");
-                xml.Save(config.ToString());
-            }
-        }
     }
 }
