@@ -19,6 +19,10 @@ Action<string, string[], Action> RequireToolNotRegistered = (tool, toolNames, ac
     {
         RequireTool(tool, action);
     }
+    else
+    {
+        action();
+    }
 };
 
 Action<string, Action> RequireTool = (tool, action) => {
