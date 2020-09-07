@@ -108,7 +108,6 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
 });
 
 BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
-    .IsDependentOn("Install-OpenCover")
     .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => {
 
     var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
@@ -148,6 +147,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         };
 
         var parsedProject = ParseProject(project, BuildParameters.Configuration);
+        coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
 
         var coverletPackage = parsedProject.GetPackage("coverlet.msbuild");
         bool shouldAddSourceLinkArgument = false; // Set it to false by default due to OpenCover
@@ -175,31 +175,15 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
 
         if (parsedProject.IsNetCore && coverletPackage != null)
         {
-            coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
             DotNetCoreTest(project.FullPath, settings, coverletSettings);
-        }
-        else if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-        {
-            testAction(Context);
         }
         else
         {
-            if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
-            {
-                // We can not use msbuild properties together with opencover
-                settings.ArgumentCustomization = null;
-                OpenCover(testAction,
-                    BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-                    new OpenCoverSettings {
-                        ReturnTargetCodeOffset = 0,
-                        OldStyle = true,
-                        Register = "user",
-                        MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath)
-                    }
-                    .WithFilter(ToolSettings.TestCoverageFilter)
-                    .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-                    .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-            }
+            // We should only require the tool if it isn't referenced in the
+            // Unit test project.
+            RequireTool(ToolSettings.CoverletGlobalTool, () => {
+                Coverlet(project, coverletSettings, settings.Configuration);
+            });
         }
     }
 });
