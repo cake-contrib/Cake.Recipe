@@ -10,7 +10,7 @@ public void SendEmail(string subject, string message, string recipient, string s
 
     // The recipient parameter can contain a single email address or a comma/semi-colon separated list of email addresses
     var recipients = recipient
-        .Split(new[] { ',', ';' })
+        .Split(new[] { ',', ';' }, StringSplitOptions.None)
         .Select(emailAddress => new MailAddress(emailAddress))
         .ToArray();
 
