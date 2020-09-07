@@ -4,7 +4,7 @@
 
 #addin nuget:?package=Cake.Codecov&version=0.9.1
 #addin nuget:?package=Cake.Coveralls&version=0.10.2
-#addin nuget:?package=Cake.Coverlet&version=2.4.2
+#addin nuget:?package=Cake.Coverlet&version=2.5.1
 #addin nuget:?package=Portable.BouncyCastle&version=1.8.5
 #addin nuget:?package=MimeKit&version=2.9.1
 #addin nuget:?package=MailKit&version=2.8.0
