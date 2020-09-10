@@ -55,7 +55,7 @@ public static class ToolSettings
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.6",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.2",
+        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.3",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.7",
