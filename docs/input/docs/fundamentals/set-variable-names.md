@@ -35,14 +35,6 @@ else
 
 The `SetVariableNames` method uses the concept of optional parameters, in fact, all the parameters to the `SetVariableNames` method are optional.  To override a specific environment variable, you need to use a named parameter.  The following is a list of all the named parameters that can be used on the method.
 
-### githubUserNameVariable
-
-Default value: `GITHUB_USERNAME`
-
-### githubPasswordVariable
-
-Default value: `GITHUB_PASSWORD`
-
 ### githubTokenVariable
 
 Default value: `GITHUB_TOKEN`

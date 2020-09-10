@@ -18,14 +18,7 @@ BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
                 settings.TargetCommitish = BuildParameters.BuildProvider.Repository.Branch;
             }
 
-            if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
-            {
-                GitReleaseManagerCreate(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, settings);
-            }
-            else
-            {
-                GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, settings);
-            }
+            GitReleaseManagerCreate(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, settings);
         }
         else
         {
@@ -53,26 +46,12 @@ BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
                     TagName         = buildVersion.Milestone
                 };
 
-                if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
-                {
-                    GitReleaseManagerExport(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.MilestoneReleaseNotesFilePath, settings);
-                }
-                else
-                {
-                    GitReleaseManagerExport(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.MilestoneReleaseNotesFilePath, settings);
-                }
+                GitReleaseManagerExport(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.MilestoneReleaseNotesFilePath, settings);
             }
 
             if (BuildParameters.ShouldDownloadFullReleaseNotes)
             {
-                if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
-                {
-                    GitReleaseManagerExport(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.FullReleaseNotesFilePath);
-                }
-                else
-                {
-                    GitReleaseManagerExport(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.FullReleaseNotesFilePath);
-                }
+                GitReleaseManagerExport(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.FullReleaseNotesFilePath);
             }
         }
         else
@@ -93,24 +72,10 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
                                    GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
                                    GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
             {
-                if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
-                {
-                    GitReleaseManagerAddAssets(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone, package.ToString());
-                }
-                else
-                {
-                    GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone, package.ToString());
-                }
+                GitReleaseManagerAddAssets(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone, package.ToString());
             }
 
-            if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
-            {
-                GitReleaseManagerClose(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone);
-            }
-            else
-            {
-                GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone);
-            }
+            GitReleaseManagerClose(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone);
         }
         else
         {
@@ -129,14 +94,7 @@ BuildParameters.Tasks.CreateDefaultLabelsTask = Task("Create-Default-Labels")
     .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitReleaseManagerGlobalTool : ToolSettings.GitReleaseManagerTool, () => {
         if (BuildParameters.CanUseGitReleaseManager)
         {
-            if (!string.IsNullOrEmpty(BuildParameters.GitHub.Token))
-            {
-                GitReleaseManagerLabel(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
-            }
-            else
-            {
-                GitReleaseManagerLabel(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
-            }
+            GitReleaseManagerLabel(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
         }
         else
         {
