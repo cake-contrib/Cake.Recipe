@@ -39,5 +39,6 @@
     "vstest",
     "wixproj",
     "xbuild"
-  ]
+  ],
+  "powershell.codeFormatting.addWhitespaceAroundPipe": true
 }

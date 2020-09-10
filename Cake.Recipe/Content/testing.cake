@@ -119,11 +119,11 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         // It is problematic to merge the reports into one, as such we use a custom directory for coverage results
         CoverletOutputDirectory = BuildParameters.Paths.Directories.TestCoverage.Combine("coverlet"),
         CoverletOutputFormat    = CoverletOutputFormat.opencover,
-        ExcludeByFile           = ToolSettings.TestCoverageExcludeByFile.Split(';').ToList(),
-        ExcludeByAttribute      = ToolSettings.TestCoverageExcludeByAttribute.Split(';').ToList()
+        ExcludeByFile           = ToolSettings.TestCoverageExcludeByFile.Split(new [] {';' }, StringSplitOptions.None).ToList(),
+        ExcludeByAttribute      = ToolSettings.TestCoverageExcludeByAttribute.Split(new [] {';' }, StringSplitOptions.None).ToList()
     };
 
-    foreach (var filter in ToolSettings.TestCoverageFilter.Split(' '))
+    foreach (var filter in ToolSettings.TestCoverageFilter.Split(new [] {' ' }, StringSplitOptions.None))
     {
         if (filter[0] == '+')
         {

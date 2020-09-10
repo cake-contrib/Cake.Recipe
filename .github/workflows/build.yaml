@@ -7,10 +7,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        # Only windows is possible until supported cake version
-        # is bumped to 0.37.0.0+.
-        # See https://github.com/cake-build/cake/issues/2695
-        os: [windows-latest]
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v2.2.0

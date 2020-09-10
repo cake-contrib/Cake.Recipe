@@ -203,7 +203,7 @@ public class LinuxBuildPlatform : BuildPlatform
 
         var lines = System.IO.File.ReadAllLines(file);
         var details = lines.Where(l => !string.IsNullOrEmpty(l))
-            .Select(l => l.Split('='))
+            .Select(l => l.Split(new [] {'=' }, StringSplitOptions.None))
             .Where(s => s.Length == 2)
             .ToDictionary(s => s[0].ToUpperInvariant(), s => s[1]);
 
