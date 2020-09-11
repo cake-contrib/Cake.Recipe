@@ -1,0 +1,31 @@
+---
+Order: 35
+Title: CI-systems   
+Description: Overview about CI-systems and how to use them
+---
+
+<h2>Using a CI-system</h2>
+<p>
+Generally using Cake.Recipe on any ci-system is not different from using it locally. 
+However, some CI-systems need different preparations than others.
+</p>
+
+
+<h2>Using multiple CI-systems (or running multiple builds on the same system)</h2>
+<p>
+When a single commit is built multiple times 
+(because of multiple CI-systems and/or multiple builds in the same system)
+some tasks (generally all tasks that involve some publishing) should only run once (to avoid publishing more than once).
+</p>
+<p>
+To ensure that those tasks are run only once, Cake.Recipe provides two setting:
+</p>
+
+<ul>
+    <li><a href="../fundamentals/set-parameters#preferredbuildprovidertype">preferredBuildProviderType</a></li>
+    <li><a href="../fundamentals/set-parameters#preferredbuildagentoperatingsystem">preferredBuildAgentOperatingSystem</a></li>
+</ul>
+
+<h2>CI-systems</h2>
+
+@Html.Partial("_ChildPages")
