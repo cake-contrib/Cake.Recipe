@@ -1,7 +1,5 @@
 public static class Environment
 {
-    public static string GithubUserNameVariable { get; private set; }
-    public static string GithubPasswordVariable { get; private set; }
     public static string GithubTokenVariable { get; private set; }
     public static string GitterTokenVariable { get; private set; }
     public static string GitterRoomIdVariable { get; private set; }
@@ -26,8 +24,6 @@ public static class Environment
     public static string WyamDeployBranchVariable { get; private set; }
 
     public static void SetVariableNames(
-        string githubUserNameVariable = null,
-        string githubPasswordVariable = null,
         string githubTokenVariable = null,
         string gitterTokenVariable = null,
         string gitterRoomIdVariable = null,
@@ -51,8 +47,6 @@ public static class Environment
         string wyamDeployRemoteVariable = null,
         string wyamDeployBranchVariable = null)
     {
-        GithubUserNameVariable = githubUserNameVariable ?? "GITHUB_USERNAME";
-        GithubPasswordVariable = githubPasswordVariable ?? "GITHUB_PASSWORD";
         GithubTokenVariable = githubTokenVariable ?? "GITHUB_TOKEN";
         GitterTokenVariable = gitterTokenVariable ?? "GITTER_TOKEN";
         GitterRoomIdVariable = gitterRoomIdVariable ?? "GITTER_ROOM_ID";
