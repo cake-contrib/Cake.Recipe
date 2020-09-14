@@ -14,5 +14,5 @@ jobs:
         with:
           fetch-depth: 0
       - name: Build using bootstrapper
-        run: ./build.ps1 --verbosity=Diagnostic
+        run: ./build.ps1 --target=CI --verbosity=Diagnostic
         shell: pwsh

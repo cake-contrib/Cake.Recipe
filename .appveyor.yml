@@ -1,8 +1,10 @@
+image: Visual Studio 2019
+
 #---------------------------------#
 #  Build Script                   #
 #---------------------------------#
 build_script:
-  - ps: .\build.ps1 -Target CI
+  - ps: .\build.ps1 --target=CI
 
 # Tests
 test: off
@@ -22,7 +24,7 @@ branches:
 #  Build Cache                    #
 #---------------------------------#
 cache:
-- 'tools -> build.ps1, tools/packages.config, Cake.Recipe/Content/addins.cake, Cake.Recipe/Content/tools.cake'
+- 'tools -> build.ps1, Cake.Recipe/Content/addins.cake, Cake.Recipe/Content/tools.cake'
 
 #---------------------------------#
 #  Environment Variables          #
