@@ -203,7 +203,7 @@ Once you have identified the task you wish to modify find the property it is ass
 This can be done with the following code
 To clear existing actions from the task call <code>Tasks.Actions.Clear()</code> on the reference to the task.</p>
 <pre><code class="language-csharp">// Clear the InspectCode tasks actions
-BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
+((CakeTask)BuildParameters.Tasks.InspectCodeTask.Task).Actions.Clear();
 </code></pre>
 <p>New actions, dependencies, criteria, etc. can be added at any time to Cake tasks. You can even have multiple calls to the <code>.Does(...)</code> method and each action will be executed.</p>
 <pre><code class="language-csharp">BuildParameters.Tasks.InspectCodeTask
@@ -238,9 +238,10 @@ BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
             </footer>
         </div>
         <a href="javascript:" id="return-to-top"><i class="fa fa-chevron-up"></i></a>
-        <div class="github-button">
-    <a href="https://github.com/cake-contrib/Cake.Recipe" target="_blank"><i class="fa fa-github"></i> GitHub</a>
-</div>
+        <a class="github-button" href="https://github.com/cake-contrib/Cake.Recipe" target="_blank">
+    <i class="fa fa-github"></i>
+    GitHub
+</a>
 <script>
     ((window.gitter = {}).chat = {}).options = {
         room: 'cake-contrib/Lobby'
