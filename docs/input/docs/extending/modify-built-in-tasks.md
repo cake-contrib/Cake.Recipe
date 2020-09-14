@@ -13,7 +13,7 @@ To clear existing actions from the task call `Tasks.Actions.Clear()` on the refe
 
 ```csharp
 // Clear the InspectCode tasks actions
-BuildParameters.Tasks.InspectCodeTask.Task.Actions.Clear();
+((CakeTask)BuildParameters.Tasks.InspectCodeTask.Task).Actions.Clear();
 ```
 
 New actions, dependencies, criteria, etc. can be added at any time to Cake tasks. You can even have multiple calls to the `.Does(...)` method and each action will be executed.
