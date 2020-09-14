@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Windows</title>
+        <title>Cake.Recipe - CI-systems</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/overview/requirements/windows.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/ci-systems/index.cshtml"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -85,17 +85,17 @@
                     <ul class="sidebar-menu">
                         
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/overview">Overview</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/overview/features">Features</a></li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/overview/requirements">Requirements</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
                 <li><a href="/Cake.Recipe/docs/overview/requirements/posix">Posix</a></li>
-                <li class="selected"><a href="/Cake.Recipe/docs/overview/requirements/windows">Windows</a></li>
+                <li><a href="/Cake.Recipe/docs/overview/requirements/windows">Windows</a></li>
 
                     </ul>
                 </li>
@@ -134,7 +134,7 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active selected">
                     <a href="/Cake.Recipe/docs/ci-systems">CI-systems</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
@@ -206,38 +206,69 @@
 
 
 		<section class="content-header">
-			<h1>Windows</h1>
+			<h1>CI-systems</h1>
 		</section>
 	<section class="content">
-		<h2 id="required-framework-version">Required Framework Version</h2>
-<p>In order to run Cake.Recipe on a Windows machine it is necessary to have, as a minimum, .Net Framework 4.7.2. This can be installed via Chocolatey using:</p>
-<pre><code class="language-bash">choco install dotnet4.7.2
-</code></pre>
-<p>If you will be building .NET Core project, Cake.Recipe will automatically use .NET Core editions of tools when possible.
-In these cases there is a requirement of having .NET Core 3.1 installed.</p>
-<p>This can easily be installed through Chocolatey using:</p>
-<pre><code class="language-console">choco install dotnetcore-runtime dotnetcore-sdk
-</code></pre>
-<h2 id="required-cake-version">Required Cake Version</h2>
-<p>As a minimum, it is recommended that Cake.Recipe should be used in conjunction with the following versions of Cake:</p>
-<table class="table-bordered table-hover table">
-<thead>
-<tr>
-<th style="text-align: center;">Cake.Recipe Version</th>
-<th style="text-align: center;">Cake Version</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: center;">1.x</td>
-<td style="text-align: center;">0.32.0</td>
-</tr>
-<tr>
-<td style="text-align: center;">2.x</td>
-<td style="text-align: center;">0.38.4</td>
-</tr>
-</tbody>
-</table>
+		
+<h2>Using a CI-system</h2>
+<p>
+Generally using Cake.Recipe on any ci-system is not different from using it locally. 
+However, some CI-systems need different preparations than others.
+</p>
+
+
+<h2>Using multiple CI-systems (or running multiple builds on the same system)</h2>
+<p>
+When a single commit is built multiple times 
+(because of multiple CI-systems and/or multiple builds in the same system)
+some tasks (generally all tasks that involve some publishing) should only run once (to avoid publishing more than once).
+</p>
+<p>
+To ensure that those tasks are run only once, Cake.Recipe provides two setting:
+</p>
+
+<ul>
+    <li><a href="../fundamentals/set-parameters#preferredbuildprovidertype">preferredBuildProviderType</a></li>
+    <li><a href="../fundamentals/set-parameters#preferredbuildagentoperatingsystem">preferredBuildAgentOperatingSystem</a></li>
+</ul>
+
+<h2>CI-systems</h2>
+
+			<div class="box">
+				<div class="box-body no-padding">
+					<table class="table table-striped table-hover two-cols-alt table-responsive">
+						
+						<tbody>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/ci-systems/appveyor">AppVeyor</a></strong></td>
+									<td>
+Running on AppVeyor									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/ci-systems/azure">Azure Pipelines</a></strong></td>
+									<td>
+Running on Azure Pipelines									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/ci-systems/github">GitHub Actions</a></strong></td>
+									<td>
+Building with GitHub Actions									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/ci-systems/teamcity">TeamCity</a></strong></td>
+									<td>
+Running on TeamCity									</td>
+								</tr>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/ci-systems/travisci">Travis CI</a></strong></td>
+									<td>
+Running on Travis CI									</td>
+								</tr>
+						</tbody>				
+					</table>
+				</div>
+			</div> 
+
 
 	</section>
                 
