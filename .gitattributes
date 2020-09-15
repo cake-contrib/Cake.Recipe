@@ -5,7 +5,7 @@
 *.cs     diff=csharp
 
 # Shellscripts on Unix is required to use LF line endings
-*.sh eol=LF
+*.sh text eol=lf
 
 # Standard to msysgit
 *.doc	 diff=astextplain

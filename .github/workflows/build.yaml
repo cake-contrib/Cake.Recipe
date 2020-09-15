@@ -1,6 +1,10 @@
 name: Build
 
-on: [push, pull_request]
+on:
+  push:
+    branches-ignore:
+      - "dependabot/**" # Will still build PRs, but not the branches themself
+  pull_request:
 
 jobs:
   build:
@@ -10,9 +14,24 @@ jobs:
         os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
-      - uses: actions/checkout@v2.2.0
+      - uses: actions/checkout@v2.3.2
+      - name: Fetch all branches and tags
+        run: git fetch --unshallow --prune
+      - name: Tools caching
+        uses: actions/cache@v2
         with:
-          fetch-depth: 0
-      - name: Build using bootstrapper
-        run: ./build.ps1 --verbosity=Diagnostic
+          path: tools
+          key: ${{ matrix.os }}-tools-${{ hashFiles('recipe.cake') }}
+      - name: Creating includes.cake file
+        run: |
+          Get-ChildItem "./Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
+            "#load `"local:?path=$($_.FullName -replace '\\','/')`""
+          } | Out-File "./includes.cake"
         shell: pwsh
+      - name: Build Cake.Recipe
+        uses: cake-build/cake-action@v1
+        with:
+          script-path: recipe.cake
+          target: CI
+          cake-version: 0.38.4
+          cake-bootstrap: true
