@@ -37,7 +37,7 @@ ShouldDeleteCachedFiles: False
 ShouldGenerateDocumentation: False
 ShouldDocumentSourceFiles: False
 ShouldRunIntegrationTests: True
-ShouldRunGitVersion: True
+ShouldCalculateVersion: True
 BuildAgentOperatingSystem: Windows
 IsRunningOnAppVeyor: True
 RepositoryOwner: GitTools

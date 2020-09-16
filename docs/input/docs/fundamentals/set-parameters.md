@@ -25,7 +25,7 @@ BuildParameters.SetParameters(context: Context,
                             shouldPublishChocolatey: false,
                             shouldPublishNuGet: false,
                             shouldPublishGitHub: false,
-                            shouldRunGitVersion: true,
+                            shouldCalculateVersion: true,
                             webLinkRoot: "ChocolateyGUI",
                             webBaseEditUrl: "https://github.com/chocolatey/ChocolateyGUI/tree/develop/docs/input/");
 ```
