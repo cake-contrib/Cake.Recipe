@@ -459,7 +459,7 @@ public static class BuildParameters
         WyamTheme = wyamTheme ?? "Samson";
         WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
         WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
-        WebLinkRoot = webLinkRoot ?? title;
+        WebLinkRoot = webLinkRoot ?? RepositoryName;
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, title, developBranchName);
 
         ShouldPostToGitter = shouldPostToGitter;
