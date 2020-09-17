@@ -648,14 +648,14 @@ string.Format("{0}.github.io", repositoryOwner)
 
 ### webLinkRoot
 
-A value with is concatenated to the WebLinkRoot when generating documentation via the Wyam tool.
+A value which is concatenated to the WebLinkRoot when generating documentation via the Wyam tool.
 
 Type: `string`
 
 Default Value:
 
 ```csharp
-Title
+RepositoryName
 ```
 
 ### webBaseEditUrl
