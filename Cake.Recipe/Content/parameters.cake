@@ -602,7 +602,7 @@ public static class BuildParameters
                                 BuildParameters.PreferredBuildProviderType == BuildParameters.BuildProvider.Type &&
                                 shouldGenerateDocumentation);
 
-        ShouldDocumentSourceFiles = ShouldGenerateDocumentation && shouldDocumentSourceFiles;
+        ShouldDocumentSourceFiles = shouldDocumentSourceFiles;
 
         ShouldRunIntegrationTests = (((!IsLocalBuild && !IsPullRequest && IsMainRepository) &&
                                         (BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Develop || BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
