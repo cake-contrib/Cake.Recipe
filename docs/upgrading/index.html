@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Installation</title>
+        <title>Cake.Recipe - Upgrading</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/vscode-extension/installation.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/upgrading/index.cshtml"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -156,11 +156,11 @@
 
                     </ul>
                 </li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li class="selected"><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/commands">Commands</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/resources">Resources</a></li>
 
@@ -194,7 +194,7 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active selected">
                     <a href="/Cake.Recipe/docs/upgrading">Upgrading</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
@@ -215,19 +215,28 @@
 
 
 		<section class="content-header">
-			<h1>Installation</h1>
+			<h1>Upgrading</h1>
 		</section>
 	<section class="content">
-		<p>There are three ways in which this VSCode extension can be installed.</p>
-<h2 id="by-navigating-to-the-marketplace">By navigating to the marketplace</h2>
-<p>Simply navigate to the following <a href="https://marketplace.visualstudio.com/items?itemName=gep13.cakerecipe-vscode">URL</a> and click the green <code>Install</code> button.</p>
-<h2 id="directly-through-vscode">Directly through VSCode</h2>
-<p>Open VSCode and click on the Extensions section.  In the search box, search for Cake.Recipe.  Click on the search result, ensuring that the publisher is <code>Gary Eway Park</code> and then click the <code>Install</code> button.</p>
-<h2 id="via-chocolatey">Via Chocolatey</h2>
-<p>If you have Chocolatey, the Windows Package Manager, installed you can simply type:</p>
-<pre><code class="language-PowerShell">choco install cakerecipe-vscode
-</code></pre>
-<p>This will ensure that both VSCode, and the Cake.Recipe extension, are installed.</p>
+		
+Moving between major versions of Cake.Recipe, there is likely to be breaking changes, that need to be addressed before you will be able to continue building a project.
+
+The following documents attempt to address the known changes that <em>need</em> to happen, as well as some of the recommendations for using newer versions of Cake.Recipe.
+
+			<div class="box">
+				<div class="box-body no-padding">
+					<table class="table table-striped table-hover two-cols-alt table-responsive">
+						
+						<tbody>
+								<tr>
+									<td><strong><a href="/Cake.Recipe/docs/upgrading/1.x-to-2.x">Upgrading from 1.x to 2.x</a></strong></td>
+									<td>
+Changes and suggestions needed for porting from Cake.Recipe 1.x to 2.x									</td>
+								</tr>
+						</tbody>				
+					</table>
+				</div>
+			</div> 
 
 	</section>
                 

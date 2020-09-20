@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="shortcut icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
         <link rel="icon" href="/Cake.Recipe/assets/img/favicon.ico" type="image/x-icon">
-        <title>Cake.Recipe - Installation</title>
+        <title>Cake.Recipe - Upgrading from 1.x to 2.x</title>
         <link href="/Cake.Recipe/assets/css/highlight.css" rel="stylesheet">
         <link href="/Cake.Recipe/assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
         <link href="/Cake.Recipe/assets/css/adminlte/AdminLTE.css" rel="stylesheet" />
@@ -74,7 +74,7 @@
             <aside class="main-sidebar ">
                 <section class="infobar" data-spy="affix" data-offset-top="60" data-offset-bottom="200"> 
                     	
-        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/vscode-extension/installation.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
+        <div><p><a href="https://github.com/cake-contrib/Cake.Recipe/tree/develop/docs/input/docs/upgrading/1.x-to-2.x.md"><i class="fa fa-pencil-square" aria-hidden="true"></i> Edit Content</a></p></div>
     <div id="infobar-headings"></div>
 
                 </section>
@@ -156,11 +156,11 @@
 
                     </ul>
                 </li>
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="/Cake.Recipe/docs/vscode-extension">VSCode Extension</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li class="selected"><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
+                <li><a href="/Cake.Recipe/docs/vscode-extension/installation">Installation</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/commands">Commands</a></li>
                 <li><a href="/Cake.Recipe/docs/vscode-extension/resources">Resources</a></li>
 
@@ -194,11 +194,11 @@
 
                     </ul>
                 </li>
-                <li class="treeview">
+                <li class="treeview active">
                     <a href="/Cake.Recipe/docs/upgrading">Upgrading</a> <a href="#" class="expand"></a>
                     <ul class="treeview-menu">
                         
-                <li><a href="/Cake.Recipe/docs/upgrading/1.x-to-2.x">Upgrading from 1.x to 2.x</a></li>
+                <li class="selected"><a href="/Cake.Recipe/docs/upgrading/1.x-to-2.x">Upgrading from 1.x to 2.x</a></li>
 
                     </ul>
                 </li>
@@ -215,19 +215,136 @@
 
 
 		<section class="content-header">
-			<h1>Installation</h1>
+			<h1>Upgrading from 1.x to 2.x</h1>
 		</section>
 	<section class="content">
-		<p>There are three ways in which this VSCode extension can be installed.</p>
-<h2 id="by-navigating-to-the-marketplace">By navigating to the marketplace</h2>
-<p>Simply navigate to the following <a href="https://marketplace.visualstudio.com/items?itemName=gep13.cakerecipe-vscode">URL</a> and click the green <code>Install</code> button.</p>
-<h2 id="directly-through-vscode">Directly through VSCode</h2>
-<p>Open VSCode and click on the Extensions section.  In the search box, search for Cake.Recipe.  Click on the search result, ensuring that the publisher is <code>Gary Eway Park</code> and then click the <code>Install</code> button.</p>
-<h2 id="via-chocolatey">Via Chocolatey</h2>
-<p>If you have Chocolatey, the Windows Package Manager, installed you can simply type:</p>
-<pre><code class="language-PowerShell">choco install cakerecipe-vscode
+		<p>In the 2.0.0 release of Cake.Recipe, there were a total of 15 breaking changes.  As a result, there are a number of changes that have to be made to any project that is currently using a 1.x.x release of Cake.Recipe, in order to allow it to start using this release.</p>
+<p>Have a look at this <a href="https://github.com/cake-contrib/Cake.DotNetVersionDetector/pull/59">pull request</a> on the Cake.DotNetVersionDetector repository for an example of a project that has made this transition.</p>
+<h2 id="required-changes">Required Changes</h2>
+<h3 id="stop-using-username-and-password-combination-for-accessing-github">Stop using username and password combination for accessing GitHub</h3>
+<p>As of November 2020, GitHub is no longer going to support using a combination of username/password for accessing its API.  Instead, you <em>have to</em> use a Personal Access Token.  As a result, the ability to provide a username/password via environment variables into Cake.Recipe has been removed.  Going forward, you will have to provide an environment variable for the <a href="../fundamentals/environment-variables#github_token">GITHUB_TOKEN</a>.</p>
+<h3 id="remove-input-parameters-which-are-no-longer-required">Remove input parameters which are no longer required</h3>
+<p>Input parameters for the <a href="../fundamentals/set-parameters">SetParameters</a> have changed.  For example the <code>shouldRunGitVersion</code> parameter is now called <code>shouldCalculateVersion</code>.</p>
+<p>In addition, the default values of some parameters have changed, which means that they don't need to be explicitly set.  For example, <code>shouldRunCodecov</code> is now enabled by default.</p>
+<h3 id="change-cake.recipe-pre-processor-directive-to-use-the-latest-version">Change Cake.Recipe pre-processor directive to use the latest version</h3>
+<p>The entry pre-processor directive should be changed to the following:</p>
+<pre><code class="language-csharp">#load nuget:?package=Cake.Recipe&amp;version=2.0.0
 </code></pre>
-<p>This will ensure that both VSCode, and the Cake.Recipe extension, are installed.</p>
+<h3 id="pin-to-updated-version-of-cake">Pin to updated version of Cake</h3>
+<p>Cake.Recipe 1.x.x was pinned to run against version 0.32.1 of Cake.  In order to use Cake.Recipe 2.0.0 you will need to use at least 0.38.4.</p>
+<h3 id="update-bootstrapper-to-include-bootstrap-command">Update bootstrapper to include --bootstrap command</h3>
+<p>Cake.Recipe now includes the use of the .Net Global Tool Module.  As such, it will be necessary to first bootstrap this module before executing the build.  That can be done as follows:</p>
+<pre><code class="language-powershell">Write-Host &quot;Bootstrapping Cake&quot;
+dotnet cake $SCRIPT_NAME --bootstrap
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Write-Host &quot;Running Build&quot;
+dotnet cake $SCRIPT_NAME &#64;args
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+</code></pre>
+<h3 id="rename-appveyor-default-target">Rename AppVeyor default target</h3>
+<p>Due to the fact that Cake.Recipe is no longer directly coupled to AppVeyor, the entry target name has changed.  Instead of calling:</p>
+<pre><code class="language-yml">build_script:
+  - ps: .\build.ps1 -Target AppVeyor
+</code></pre>
+<p>you should call:</p>
+<pre><code class="language-yml">build_script:
+  - ps: .\build.ps1 --target=CI
+</code></pre>
+<h3 id="update-gitversion.yml-file-with-the-required-changes-for-using-new-version-of-gitversion">Update GitVersion.yml file with the required changes for using new version of GitVersion</h3>
+<p>Cake.Recipe has switched from using 3.6.5 of GitVersion, to 5.0.1 of the .Net Framework version, and 5.3.7 of the .Net Global Tool version.  There have been a number of breaking changes in how GitVersion configuration works, specifically around how branches are configured.  If you have done any branch configuration in the GitVersion.yml file, you may have to update to the <a href="https://gitversion.net/docs/configuration#branch-configuration">latest standards</a>.</p>
+<h3 id="ensure-appveyor-build-image-is-using-the-latest">Ensure AppVeyor build image is using the latest</h3>
+<p>In order to execute correctly on AppVeyor, you will need to use the Visual Studio 2019 build image.  Change the image definition from:</p>
+<pre><code class="language-yml">image: Visual Studio 2017
+</code></pre>
+<p>to:</p>
+<pre><code class="language-yml">image: Visual Studio 2019
+</code></pre>
+<h3 id="ensure-that-environment.setvariablenames-is-called">Ensure that Environment.SetVariableNames() is called</h3>
+<p>Previously, the call to <a href="../fundamentals/set-variable-names">Environment.SetVariableNames</a> was not mandatory, and could be omitted from the recipe.cake file.  This is no longer the case, and it must be included.</p>
+<h2 id="suggested-changes">Suggested Changes</h2>
+<h3 id="use-embedded-icon-for-nuget-package">Use embedded icon for NuGet package</h3>
+<p>This guidance comes from the NuGet team directly.  From now on, you should look to include an icon within the nupkg file.</p>
+<h3 id="add-cakecontrib.guidelines-nuget-package">Add CakeContrib.Guidelines Nuget Package</h3>
+<p>To help with the above suggestion, and likely others given time, we are recommending that you add the <a href="https://www.nuget.org/packages/CakeContrib.Guidelines/">CakeContrib.Guidelines</a> NuGet package to your project.  This will inspect your project, and make sure that you are following the guidelines from the Cake-Contrib Organisation for your addin.</p>
+<h3 id="remove-usage-of-nuspec-files-for-nuget-packages">Remove usage of nuspec file(s) for NuGet packages</h3>
+<p>Due to the fact that Cake.Recipe has now enabled fully deterministic builds by default, as well as turning on of SourceLink and embedding pdb files into the generated nupkg file, it is simply easier to run <code>dotnet pack</code>, rather than attempting to do this manually using a nuspec file.</p>
+<p>To facilitate this, you will need to add the following parameter:</p>
+<pre><code class="language-csharp">shouldRunDotNetCorePack: true
+</code></pre>
+<h3 id="add-cake.addin.analyzer-package">Add Cake.Addin.Analyzer package</h3>
+<p>Similar to the CakeContrib.Guidelines NuGet Package, we are also recommending that you add the <a href="https://www.nuget.org/packages/Cake.Addin.Analyzer/">Cake.Addin.Analyzer</a> package to your project.  This will check through your projects and ensure that you are following best practices from a Cake perspective.</p>
+<h3 id="add-settings.json-file-for-vscode">Add settings.json file for VSCode</h3>
+<p>To help with ensuring consistency of an addins codebase, the following settings.json file is recommended:</p>
+<pre><code class="language-json">{
+  &quot;omnisharp.enableEditorConfigSupport&quot;: true,
+  &quot;omnisharp.enableRoslynAnalyzers&quot;: true,
+  &quot;[powershell]&quot;: {
+    &quot;files.encoding&quot;: &quot;utf8bom&quot;
+  },
+  &quot;powershell.codeFormatting.addWhitespaceAroundPipe&quot;: true
+}
+</code></pre>
+<h3 id="add-dependabot-config-file">Add dependabot config file</h3>
+<p>To keep your dependencies up to date, we recommend that you enable dependabot to help with that task.  This can be done by creating a <code>.github/dependabot.yml</code> file in your project with the following contents.</p>
+<p><strong>NOTE:</strong> If you choose to do this, we also recommend that you enable the <code>Do not build on &quot;Pull request&quot; events</code> within the AppVeyor project settings.  This will prevent AppVeyor from getting overwhelmed with pull requests coming from the Cake-Contrib organisation.  Enabling <code>Do not build on &quot;Pull request</code> events` is only recommended if you choose to enable GitHub Actions for your project.</p>
+<pre><code class="language-yml">version: 2
+updates:
+  - package-ecosystem: &quot;nuget&quot;
+    directory: &quot;/&quot;
+    schedule:
+      interval: &quot;daily&quot;
+      ignore:
+        - &quot;Cake.Core&quot;
+  - package-ecosystem: &quot;github-actions&quot;
+    directory: &quot;/&quot;
+    schedule:
+      interval: &quot;daily&quot;
+</code></pre>
+<h3 id="add-github-actions">Add GitHub Actions</h3>
+<p>Now that Cake.Recipe supports other platforms than just AppVeyor, we recommend adding builds for some other platforms, to allow building of addin project on all major operating systems.  Details on how this can be achieved can do found in the <a href="../ci-systems/github">docs</a>.</p>
+<h3 id="switch-to-cake.tool-rather-than-cake.exe">Switch to Cake.Tool rather than Cake.exe</h3>
+<p>Since Cake.Recipe now fully supports running on .Net Core, we are also recommending that you switch to use the .Net Global Tool version of Cake.  This includes using a <code>.config/dotnet-tools.json</code> file to pin to a specific version of Cake.  More information on switching to this can be found in the <a href="https://cakebuild.net/docs/getting-started/setting-up-a-new-project">Cake docs</a>.</p>
+<h3 id="update-bootstrappers-to-use.net-global-tool">Update bootstrappers to use .Net Global Tool</h3>
+<p>An example of a build.ps1 file that can be used is:</p>
+<pre><code class="language-powershell">$ErrorActionPreference = 'Stop'
+
+$SCRIPT_NAME = &quot;recipe.cake&quot;
+
+Write-Host &quot;Restoring .NET Core tools&quot;
+dotnet tool restore
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Write-Host &quot;Bootstrapping Cake&quot;
+dotnet cake $SCRIPT_NAME --bootstrap
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Write-Host &quot;Running Build&quot;
+dotnet cake $SCRIPT_NAME &#64;args
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+</code></pre>
+<p>An example of a build.sh file that can be used is:</p>
+<pre><code class="language-bash">#!/bin/bash
+SCRIPT_NAME=&quot;recipe.cake&quot;
+
+echo &quot;Restoring .NET Core tools&quot;
+dotnet tool restore
+
+echo &quot;Bootstrapping Cake&quot;
+dotnet cake $SCRIPT_NAME --bootstrap
+
+echo &quot;Running Build&quot;
+dotnet cake $SCRIPT_NAME &quot;$&#64;&quot;
+</code></pre>
+<h3 id="update-appveyor.yml-file-for-busting-cache">Update appveyor.yml file for busting cache</h3>
+<p>On AppVeyor, it is possible to cache the contents of the tools folder between build executions.  Previously, this cache would have been busted using:</p>
+<pre><code class="language-yml">- tools -&gt; recipe.cake, tools/packages.config
+</code></pre>
+<p>However, now that the packages.config file is no longer being used, and the tool manifest does not store any tools in the repository, it can be changed to:</p>
+<pre><code class="language-yml">- tools -&gt; recipe.cake
+</code></pre>
+<h3 id="delete-packages.config-file">Delete packages.config file</h3>
+<p>Since we are recommending switching to using the .Net Global Tool version of Cake, with associated bootstrappers, the packages.config file in the tools folder is no longer required, and can be deleted.  In addition, you should update the .gitignore file to remove the special handling of this file.</p>
 
 	</section>
                 
