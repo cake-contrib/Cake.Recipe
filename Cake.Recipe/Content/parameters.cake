@@ -526,7 +526,7 @@ public static class BuildParameters
         IsRunningOnAppVeyor = buildSystem.AppVeyor.IsRunningOnAppVeyor;
         IsRunningOnTravisCI = buildSystem.IsRunningOnTravisCI;
         IsPullRequest = BuildProvider.PullRequest.IsPullRequest;
-        IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", repositoryName), BuildProvider.Repository.Name);
+        IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", RepositoryName), BuildProvider.Repository.Name);
         IsPublicRepository = isPublicRepository;
 
         var branchName = BuildProvider.Repository.Branch ?? string.Empty; // This is just to prevent any null reference exceptions
