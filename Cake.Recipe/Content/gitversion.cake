@@ -47,6 +47,7 @@ public class BuildVersion
         string informationalVersion = null;
         string assemblySemVer = null;
         string fullSemVersion = null;
+        string uniqueSemVersion = null;
         GitVersion assertedVersions = null;
 
         if (BuildParameters.ShouldCalculateVersion)
@@ -78,6 +79,7 @@ public class BuildVersion
                 assemblySemVer = context.EnvironmentVariable("GitVersion_AssemblySemVer");
                 milestone = string.Concat(version);
                 fullSemVersion = context.EnvironmentVariable("GitVersion_FullSemVer");
+                uniqueSemVersion = string.Concat(context.EnvironmentVariable("GitVersion_LegacySemVerPadded"), "-", context.EnvironmentVariable("GitVersion_CommitsSinceVersionSourcePadded"));
             }
 
             if (!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
@@ -98,6 +100,7 @@ public class BuildVersion
             assemblySemVer = assertedVersions.AssemblySemVer;
             milestone = assertedVersions.SemVer;
             fullSemVersion = assertedVersions.FullSemVer;
+            uniqueSemVersion = string.Concat(assertedVersions.LegacySemVerPadded, "-", assertedVersions.CommitsSinceVersionSourcePadded);
 
             context.Information("Calculated Semantic Version: {0}", semVersion);
         }
@@ -115,7 +118,7 @@ public class BuildVersion
         return new BuildVersion
         {
             Version = version,
-            SemVersion = semVersion?.ToLowerInvariant(),
+            SemVersion = (BuildParameters.BranchType == BranchType.HotFix || BuildParameters.BranchType == BranchType.Release && !BuildParameters.IsTagged) ? uniqueSemVersion?.ToLowerInvariant() : semVersion?.ToLowerInvariant(),
             Milestone = BuildParameters.IsTagged || context.HasArgument("create-pre-release") ? milestone : version,
             CakeVersion = cakeVersion,
             InformationalVersion = informationalVersion?.ToLowerInvariant(),
