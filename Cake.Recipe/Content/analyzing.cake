@@ -2,9 +2,9 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
-    .WithCriteria(() => BuildParameters.IsDotNetCoreBuild || BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows, or using .Net Global Tools for JetBrains")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder has been disabled")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReSharperGlobalTools : ToolSettings.ReSharperTools, () => {
+    .Does(() => RequireTool(ToolSettings.ReSharperTools, () => {
         var dupFinderLogFilePath = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml");
 
         var settings = new DupFinderSettings() {
@@ -14,18 +14,6 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
             ExcludeCodeRegionsByNameSubstring = new string [] { "DupFinder Exclusion" },
             ThrowExceptionOnFindingDuplicates = ToolSettings.DupFinderThrowExceptionOnFindingDuplicates ?? true
         };
-
-        // Workaround until 1.0.0+ version of cake is released
-        if (BuildParameters.IsDotNetCoreBuild && BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
-        {
-            settings.ToolPath = Context.Tools.Resolve("jb.exe");
-            settings.ArgumentCustomization = args => args.Prepend("dupfinder");
-        }
-        else if(BuildParameters.IsDotNetCoreBuild)
-        {
-            settings.ToolPath = Context.Tools.Resolve("jb");
-            settings.ArgumentCustomization = args => args.Prepend("dupfinder");
-        }
 
         if (ToolSettings.DupFinderExcludePattern != null)
         {
@@ -50,27 +38,15 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
 );
 
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
-    .WithCriteria(() => BuildParameters.IsDotNetCoreBuild || BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows, or using .Net Global Tools for JetBrains")
+    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunInspectCode, "Skipping because InspectCode has been disabled")
-    .Does<BuildData>(data => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReSharperGlobalTools : ToolSettings.ReSharperTools, () => {
+    .Does<BuildData>(data => RequireTool(ToolSettings.ReSharperTools, () => {
         var inspectCodeLogFilePath = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml");
 
         var settings = new InspectCodeSettings() {
             SolutionWideAnalysis = true,
             OutputFile = inspectCodeLogFilePath
         };
-
-        // Workaround until 1.0.0+ version of cake is released
-        if (BuildParameters.IsDotNetCoreBuild && BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
-        {
-            settings.ToolPath = Context.Tools.Resolve("jb.exe");
-            settings.ArgumentCustomization = args => args.Prepend("inspectcode");
-        }
-        else if(BuildParameters.IsDotNetCoreBuild)
-        {
-            settings.ToolPath = Context.Tools.Resolve("jb");
-            settings.ArgumentCustomization = args => args.Prepend("inspectcode");
-        }
 
         if (FileExists(BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName)))
         {

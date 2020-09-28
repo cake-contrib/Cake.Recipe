@@ -38,7 +38,6 @@ public static class ToolSettings
     public static string ReportGeneratorGlobalTool { get; private set; }
     public static string WyamGlobalTool { get; private set; }
     public static string KuduSyncGlobalTool { get; private set; }
-    public static string ReSharperGlobalTools { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.12.3",
@@ -63,8 +62,7 @@ public static class ToolSettings
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.7",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
         // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
-        string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218",
-        string resharperGlobalTools = "#tool dotnet:?package=JetBrains.ReSharper.GlobalTools&version=2020.2.2"
+        string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218"
     )
     {
         CodecovTool = codecovTool;
@@ -87,7 +85,6 @@ public static class ToolSettings
         CoverallsGlobalTool = coverallsGlobalTool;
         WyamGlobalTool = wyamGlobalTool;
         KuduSyncGlobalTool = kuduSyncGlobalTool;
-        ReSharperGlobalTools = resharperGlobalTools;
     }
 
     public static void SetToolSettings(
