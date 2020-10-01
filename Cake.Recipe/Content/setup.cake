@@ -50,6 +50,15 @@ Setup<BuildData>(context =>
         .IsDependentOn("Build")
         .IsDependentOn("InspectCode");
 
+    // Define additional URL resolvers for Cake.Issues
+
+    // Rules from https://github.com/cake-contrib/CakeContrib.Guidelines
+    MsBuildAddRuleUrlResolver(x =>
+        x.Category.ToUpperInvariant() == "CCG" ?
+        new Uri("https://cake-contrib.github.io/CakeContrib.Guidelines/rules/" + x.Rule.ToLowerInvariant()) :
+        null,
+        5);
+
     return new BuildData(context);
 });
 
