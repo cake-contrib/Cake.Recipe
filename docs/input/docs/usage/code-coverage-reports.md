@@ -1,7 +1,9 @@
 ---
 Order: 30
-Title: How to publish code coverage reports
+Title: Code coverage reports
+Description: How to publish code coverage reports with Cake.Recipe
 ---
+
 This document describes known issues pushing code coverage reports during Cake.Recipe builds.
 
 ## Coveralls Reports
@@ -22,7 +24,9 @@ OpenCover doesn't support the [portable debug type](https://github.com/dotnet/co
     <DebugType>full</DebugType>
   </PropertyGroup>
 ```
+
 or
+
 ``` xml
   <PropertyGroup>
     <DebugType>pdbonly</DebugType>

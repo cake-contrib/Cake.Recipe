@@ -3,17 +3,26 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report")
-    .WithCriteria(() => FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
     .WithCriteria(() => !BuildParameters.IsLocalBuild)
     .WithCriteria(() => !BuildParameters.IsPullRequest)
     .WithCriteria(() => BuildParameters.IsMainRepository)
-    .Does(() => RequireTool(CoverallsTool, () => {
-        if(BuildParameters.CanPublishToCoveralls)
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.CoverallsGlobalTool : ToolSettings.CoverallsTool, () => {
+        if (BuildParameters.CanPublishToCoveralls)
         {
-            CoverallsIo(BuildParameters.Paths.Files.TestCoverageOutputFilePath, new CoverallsIoSettings()
+            var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
+            if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
             {
-                RepoToken = BuildParameters.Coveralls.RepoToken
-            });
+                coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
+            }
+
+            foreach(var coverageFile in coverageFiles)
+            {
+                Information("Publishing coverage results from: {0}", coverageFile);
+                CoverallsNet(coverageFile, CoverallsNetReportType.OpenCover, new CoverallsNetSettings()
+                {
+                    RepoToken = BuildParameters.Coveralls.RepoToken
+                });
+            }
         }
         else
         {

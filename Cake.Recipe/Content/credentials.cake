@@ -1,12 +1,10 @@
 public class GitHubCredentials
 {
-    public string UserName { get; private set; }
-    public string Password { get; private set; }
+    public string Token { get; private set; }
 
-    public GitHubCredentials(string userName, string password)
+    public GitHubCredentials(string token)
     {
-        UserName = userName;
-        Password = password;
+        Token = token;
     }
 }
 
@@ -17,6 +15,24 @@ public class MicrosoftTeamsCredentials
     public MicrosoftTeamsCredentials(string webHookUrl)
     {
         WebHookUrl = webHookUrl;
+    }
+}
+
+public class EmailCredentials
+{
+    public string SmtpHost { get; private set; }
+    public int Port { get; private set; }
+    public bool EnableSsl { get; private set; }
+    public string Username { get; private set; }
+    public string Password { get; private set; }
+
+    public EmailCredentials(string smtpHost, int port, bool enableSsl, string username, string password)
+    {
+        SmtpHost = smtpHost;
+        Port = port;
+        EnableSsl = enableSsl;
+        Username = username;
+        Password = password;
     }
 }
 
@@ -60,43 +76,17 @@ public class TwitterCredentials
     }
 }
 
-public class MyGetCredentials
+public class PackageSourceCredentials
 {
     public string ApiKey { get; private set; }
-    public string SourceUrl { get; private set; }
     public string User { get; private set; }
     public string Password { get; private set; }
 
-    public MyGetCredentials(string apiKey, string sourceUrl, string user, string password)
+    public PackageSourceCredentials(string apiKey, string user, string password)
     {
         ApiKey = apiKey;
-        SourceUrl = sourceUrl;
         User = user;
         Password = password;
-    }
-}
-
-public class NuGetCredentials
-{
-    public string ApiKey { get; private set; }
-    public string SourceUrl { get; private set; }
-
-    public NuGetCredentials(string apiKey, string sourceUrl)
-    {
-        ApiKey = apiKey;
-        SourceUrl = sourceUrl;
-    }
-}
-
-public class ChocolateyCredentials
-{
-    public string ApiKey { get; private set; }
-    public string SourceUrl { get; private set; }
-
-    public ChocolateyCredentials(string apiKey, string sourceUrl)
-    {
-        ApiKey = apiKey;
-        SourceUrl = sourceUrl;
     }
 }
 
@@ -155,9 +145,17 @@ public class WyamCredentials
 
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
-    return new GitHubCredentials(
-        context.EnvironmentVariable(Environment.GithubUserNameVariable),
-        context.EnvironmentVariable(Environment.GithubPasswordVariable));
+    return new GitHubCredentials(context.EnvironmentVariable(Environment.GithubTokenVariable));
+}
+
+public static EmailCredentials GetEmailCredentials(ICakeContext context)
+{
+    return new EmailCredentials(
+        context.EnvironmentVariable(Environment.EmailSmtpHost),
+        int.Parse(context.EnvironmentVariable(Environment.EmailPort) ?? "0"),
+        bool.Parse(context.EnvironmentVariable(Environment.EmailEnableSsl) ?? "false"),
+        context.EnvironmentVariable(Environment.EmailUserName),
+        context.EnvironmentVariable(Environment.EmailPassword));
 }
 
 public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContext context)
@@ -187,29 +185,6 @@ public static TwitterCredentials GetTwitterCredentials(ICakeContext context)
         context.EnvironmentVariable(Environment.TwitterConsumerSecretVariable),
         context.EnvironmentVariable(Environment.TwitterAccessTokenVariable),
         context.EnvironmentVariable(Environment.TwitterAccessTokenSecretVariable));
-}
-
-public static MyGetCredentials GetMyGetCredentials(ICakeContext context)
-{
-    return new MyGetCredentials(
-        context.EnvironmentVariable(Environment.MyGetApiKeyVariable),
-        context.EnvironmentVariable(Environment.MyGetSourceUrlVariable),
-        context.EnvironmentVariable(Environment.MyGetUserVariable),
-        context.EnvironmentVariable(Environment.MyGetPasswordVariable));
-}
-
-public static NuGetCredentials GetNuGetCredentials(ICakeContext context)
-{
-    return new NuGetCredentials(
-        context.EnvironmentVariable(Environment.NuGetApiKeyVariable),
-        context.EnvironmentVariable(Environment.NuGetSourceUrlVariable));
-}
-
-public static ChocolateyCredentials GetChocolateyCredentials(ICakeContext context)
-{
-    return new ChocolateyCredentials(
-        context.EnvironmentVariable(Environment.ChocolateyApiKeyVariable),
-        context.EnvironmentVariable(Environment.ChocolateySourceUrlVariable));
 }
 
 public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)

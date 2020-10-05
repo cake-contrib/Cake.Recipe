@@ -3,93 +3,93 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 var publishingError = false;
-var currentSupportedCakeVersionNumber = "0.32.1.0";
 
 ///////////////////////////////////////////////////////////////////////////////
-// SETUP / TEARDOWN
+// Support function for comparing cake version support
 ///////////////////////////////////////////////////////////////////////////////
-
-Setup<BuildData>(context =>
+public bool IsSupportedCakeVersion(string supportedVersion, string currentVersion)
 {
-    Information(Figlet(BuildParameters.Title));
+    var twoPartSupported = Version.Parse(supportedVersion).ToString(2);
+    var twoPartCurrent = Version.Parse(currentVersion).ToString(2);
 
-    Information("Starting Setup...");
+    return twoPartCurrent == twoPartSupported;
+}
 
-    if(BuildParameters.IsMasterBranch && (context.Log.Verbosity != Verbosity.Diagnostic)) {
-        Information("Increasing verbosity to diagnostic.");
-        context.Log.Verbosity = Verbosity.Diagnostic;
-    }
+///////////////////////////////////////////////////////////////////////////////
+// TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
 
-    RequireTool(GitVersionTool, () => {
-        BuildParameters.SetBuildVersion(
-            BuildVersion.CalculatingSemanticVersion(
-                context: Context
-            )
-        );
-    });
-
-    Information("Building version {0} of " + BuildParameters.Title + " ({1}, {2}) using version {3} of Cake, and version {4} of Cake.Recipe. (IsTagged: {5})",
-        BuildParameters.Version.SemVersion,
-        BuildParameters.Configuration,
-        BuildParameters.Target,
-        BuildParameters.Version.CakeVersion,
-        BuildMetaData.Version,
-        BuildParameters.IsTagged);
-
-    if(BuildParameters.Version.CakeVersion != currentSupportedCakeVersionNumber)
-    {
-        throw new Exception(string.Format("Cake.Recipe currently only supports building projects using version {0} of Cake.  Please update your packages.config file (or whatever method is used to pin to a specific version of Cake) to use this version.", currentSupportedCakeVersionNumber));
-    }
-
-    return new BuildData(context);
-});
-
-Teardown(context =>
+Teardown<BuildVersion>((context, buildVersion) =>
 {
     Information("Starting Teardown...");
 
-    if(context.Successful)
+    if (BuildParameters.PublishReleasePackagesWasSuccessful)
     {
-        if(!BuildParameters.IsLocalBuild &&
+        if (!BuildParameters.IsLocalBuild &&
             !BuildParameters.IsPullRequest &&
             BuildParameters.IsMainRepository &&
-            (BuildParameters.IsMasterBranch ||
-                ((BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch)
-                && BuildParameters.ShouldNotifyBetaReleases)) &&
+            (BuildParameters.BranchType == BranchType.Master ||
+                ((BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix) &&
+                BuildParameters.ShouldNotifyBetaReleases)) &&
             BuildParameters.IsTagged &&
             !BuildParameters.IsRunningIntegrationTests)
         {
-            if(BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
+            if (BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
-                SendMessageToTwitter();
+                SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, buildVersion.Version, BuildParameters.Title));
             }
 
-            if(BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
+            if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
-                SendMessageToGitterRoom();
+                SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, buildVersion.Version, BuildParameters.Title));
             }
 
-            if(BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
+            if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
-                SendMessageToMicrosoftTeams();
+                SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, buildVersion.Version, BuildParameters.Title));
+            }
+
+            if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            {
+                var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
+                var message = new StringBuilder();
+                message.AppendLine(string.Format(BuildParameters.StandardMessage, buildVersion.Version, BuildParameters.Title) + "<br/>");
+                message.AppendLine("<br/>");
+                message.AppendLine($"<strong>Name</strong>: {BuildParameters.Title}<br/>");
+                message.AppendLine($"<strong>Version</strong>: {buildVersion.SemVersion}<br/>");
+                message.AppendLine($"<strong>Configuration</strong>: {BuildParameters.Configuration}<br/>");
+                message.AppendLine($"<strong>Target</strong>: {BuildParameters.Target}<br/>");
+                message.AppendLine($"<strong>Cake version</strong>: {buildVersion.CakeVersion}<br/>");
+                message.AppendLine($"<strong>Cake.Recipe version</strong>: {BuildMetaData.Version}<br/>");
+
+                SendEmail(subject, message.ToString(), BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
             }
         }
     }
-    else
+
+    if(!context.Successful)
     {
-        if(!BuildParameters.IsLocalBuild &&
+        if (!BuildParameters.IsLocalBuild &&
             BuildParameters.IsMainRepository &&
             !BuildParameters.IsRunningIntegrationTests)
         {
-            if(BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
+            if (BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
                 SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
+            }
+
+            if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
+            {
+                var subject = $"Continuous Integration Build of {BuildParameters.Title} failed";
+                var message = context.ThrownException.ToString().Replace(System.Environment.NewLine, "<br/>");
+
+                SendEmail(subject, message, BuildParameters.EmailRecipient, BuildParameters.EmailSenderName, BuildParameters.EmailSenderAddress);
             }
         }
     }
 
     // Clear nupkg files from tools directory
-    if(DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
+    if ((!BuildParameters.IsLocalBuild || BuildParameters.ShouldDeleteCachedFiles) && DirectoryExists(Context.Environment.WorkingDirectory.Combine("tools")))
     {
         Information("Deleting nupkg files...");
         var nupkgFiles = GetFiles(Context.Environment.WorkingDirectory.Combine("tools") + "/**/*.nupkg");
@@ -106,6 +106,7 @@ Teardown(context =>
 BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     .Does(() =>
 {
+    Information("Build Platform: {0}", BuildParameters.Platform);
     Information("Target: {0}", BuildParameters.Target);
     Information("Configuration: {0}", BuildParameters.Configuration);
     Information("PrepareLocalRelease: {0}", BuildParameters.PrepareLocalRelease);
@@ -114,9 +115,6 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     Information("IsLocalBuild: {0}", BuildParameters.IsLocalBuild);
     Information("IsPullRequest: {0}", BuildParameters.IsPullRequest);
     Information("IsMainRepository: {0}", BuildParameters.IsMainRepository);
-    Information("IsMasterBranch: {0}", BuildParameters.IsMasterBranch);
-    Information("IsReleaseBranch: {0}", BuildParameters.IsReleaseBranch);
-    Information("IsHotFixBranch: {0}", BuildParameters.IsHotFixBranch);
     Information("IsTagged: {0}", BuildParameters.IsTagged);
 
     Information("Solution FilePath: {0}", MakeAbsolute((FilePath)BuildParameters.SolutionFilePath));
@@ -127,7 +125,7 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
 
 BuildParameters.Tasks.CleanTask = Task("Clean")
     .IsDependentOn("Show-Info")
-    .IsDependentOn("Print-AppVeyor-Environment-Variables")
+    .IsDependentOn("Print-CI-Provider-Environment-Variables")
     .Does(() =>
 {
     Information("Cleaning...");
@@ -139,47 +137,44 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
     .Does(() =>
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
-
-    NuGetRestore(
-        BuildParameters.SolutionFilePath,
-        new NuGetRestoreSettings
-        {
-            Source = BuildParameters.NuGetSources
-        });
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+        NuGetRestore(
+            BuildParameters.SolutionFilePath,
+            new NuGetRestoreSettings
+            {
+                Source = BuildParameters.NuGetSources
+            });
+    });
 });
 
 BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
-    .Does(() =>
+    .Does<BuildVersion>((context, buildVersion) =>
 {
-    var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
-
-    if(!IsRunningOnWindows())
+    // We need to clone the settings class, so we don't
+    // add additional properties to every other task.
+    var msBuildSettings = new DotNetCoreMSBuildSettings();
+    foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
     {
-        var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-        // Use FrameworkPathOverride when not running on Windows.
-        Information("Restore will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-        msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+        string value = string.Join(" ", kv.Value);
+        msBuildSettings.WithProperty(kv.Key, value);
     }
+    msBuildSettings.WithProperty("Configuration", BuildParameters.Configuration);
 
     DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
     {
         Sources = BuildParameters.NuGetSources,
-        MSBuildSettings = msBuildSettings
+        MSBuildSettings = msBuildSettings,
+        PackagesDirectory = BuildParameters.RestorePackagesDirectory
     });
 });
 
 BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does<BuildData>(data => RequireTool(MSBuildExtensionPackTool, () => {
+    .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        if(BuildParameters.IsRunningOnWindows)
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows || Context.Tools.Resolve("msbuild") != null)
         {
             var msbuildSettings = new MSBuildSettings()
                 .SetPlatformTarget(ToolSettings.BuildPlatformTarget)
@@ -187,26 +182,24 @@ BuildParameters.Tasks.BuildTask = Task("Build")
                 .WithProperty("TreatWarningsAsErrors", BuildParameters.TreatWarningsAsErrors.ToString())
                 .WithTarget("Build")
                 .SetMaxCpuCount(ToolSettings.MaxCpuCount)
-                .SetConfiguration(BuildParameters.Configuration)
-                .WithLogger(
-                    Context.Tools.Resolve("MSBuild.ExtensionPack.Loggers.dll").FullPath,
-                    "XmlFileLogger",
-                    string.Format(
-                        "logfile=\"{0}\";invalidCharReplacement=_;verbosity=Detailed;encoding=UTF-8",
-                        BuildParameters.Paths.Files.BuildLogFilePath)
-                );
+                .SetConfiguration(BuildParameters.Configuration);
+
+            msbuildSettings.ArgumentCustomization = args =>
+                args.Append(string.Format("/logger:BinaryLogger,\"{0}\";\"{1}\"",
+                    context.Tools.Resolve("Cake.Issues.MsBuild*/**/StructuredLogger.dll"),
+                    BuildParameters.Paths.Files.BuildBinLogFilePath));
+
+            // This is used in combination with SourceLink to ensure a deterministic
+            // package is generated
+            if(BuildParameters.ShouldUseDeterministicBuilds)
+            {
+                msbuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
+            }
 
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
-            // Parse warnings.
-            var issues = ReadIssues(
-                MsBuildIssuesFromFilePath(
-                    BuildParameters.Paths.Files.BuildLogFilePath,
-                    MsBuildXmlFileLoggerFormat),
-                data.RepositoryRoot);
-
-            Information("{0} MsBuild warnings are found.", issues.Count());
-            data.AddIssues(issues);
+            // Pass path to MsBuild log file to Cake.Issues.Recipe
+            IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
         }
         else
         {
@@ -218,55 +211,46 @@ BuildParameters.Tasks.BuildTask = Task("Build")
             XBuild(BuildParameters.SolutionFilePath, xbuildSettings);
         }
 
-        if(BuildParameters.ShouldExecuteGitLink)
-        {
-            ExecuteGitLink();
-        }
-
-        CopyBuildOutput();
-    }));
+        CopyBuildOutput(buildVersion);
+    });
 
 
 BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .IsDependentOn("Clean")
     .IsDependentOn("DotNetCore-Restore")
-    .Does(() => {
+    .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
-        var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
-
-        if(!IsRunningOnWindows())
+        // We need to clone the settings class, so we don't
+        // add additional properties to every other task.
+        var msBuildSettings = new DotNetCoreMSBuildSettings();
+        foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
         {
-            var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-            // Use FrameworkPathOverride when not running on Windows.
-            Information("Build will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-            msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
+            string value = string.Join(" ", kv.Value);
+            msBuildSettings.WithProperty(kv.Key, value);
         }
+        msBuildSettings.WithLogger("BinaryLogger," + context.Tools.Resolve("Cake.Issues.MsBuild*/**/StructuredLogger.dll"),
+            "",
+            BuildParameters.Paths.Files.BuildBinLogFilePath.ToString());
 
         DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
         {
             Configuration = BuildParameters.Configuration,
-            MSBuildSettings = msBuildSettings
+            MSBuildSettings = msBuildSettings,
+            NoRestore = true
         });
 
-        if(BuildParameters.ShouldExecuteGitLink)
-        {
-            ExecuteGitLink();
-        }
+        // We set this here, so we won't have a failure in case this task is never called
+        IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
 
-        CopyBuildOutput();
+        CopyBuildOutput(buildVersion);
     });
 
-public void CopyBuildOutput()
+public void CopyBuildOutput(BuildVersion buildVersion)
 {
     Information("Copying build output...");
 
-    foreach(var project in ParseSolution(BuildParameters.SolutionFilePath).GetProjects())
+    foreach (var project in ParseSolution(BuildParameters.SolutionFilePath).GetProjects())
     {
         // There is quite a bit of duplication in this function, that really needs to be tidied Upload
 
@@ -275,28 +259,28 @@ public void CopyBuildOutput()
         Information("Using BuildPlatformTarget: {0}", platformTarget);
         var parsedProject = ParseProject(project.Path, BuildParameters.Configuration, platformTarget);
 
-        if(project.Path.FullPath.ToLower().Contains("wixproj"))
+        if (project.Path.FullPath.ToLower().Contains("wixproj"))
         {
             Warning("Skipping wix project");
             continue;
         }
 
-        if(project.Path.FullPath.ToLower().Contains("shproj"))
+        if (project.Path.FullPath.ToLower().Contains("shproj"))
         {
             Warning("Skipping shared project");
             continue;
         }
 
-        if(parsedProject.OutputPath == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
+        if (parsedProject.OutputPaths.FirstOrDefault() == null || parsedProject.RootNameSpace == null || parsedProject.OutputType == null)
         {
-            Information("OutputPath: {0}", parsedProject.OutputPath);
+            Information("OutputPath: {0}", parsedProject.OutputPaths.FirstOrDefault());
             Information("RootNameSpace: {0}", parsedProject.RootNameSpace);
             Information("OutputType: {0}", parsedProject.OutputType);
             throw new Exception(string.Format("Unable to parse project file correctly: {0}", project.Path));
         }
 
         // If the project is an exe, then simply copy all of the contents to the correct output folder
-        if(!parsedProject.IsLibrary())
+        if (!parsedProject.IsLibrary())
         {
             Information("Project has an output type of exe: {0}", parsedProject.RootNameSpace);
             var outputFolder = BuildParameters.Paths.Directories.PublishedApplications.Combine(parsedProject.RootNameSpace);
@@ -304,36 +288,25 @@ public void CopyBuildOutput()
 
             // If .NET SDK project, copy using dotnet publish for each target framework
             // Otherwise just copy
-            if(parsedProject.IsVS2017ProjectFormat)
+            if (parsedProject.IsVS2017ProjectFormat)
             {
-                var msBuildSettings = new DotNetCoreMSBuildSettings()
-                            .WithProperty("Version", BuildParameters.Version.SemVersion)
-                            .WithProperty("AssemblyVersion", BuildParameters.Version.Version)
-                            .WithProperty("FileVersion",  BuildParameters.Version.Version)
-                            .WithProperty("AssemblyInformationalVersion", BuildParameters.Version.InformationalVersion);
+                var msBuildSettings = Context.Data.Get<DotNetCoreMSBuildSettings>();
 
-                if(!IsRunningOnWindows())
-                {
-                    var frameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/";
-
-                    // Use FrameworkPathOverride when not running on Windows.
-                    Information("Publish will use FrameworkPathOverride={0} since not building on Windows.", frameworkPathOverride);
-                    msBuildSettings.WithProperty("FrameworkPathOverride", frameworkPathOverride);
-                }
-
-                foreach(var targetFramework in parsedProject.NetCore.TargetFrameworks)
+                foreach (var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
                     DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings {
                         OutputDirectory = outputFolder.Combine(targetFramework),
                         Framework = targetFramework,
                         Configuration = BuildParameters.Configuration,
-                        MSBuildSettings = msBuildSettings
+                        MSBuildSettings = msBuildSettings,
+                        NoRestore = true,
+                        NoBuild = true
                     });
                 }
             }
             else
             {
-                CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
+                CopyMsBuildProjectOutput(outputFolder, parsedProject);
             }
 
             continue;
@@ -341,7 +314,7 @@ public void CopyBuildOutput()
 
         // Now we need to test for whether this is a unit test project.
         // If this is found, move the output to the unit test folder, otherwise, simply copy to normal output folder
-        if(!BuildParameters.IsDotNetCoreBuild)
+        if (!BuildParameters.IsDotNetCoreBuild)
         {
             Information("Not a .Net Core Build");
         }
@@ -350,63 +323,62 @@ public void CopyBuildOutput()
             Information("Is a .Net Core Build");
         }
 
-        if(parsedProject.IsLibrary() && (parsedProject.HasPackage("xunit") || parsedProject.HasReference("xunit.core")))
+        if (parsedProject.IsLibrary() && (parsedProject.HasPackage("xunit") || parsedProject.HasReference("xunit.core")))
         {
             Information("Project has an output type of library and is an xUnit Test Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedxUnitTests.Combine(parsedProject.RootNameSpace);
-            EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
-            continue;
+            CopyMsBuildProjectOutput(BuildParameters.Paths.Directories.PublishedxUnitTests, parsedProject);
         }
-        else if(parsedProject.IsLibrary() && (parsedProject.HasPackage("fixie") || parsedProject.HasReference("fixie")))
-        {
-            Information("Project has an output type of library and is a Fixie Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedFixieTests.Combine(parsedProject.RootNameSpace);
-            EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
-            continue;
-        }
-        else if(parsedProject.IsLibrary() && (parsedProject.HasPackage("nunit") || parsedProject.HasReference("nunit.framework")))
+        else if (parsedProject.IsLibrary() && (parsedProject.HasPackage("nunit") || parsedProject.HasReference("nunit.framework")))
         {
             Information("Project has an output type of library and is a NUnit Test Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedNUnitTests.Combine(parsedProject.RootNameSpace);
-            EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
-            continue;
+            CopyMsBuildProjectOutput(BuildParameters.Paths.Directories.PublishedNUnitTests, parsedProject);
         }
-        else if(parsedProject.IsLibrary() && parsedProject.IsMSTestProject())
+        else if (parsedProject.IsLibrary() && parsedProject.IsMSTestProject())
         {
             // We will use vstest.console.exe by default for MSTest Projects
             Information("Project has an output type of library and is an MSTest Project: {0}", parsedProject.RootNameSpace);
-            var outputFolder = BuildParameters.Paths.Directories.PublishedVSTestTests.Combine(parsedProject.RootNameSpace);
-            EnsureDirectoryExists(outputFolder);
-            CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
-            continue;
+            CopyMsBuildProjectOutput(BuildParameters.Paths.Directories.PublishedVSTestTests, parsedProject);
         }
         else
         {
             Information("Project has an output type of library: {0}", parsedProject.RootNameSpace);
+            CopyMsBuildProjectOutput(BuildParameters.Paths.Directories.PublishedLibraries, parsedProject);
+        }
+    }
+}
 
-            // If .NET SDK project, copy for each output path
-            // Otherwise just copy
-            if(parsedProject.IsVS2017ProjectFormat)
+public void CopyMsBuildProjectOutput(DirectoryPath outputBase, CustomProjectParserResult parsedProject)
+{
+    if (parsedProject.IsVS2017ProjectFormat)
+    {
+        foreach (var outputPath in parsedProject.OutputPaths)
+        {
+            var outputFolder = outputBase.Combine(parsedProject.RootNameSpace).Combine(outputPath.GetDirectoryName());
+            EnsureDirectoryExists(outputFolder);
+            var files = GetFiles(outputPath + "/**/*");
+            if (files.Any())
             {
-                foreach(var outputPath in parsedProject.OutputPaths)
-                {
-                    var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace).Combine(outputPath.GetDirectoryName());
-                    EnsureDirectoryExists(outputFolder);
-                    Information(outputPath);
-                    CopyFiles(GetFiles(outputPath + "/**/*"), outputFolder, true);
-                }
+                CopyFiles(files, outputFolder, true);
             }
             else
             {
-                var outputFolder = BuildParameters.Paths.Directories.PublishedLibraries.Combine(parsedProject.RootNameSpace);
-                EnsureDirectoryExists(outputFolder);
-                Information(parsedProject.OutputPath.FullPath);
-                CopyFiles(GetFiles(parsedProject.OutputPath.FullPath + "/**/*"), outputFolder, true);
+                Warning("No files were found in the project output directory: '{0}'", outputPath);
             }
-            continue;
+        }
+    }
+    else
+    {
+        var outputFolder = outputBase.Combine(parsedProject.RootNameSpace);
+        EnsureDirectoryExists(outputFolder);
+        var outputPath = parsedProject.OutputPaths.First().FullPath;
+        var files = GetFiles(outputPath + "/**/*");
+        if (files.Any())
+        {
+            CopyFiles(files, outputFolder, true);
+        }
+        else
+        {
+            Warning("No files were found in the project output directory: '{0}'", outputPath);
         }
     }
 }
@@ -415,17 +387,43 @@ BuildParameters.Tasks.PackageTask = Task("Package")
     .IsDependentOn("Export-Release-Notes");
 
 BuildParameters.Tasks.DefaultTask = Task("Default")
-    .IsDependentOn("Package");
+    .IsDependentOn("Package")
+    // Run issues task from Cake.Issues.Recipe by default.
+    .IsDependentOn("Issues");
 
-BuildParameters.Tasks.AppVeyorTask = Task("AppVeyor")
-    .IsDependentOn("Upload-AppVeyor-Artifacts")
-    .IsDependentOn("Publish-MyGet-Packages")
-    .IsDependentOn("Publish-Nuget-Packages")
+BuildParameters.Tasks.UploadArtifactsTask = Task("Upload-Artifacts")
+    .IsDependentOn("Package")
+    .WithCriteria(() => !BuildParameters.IsLocalBuild)
+    .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.NuGetPackages) || DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    .Does(() =>
+{
+    var artifacts = GetFiles(BuildParameters.Paths.Directories.Packages + "/*") +
+                           GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
+                           GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*") +
+                           GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
+
+    if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
+    {
+        artifacts += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
+    }
+
+    foreach (var artifact in artifacts)
+    {
+        BuildParameters.BuildProvider.UploadArtifact(artifact);
+    }
+});
+
+BuildParameters.Tasks.ContinuousIntegrationTask = Task("CI")
+    // Run issues task from Cake.Issues.Recipe by default.
+    .IsDependentOn("Upload-Artifacts")
+    .IsDependentOn("Issues")
+    .IsDependentOn("Publish-PreRelease-Packages")
+    .IsDependentOn("Publish-Release-Packages")
     .IsDependentOn("Publish-GitHub-Release")
     .IsDependentOn("Publish-Documentation")
     .Finally(() =>
 {
-    if(publishingError)
+    if (publishingError)
     {
         throw new Exception("An error occurred during the publishing of " + BuildParameters.Title + ".  All publishing tasks have been attempted.");
     }
@@ -514,9 +512,7 @@ public class Builder
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-Chocolatey-Packages");
         BuildParameters.Tasks.UploadCodecovReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
-        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Upload-Coverage-Report");
-        BuildParameters.Tasks.AppVeyorTask.IsDependentOn("Publish-Chocolatey-Packages");
-        BuildParameters.Tasks.InstallReportGeneratorTask.IsDependentOn(prefix + "Build");
+        BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Upload-Coverage-Report");
 
         if (!isDotNetCoreBuild)
         {
@@ -524,12 +520,17 @@ public class Builder
             {
                 BuildParameters.Tasks.BuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-NUnit");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-xUnit");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-MSTest");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-VSTest");
-            BuildParameters.Tasks.TestTask.IsDependentOn("Test-Fixie");
-            BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportUnit");
+
+            BuildParameters.Tasks.TestMSTestTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestNUnitTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestVSTestTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.TestxUnitTask.IsDependentOn(prefix + "Build");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-MSTest");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-NUnit");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-VSTest");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn("Test-xUnit");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-FriendlyTestReport");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");
         }
         else
         {
@@ -537,8 +538,8 @@ public class Builder
             {
                 BuildParameters.Tasks.DotNetCoreBuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
-            BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Test");
-            BuildParameters.Tasks.InstallOpenCoverTask.IsDependentOn("Install-ReportGenerator");
+            BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn(prefix + "Test");
+            BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");
             BuildParameters.Tasks.PackageTask.IsDependentOn(prefix + "Pack");
         }
     }

@@ -3,15 +3,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+    .Does<BuildVersion>((context, buildVersion) => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitReleaseManagerGlobalTool : ToolSettings.GitReleaseManagerTool, () => {
+        if (BuildParameters.CanUseGitReleaseManager)
         {
-            GitReleaseManagerCreate(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, new GitReleaseManagerCreateSettings {
-                Milestone         = BuildParameters.Version.Milestone,
-                Name              = BuildParameters.Version.Milestone,
+            var settings = new GitReleaseManagerCreateSettings
+            {
+                Milestone         = buildVersion.Milestone,
+                Name              = buildVersion.Milestone,
                 TargetCommitish   = BuildParameters.MasterBranchName,
-                Prerelease        = false
-            });
+                Prerelease        = context.HasArgument("create-pre-release")
+            };
+            if (settings.Prerelease)
+            {
+                settings.TargetCommitish = BuildParameters.BuildProvider.Repository.Branch;
+            }
+
+            GitReleaseManagerCreate(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, settings);
         }
         else
         {
@@ -21,25 +28,30 @@ BuildParameters.Tasks.CreateReleaseNotesTask = Task("Create-Release-Notes")
 );
 
 BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
-    .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes)
-    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => BuildParameters.IsMasterBranch || BuildParameters.IsReleaseBranch || BuildParameters.IsHotFixBranch || BuildParameters.PrepareLocalRelease)
-    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease)
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+    .WithCriteria(() => BuildParameters.ShouldDownloadMilestoneReleaseNotes || BuildParameters.ShouldDownloadFullReleaseNotes, "Exporting Release notes has been disabled")
+    .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.PrepareLocalRelease, "Is local build, and is not preparing local release")
+    .WithCriteria(() => !BuildParameters.IsPullRequest || BuildParameters.PrepareLocalRelease, "Is pull request, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.IsMainRepository || BuildParameters.PrepareLocalRelease, "Is not main repository, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.BranchType == BranchType.Master || BuildParameters.BranchType == BranchType.Release || BuildParameters.BranchType == BranchType.HotFix || BuildParameters.PrepareLocalRelease, "Is not a releasable branch, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.IsTagged || BuildParameters.PrepareLocalRelease, "Is not a tagged build, and is not preparing local release")
+    .WithCriteria(() => BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem, "Not running on preferred build agent operating system")
+    .WithCriteria(() => BuildParameters.PreferredBuildProviderType == BuildParameters.BuildProvider.Type, "Not running on preferred build provider type")
+    .Does<BuildVersion>((context, buildVersion) => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitReleaseManagerGlobalTool : ToolSettings.GitReleaseManagerTool, () => {
+        if (BuildParameters.CanUseGitReleaseManager)
         {
-            if(BuildParameters.ShouldDownloadMilestoneReleaseNotes)
+            if (BuildParameters.ShouldDownloadMilestoneReleaseNotes)
             {
-                GitReleaseManagerExport(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.MilestoneReleaseNotesFilePath, new GitReleaseManagerExportSettings {
-                    TagName         = BuildParameters.Version.Milestone
-                });
+                var settings = new GitReleaseManagerExportSettings
+                {
+                    TagName         = buildVersion.Milestone
+                };
+
+                GitReleaseManagerExport(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.MilestoneReleaseNotesFilePath, settings);
             }
 
-            if(BuildParameters.ShouldDownloadFullReleaseNotes)
+            if (BuildParameters.ShouldDownloadFullReleaseNotes)
             {
-                GitReleaseManagerExport(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.FullReleaseNotesFilePath);
+                GitReleaseManagerExport(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.FullReleaseNotesFilePath);
             }
         }
         else
@@ -52,18 +64,18 @@ BuildParameters.Tasks.ExportReleaseNotesTask = Task("Export-Release-Notes")
 BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
     .IsDependentOn("Package")
     .WithCriteria(() => BuildParameters.ShouldPublishGitHub)
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+    .Does<BuildVersion>((context, buildVersion) => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitReleaseManagerGlobalTool : ToolSettings.GitReleaseManagerTool, () => {
+        if (BuildParameters.CanUseGitReleaseManager)
         {
             // Concatenating FilePathCollections should make sure we get unique FilePaths
-            foreach(var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+            foreach (var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
                                    GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
                                    GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
             {
-                GitReleaseManagerAddAssets(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone, package.ToString());
+                GitReleaseManagerAddAssets(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone, package.ToString());
             }
 
-            GitReleaseManagerClose(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, BuildParameters.Version.Milestone);
+            GitReleaseManagerClose(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName, buildVersion.Milestone);
         }
         else
         {
@@ -79,10 +91,10 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
 });
 
 BuildParameters.Tasks.CreateDefaultLabelsTask = Task("Create-Default-Labels")
-    .Does(() => RequireTool(GitReleaseManagerTool, () => {
-        if(BuildParameters.CanUseGitReleaseManager)
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitReleaseManagerGlobalTool : ToolSettings.GitReleaseManagerTool, () => {
+        if (BuildParameters.CanUseGitReleaseManager)
         {
-            GitReleaseManagerLabel(BuildParameters.GitHub.UserName, BuildParameters.GitHub.Password, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
+            GitReleaseManagerLabel(BuildParameters.GitHub.Token, BuildParameters.RepositoryOwner, BuildParameters.RepositoryName);
         }
         else
         {

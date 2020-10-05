@@ -1,4 +1,11 @@
-#load nuget:?package=Cake.Recipe&version=1.0.0
+#load "./includes.cake"
+
+public class BuildMetaData
+{
+    public static string Date { get; } = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+    public static string Version { get; } = "DogFood";
+    public static string CakeVersion { get; } = typeof(ICakeContext).Assembly.GetName().Version.ToString();
+}
 
 Environment.SetVariableNames();
 
@@ -8,8 +15,7 @@ BuildParameters.SetParameters(context: Context,
                             title: "Cake.Recipe",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Recipe",
-                            appVeyorAccountName: "cakecontrib",
-                            shouldRunGitVersion: true);
+                            appVeyorAccountName: "cakecontrib");
 
 BuildParameters.PrintParameters(Context);
 
@@ -19,18 +25,20 @@ BuildParameters.Tasks.CleanTask
     .IsDependentOn("Generate-Version-File");
 
 Task("Generate-Version-File")
-    .Does(() => {
+    .Does<BuildVersion>((context, buildVersion) => {
         var buildMetaDataCodeGen = TransformText(@"
         public class BuildMetaData
         {
             public static string Date { get; } = ""<%date%>"";
             public static string Version { get; } = ""<%version%>"";
+            public static string CakeVersion { get; } = ""<%cakeversion%>"";
         }",
         "<%",
         "%>"
         )
-   .WithToken("date", DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"))
-   .WithToken("version", BuildParameters.Version.SemVersion)
+   .WithToken("date", BuildMetaData.Date)
+   .WithToken("version", buildVersion.SemVersion)
+   .WithToken("cakeversion", BuildMetaData.CakeVersion)
    .ToString();
 
     System.IO.File.WriteAllText(
@@ -41,11 +49,11 @@ Task("Generate-Version-File")
 
 Task("Run-Local-Integration-Tests")
     .IsDependentOn("Default")
-    .Does(() => {
+    .Does<BuildVersion>((context, buildVersion) => {
     CakeExecuteScript("./test.cake",
         new CakeSettings {
             Arguments = new Dictionary<string, string>{
-                { "recipe-version", BuildParameters.Version.SemVersion },
+                { "recipe-version", buildVersion.SemVersion },
                 { "verbosity", Context.Log.Verbosity.ToString("F") }
             }});
 });

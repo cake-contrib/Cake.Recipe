@@ -1,16 +1,38 @@
 ---
 Title: Cake.Recipe
 NoSidebar: true
-NoContainer: false
+NoContainer: true
 NoGutter: true
 ---
 
-<div class="container">				
-	<h1>What is it?</h1>
-    <p>
-        Cake.Recipe is a set of convention based build scripts, which are delivered as a NuGet Package, which can then be consumed by Cake.
-    </p>
-    <p>
-        The thought process behind this is that I was creating the same build script several times, with minor tweaks, which meant when something changed, I had to update it in several places.  This isn't good for a number of reasons, but mostly due to the fact that it is a lot of effort to keep those up to date when things change.  By making a NuGet package of the common tasks, with the ability to configure the different options means that Cake.Recipe can be used on many projects, and updated in a single place.'
-    </p>
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-4">Cake.Recipe</h1>
+        <p>
+            Opinionated build recipe for the Cake Build System<br/>
+        </p>
+        <a class="btn btn-primary btn-lg" href="docs" role="button">Learn more</a>
+    </div>
+</div>
+
+<div class="container text-center">
+    <div class="row slideanim">
+        <div class="col-sm-4">
+            <span class="glyphicon glyphicon-heart logo-small"></span>
+            <h3 class="no-anchor">Open-Source</h3>
+            <p>
+                Cake.Recipe is free to use, improve, contribute and distribute.
+                Source code is available on <a href="https://github.com/cake-contrib/Cake.Recipe">GitHub</a> under MIT license.
+            </p>
+        </div>
+        <div class="col-sm-4">
+            <span class="glyphicon glyphicon-th-large logo-small"></span>
+            <h3 class="no-anchor">Extensible</h3>
+            <p>
+                While Cake.Recipe comes with a pre-defined set of tasks, it is possible
+                to <a href="docs/extending">extend</a> with your own tasks, or completely
+                replace with your own tasks.
+            </p>
+        </div>
+    </div>
 </div>

@@ -8,19 +8,11 @@ BuildParameters.Tasks.CleanDocumentationTask = Task("Clean-Documentation")
     EnsureDirectoryExists(BuildParameters.WyamPublishDirectoryPath);
 });
 
-BuildParameters.Tasks.DeployGraphDocumentation = Task("Deploy-Graph-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldDeployGraphDocumentation)
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => {
-        Graph(Tasks).Deploy();
-    });
-
 BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
-    .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation)
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => RequireTool(WyamTool, () => {
+    .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation, "Wyam documentation has been disabled")
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
         // Check to see if any documentation has changed
         var sourceCommit = GitLogTip("./");
         Information("Source Commit Sha: {0}", sourceCommit.Sha);
@@ -30,12 +22,26 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
         var wyamDocsFolderDirectoryName = BuildParameters.WyamRootDirectoryPath.GetDirectoryName();
 
-        foreach(var file in filesChanged)
+        var pathsToTestAgainst = new List<string>() {
+            string.Format("{0}{1}", wyamDocsFolderDirectoryName, '/')
+        };
+
+        if (BuildParameters.ShouldDocumentSourceFiles)
         {
-            var forwardSlash = '/';
+            // BuildParameters.WyamSourceFiles can not be used - the wyam globs are different from globs in GetFiles().
+            pathsToTestAgainst.Add(string.Format("{0}{1}", BuildParameters.SourceDirectoryPath.FullPath, '/'));
+        }
+
+        Verbose("Comparing all file-changes to the following paths:");
+        foreach(var p in pathsToTestAgainst)
+        {
+            Verbose(" - "+p);
+        }
+
+        foreach (var file in filesChanged)
+        {
             Verbose("Changed File OldPath: {0}, Path: {1}", file.OldPath, file.Path);
-            if(file.OldPath.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
-                file.Path.Contains(string.Format("{0}{1}", wyamDocsFolderDirectoryName, forwardSlash)) ||
+            if (pathsToTestAgainst.Any(x => file.OldPath.Contains(x) || file.Path.Contains(x)) ||
                 file.Path.Contains("config.wyam"))
             {
             docFileChanged = true;
@@ -43,9 +49,22 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
             }
         }
 
-        if(docFileChanged)
+        if (docFileChanged)
         {
             Information("Detected that documentation files have changed, so running Wyam...");
+            var settings = new Dictionary<string, object>
+            {
+                { "Host",  BuildParameters.WebHost },
+                { "LinkRoot",  BuildParameters.WebLinkRoot },
+                { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+                { "Title", BuildParameters.Title },
+                { "IncludeGlobalNamespace", false }
+            };
+
+            if (BuildParameters.ShouldDocumentSourceFiles)
+            {
+                settings.Add("SourceFiles", BuildParameters.WyamSourceFiles);
+            }
 
             Wyam(new WyamSettings
             {
@@ -55,15 +74,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
                 RootPath = BuildParameters.WyamRootDirectoryPath,
                 ConfigurationFile = BuildParameters.WyamConfigurationFile,
                 PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
-                Settings = new Dictionary<string, object>
-                {
-                    { "Host",  BuildParameters.WebHost },
-                    { "LinkRoot",  BuildParameters.WebLinkRoot },
-                    { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
-                    { "SourceFiles", BuildParameters.WyamSourceFiles },
-                    { "Title", BuildParameters.Title },
-                    { "IncludeGlobalNamespace", false }
-                }
+                Settings = settings
             });
 
             PublishDocumentation();
@@ -82,9 +93,22 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 });
 
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
-    .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => RequireTool(WyamTool, () => {
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+        var settings = new Dictionary<string, object>
+        {
+            { "Host",  BuildParameters.WebHost },
+            { "LinkRoot",  BuildParameters.WebLinkRoot },
+            { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+            { "Title", BuildParameters.Title },
+            { "IncludeGlobalNamespace", false }
+        };
+
+        if (BuildParameters.ShouldDocumentSourceFiles)
+        {
+            settings.Add("SourceFiles", BuildParameters.WyamSourceFiles);
+        }
+
         Wyam(new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
@@ -95,24 +119,29 @@ BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
             Watch = true,
             ConfigurationFile = BuildParameters.WyamConfigurationFile,
             PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
-            Settings = new Dictionary<string, object>
-            {
-                { "Host",  BuildParameters.WebHost },
-                { "LinkRoot",  BuildParameters.WebLinkRoot },
-                { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
-                { "SourceFiles", BuildParameters.WyamSourceFiles },
-                { "Title", BuildParameters.Title },
-                { "IncludeGlobalNamespace", false }
-            }
+            Settings = settings
         });
     })
 );
 
 BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
-    .IsDependentOn("Deploy-Graph-Documentation")
-    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath))
-    .Does(() => RequireTool(WyamTool, () => {
+    .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
+    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+        var settings = new Dictionary<string, object>
+        {
+            { "Host",  BuildParameters.WebHost },
+            { "LinkRoot",  BuildParameters.WebLinkRoot },
+            { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
+            { "Title", BuildParameters.Title },
+            { "IncludeGlobalNamespace", false }
+        };
+
+        if (BuildParameters.ShouldDocumentSourceFiles)
+        {
+            settings.Add("SourceFiles", BuildParameters.WyamSourceFiles);
+        }
+
         Wyam(new WyamSettings
         {
             Recipe = BuildParameters.WyamRecipe,
@@ -121,15 +150,7 @@ BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Docume
             RootPath = BuildParameters.WyamRootDirectoryPath,
             ConfigurationFile = BuildParameters.WyamConfigurationFile,
             PreviewVirtualDirectory = BuildParameters.WebLinkRoot,
-            Settings = new Dictionary<string, object>
-            {
-                { "Host",  BuildParameters.WebHost },
-                { "LinkRoot",  BuildParameters.WebLinkRoot },
-                { "BaseEditUrl", BuildParameters.WebBaseEditUrl },
-                { "SourceFiles", BuildParameters.WyamSourceFiles },
-                { "Title", BuildParameters.Title },
-                { "IncludeGlobalNamespace", false }
-            }
+            Settings = settings
         });
 
         PublishDocumentation();
@@ -138,8 +159,8 @@ BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Docume
 
 public void PublishDocumentation()
 {
-    RequireTool(KuduSyncTool, () => {
-        if(BuildParameters.CanUseWyam)
+    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.KuduSyncGlobalTool : ToolSettings.KuduSyncTool, () => {
+        if (BuildParameters.CanUseWyam)
         {
             var sourceCommit = GitLogTip("./");
 
@@ -158,14 +179,14 @@ public void PublishDocumentation()
                 Information("Stage all changes...");
                 GitAddAll(publishFolder);
 
-                if(GitHasStagedChanges(publishFolder))
+                if (GitHasStagedChanges(publishFolder))
                 {
                     Information("Commit all changes...");
                     GitCommit(
                         publishFolder,
                         sourceCommit.Committer.Name,
                         sourceCommit.Committer.Email,
-                        string.Format("AppVeyor Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
+                        string.Format("Continuous Integration Publish: {0}\r\n{1}", sourceCommit.Sha, sourceCommit.Message)
                     );
 
                     Information("Pushing all changes...");

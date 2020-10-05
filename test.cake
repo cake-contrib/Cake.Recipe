@@ -13,12 +13,12 @@ var testRepos                     = new [] {
                                       new {
                                           Path = testReposRootPath.Combine("Cake.Gulp"),
                                           Url = "https://github.com/cake-contrib/Cake.Gulp.git",
-                                          BuildScriptName = "setup.cake"
+                                          BuildScriptName = "recipe.cake"
                                       },
                                       new {
                                           Path = testReposRootPath.Combine("Cake.Http"),
                                           Url = "https://github.com/cake-contrib/Cake.Http.git",
-                                          BuildScriptName = "setup.cake"
+                                          BuildScriptName = "recipe.cake"
                                       },
                                       new {
                                           Path = testReposRootPath.Combine("Cake.Twitter"),
@@ -85,7 +85,7 @@ var testsTask = Task("Tests")
 
 Information("Setting up integration tests...");
 
-foreach(var testRepo in testRepos)
+foreach (var testRepo in testRepos)
 {
     var url = testRepo.Url;
     var path = testRepo.Path;

@@ -1,12 +1,12 @@
 public class BuildVersion
 {
-    public string Version { get; private set; }
-    public string SemVersion { get; private set; }
-    public string Milestone { get; private set; }
-    public string CakeVersion { get; private set; }
-    public string InformationalVersion { get; private set; }
-    public string FullSemVersion { get; private set; }
-    public string AssemblySemVer { get; private set; }
+    public string Version { get; set; }
+    public string SemVersion { get; set; }
+    public string Milestone { get; set; }
+    public string CakeVersion { get; set; }
+    public string InformationalVersion { get; set; }
+    public string FullSemVersion { get; set; }
+    public string AssemblySemVer { get; set; }
 
     public static BuildVersion CalculatingSemanticVersion(
         ICakeContext context)
@@ -16,24 +16,48 @@ public class BuildVersion
             throw new ArgumentNullException("context");
         }
 
+        var cakeVersion = typeof(ICakeContext).Assembly.GetName().Version.ToString();
+
+        try
+        {
+            context.Information("Testing to see if valid git repository...");
+
+            var rootPath = BuildParameters.RootDirectoryPath;
+            rootPath = context.GitFindRootFromPath(rootPath);
+        }
+        catch (LibGit2Sharp.RepositoryNotFoundException)
+        {
+            context.Warning("Unable to locate git repository, so GitVersion can't be executed, returning default version numbers...");
+
+            return new BuildVersion
+            {
+                Version = "0.1.0",
+                SemVersion = "0.1.0-alpha.0",
+                Milestone = "0.1.0",
+                CakeVersion = cakeVersion,
+                InformationalVersion = "0.1.0-alpha.0+Branch.develop.Sha.528f9bf572a52f0660cbe3f4d109599eab1e9866",
+                FullSemVersion = "0.1.0-alpha.0",
+                AssemblySemVer = "0.1.0.o"
+            };
+        }
+
         string version = null;
         string semVersion = null;
         string milestone = null;
         string informationalVersion = null;
         string assemblySemVer = null;
         string fullSemVersion = null;
+        string uniqueSemVersion = null;
         GitVersion assertedVersions = null;
 
-        if (BuildParameters.ShouldRunGitVersion)
+        if (BuildParameters.ShouldCalculateVersion)
         {
-            if (context.IsRunningOnUnix()) {
-                PatchGitLibConfigFiles(context);
-            }
+            BuildParameters.Platform.PatchGitLib2ConfigFiles("**/GitVersion*/**/LibGit2Sharp.dll.config");
 
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
             {
-                if(!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
+                if (!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
                 {
                     context.GitVersion(new GitVersionSettings{
                         UpdateAssemblyInfoFilePath = BuildParameters.Paths.Files.SolutionInfoFilePath,
@@ -55,9 +79,10 @@ public class BuildVersion
                 assemblySemVer = context.EnvironmentVariable("GitVersion_AssemblySemVer");
                 milestone = string.Concat(version);
                 fullSemVersion = context.EnvironmentVariable("GitVersion_FullSemVer");
+                uniqueSemVersion = string.Concat(context.EnvironmentVariable("GitVersion_LegacySemVerPadded"), "-", context.EnvironmentVariable("GitVersion_CommitsSinceVersionSourcePadded"));
             }
 
-            if(!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
+            if (!BuildParameters.IsPublicRepository && BuildParameters.IsRunningOnAppVeyor)
             {
                 assertedVersions = context.GitVersion(new GitVersionSettings{
                         OutputType = GitVersionOutput.Json,
@@ -73,8 +98,9 @@ public class BuildVersion
             semVersion = assertedVersions.LegacySemVerPadded;
             informationalVersion = assertedVersions.InformationalVersion;
             assemblySemVer = assertedVersions.AssemblySemVer;
-            milestone = string.Concat(version);
+            milestone = assertedVersions.SemVer;
             fullSemVersion = assertedVersions.FullSemVer;
+            uniqueSemVersion = string.Concat(assertedVersions.LegacySemVerPadded, "-", assertedVersions.CommitsSinceVersionSourcePadded);
 
             context.Information("Calculated Semantic Version: {0}", semVersion);
         }
@@ -89,59 +115,15 @@ public class BuildVersion
             milestone = string.Concat(version);
         }
 
-        var cakeVersion = typeof(ICakeContext).Assembly.GetName().Version.ToString();
-
         return new BuildVersion
         {
             Version = version,
-            SemVersion = semVersion,
-            Milestone = milestone,
+            SemVersion = (BuildParameters.BranchType == BranchType.HotFix || BuildParameters.BranchType == BranchType.Release && !BuildParameters.IsTagged) ? uniqueSemVersion?.ToLowerInvariant() : semVersion?.ToLowerInvariant(),
+            Milestone = BuildParameters.IsTagged || context.HasArgument("create-pre-release") ? milestone : version,
             CakeVersion = cakeVersion,
-            InformationalVersion = informationalVersion,
-            FullSemVersion = fullSemVersion,
-            AssemblySemVer = assemblySemVer
+            InformationalVersion = informationalVersion?.ToLowerInvariant(),
+            FullSemVersion = fullSemVersion?.ToLowerInvariant(),
+            AssemblySemVer = assemblySemVer?.ToLowerInvariant()
         };
-    }
-
-    private static void PatchGitLibConfigFiles(ICakeContext context)
-    {
-        var configFiles = context.GetFiles("./tools/**/LibGit2Sharp.dll.config");
-        var libgitPath = GetLibGit2Path(context);
-        if (string.IsNullOrEmpty(libgitPath)) { return; }
-
-        foreach(var config in configFiles) {
-            var xml = System.Xml.Linq.XDocument.Load(config.ToString());
-
-            if (xml.Element("configuration").Elements("dllmap")
-                .All(e => e.Attribute("target").Value != libgitPath)) {
-
-                var dllName = xml.Element("configuration").Elements("dllmap").First(e => e.Attribute("os").Value == "linux").Attribute("dll").Value;
-                xml.Element("configuration")
-                    .Add(new System.Xml.Linq.XElement("dllmap",
-                        new System.Xml.Linq.XAttribute("os", "linux"),
-                        new System.Xml.Linq.XAttribute("dll", dllName),
-                        new System.Xml.Linq.XAttribute("target", libgitPath)));
-
-                context.Information($"Patching '{config}' to use fallback system path on Linux...");
-                xml.Save(config.ToString());
-            }
-        }
-    }
-
-    private static string GetLibGit2Path(ICakeContext context)
-    {
-        var possiblePaths = new[] {
-            "/usr/lib*/libgit2.so*",
-            "/usr/lib/*/libgit2.so*"
-        };
-
-        foreach (var path in possiblePaths) {
-            var file = context.GetFiles(path).FirstOrDefault();
-            if (file != null && !string.IsNullOrEmpty(file.ToString())) {
-                return file.ToString();
-            }
-        }
-
-        return null;
     }
 }
