@@ -37,6 +37,12 @@ jobs:
         with:
           branch: "release/${{ steps.gitversion.outputs.majorMinorPatch }}"
           github_token: ${{ secrets.GH_TOKEN }}
+      - name: Creating includes.cake file
+        run: |
+          Get-ChildItem "./Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
+            "#load `"local:?path=$($_.FullName -replace '\\','/')`""
+          } | Out-File "./includes.cake"
+        shell: pwsh
       - name: Drafting Release Notes
         uses: cake-build/cake-action@v1
         with:
