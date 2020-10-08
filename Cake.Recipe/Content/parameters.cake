@@ -529,6 +529,11 @@ public static class BuildParameters
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", RepositoryName), BuildProvider.Repository.Name);
         IsPublicRepository = isPublicRepository;
 
+        IsTagged = (
+            BuildProvider.Repository.Tag.IsTag &&
+            !string.IsNullOrWhiteSpace(BuildProvider.Repository.Tag.Name)
+        );
+
         var branchName = BuildProvider.Repository.Branch ?? string.Empty; // This is just to prevent any null reference exceptions
         if (StringComparer.OrdinalIgnoreCase.Equals(masterBranchName, branchName))
         {
@@ -546,15 +551,55 @@ public static class BuildParameters
         {
             BranchType = BranchType.HotFix;
         }
+        else if (IsTagged)
+        {
+            BranchType = BranchType.Unknown;
+            var gitTool = context.Tools.Resolve("git");
+
+            if (gitTool != null)
+            {
+                IEnumerable<string> redirectedStandardOutput;
+                IEnumerable<string> redirectedError;
+
+                var exitCode = context.StartProcess(
+                    gitTool,
+                    new ProcessSettings {
+                        Arguments = "branch --contains HEAD",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                    },
+                    out redirectedStandardOutput,
+                    out redirectedError
+                );
+
+                if (exitCode == 0)
+                {
+                    var lines = redirectedStandardOutput.Select(c => c.TrimStart(new []{ ' ', '*' })).ToList();
+
+                    if (lines.Contains(masterBranchName))
+                    {
+                        BranchType = BranchType.Master;
+                    }
+                    else if (lines.Contains(developBranchName))
+                    {
+                        BranchType = BranchType.Develop;
+                    }
+                    else if (lines.Any(l => l.StartsWith("release", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        BranchType = BranchType.Release;
+                    }
+                    else if (lines.Any(l => l.StartsWith("hotfix", StringComparison.OrdinalIgnoreCase)))
+                    {
+                        BranchType = BranchType.HotFix;
+                    }
+                }
+            }
+        }
         else
         {
             BranchType = BranchType.Unknown;
         }
 
-        IsTagged = (
-            BuildProvider.Repository.Tag.IsTag &&
-            !string.IsNullOrWhiteSpace(BuildProvider.Repository.Tag.Name)
-        );
         TreatWarningsAsErrors = treatWarningsAsErrors;
 
         GitHub = GetGitHubCredentials(context);
