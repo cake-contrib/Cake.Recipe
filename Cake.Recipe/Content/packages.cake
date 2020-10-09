@@ -281,9 +281,13 @@ public void PushNuGetPackages(ICakeContext context, bool isRelease, List<Package
                             Password = nugetSource.Credentials.Password
                         };
 
-                    // This is required so that the X-NuGet-ApiKey is set, which is required when
-                    // pushing to some sources, for example Azure Artifacts.
-                    nugetPushSettings.ApiKey = "RandomToken";
+                    if (nugetSource.Name == "AZURE")
+                    {
+                        // This is required so that the X-NuGet-ApiKey is set.  Currently,
+                        // it is only known that this is required when pushing to Azure
+                        // Artifacts, as such, a more general solution hasn't been provided.
+                        nugetPushSettings.ApiKey = "RandomToken";
+                    }
 
                     context.Information("Adding NuGet source with user/pass...");
                     context.NuGetAddSource(isRelease ? string.Format("ReleaseSource_{0}", nugetSource.Name) : string.Format("PreReleaseSource_{0}", nugetSource.Name), nugetSource.PushUrl, nugetSourceSettings);

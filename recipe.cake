@@ -9,13 +9,17 @@ public class BuildMetaData
 
 Environment.SetVariableNames();
 
+var standardNotificationMessage = "Version {0} of {1} has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.";
+
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
                             sourceDirectoryPath: "./src",
                             title: "Cake.Recipe",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Recipe",
-                            appVeyorAccountName: "cakecontrib");
+                            appVeyorAccountName: "cakecontrib",
+                            gitterMessage: "@/all " + standardNotificationMessage,
+                            twitterMessage: standardNotificationMessage);
 
 BuildParameters.PrintParameters(Context);
 
