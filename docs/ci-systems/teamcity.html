@@ -218,7 +218,66 @@
 			<h1>TeamCity</h1>
 		</section>
 	<section class="content">
-		<p>This documentation is currently missing.</p>
+		<h2 id="specifics">Specifics</h2>
+<ul>
+<li><p><code>vcsroot.branch</code>-environment variable</p>
+<p>Exposing the <code>vcsroot.branch</code> parameter as an environment variable is required.</p>
+</li>
+</ul>
+<h2 id="example-config">Example Config</h2>
+<p>Generally, TeamCity is configured using the UI:</p>
+<ul>
+<li><p>Add a new build configuration to your project</p>
+</li>
+<li><p>Select a VCS-Root</p>
+</li>
+<li><p>Choose &quot;configure build steps manually&quot; (and skip auto-detection)</p>
+</li>
+<li><p>Select &quot;PowerShell&quot; as Runner type</p>
+</li>
+<li><p>Add <code>build.ps1</code> as &quot;Script file&quot; and optionally some &quot;Script arguments&quot;</p>
+<p><img src="./teamcity/build-step.png" class="img-responsive img-fluid" alt="build.ps1 in script file" /></p>
+</li>
+<li><p>Select &quot;Parameters&quot; and a new parameter</p>
+<ul>
+<li>Choose <code>env.vcsroot.branch</code> as Name,</li>
+<li>&quot;Environment Variable&quot; as Kind,</li>
+<li><code>%vcsroot.branch%</code> as Value</li>
+</ul>
+<p><img src="./teamcity/parameter.png" class="img-responsive img-fluid" alt="env.vcsroot.branch variable" /></p>
+</li>
+<li><p>At this point you are done with the basic setup and can select &quot;Run&quot; to try the new configuration.</p>
+</li>
+</ul>
+<p>The following code shows the Kotlin DSL, as can be exported in TeamCity-UI.
+Though generally the build is configured using the TeamCity-UI.</p>
+<pre><code class="language-java">object Cake : BuildType({
+    name = &quot;Cake&quot;
+
+    params {
+        param(&quot;env.vcsroot.branch&quot;, &quot;%vcsroot.branch%&quot;)
+    }
+
+    vcs {
+        root(SomeConfiguredVcsRoot)
+    }
+
+    steps {
+        powerShell {
+            scriptMode = file {
+                path = &quot;build.ps1&quot;
+            }
+            noProfile = false
+            param(&quot;jetbrains_powershell_scriptArguments&quot;, &quot;--verbosity=Diagnostic&quot;)
+        }
+    }
+
+    triggers {
+        vcs {
+        }
+    }
+})
+</code></pre>
 
 	</section>
                 
