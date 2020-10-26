@@ -118,7 +118,7 @@ public class BuildVersion
         return new BuildVersion
         {
             Version = version,
-            SemVersion = (BuildParameters.BranchType == BranchType.HotFix || BuildParameters.BranchType == BranchType.Release && !BuildParameters.IsTagged) ? uniqueSemVersion?.ToLowerInvariant() : semVersion?.ToLowerInvariant(),
+            SemVersion = ((BuildParameters.BranchType == BranchType.HotFix || BuildParameters.BranchType == BranchType.Release) && !BuildParameters.IsTagged) ? uniqueSemVersion?.ToLowerInvariant() : semVersion?.ToLowerInvariant(),
             Milestone = BuildParameters.IsTagged || context.HasArgument("create-pre-release") ? milestone : version,
             CakeVersion = cakeVersion,
             InformationalVersion = informationalVersion?.ToLowerInvariant(),
