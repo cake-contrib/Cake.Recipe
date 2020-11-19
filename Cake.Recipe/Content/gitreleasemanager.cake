@@ -68,7 +68,7 @@ BuildParameters.Tasks.PublishGitHubReleaseTask = Task("Publish-GitHub-Release")
         if (BuildParameters.CanUseGitReleaseManager)
         {
             // Concatenating FilePathCollections should make sure we get unique FilePaths
-            foreach (var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/**/*") +
+            foreach (var package in GetFiles(BuildParameters.Paths.Directories.Packages + "/*") +
                                    GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*") +
                                    GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*"))
             {
