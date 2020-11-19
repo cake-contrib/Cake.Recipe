@@ -53,13 +53,13 @@ public static class ToolSettings
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.11.1",
         string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=5.7.0",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
-        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.6.7",
+        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.7.1",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.3",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
-        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.3.7",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.6.7",
+        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.5.1",
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.7.1",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
         // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
         string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218"

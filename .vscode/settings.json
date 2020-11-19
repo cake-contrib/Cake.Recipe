@@ -25,6 +25,7 @@
     "clearcache",
     "clickable",
     "hotfix",
+    "jetbrains",
     "msbuild",
     "netcoreapp",
     "netstandard",
@@ -35,7 +36,9 @@
     "publishdocs",
     "releasenotes",
     "resharper",
+    "teamcity",
     "typeof",
+    "vcsroot",
     "vstest",
     "wixproj",
     "xbuild"

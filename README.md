@@ -36,7 +36,7 @@ To build this package we are using Cake.
 On Windows PowerShell run:
 
 ```powershell
-./build
+.\build.ps1
 ```
 
 On OSX/Linux run:

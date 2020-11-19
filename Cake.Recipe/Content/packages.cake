@@ -193,7 +193,7 @@ public void PushChocolateyPackages(ICakeContext context, bool isRelease, List<Pa
 
         foreach (var chocolateySource in chocolateySources)
         {
-            var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/**/*.nupkg");
+            var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.ChocolateyPackages + "/*.nupkg");
 
             var chocolateyPushSettings = new ChocolateyPushSettings
                 {
@@ -257,7 +257,7 @@ public void PushNuGetPackages(ICakeContext context, bool isRelease, List<Package
 
         foreach (var nugetSource in nugetSources)
         {
-            var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/**/*.nupkg");
+            var nupkgFiles = GetFiles(BuildParameters.Paths.Directories.NuGetPackages + "/*.nupkg");
 
             var nugetPushSettings = new NuGetPushSettings
                 {
