@@ -37,7 +37,7 @@ The `SetVariableNames` method uses the concept of optional parameters, in fact, 
 
 ### githubTokenVariable
 
-Default value: `GITHUB_TOKEN`
+Default value: `GITHUB_PAT`
 
 ### gitterTokenVariable
 
