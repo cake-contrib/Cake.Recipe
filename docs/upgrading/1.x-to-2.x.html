@@ -345,6 +345,12 @@ dotnet cake $SCRIPT_NAME &quot;$&#64;&quot;
 </code></pre>
 <h3 id="delete-packages.config-file">Delete packages.config file</h3>
 <p>Since we are recommending switching to using the .Net Global Tool version of Cake, with associated bootstrappers, the packages.config file in the tools folder is no longer required, and can be deleted.  In addition, you should update the .gitignore file to remove the special handling of this file.</p>
+<h3 id="ensure-there-are-no-trailing-spaces-in-the-recipe.cake-file-for-the-testcoveragefilter-parameter">Ensure there are no trailing spaces in the recipe.cake file for the testCoverageFilter parameter</h3>
+<p>If there is, you might see an error like the following:</p>
+<blockquote class="blockquote">
+<p>Error: One or more errors occurred. (Index was outside the bounds of the array.)</p>
+</blockquote>
+<p>To fix this issue, simply delete the trailing space in the parameter.</p>
 
 	</section>
                 
