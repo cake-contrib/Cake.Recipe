@@ -30,11 +30,41 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
             // branch name if the branch name itself contains a '/'
             var tempName = context.BuildSystem().GitHubActions.Environment.Workflow.Ref;
             const string headPrefix = "refs/heads/";
+            const string tagPrefix = "refs/tags/";
             if (!string.IsNullOrEmpty(tempName))
             {
                 if (tempName.StartsWith(headPrefix))
                 {
                     tempName = tempName.Substring(headPrefix.Length);
+                }
+                else if (tempName.StartsWith(tagPrefix))
+                {
+                    var gitTool = context.Tools.Resolve("git");
+
+                    if (gitTool != null)
+                    {
+                        IEnumerable<string> redirectedStandardOutput;
+                        IEnumerable<string> redirectedError;
+
+                        var exitCode = context.StartProcess(
+                            gitTool,
+                            new ProcessSettings {
+                                Arguments = "branch -r --contains " + tempName,
+                                RedirectStandardOutput = true,
+                                RedirectStandardError = true,
+                            },
+                            out redirectedStandardOutput,
+                            out redirectedError
+                        );
+
+                        if (exitCode == 0)
+                        {
+                            if (redirectedStandardOutput.Any())
+                            {
+                                tempName = redirectedStandardOutput.First().TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
+                            }
+                        }
+                    }
                 }
                 else if (tempName.IndexOf('/') >= 0)
                 {
