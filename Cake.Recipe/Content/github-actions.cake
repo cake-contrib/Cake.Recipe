@@ -59,9 +59,10 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
 
                         if (exitCode == 0)
                         {
-                            if (redirectedStandardOutput.Any())
+                            var lines = redirectedStandardOutput.ToList();
+                            if (lines.Count != 0)
                             {
-                                tempName = redirectedStandardOutput.First().TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
+                                tempName = lines[0].TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
                             }
                         }
                     }
