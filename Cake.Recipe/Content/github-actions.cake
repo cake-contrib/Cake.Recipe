@@ -40,6 +40,10 @@ public class GitHubActionRepositoryInfo : IRepositoryInfo
                 else if (tempName.StartsWith(tagPrefix))
                 {
                     var gitTool = context.Tools.Resolve("git");
+                    if (gitTool == null)
+                    {
+                        gitTool = context.Tools.Resolve("git.exe");
+                    }
 
                     if (gitTool != null)
                     {
