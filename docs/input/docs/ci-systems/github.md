@@ -44,11 +44,6 @@ jobs:
           path: tools
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
       
-      - name: Setup .NET Core 3.1
-        uses: actions/setup-dotnet@v1.5.0
-        with:
-          dotnet-version: 3.1.107
-      
       - name: Build project
         uses: cake-build/cake-action@v1
         with:
