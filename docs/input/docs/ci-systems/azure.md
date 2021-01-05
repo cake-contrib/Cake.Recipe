@@ -25,5 +25,5 @@ steps:
     target: 'CI'
     verbosity: 'Normal'
     Bootstrap: true
-    Version: '0.38.4'
+    Version: '0.38.5'
 ```
