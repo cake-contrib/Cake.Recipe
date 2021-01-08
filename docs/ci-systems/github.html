@@ -224,7 +224,11 @@
 <p>Uploading artifacts is currently not supported in Cake.Recipe. Please use the <code>actions/upload-artifacts</code> GitHub Action.</p>
 </li>
 <li><p><code>actions/checkout</code></p>
-<p>The default for <code>fetch-depth</code> is <code>1</code> - this currently does not work with <code>GitVersion</code>. Set <code>fetch-depth: 0</code> to fetch all history for all branches.</p>
+<p>The default for <code>fetch-depth</code> is <code>1</code> - this currently does not work with <code>GitVersion</code>.
+Additionally information on different tags and branches is needed on some occasions
+(like building from a tag which does happen when releasing a new version.)</p>
+<p>Therefore it is required to &quot;unshallow&quot; the checked out repository by adding a manual
+step: <code>git fetch --prune --unshallow</code></p>
 </li>
 </ul>
 <h2 id="example-config">Example Config</h2>
@@ -238,9 +242,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: actions/checkout&#64;v2.2.0
-        with:
-          fetch-depth: 0
+      - name: Checkout the repository 
+        uses: actions/checkout&#64;v2
+      
+      - name: Fetch all tags and branches
+        run: git fetch --prune --unshallow
 
       - name: Cache Tools
         uses: actions/cache&#64;v2
@@ -248,18 +254,13 @@ jobs:
           path: tools
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
       
-      - name: Setup .NET Core 3.1
-        uses: actions/setup-dotnet&#64;v1.5.0
-        with:
-          dotnet-version: 3.1.107
-      
       - name: Build project
         uses: cake-build/cake-action&#64;v1
         with:
           script-path: recipe.cake
           target: CI
           verbosity: Normal
-          cake-version: 0.38.4
+          cake-version: 0.38.5
           cake-bootstrap: true
 
       - name: Upload Issues-Report
