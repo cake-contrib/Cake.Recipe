@@ -8,7 +8,7 @@ Description: Running on AppVeyor
 
 * PR-Builds
 
-  In organisations with large amounts of projects (like cake-contrib) it is advaisable to *not* run 
+  In organizations with large amounts of projects (like cake-contrib) it is advisable to *not* run 
   pull-requests on AppVeyor (if using the OSS-plan in AppVeyor), to
   reduce the amount of build-time.
   This change can not be done in the yaml but must be done manually in the UI.
