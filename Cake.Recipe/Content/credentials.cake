@@ -145,7 +145,18 @@ public class WyamCredentials
 
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
-    return new GitHubCredentials(context.EnvironmentVariable(Environment.GithubTokenVariable));
+    string token = null;
+    // if "GithubTokenVariable" is not set, fallback to the gh-cli defaults of GH_TOKEN, GITHUB_TOKEN
+    var variableNames = new[]{ Environment.GithubTokenVariable, "GH_TOKEN", "GITHUB_TOKEN" };
+    foreach (var name in variableNames)
+    {
+        token = context.EnvironmentVariable(name);
+        if(!string.IsNullOrEmpty(token))
+        {
+            break;
+        }
+    }
+    return new GitHubCredentials(token);
 }
 
 public static EmailCredentials GetEmailCredentials(ICakeContext context)

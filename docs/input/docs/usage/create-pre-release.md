@@ -18,7 +18,7 @@ which are documented [here](creating-release){.alert-link}.
 2. Make sure that a GitHub milestone exists for this release.
 3. Make sure there were issues for all changes with the appropriate labels and the correct milestone set.
 4. Make sure that you have the following environment variables set in your local development environment:
-   - [GITHUB_TOKEN](../fundamentals/environment-variables#github_token)
+   - [GITHUB_PAT](../fundamentals/environment-variables#github_pat)
 5. Create a GitHub release draft by running:
    - On Windows: `.\build.ps1 --target=releasenotes --create-pre-release`
    - On MacOS/Linux: `./build.sh --target=releasenotes --create-pre-release`

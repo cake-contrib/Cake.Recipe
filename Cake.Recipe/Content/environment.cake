@@ -47,7 +47,7 @@ public static class Environment
         string wyamDeployRemoteVariable = null,
         string wyamDeployBranchVariable = null)
     {
-        GithubTokenVariable = githubTokenVariable ?? "GITHUB_TOKEN";
+        GithubTokenVariable = githubTokenVariable ?? "GITHUB_PAT";
         GitterTokenVariable = gitterTokenVariable ?? "GITTER_TOKEN";
         GitterRoomIdVariable = gitterRoomIdVariable ?? "GITTER_ROOM_ID";
         SlackTokenVariable = slackTokenVariable ?? "SLACK_TOKEN";

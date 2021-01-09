@@ -32,9 +32,15 @@ A token will be checked for first, and if not provided, the username and passwor
 In addition to these environment variables being present, and correct, the control variable [shouldPublishToGitHub](./set-parameters#shouldPublishToGitHub) also needs to be set to true.
 :::
 
-### GITHUB_TOKEN
+### GITHUB_PAT
 
 The Personal Access Token of the GitHub account to be used.
+
+:::{.alert .alert-info}
+**NOTE:**
+
+If `GITHUB_PAT` is not set, the alternatives of `GH_TOKEN` and `GITHUB_TOKEN` are considered.
+:::
 
 ## Gitter
 
