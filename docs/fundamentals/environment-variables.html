@@ -232,8 +232,11 @@
 <div class="alert alert-info"><p><strong>NOTE:</strong></p>
 <p>In addition to these environment variables being present, and correct, the control variable <a href="./set-parameters#shouldPublishToGitHub">shouldPublishToGitHub</a> also needs to be set to true.</p>
 </div>
-<h3 id="github_token">GITHUB_TOKEN</h3>
+<h3 id="github_pat">GITHUB_PAT</h3>
 <p>The Personal Access Token of the GitHub account to be used.</p>
+<div class="alert alert-info"><p><strong>NOTE:</strong></p>
+<p>If <code>GITHUB_PAT</code> is not set, the alternatives of <code>GH_TOKEN</code> and <code>GITHUB_TOKEN</code> are considered.</p>
+</div>
 <h2 id="gitter">Gitter</h2>
 <p>When a successful release build has been completed, Cake.Recipe can be configured to send out a notification (with configurable message) to a Gitter Room.  There are two required environment variables that needs to be set to make this happen.  Further information about find this information can be found in the Cake.Gitter <a href="https://cake-contrib.github.io/Cake.Gitter/docs/usage/requiredinformation">documentation</a>.</p>
 <div class="alert alert-info"><p><strong>NOTE:</strong></p>
