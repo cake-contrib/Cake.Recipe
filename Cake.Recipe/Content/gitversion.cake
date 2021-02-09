@@ -54,6 +54,30 @@ public class BuildVersion
         {
             BuildParameters.Platform.PatchGitLib2ConfigFiles("**/GitVersion*/**/LibGit2Sharp.dll.config");
 
+            context.Information("Confirming what version of GitVersion is being used...");
+
+            var gitVersionTool = context.Tools.Resolve("dotnet-gitversion");
+            if (gitVersionTool == null)
+            {
+                gitVersionTool = context.Tools.Resolve("dotnet-gitversion.exe");
+            }
+
+            IEnumerable<string> redirectedStandardOutput;
+            IEnumerable<string> redirectedError;
+            var exitCode = StartProcess(
+                gitVersionTool,
+                new ProcessSettings {
+                    Arguments = "/Version",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true
+                },
+                out redirectedStandardOutput,
+                out redirectedError
+            );
+
+            Information("Exit code: {0}", exitCode);
+            Information("GitVersion: {0}", string.Join("\r\n", redirectedStandardOutput));
+
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
             {
