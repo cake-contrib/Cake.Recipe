@@ -90,13 +90,15 @@ public class BuildVersion
                         UpdateAssemblyInfoFilePath = BuildParameters.Paths.Files.SolutionInfoFilePath,
                         UpdateAssemblyInfo = true,
                         OutputType = GitVersionOutput.BuildServer,
-                        NoFetch = true
+                        NoFetch = true,
+                        ToolPath = gitVersionTool
                     });
                 } else {
                     context.GitVersion(new GitVersionSettings{
                         UpdateAssemblyInfoFilePath = BuildParameters.Paths.Files.SolutionInfoFilePath,
                         UpdateAssemblyInfo = true,
-                        OutputType = GitVersionOutput.BuildServer
+                        OutputType = GitVersionOutput.BuildServer,
+                        ToolPath = gitVersionTool
                     });
                 }
 
@@ -113,11 +115,13 @@ public class BuildVersion
             {
                 assertedVersions = context.GitVersion(new GitVersionSettings{
                         OutputType = GitVersionOutput.Json,
-                        NoFetch = true
+                        NoFetch = true,
+                        ToolPath = gitVersionTool
                 });
             } else {
                 assertedVersions = context.GitVersion(new GitVersionSettings{
                         OutputType = GitVersionOutput.Json,
+                        ToolPath = gitVersionTool
                 });
             }
 
