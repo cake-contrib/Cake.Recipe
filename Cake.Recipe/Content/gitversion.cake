@@ -64,7 +64,7 @@ public class BuildVersion
 
             IEnumerable<string> redirectedStandardOutput;
             IEnumerable<string> redirectedError;
-            var exitCode = StartProcess(
+            var exitCode = context.StartProcess(
                 gitVersionTool,
                 new ProcessSettings {
                     Arguments = "/Version",
@@ -75,8 +75,8 @@ public class BuildVersion
                 out redirectedError
             );
 
-            Information("Exit code: {0}", exitCode);
-            Information("GitVersion: {0}", string.Join("\r\n", redirectedStandardOutput));
+            context.Information("Exit code: {0}", exitCode);
+            context.Information("GitVersion: {0}", string.Join("\r\n", redirectedStandardOutput));
 
             context.Information("Calculating Semantic Version...");
             if (!BuildParameters.IsLocalBuild || BuildParameters.IsPublishBuild || BuildParameters.IsReleaseBuild || BuildParameters.PrepareLocalRelease)
