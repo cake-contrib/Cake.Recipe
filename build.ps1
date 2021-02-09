@@ -16,5 +16,5 @@ dotnet cake $SCRIPT_NAME --bootstrap
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "Running Build"
-dotnet cake $SCRIPT_NAME @args
+dotnet cake $SCRIPT_NAME @args --verbosity=diagnostic
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
