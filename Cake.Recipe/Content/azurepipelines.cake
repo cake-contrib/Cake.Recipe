@@ -39,7 +39,6 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
             }
             else if (tempName.StartsWith(tagPrefix))
             {
-                context.Information("Attempting to find branch name using git...");
                 var gitTool = context.Tools.Resolve("git");
                 if (gitTool == null)
                 {
@@ -67,48 +66,32 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
                         var lines = redirectedStandardOutput.ToList();
                         if (lines.Count == 1)
                         {
-                            context.Information("There is one line");
-                            context.Information("lines[0]: {0}", lines[0]);
                             tempName = lines[0].TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
                         }
                         else if(lines.Count > 1)
                         {
-                            
-                            context.Information("There are more than one line");
                             foreach(var line in lines)
                             {
                                 var trimmedLine = line.TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
-                                context.Information("trimmedLine: {0}", trimmedLine);
                                 
                                 // This is a crude check to make sure that we are not looking at a ref
                                 // to a SHA of the current commit.  If it is, we don't want to return that
                                 if (trimmedLine.Length != 40)
                                 {
-                                    context.Information("tempName is not 40");
                                     tempName = trimmedLine;
                                     break;
                                 }
                             }
                         }
                     }
-                    else
-                    {
-                        context.Information("Something went wrong...");
-                    }
-                }
-                else
-                {
-                    context.Information("Unable to find git :-(");
                 }
             }
             else if (tempName.IndexOf('/') >= 0)
             {
-                context.Information("Resorting to checking for last slash...");
                 tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
             }
         }
 
-        context.Information("tempName: {0}", tempName);
         Branch = tempName;
 
         Tag = new AzurePipelinesTagInfo(azurePipelines);
