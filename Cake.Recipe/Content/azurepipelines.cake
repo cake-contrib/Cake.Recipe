@@ -23,8 +23,56 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 {
     public AzurePipelinesRepositoryInfo(IAzurePipelinesProvider azurePipelines)
     {
-        Branch = azurePipelines.Environment.Repository.SourceBranchName;
         Name = azurePipelines.Environment.Repository.RepoName;
+        
+        var tempName = azurePipelines.Environment.Repository.SourceBranch;
+        const string headPrefix = "refs/heads/";
+        const string tagPrefix = "refs/tags/";
+
+        if (!string.IsNullOrEmpty(tempName))
+        {
+            if (tempName.StartsWith(headPrefix))
+            {
+                tempName = azurePipelines.Environment.Repository.SourceBranchName;
+            }
+            else if (tempName.StartsWith(tagPrefix))
+            {
+                var gitTool = context.Tools.Resolve("git");
+                if (gitTool == null)
+                {
+                    gitTool = context.Tools.Resolve("git.exe");
+                }
+
+                if (gitTool != null)
+                {
+                    IEnumerable<string> redirectedStandardOutput;
+                    IEnumerable<string> redirectedError;
+
+                    var exitCode = context.StartProcess(
+                        gitTool,
+                        new ProcessSettings {
+                            Arguments = "branch -r --contains " + tempName,
+                            RedirectStandardOutput = true,
+                            RedirectStandardError = true,
+                        },
+                        out redirectedStandardOutput,
+                        out redirectedError
+                    );
+
+                    if (exitCode == 0)
+                    {
+                        var lines = redirectedStandardOutput.ToList();
+                        if (lines.Count != 0)
+                        {
+                            tempName = lines[0].TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
+                        }
+                    }
+                }
+            }
+        }
+
+        Branch = tempName;
+
         Tag = new AzurePipelinesTagInfo(azurePipelines);
     }
 
