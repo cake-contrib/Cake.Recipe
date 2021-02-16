@@ -59,6 +59,10 @@ public class BuildVersion
             {
                 gitVersionTool = context.Tools.Resolve("dotnet-gitversion.exe");
             }
+            if (gitVersionTool == null)
+            {
+                gitVersionTool = context.Tools.Resolve("GitVersion.exe")
+            }
 
             if(gitVersionTool != null)
             {
