@@ -25,6 +25,8 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
     {
         Name = azurePipelines.Environment.Repository.RepoName;
         
+        // This trimming is not perfect, as it will remove part of a
+        // branch name if the branch name itself contains a '/'
         var tempName = azurePipelines.Environment.Repository.SourceBranch;
         const string headPrefix = "refs/heads/";
         const string tagPrefix = "refs/tags/";
@@ -33,7 +35,7 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
         {
             if (tempName.StartsWith(headPrefix))
             {
-                tempName = azurePipelines.Environment.Repository.SourceBranchName;
+                tempName = tempName.Substring(headPrefix.Length);
             }
             else if (tempName.StartsWith(tagPrefix))
             {
@@ -68,6 +70,10 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
                         }
                     }
                 }
+            }
+            else if (tempName.IndexOf('/') >= 0)
+            {
+                tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
             }
         }
 
