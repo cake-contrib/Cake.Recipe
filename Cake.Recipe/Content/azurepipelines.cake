@@ -8,9 +8,9 @@ public class AzurePipelinesTagInfo : ITagInfo
     {
         const string refTags = "refs/tags/";
         // at the moment, there is no ability to know is it tag or not
-        IsTag = azurePipelines.Environment.Repository.SourceBranchName.StartsWith(refTags);
+        IsTag = azurePipelines.Environment.Repository.SourceBranch.StartsWith(refTags);
         Name = IsTag
-            ? azurePipelines.Environment.Repository.SourceBranchName.Substring(refTags.Length)
+            ? azurePipelines.Environment.Repository.SourceBranch.Substring(refTags.Length)
             : string.Empty;
     }
 
@@ -23,7 +23,7 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 {
     public AzurePipelinesRepositoryInfo(IAzurePipelinesProvider azurePipelines)
     {
-        Branch = azurePipelines.Environment.Repository.SourceBranchName;
+        Branch = azurePipelines.Environment.Repository.SourceBranch;
         Name = azurePipelines.Environment.Repository.RepoName;
         Tag = new AzurePipelinesTagInfo(azurePipelines);
     }
@@ -80,6 +80,7 @@ public class AzurePipelinesBuildProvider : IBuildProvider
         "BUILD_BUILDID",
         "BUILD_BUILDNUMBER",
         "BUILD_REPOSITORY_NAME",
+        "BUILD_SOURCEBRANCH",
         "BUILD_SOURCEBRANCHNAME",
         "BUILD_SOURCEVERSION",
         "SYSTEM_PULLREQUEST_PULLREQUESTNUMBER",
