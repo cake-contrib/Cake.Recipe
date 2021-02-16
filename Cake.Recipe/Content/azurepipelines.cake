@@ -21,7 +21,7 @@ public class AzurePipelinesTagInfo : ITagInfo
 
 public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 {
-    public AzurePipelinesRepositoryInfo(IAzurePipelinesProvider azurePipelines)
+    public AzurePipelinesRepositoryInfo(IAzurePipelinesProvider azurePipelines, ICakeContext context)
     {
         Name = azurePipelines.Environment.Repository.RepoName;
         
@@ -105,11 +105,11 @@ public class AzurePipelinesBuildInfo : IBuildInfo
 
 public class AzurePipelinesBuildProvider : IBuildProvider
 {
-    public AzurePipelinesBuildProvider(IAzurePipelinesProvider azurePipelines, ICakeEnvironment environment)
+    public AzurePipelinesBuildProvider(IAzurePipelinesProvider azurePipelines, ICakeEnvironment environment, ICakeContext context)
     {
         Build = new AzurePipelinesBuildInfo(azurePipelines);
         PullRequest = new AzurePipelinesPullRequestInfo(azurePipelines, environment);
-        Repository = new AzurePipelinesRepositoryInfo(azurePipelines);
+        Repository = new AzurePipelinesRepositoryInfo(azurePipelines, context);
 
         _azurePipelines = azurePipelines;
     }
