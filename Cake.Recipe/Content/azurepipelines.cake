@@ -39,6 +39,7 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
             }
             else if (tempName.StartsWith(tagPrefix))
             {
+                context.Information("Attempting to find branch name using git...");
                 var gitTool = context.Tools.Resolve("git");
                 if (gitTool == null)
                 {
@@ -66,17 +67,32 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
                         var lines = redirectedStandardOutput.ToList();
                         if (lines.Count != 0)
                         {
+                            context.Information("lines[0]: {0}", lines[0]);
                             tempName = lines[0].TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
                         }
+                        else
+                        {
+                            context.Information("There were 0 lines");
+                        }
                     }
+                    else
+                    {
+                        context.Information("Something went wrong...");
+                    }
+                }
+                else
+                {
+                    context.Information("Unable to find git :-(");
                 }
             }
             else if (tempName.IndexOf('/') >= 0)
             {
+                context.Information("Resorting to checking for last slash...");
                 tempName = tempName.Substring(tempName.LastIndexOf('/') + 1);
             }
         }
 
+        context.Information("tempName: {0}", tempName);
         Branch = tempName;
 
         Tag = new AzurePipelinesTagInfo(azurePipelines);
