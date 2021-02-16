@@ -65,14 +65,30 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
                     if (exitCode == 0)
                     {
                         var lines = redirectedStandardOutput.ToList();
-                        if (lines.Count != 0)
+                        if (lines.Count == 1)
                         {
+                            context.Information("There is one line");
                             context.Information("lines[0]: {0}", lines[0]);
                             tempName = lines[0].TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
                         }
-                        else
+                        else if(lines.Count > 1)
                         {
-                            context.Information("There were 0 lines");
+                            
+                            context.Information("There are more than one line");
+                            foreach(var line in lines)
+                            {
+                                var trimmedLine = line.TrimStart(new []{ ' ', '*' }).Replace("origin/", string.Empty);
+                                context.Information("trimmedLine: {0}", trimmedLine);
+                                
+                                // This is a crude check to make sure that we are not looking at a ref
+                                // to a SHA of the current commit.  If it is, we don't want to return that
+                                if (trimmedLine.Length != 40)
+                                {
+                                    context.Information("tempName is not 40");
+                                    tempName = trimmedLine;
+                                    break;
+                                }
+                            }
                         }
                     }
                     else
