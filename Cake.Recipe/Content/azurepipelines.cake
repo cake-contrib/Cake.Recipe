@@ -23,7 +23,7 @@ public class AzurePipelinesRepositoryInfo : IRepositoryInfo
 {
     public AzurePipelinesRepositoryInfo(IAzurePipelinesProvider azurePipelines)
     {
-        Branch = azurePipelines.Environment.Repository.SourceBranch;
+        Branch = azurePipelines.Environment.Repository.SourceBranchName;
         Name = azurePipelines.Environment.Repository.RepoName;
         Tag = new AzurePipelinesTagInfo(azurePipelines);
     }
