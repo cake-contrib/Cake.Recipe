@@ -61,7 +61,7 @@ public class BuildVersion
             }
             if (gitVersionTool == null)
             {
-                gitVersionTool = context.Tools.Resolve("GitVersion.exe")
+                gitVersionTool = context.Tools.Resolve("GitVersion.exe");
             }
 
             if(gitVersionTool != null)
