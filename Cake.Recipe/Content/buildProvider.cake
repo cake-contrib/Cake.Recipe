@@ -75,7 +75,7 @@ public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem 
     if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
     {
         context.Information("Using Azure DevOps Pipelines Provider...");
-        return new AzurePipelinesBuildProvider(buildSystem.AzurePipelines, context.Environment);
+        return new AzurePipelinesBuildProvider(buildSystem.AzurePipelines, context.Environment, context);
     }
 
     if (buildSystem.IsRunningOnTeamCity)

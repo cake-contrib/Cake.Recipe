@@ -16,7 +16,7 @@ Description: Running on Travis CI
 
 ## Example Config
 
-*The example shows a build-configuarion for Travis CI, using windows. 
+*The example shows a build-configuration for Travis CI, using windows. 
 Keep in mind using windows in Travis CI is currently an [early release](https://docs.travis-ci.com/user/reference/windows)
 and not everything is fully supported.*
 

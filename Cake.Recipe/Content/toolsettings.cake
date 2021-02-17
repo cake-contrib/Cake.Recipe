@@ -40,26 +40,26 @@ public static class ToolSettings
     public static string KuduSyncGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
-        string codecovTool = "#tool nuget:?package=codecov&version=1.12.3",
+        string codecovTool = "#tool nuget:?package=codecov&version=1.13.0",
         // This is specifically pinned to 0.7.0 as later versions of same package publish .Net Global Tool, rather than full framework version
         string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
         // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
-        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2020.2.4",
+        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2020.3.2",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1",
-        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.11.1",
-        string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=5.7.0",
+        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.12.0",
+        string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=5.8.1",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
-        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.7.1",
+        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.8.5",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.12.3",
+        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.13.0",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
-        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.5.1",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.7.1",
+        string gitVersionGlobalTool = "#tool dotnet:https://www.myget.org/F/gep13/api/v3/index.json?package=GitVersion.Tool&version=5.6.6",
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
         // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
         string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218"
