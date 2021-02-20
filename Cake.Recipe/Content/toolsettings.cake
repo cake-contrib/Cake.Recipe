@@ -16,6 +16,7 @@ public static class ToolSettings
     public static MSBuildToolVersion BuildMSBuildToolVersion { get; private set; }
     public static int MaxCpuCount { get; private set; }
     public static string TargetFrameworkPathOverride { get; private set; }
+    public static bool SkipDuplicatePackages { get; private set; }
 
     public static string CodecovTool { get; private set; }
     public static string CoverallsTool { get; private set; }
@@ -99,7 +100,8 @@ public static class ToolSettings
         DirectoryPath targetFrameworkPathOverride = null,
         string[] dupFinderExcludeFilesByStartingCommentSubstring = null,
         int? dupFinderDiscardCost = null,
-        bool? dupFinderThrowExceptionOnFindingDuplicates = null
+        bool? dupFinderThrowExceptionOnFindingDuplicates = null,
+        bool skipDuplicatePackages = false
     )
     {
         context.Information("Setting up tools...");

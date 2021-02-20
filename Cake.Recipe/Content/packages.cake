@@ -261,7 +261,8 @@ public void PushNuGetPackages(ICakeContext context, bool isRelease, List<Package
 
             var nugetPushSettings = new NuGetPushSettings
                 {
-                    Source = nugetSource.PushUrl
+                    Source = nugetSource.PushUrl,
+                    SkipDuplicate = ToolSettings.SkipDuplicatePackages
                 };
 
             var canPushToNuGetSource = false;
