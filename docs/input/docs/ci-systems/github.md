@@ -19,6 +19,12 @@ Description: Building with GitHub Actions
   Therefore it is required to "unshallow" the checked out repository by adding a manual 
   step: `git fetch --prune --unshallow`
 
+* Matrix build
+
+  GitHub Actions support building the same build on multiple OS. This is called a `matrix` build.
+  Testing builds on different systems is highly encouraged, therefore the example will
+  show a `matrix` build.
+
 ## Example Config
 
 ```yaml
@@ -26,10 +32,14 @@ name: Build
 
 on:
   push:
+  pull_request:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
 
     steps:
       - name: Checkout the repository 
@@ -57,11 +67,12 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           if-no-files-found: warn
-          name: issues
+          name: ${{ matrix.os }} issues
           path: BuildArtifacts/report.html
 
       - name: Upload Packages
         uses: actions/upload-artifact@v2
+        if: runner.os == 'Windows'
         with:
           if-no-files-found: warn
           name: package
