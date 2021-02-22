@@ -25,6 +25,16 @@ Description: Building with GitHub Actions
   Testing builds on different systems is highly encouraged, therefore the example will
   show a `matrix` build.
 
+* PR builds
+  
+  When building on pull requests, GitHub actions will start two builds: One on the target branch and 
+  one on the source branch. This is unwanted in cases where the source and target branch originate
+  in the same repository. (E.g. when doing a PR from `bugfix/GH-12` to `develop`). GitHub actions
+  currently has no builtin feature to suppress this. (like AppVeyor has a setting `skip_branch_with_pr`.)
+  To mimic this feature the example shows a conditional build using `if`. The source of this workaround
+  can be found in the GitHub community thread 
+  [*Duplicate checks on “push” and “pull_request” simultaneous event*](https://github.community/t/duplicate-checks-on-push-and-pull-request-simultaneous-event/18012)
+
 ## Example Config
 
 ```yaml
@@ -37,6 +47,7 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
