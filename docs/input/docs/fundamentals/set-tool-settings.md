@@ -161,3 +161,11 @@ This is used when executing the DupFinder command line tool.  If set to true, an
 Type: `bool?`
 
 Default Value: `null`
+
+### skipDuplicatesPackages
+
+This is used to tell NuGet to ignore issues with trying to push package versions when the version already exist upstream, instead of failing the build.
+
+Type: `bool`
+
+Default Value: `false`
