@@ -19,6 +19,22 @@ Description: Building with GitHub Actions
   Therefore it is required to "unshallow" the checked out repository by adding a manual 
   step: `git fetch --prune --unshallow`
 
+* Matrix build
+
+  GitHub Actions support building the same build on multiple OS. This is called a `matrix` build.
+  Testing builds on different systems is highly encouraged, therefore the example will
+  show a `matrix` build.
+
+* PR builds
+  
+  When building on pull requests, GitHub actions will start two builds: One on the target branch and 
+  one on the source branch. This is unwanted in cases where the source and target branch originate
+  in the same repository. (E.g. when doing a PR from `bugfix/GH-12` to `develop`). GitHub actions
+  currently has no builtin feature to suppress this. (like AppVeyor has a setting `skip_branch_with_pr`.)
+  To mimic this feature the example shows a conditional build using `if`. The source of this workaround
+  can be found in the GitHub community thread 
+  [*Duplicate checks on “push” and “pull_request” simultaneous event*](https://github.community/t/duplicate-checks-on-push-and-pull-request-simultaneous-event/18012)
+
 ## Example Config
 
 ```yaml
@@ -26,10 +42,15 @@ name: Build
 
 on:
   push:
+  pull_request:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    strategy:
+      matrix:
+        os: [ windows-latest, ubuntu-latest, macos-latest ]
 
     steps:
       - name: Checkout the repository 
@@ -57,11 +78,12 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           if-no-files-found: warn
-          name: issues
+          name: ${{ matrix.os }} issues
           path: BuildArtifacts/report.html
 
       - name: Upload Packages
         uses: actions/upload-artifact@v2
+        if: runner.os == 'Windows'
         with:
           if-no-files-found: warn
           name: package
