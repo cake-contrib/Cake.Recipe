@@ -6,13 +6,33 @@ Description: Running on Azure Pipelines
 
 ## Specifics
 
-None.
+* Trigger: Branches
+
+  When no branches are specified in the trigger sections, the build *should* trigger for pushes to all branches.
+  However, we have seen different behavior and hence suggest to specify branches explicitly.
+
+* Trigger: Tags
+
+  When no tags are specified in the trigger section the default is to not trigger on tags being pushed.
 
 ## Example Config
 
 ```yaml
 pool:
   vmImage: 'windows-latest'
+
+trigger:
+  branches:
+    include:
+    - '*'
+  tags:
+    include:
+    - '*'
+
+pr:
+  branches:
+    include:
+    - '*'
 
 steps:
 - task: Cache@2
