@@ -49,5 +49,5 @@ jobs:
           script-path: recipe.cake
           target: releasenotes
           verbosity: Diagnostic
-          cake-version: 0.38.5
+          cake-version: 1.0.0
           cake-bootstrap: true
