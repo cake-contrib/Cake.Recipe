@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v2.1.4
         with:
           path: tools
-          key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
+          key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake', 'Cake.Recipe/Content/addins.cake', 'Cake.Recipe/Content/tools.cake', 'Cake.Recipe/Content/modules.cake') }}
       - name: Set up git version
         if: ${{ !contains(github.ref, '/hotfix/') && !contains(github.ref, '/release/') }}
         uses: gittools/actions/gitversion/setup@v0.9.9
