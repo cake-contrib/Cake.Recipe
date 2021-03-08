@@ -245,7 +245,7 @@ public void PushChocolateyPackages(ICakeContext context, bool isRelease, List<Pa
     }
     else
     {
-        context.Information("Unable to publish Chocolatey packages. IsRunningOnWindows: {0} Chocolatey Packages Directory Exists: {0}", BuildParameters.BuildAgentOperatingSystem, DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages));
+        context.Information("Unable to publish Chocolatey packages. IsRunningOnWindows: {0} Chocolatey Packages Directory Exists: {1}", BuildParameters.BuildAgentOperatingSystem, DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages));
     }
 }
 
