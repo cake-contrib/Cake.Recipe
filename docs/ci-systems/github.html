@@ -235,27 +235,25 @@ step: <code>git fetch --prune --unshallow</code></p>
 Testing builds on different systems is highly encouraged, therefore the example will
 show a <code>matrix</code> build.</p>
 </li>
-<li><p>PR builds</p>
-<p>When building on pull requests, GitHub actions will start two builds: One on the target branch and
-one on the source branch. This is unwanted in cases where the source and target branch originate
-in the same repository. (E.g. when doing a PR from <code>bugfix/GH-12</code> to <code>develop</code>). GitHub actions
-currently has no builtin feature to suppress this. (like AppVeyor has a setting <code>skip_branch_with_pr</code>.)
-To mimic this feature the example shows a conditional build using <code>if</code>. The source of this workaround
-can be found in the GitHub community thread
-<a href="https://github.community/t/duplicate-checks-on-push-and-pull-request-simultaneous-event/18012"><em>Duplicate checks on “push” and “pull_request” simultaneous event</em></a></p>
-</li>
 </ul>
 <h2 id="example-config">Example Config</h2>
 <pre><code class="language-yaml">name: Build
 
 on:
   push:
+    branches:
+      - main
+      - develop
+      - &quot;feature/**&quot;
+      - &quot;release/**&quot;
+      - &quot;hotfix/**&quot;
+    tags:
+      - &quot;*&quot;
   pull_request:
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     strategy:
       matrix:
         os: [ windows-latest, ubuntu-latest, macos-latest ]
