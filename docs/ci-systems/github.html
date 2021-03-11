@@ -237,6 +237,11 @@ show a <code>matrix</code> build.</p>
 </li>
 </ul>
 <h2 id="example-config">Example Config</h2>
+<div class="alert alert-info"><p><strong>NOTE:</strong></p>
+<p>The following example shows pinned virtual environments.
+The current list of available environments for GitHub actions can be found in
+<a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources">the documentation</a>.</p>
+</div>
 <pre><code class="language-yaml">name: Build
 
 on:
@@ -256,7 +261,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        os: [ windows-2019, ubuntu-18.04, macos-10.15 ]
 
     steps:
       - name: Checkout the repository 

@@ -229,8 +229,13 @@ However, we have seen different behavior and hence suggest to specify branches e
 </li>
 </ul>
 <h2 id="example-config">Example Config</h2>
+<div class="alert alert-info"><p><strong>NOTE:</strong></p>
+<p>The following example shows a pinned virtual environment.
+The current list of available environments for Azure Pipelines can be found in
+<a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops&amp;tabs=yaml#software">the documentation</a>.</p>
+</div>
 <pre><code class="language-yaml">pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-2019'
 
 trigger:
   branches:
