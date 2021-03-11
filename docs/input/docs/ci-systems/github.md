@@ -28,6 +28,16 @@ Description: Building with GitHub Actions
 
 ## Example Config
 
+:::{.alert .alert-info}
+**NOTE:**
+
+The following example shows pinned virtual environments.
+The current list of available environments for GitHub actions can be found in 
+[the documentation](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources).
+
+:::
+
+
 ```yaml
 name: Build
 
@@ -48,7 +58,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ windows-latest, ubuntu-latest, macos-latest ]
+        os: [ windows-2019, ubuntu-18.04, macos-10.15 ]
 
     steps:
       - name: Checkout the repository 

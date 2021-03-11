@@ -17,6 +17,15 @@ Description: Running on AppVeyor
 
 ## Example Config
 
+:::{.alert .alert-info}
+**NOTE:**
+
+The following example shows a pinned virtual environment.
+The current list of available environments for AppVeyor can be found in 
+[the documentation](https://www.appveyor.com/docs/build-environment/#build-worker-images).
+
+:::
+
 ```yaml
 image:
   - Visual Studio 2019
