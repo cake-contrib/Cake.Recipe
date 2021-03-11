@@ -41,7 +41,13 @@ public class TeamCityRepositoryInfo : IRepositoryInfo
 {
     public TeamCityRepositoryInfo(ITeamCityProvider teamCity, ICakeContext context)
     {
-        Branch = context.Environment.GetEnvironmentVariable("vcsroot.branch").Replace("refs/heads/", string.Empty);
+        var branchName = context.Environment.GetEnvironmentVariable("vcsroot.branch");
+        if(string.IsNullOrEmpty(branchName)) 
+        {
+            throw new Exception(@"Environment variable ""vcsroot.branch"" could not be found. Cake.Recipe needs ""vcsroot.branch"" exposed as a build parameter.");
+        }
+
+        Branch = branchName.Replace("refs/heads/", string.Empty);
         Name = teamCity.Environment.Build.BuildConfName;
         Tag = new TeamCityTagInfo(context);
     }
