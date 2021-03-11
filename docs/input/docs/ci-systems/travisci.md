@@ -16,9 +16,17 @@ Description: Running on Travis CI
 
 ## Example Config
 
-*The example shows a build-configuration for Travis CI, using windows. 
+:::{.alert .alert-info}
+**NOTE:**
+
+The example shows a build-configuration for Travis CI, using windows. 
 Keep in mind using windows in Travis CI is currently an [early release](https://docs.travis-ci.com/user/reference/windows)
-and not everything is fully supported.*
+and not everything is fully supported.
+
+The current list of available environments for Travis-CI can be found in [the documentation](https://docs.travis-ci.com/user/reference/overview/).
+
+:::
+
 
 ```yaml
 language: csharp
