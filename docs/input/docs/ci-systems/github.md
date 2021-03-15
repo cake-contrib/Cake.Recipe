@@ -79,7 +79,7 @@ jobs:
           script-path: recipe.cake
           target: CI
           verbosity: Normal
-          cake-version: 1.0.0
+          cake-version: 1.1.0
           cake-bootstrap: true
 
       - name: Upload Issues-Report

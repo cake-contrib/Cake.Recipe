@@ -33,5 +33,5 @@ jobs:
         with:
           script-path: recipe.cake
           target: CI
-          cake-version: 1.0.0
+          cake-version: 1.1.0
           cake-bootstrap: true
