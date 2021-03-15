@@ -17,9 +17,18 @@ Description: Running on Azure Pipelines
 
 ## Example Config
 
+:::{.alert .alert-info}
+**NOTE:**
+
+The following example shows a pinned virtual environment.
+The current list of available environments for Azure Pipelines can be found in 
+[the documentation](https://docs.microsoft.com/en-us/azure/devops/pipelines/agents/hosted?view=azure-devops&tabs=yaml#software).
+
+:::
+
 ```yaml
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-2019'
 
 trigger:
   branches:
