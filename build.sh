@@ -8,7 +8,7 @@ if [ -f "./includes.cake" ]; then
 fi
 
 echo "Updating 'includes.cake' with Cake.Recipe content files"
-find ./Cake.Recipe/Content -type f \( -iname "*.cake" -and -not -iname "version.cake" \) -exec echo "#load \"local:?path={}\"" >> includes.cake \;
+find ./Source/Cake.Recipe/Content -type f \( -iname "*.cake" -and -not -iname "version.cake" \) -exec echo "#load \"local:?path={}\"" >> includes.cake \;
 
 echo "Bootstrapping Cake"
 dotnet cake recipe.cake --bootstrap
