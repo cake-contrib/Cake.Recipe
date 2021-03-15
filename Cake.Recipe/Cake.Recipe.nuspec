@@ -19,6 +19,6 @@ NOTE:  Currently, Cake.Recipe itself is built using 0.38.4, and as a result, the
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.jsdelivr.net/gh/cake-contrib/graphics@a5cf0f881c390650144b2243ae551d5b9f836196/png/cake-contrib-medium.png</iconUrl>
     <copyright>Copyright (c) Cake Contributions 2016 - Present</copyright>
-    <tags>Cake, Build, Automation, Recipe</tags>
+    <tags>Cake, Build, Automation, Recipe, cake-recipe</tags>
   </metadata>
 </package>
