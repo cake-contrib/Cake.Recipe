@@ -136,20 +136,25 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
 
 BuildParameters.Tasks.PublishPreReleasePackagesTask = Task("Publish-PreRelease-Packages")
     .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.ForceContinuousIntegration, "Skipping because this is a local build, and force isn't being applied")
+    .WithCriteria(() => !BuildParameters.IsPullRequest, "Skipping because current build is from a Pull Request")
     .WithCriteria(() => !BuildParameters.IsTagged, "Skipping because current commit is tagged")
-    .WithCriteria(() => BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem, "Not running on preferred build agent operating system")
     .WithCriteria(() => BuildParameters.PreferredBuildProviderType == BuildParameters.BuildProvider.Type, "Not running on preferred build provider type")
     .IsDependentOn("Package")
     .Does(() =>
 {
-    var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey && p.IsRelease == false).ToList();
-    var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == false).ToList();
+    if (BuildParameters.PreferredBuildAgentOperatingSystem == PlatformFamily.Windows)
+    {
+        var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey && p.IsRelease == false).ToList();
+        PushChocolateyPackages(Context, false, chocolateySources);
+    }
 
-    PushChocolateyPackages(Context, false, chocolateySources);
-
-    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
-        PushNuGetPackages(Context, false, nugetSources);
-    });
+    if (BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem)
+    {
+        var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == false).ToList();
+        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+            PushNuGetPackages(Context, false, nugetSources);
+        });
+    }
 })
 .OnError(exception =>
 {
@@ -160,22 +165,27 @@ BuildParameters.Tasks.PublishPreReleasePackagesTask = Task("Publish-PreRelease-P
 
 BuildParameters.Tasks.PublishReleasePackagesTask = Task("Publish-Release-Packages")
     .WithCriteria(() => !BuildParameters.IsLocalBuild || BuildParameters.ForceContinuousIntegration, "Skipping because this is a local build, and force isn't being applied")
+    .WithCriteria(() => !BuildParameters.IsPullRequest, "Skipping because current build is from a Pull Request")
     .WithCriteria(() => BuildParameters.IsTagged, "Skipping because current commit is not tagged")
-    .WithCriteria(() => BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem, "Not running on preferred build agent operating system")
     .WithCriteria(() => BuildParameters.PreferredBuildProviderType == BuildParameters.BuildProvider.Type, "Not running on preferred build provider type")
     .IsDependentOn("Package")
     .Does(() =>
 {
-    var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey && p.IsRelease == true).ToList();
-    var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == true).ToList();
+    if (BuildParameters.PreferredBuildAgentOperatingSystem == PlatformFamily.Windows)
+    {
+        var chocolateySources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.Chocolatey && p.IsRelease == true).ToList();
+        PushChocolateyPackages(Context, true, chocolateySources);
+    }
 
-    PushChocolateyPackages(Context, true, chocolateySources);
-
-    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
-        PushNuGetPackages(Context, true, nugetSources);
-    });
-
-    BuildParameters.PublishReleasePackagesWasSuccessful = true;
+    if (BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem)
+    {
+        var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == true).ToList();
+        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+            PushNuGetPackages(Context, true, nugetSources);
+        });
+        // Only consider pushes to nuget and on the same Build Agent Operating System
+        BuildParameters.PublishReleasePackagesWasSuccessful = true;
+    }
 })
 .OnError(exception =>
 {
@@ -187,7 +197,7 @@ BuildParameters.Tasks.PublishReleasePackagesTask = Task("Publish-Release-Package
 
 public void PushChocolateyPackages(ICakeContext context, bool isRelease, List<PackageSourceData> chocolateySources)
 {
-    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows && DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
+    if (DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages))
     {
         Information("Number of configured {0} Chocolatey Sources: {1}", isRelease ? "Release" : "PreRelease", chocolateySources.Count());
 
@@ -245,7 +255,7 @@ public void PushChocolateyPackages(ICakeContext context, bool isRelease, List<Pa
     }
     else
     {
-        context.Information("Unable to publish Chocolatey packages. IsRunningOnWindows: {0} Chocolatey Packages Directory Exists: {0}", BuildParameters.BuildAgentOperatingSystem, DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages));
+        context.Information("Unable to publish Chocolatey packages. Chocolatey Packages Directory Exists: {0}", DirectoryExists(BuildParameters.Paths.Directories.ChocolateyPackages));
     }
 }
 
