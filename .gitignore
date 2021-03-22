@@ -256,7 +256,7 @@ tools/
 BuildArtifacts/
 *.temp.nuspec
 tests/integration/repos/
-Cake.Recipe/Content/version.cake
+Source/Cake.Recipe/Content/version.cake
 includes.cake
 
 # Wyam related

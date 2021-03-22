@@ -7,7 +7,7 @@ dotnet tool restore
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "Updating 'includes.cake' with Cake.Recipe content files."
-Get-ChildItem "./Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
+Get-ChildItem "./Source/Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
     "#load `"local:?path=$($_.FullName -replace '\\','/')`""
 } | Out-File "./includes.cake"
 

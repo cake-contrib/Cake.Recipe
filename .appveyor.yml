@@ -24,7 +24,7 @@ branches:
 #  Build Cache                    #
 #---------------------------------#
 cache:
-- 'tools -> build.ps1, Cake.Recipe/Content/addins.cake, Cake.Recipe/Content/tools.cake'
+- 'tools -> build.ps1, Source/Cake.Recipe/Content/addins.cake, Source/Cake.Recipe/Content/tools.cake'
 
 #---------------------------------#
 #  Environment Variables          #
