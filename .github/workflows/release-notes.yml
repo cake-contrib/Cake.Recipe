@@ -18,7 +18,7 @@ jobs:
         uses: actions/cache@v2.1.4
         with:
           path: tools
-          key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake', 'Cake.Recipe/Content/addins.cake', 'Cake.Recipe/Content/tools.cake', 'Cake.Recipe/Content/modules.cake') }}
+          key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake', 'Source/Cake.Recipe/Content/addins.cake', 'Source/Cake.Recipe/Content/tools.cake', 'Source/Cake.Recipe/Content/modules.cake') }}
       - name: Set up git version
         if: ${{ !contains(github.ref, '/hotfix/') && !contains(github.ref, '/release/') }}
         uses: gittools/actions/gitversion/setup@v0.9.9
@@ -39,7 +39,7 @@ jobs:
           github_token: ${{ secrets.GH_TOKEN }}
       - name: Creating includes.cake file
         run: |
-          Get-ChildItem "./Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
+          Get-ChildItem "./Source/Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
             "#load `"local:?path=$($_.FullName -replace '\\','/')`""
           } | Out-File "./includes.cake"
         shell: pwsh
