@@ -9,10 +9,10 @@ var publishingError = false;
 ///////////////////////////////////////////////////////////////////////////////
 public bool IsSupportedCakeVersion(string supportedVersion, string currentVersion)
 {
-    var twoPartSupported = Version.Parse(supportedVersion).ToString(2);
-    var twoPartCurrent = Version.Parse(currentVersion).ToString(2);
+    var onePartSupported = Version.Parse(supportedVersion).ToString(1);
+    var onePartCurrent = Version.Parse(currentVersion).ToString(1);
 
-    return twoPartCurrent == twoPartSupported;
+    return onePartCurrent == onePartSupported;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
