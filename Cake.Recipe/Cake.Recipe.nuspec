@@ -11,7 +11,7 @@ This NuGet package contains a set of re-usable scripts that can be added to your
 
 https://cake-contrib.github.io/Cake.Recipe/docs/
 
-NOTE:  Currently, Cake.Recipe itself is built using 0.38.4, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 0.38.4 of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
+NOTE:  Currently, Cake.Recipe itself is built using 1.1.0, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 1.1.0 of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
     </description>
     <license type="expression">MIT</license>
     <projectUrl>https://github.com/cake-contrib/Cake.Recipe/</projectUrl>
