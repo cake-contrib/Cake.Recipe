@@ -442,7 +442,7 @@ public static class BuildParameters
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
-        AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
+        AppVeyorProjectSlug = appVeyorProjectSlug ?? RepositoryName.Replace(".", "-").ToLower();
 
         TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository(context);
         TransifexPullMode = transifexPullMode;
@@ -460,7 +460,7 @@ public static class BuildParameters
         WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
         WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
         WebLinkRoot = webLinkRoot ?? RepositoryName;
-        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, title, developBranchName);
+        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
