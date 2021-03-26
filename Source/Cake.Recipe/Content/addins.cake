@@ -15,7 +15,7 @@
 #addin nuget:?package=Cake.Gitter&version=1.0.1
 #addin nuget:?package=Cake.Incubator&version=6.0.0
 #addin nuget:?package=Cake.Kudu&version=1.0.0
-#addin nuget:?package=Cake.MicrosoftTeams&version=1.0.0
+#addin nuget:?package=Cake.MicrosoftTeams&version=1.0.1
 #addin nuget:?package=Cake.Slack&version=1.0.0
 #addin nuget:?package=Cake.Transifex&version=1.0.0
 #addin nuget:?package=Cake.Twitter&version=1.0.0
