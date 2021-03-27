@@ -4,7 +4,7 @@
 
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
-        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=5.0.0&loaddependencies=true
+        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=5.0.1&loaddependencies=true
         AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
             EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
             EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
