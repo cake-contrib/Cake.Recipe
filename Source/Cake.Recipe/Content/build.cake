@@ -136,7 +136,7 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
     .Does(() =>
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
-    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget.exe" }, () => {
         NuGetRestore(
             BuildParameters.SolutionFilePath,
             new NuGetRestoreSettings
