@@ -3,20 +3,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 Action<string, string[], Action> RequireToolNotRegistered = (tool, toolNames, action) => {
+    var toolsFolder = Context.FileSystem.GetDirectory(
+        Context.Configuration.GetToolPath(Context.Environment.WorkingDirectory, Context.Environment));
     bool found = false;
 
+    Context.Verbose("Searching for tool {0} in tools: {1}", string.Join("|", toolNames), toolsFolder.Path);
     foreach (var name in toolNames)
     {
         if (found)
         {
             break;
         }
-        var path = Context.Tools.Resolve(name);
+        var path = Context.GetFiles(toolsFolder.Path + $"/**/{name}").FirstOrDefault();
         found = path != null;
     }
 
     if (!found)
     {
+        Context.Verbose("Tool not found. Requiring '{0}'", tool);
         RequireTool(tool, action);
     }
     else
