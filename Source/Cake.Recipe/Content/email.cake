@@ -36,7 +36,7 @@ public void SendEmail(string subject, string message, string recipient, string s
 
         if (result.Ok)
         {
-            Information("Email succcessfully sent");
+            Information("Email successfully sent");
         }
         else
         {
