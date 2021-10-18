@@ -14,7 +14,7 @@ jobs:
         os: [windows-latest, ubuntu-18.04, macos-latest]
 
     steps:
-      - uses: actions/checkout@v2.3.4
+      - uses: actions/checkout@v2.3.5
       - name: Fetch all branches and tags
         run: git fetch --unshallow --prune
       - name: Tools caching
