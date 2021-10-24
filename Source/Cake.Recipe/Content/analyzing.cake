@@ -4,14 +4,16 @@
 BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunDupFinder, "Skipping because DupFinder has been disabled")
-    .Does(() => RequireTool(ToolSettings.ReSharperTools, () => {
+    .Does(() => RequireTool(ToolSettings.ReSharperTools, () =>
+    {
         var dupFinderLogFilePath = BuildParameters.Paths.Directories.DupFinderTestResults.CombineWithFilePath("dupfinder.xml");
 
-        var settings = new DupFinderSettings() {
+        var settings = new DupFinderSettings()
+        {
             ShowStats = true,
             ShowText = true,
             OutputFile = dupFinderLogFilePath,
-            ExcludeCodeRegionsByNameSubstring = new string [] { "DupFinder Exclusion" },
+            ExcludeCodeRegionsByNameSubstring = new string[] { "DupFinder Exclusion" },
             ThrowExceptionOnFindingDuplicates = ToolSettings.DupFinderThrowExceptionOnFindingDuplicates ?? true
         };
 
@@ -33,17 +35,19 @@ BuildParameters.Tasks.DupFinderTask = Task("DupFinder")
         DupFinder(BuildParameters.SolutionFilePath, settings);
 
         // Pass path to dupFinder log file to Cake.Issues.Recipe
-        IssuesParameters.InputFiles.DupFinderLogFilePath = dupFinderLogFilePath;
+        IssuesParameters.InputFiles.AddDupFinderLogFile(dupFinderLogFilePath);
     })
 );
 
 BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
     .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Skipping due to not running on Windows")
     .WithCriteria(() => BuildParameters.ShouldRunInspectCode, "Skipping because InspectCode has been disabled")
-    .Does<BuildData>(data => RequireTool(ToolSettings.ReSharperTools, () => {
+    .Does<BuildData>(data => RequireTool(ToolSettings.ReSharperTools, () =>
+    {
         var inspectCodeLogFilePath = BuildParameters.Paths.Directories.InspectCodeTestResults.CombineWithFilePath("inspectcode.xml");
 
-        var settings = new InspectCodeSettings() {
+        var settings = new InspectCodeSettings()
+        {
             SolutionWideAnalysis = true,
             OutputFile = inspectCodeLogFilePath
         };
@@ -56,7 +60,7 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
         InspectCode(BuildParameters.SolutionFilePath, settings);
 
         // Pass path to InspectCode log file to Cake.Issues.Recipe
-        IssuesParameters.InputFiles.InspectCodeLogFilePath = inspectCodeLogFilePath;
+        IssuesParameters.InputFiles.AddInspectCodeLogFile(inspectCodeLogFilePath);
     })
 );
 

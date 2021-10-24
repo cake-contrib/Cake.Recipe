@@ -67,7 +67,7 @@ Teardown<BuildVersion>((context, buildVersion) =>
         }
     }
 
-    if(!context.Successful)
+    if (!context.Successful)
     {
         if (!BuildParameters.IsLocalBuild &&
             BuildParameters.IsMainRepository &&
@@ -137,7 +137,8 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
     .Does(() =>
 {
     Information("Restoring {0}...", BuildParameters.SolutionFilePath);
-    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () =>
+    {
         NuGetRestore(
             BuildParameters.SolutionFilePath,
             new NuGetRestoreSettings
@@ -171,7 +172,8 @@ BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
 BuildParameters.Tasks.BuildTask = Task("Build")
     .IsDependentOn("Clean")
     .IsDependentOn("Restore")
-    .Does<BuildVersion>((context, buildVersion) => {
+    .Does<BuildVersion>((context, buildVersion) =>
+    {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows || Context.Tools.Resolve("msbuild") != null)
@@ -191,7 +193,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
 
             // This is used in combination with SourceLink to ensure a deterministic
             // package is generated
-            if(BuildParameters.ShouldUseDeterministicBuilds)
+            if (BuildParameters.ShouldUseDeterministicBuilds)
             {
                 msbuildSettings.WithProperty("ContinuousIntegrationBuild", "true");
             }
@@ -199,7 +201,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
             // Pass path to MsBuild log file to Cake.Issues.Recipe
-            IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
+            IssuesParameters.InputFiles.AddMsBuildBinaryLogFile(BuildParameters.Paths.Files.BuildBinLogFilePath);
         }
         else
         {
@@ -218,7 +220,8 @@ BuildParameters.Tasks.BuildTask = Task("Build")
 BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
     .IsDependentOn("Clean")
     .IsDependentOn("DotNetCore-Restore")
-    .Does<BuildVersion>((context, buildVersion) => {
+    .Does<BuildVersion>((context, buildVersion) =>
+    {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         // We need to clone the settings class, so we don't
@@ -241,7 +244,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
         });
 
         // We set this here, so we won't have a failure in case this task is never called
-        IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
+        IssuesParameters.InputFiles.AddMsBuildBinaryLogFile(BuildParameters.Paths.Files.BuildBinLogFilePath);
 
         CopyBuildOutput(buildVersion);
     });
@@ -294,7 +297,8 @@ public void CopyBuildOutput(BuildVersion buildVersion)
 
                 foreach (var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
-                    DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings {
+                    DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings
+                    {
                         OutputDirectory = outputFolder.Combine(targetFramework),
                         Framework = targetFramework,
                         Configuration = BuildParameters.Configuration,

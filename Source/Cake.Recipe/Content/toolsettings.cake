@@ -46,7 +46,7 @@ public static class ToolSettings
         string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.12.1",
         // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
-        string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.7.0",
+        string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2021.2.2",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
@@ -59,7 +59,7 @@ public static class ToolSettings
         string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.13.0",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.12.1",
-        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.7.0",
+        string gitVersionGlobalTool = "#tool dotnet:https://www.myget.org/F/gep13/api/v3/index.json?package=GitVersion.Tool&version=5.6.7",
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.13",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
         // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
