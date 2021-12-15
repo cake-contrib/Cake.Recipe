@@ -239,9 +239,12 @@ show a <code>matrix</code> build.</p>
 </ul>
 <h2 id="example-config">Example Config</h2>
 <div class="alert alert-info"><p><strong>NOTE:</strong></p>
-<p>The following example shows pinned virtual environments.
-The current list of available environments for GitHub actions can be found in
+<p>The following example shows pinned virtual environments (e.g. <code>ubuntu-18.04</code> instead of <code>ubuntu-latest</code>) and actions with full versions given (e.g. <code>actions/checkout&#64;v2.3.4</code> instead of <code>actions/checkout&#64;v2</code>).</p>
+<p>The current list of available environments for GitHub actions can be found in
 <a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources">the documentation</a>.</p>
+<p>The current versions for each action have to be looked up individually.
+We advise you to setup <a href="https://docs.github.com/en/code-security/supply-chain-security/keeping-your-dependencies-updated-automatically">dependabot</a>
+or <a href="https://www.whitesourcesoftware.com/free-developer-tools/renovate">renovate</a> or similar to automate the process of updating those versions.</p>
 </div>
 <pre><code class="language-yaml">name: Build
 
@@ -266,13 +269,13 @@ jobs:
 
     steps:
       - name: Checkout the repository 
-        uses: actions/checkout&#64;v2
+        uses: actions/checkout&#64;v2.3.4
       
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
 
       - name: Cache Tools
-        uses: actions/cache&#64;v2
+        uses: actions/cache&#64;v2.1.6
         with:
           path: tools
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake') }}
@@ -287,14 +290,14 @@ jobs:
           cake-bootstrap: true
 
       - name: Upload Issues-Report
-        uses: actions/upload-artifact&#64;v2
+        uses: actions/upload-artifact&#64;v2.2.3
         with:
           if-no-files-found: warn
           name: ${{ matrix.os }} issues
           path: BuildArtifacts/report.html
 
       - name: Upload Packages
-        uses: actions/upload-artifact&#64;v2
+        uses: actions/upload-artifact&#64;v2.2.3
         if: runner.os == 'Windows'
         with:
           if-no-files-found: warn
