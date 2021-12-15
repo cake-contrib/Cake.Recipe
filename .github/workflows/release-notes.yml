@@ -44,7 +44,7 @@ jobs:
           } | Out-File "./includes.cake"
         shell: pwsh
       - name: Drafting Release Notes
-        uses: cake-build/cake-action@v1.3.0
+        uses: cake-build/cake-action@v1.4.0
         with:
           script-path: recipe.cake
           target: releasenotes
