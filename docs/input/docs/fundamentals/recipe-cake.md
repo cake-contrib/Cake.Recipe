@@ -22,7 +22,6 @@ BuildParameters.SetParameters(context: Context,
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] {
                             BuildParameters.RootDirectoryPath + "/Source/Cake.Example.Tests/*.cs",
                             BuildParameters.RootDirectoryPath + "/Source/Cake.Example/**/*.AssemblyInfo.cs" },
                             testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* ",
@@ -50,6 +49,6 @@ This recipe.cake file is broken up to distinct sections, some of which have more
 * A call to the [BuildParameters.PrintParameters](./print-parameters) method
   * It is really helpful, when running a build to know the value of the parameters that are being used.  Calling this method will cause them to be printed out to the build log.
 * A call to the [ToolSettings.SetToolSettings](./set-tool-settings) method
-  * Cake.Recipe uses a number of different tools, for example, DupFinder.  When required, you can override the settings that are passed to these tools.  Cake.Recipe attempts to provide sensible defaults for these tools.
+  * Cake.Recipe uses a number of different tools, for example, InspectCode.  When required, you can override the settings that are passed to these tools.  Cake.Recipe attempts to provide sensible defaults for these tools.
 * A call to one of the three available [Build](./build) methods
   * Cake.Recipe has three different build modes.  .NET Framework, .NET Core and NuGet.  Depending on what you are doing, you call the required one here.  This method is what causes the actual build to execute.

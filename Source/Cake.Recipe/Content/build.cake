@@ -118,7 +118,6 @@ BuildParameters.Tasks.ShowInfoTask = Task("Show-Info")
     Information("IsTagged: {0}", BuildParameters.IsTagged);
 
     Information("Solution FilePath: {0}", MakeAbsolute((FilePath)BuildParameters.SolutionFilePath));
-    Information("Solution DirectoryPath: {0}", MakeAbsolute((DirectoryPath)BuildParameters.SolutionDirectoryPath));
     Information("Source DirectoryPath: {0}", MakeAbsolute(BuildParameters.SourceDirectoryPath));
     Information("Build DirectoryPath: {0}", MakeAbsolute(BuildParameters.Paths.Directories.Build));
 });
@@ -504,7 +503,6 @@ public class Builder
         BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn(prefix + "Build");
         BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn(prefix + "Build");
         BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Build");
-        BuildParameters.Tasks.DupFinderTask.IsDependentOn(prefix + "Build");
         BuildParameters.Tasks.InspectCodeTask.IsDependentOn(prefix + "Build");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Analyze");
         BuildParameters.Tasks.PackageTask.IsDependentOn("Test");

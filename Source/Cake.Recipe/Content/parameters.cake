@@ -94,7 +94,6 @@ public static class BuildParameters
     public static DirectoryPath RootDirectoryPath { get; private set; }
     public static FilePath SolutionFilePath { get; private set; }
     public static DirectoryPath SourceDirectoryPath { get; private set; }
-    public static DirectoryPath SolutionDirectoryPath { get; private set; }
     public static DirectoryPath TestDirectoryPath { get; private set; }
     public static FilePath IntegrationTestScriptPath { get; private set; }
     public static string TestFilePattern { get; private set; }
@@ -122,7 +121,6 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
-    public static bool ShouldRunDupFinder { get; private set; }
     public static bool ShouldRunInspectCode { get; private set; }
     public static bool ShouldRunCoveralls { get; private set; }
     public static bool ShouldRunCodecov { get; private set; }
@@ -345,7 +343,6 @@ public static class BuildParameters
         DirectoryPath sourceDirectoryPath,
         string title,
         FilePath solutionFilePath = null,
-        DirectoryPath solutionDirectoryPath = null,
         DirectoryPath rootDirectoryPath = null,
         DirectoryPath testDirectoryPath = null,
         string testFilePattern = null,
@@ -371,7 +368,6 @@ public static class BuildParameters
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
         bool shouldDocumentSourceFiles = true,
-        bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
         bool shouldRunCoveralls = true,
         bool shouldRunCodecov = true,
@@ -433,7 +429,6 @@ public static class BuildParameters
         SourceDirectoryPath = sourceDirectoryPath;
         Title = title;
         SolutionFilePath = solutionFilePath ?? SourceDirectoryPath.CombineWithFilePath(Title + ".sln");
-        SolutionDirectoryPath = solutionDirectoryPath ?? SourceDirectoryPath.Combine(Title);
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
         TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
         TestFilePattern = testFilePattern;
@@ -471,7 +466,6 @@ public static class BuildParameters
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
         ShouldDeleteCachedFiles = shouldDeleteCachedFiles;
-        ShouldRunDupFinder = shouldRunDupFinder;
         ShouldRunInspectCode = shouldRunInspectCode;
         ShouldRunCoveralls = shouldRunCoveralls;
         ShouldRunCodecov = shouldRunCodecov;
