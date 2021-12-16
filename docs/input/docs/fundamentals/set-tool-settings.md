@@ -4,7 +4,7 @@ Title: SetToolSettings Method
 Description: Override the default tool settings used by Cake.Recipe
 ---
 
-Cake.Recipe makes use of a number of different tools, for example DupFinder, MSBuild, OpenCover, etc.  While Cake.Recipe attempts to provide sensible defaults for all of these tools, there are times when it is necessary to override these for specific project requirements.
+Cake.Recipe makes use of a number of different tools, for example InspectCode, MSBuild, OpenCover, etc.  While Cake.Recipe attempts to provide sensible defaults for all of these tools, there are times when it is necessary to override these for specific project requirements.
 
 This can be done by calling the `SetToolSettings` method.
 
@@ -12,7 +12,6 @@ As an example, you could override some tool settings using the following:
 
 ```csharp
 ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] {
                             BuildParameters.RootDirectoryPath + "/Source/Cake.Example.Tests/*.cs",
                             BuildParameters.RootDirectoryPath + "/Source/Cake.Example/**/*.AssemblyInfo.cs" },
                             testCoverageFilter: "+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* ",
@@ -23,24 +22,6 @@ ToolSettings.SetToolSettings(context: Context,
 ## Default Tool Setting Parameters
 
 The `SetToolSettings` method uses the concept of optional parameters, in fact, all but one of the parameters to the `SetToolSettings` method are optional.  To override a specific tool setting, you need to use a named parameter.  The following is a list of all the named parameters that can be used on the method.
-
-### dupFinderExcludePattern
-
-This is used when executing the DupFinder command line tool.  It provides a list of strings, representing file paths, which should be excluded from the DupFinder analysis.
-
-Type: `string[]`
-
-Default Value:
-
-```csharp
-var absoluteSourceDirectory = context.MakeAbsolute(BuildParameters.SolutionDirectoryPath);
-
-new string[]
-            {
-                string.Format("{0}/{1}.Tests/**/*.cs", absoluteTestDirectory, BuildParameters.Title),
-                string.Format("{0}/**/*.AssemblyInfo.cs", absoluteSourceDirectory)
-            }
-```
 
 ### testCoverageFilter
 
@@ -137,30 +118,6 @@ If a value for `targetFrameworkPathOverride` is provided, then the default value
 ```csharp
 TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
 ```
-
-### dupFinderExcludeFilesByStartingCommentSubstring
-
-This is used when executing the DupFinder command line tool.  It provides a list of strings, which should be matched in the opening comments of a file, which should be excluded from the DupFinder analysis.
-
-Type: `string[]`
-
-Default Value: `null`
-
-### dupFinderDiscardCost
-
-This is used when executing the DupFinder command line tool.  It allows setting a threshold for code complexity of the duplicated fragments. The fragments with lower complexity are discarded as non-duplicates.
-
-Type: `int?`
-
-Default Value: `null`
-
-### dupFinderThrowExceptionOnFindingDuplicates
-
-This is used when executing the DupFinder command line tool.  If set to true, an exception will be thrown is duplicates are found.
-
-Type: `bool?`
-
-Default Value: `null`
 
 ### skipDuplicatesPackages
 

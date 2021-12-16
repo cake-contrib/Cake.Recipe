@@ -1,6 +1,5 @@
 public class BuildTasks
 {
-    public CakeTaskBuilder DupFinderTask { get; set; }
     public CakeTaskBuilder InspectCodeTask { get; set; }
     public CakeTaskBuilder AnalyzeTask { get; set; }
     public CakeTaskBuilder PrintCiProviderEnvironmentVariablesTask { get; set; }
