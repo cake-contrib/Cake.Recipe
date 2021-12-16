@@ -225,7 +225,6 @@
                             buildSystem: BuildSystem,
                             sourceDirectoryPath: &quot;./Source&quot;,
                             solutionFilePath: &quot;./Source/ChocolateyGui.sln&quot;,
-                            solutionDirectoryPath: &quot;./Source/ChocolateyGui&quot;,
                             resharperSettingsFileName: &quot;ChocolateyGui.sln.DotSettings&quot;,
                             title: &quot;Chocolatey GUI&quot;,
                             repositoryOwner: &quot;chocolatey&quot;,
@@ -262,12 +261,6 @@
 <p>Type: <code>FilePath</code></p>
 <p>Default Value:</p>
 <pre><code class="language-csharp">SourceDirectoryPath.CombineWithFilePath(Title + &quot;.sln&quot;)
-</code></pre>
-<h3 id="solutiondirectorypath">solutionDirectoryPath</h3>
-<p>This value is only used to feed into the default value for the DupFinderExcludePattern, which can be overridden in the SetToolSettings method.</p>
-<p>Type: <code>DirectoryPath</code></p>
-<p>Default Value:</p>
-<pre><code class="language-csharp">SourceDirectoryPath.Combine(Title)
 </code></pre>
 <h3 id="rootdirectorypath">rootDirectoryPath</h3>
 <p>This is intended to store the root directory path for the repository that Cake.Recipe is running in.  This is derived from the WorkingDirectory of Cake by default.</p>
@@ -413,12 +406,6 @@
 </code></pre>
 <h3 id="shoulddocumentsourcefiles">shouldDocumentSourceFiles</h3>
 <p>This is used as a final control variable for whether or not Wyam should be executed against the source files for the project to generate additional documentation.</p>
-<p>Type: <code>bool</code></p>
-<p>Default Value:</p>
-<pre><code class="language-csharp">true
-</code></pre>
-<h3 id="shouldrundupfinder">shouldRunDupFinder</h3>
-<p>This is used as a final control variable for whether or not the DupFinder tool should be executed as part of the build.</p>
 <p>Type: <code>bool</code></p>
 <p>Default Value:</p>
 <pre><code class="language-csharp">true

@@ -219,11 +219,10 @@
 			<h1>SetToolSettings Method</h1>
 		</section>
 	<section class="content">
-		<p>Cake.Recipe makes use of a number of different tools, for example DupFinder, MSBuild, OpenCover, etc.  While Cake.Recipe attempts to provide sensible defaults for all of these tools, there are times when it is necessary to override these for specific project requirements.</p>
+		<p>Cake.Recipe makes use of a number of different tools, for example InspectCode, MSBuild, OpenCover, etc.  While Cake.Recipe attempts to provide sensible defaults for all of these tools, there are times when it is necessary to override these for specific project requirements.</p>
 <p>This can be done by calling the <code>SetToolSettings</code> method.</p>
 <p>As an example, you could override some tool settings using the following:</p>
 <pre><code class="language-csharp">ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] {
                             BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example.Tests/*.cs&quot;,
                             BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example/**/*.AssemblyInfo.cs&quot; },
                             testCoverageFilter: &quot;+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* &quot;,
@@ -232,18 +231,6 @@
 </code></pre>
 <h2 id="default-tool-setting-parameters">Default Tool Setting Parameters</h2>
 <p>The <code>SetToolSettings</code> method uses the concept of optional parameters, in fact, all but one of the parameters to the <code>SetToolSettings</code> method are optional.  To override a specific tool setting, you need to use a named parameter.  The following is a list of all the named parameters that can be used on the method.</p>
-<h3 id="dupfinderexcludepattern">dupFinderExcludePattern</h3>
-<p>This is used when executing the DupFinder command line tool.  It provides a list of strings, representing file paths, which should be excluded from the DupFinder analysis.</p>
-<p>Type: <code>string[]</code></p>
-<p>Default Value:</p>
-<pre><code class="language-csharp">var absoluteSourceDirectory = context.MakeAbsolute(BuildParameters.SolutionDirectoryPath);
-
-new string[]
-            {
-                string.Format(&quot;{0}/{1}.Tests/**/*.cs&quot;, absoluteTestDirectory, BuildParameters.Title),
-                string.Format(&quot;{0}/**/*.AssemblyInfo.cs&quot;, absoluteSourceDirectory)
-            }
-</code></pre>
 <h3 id="testcoveragefilter">testCoverageFilter</h3>
 <p>This is used in conjunction with both OpenCover and Coverlet.  It controls which assemblies/namespaces should be included within the Unit Test coverage.</p>
 <p>Type: <code>string</code></p>
@@ -293,18 +280,6 @@ TargetFrameworkPathOverride = path.FullPath + &quot;/&quot;
 <p>If a value for <code>targetFrameworkPathOverride</code> is provided, then the default value is simply the FullPath of this DirectoryPath.</p>
 <pre><code class="language-csharp">TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
 </code></pre>
-<h3 id="dupfinderexcludefilesbystartingcommentsubstring">dupFinderExcludeFilesByStartingCommentSubstring</h3>
-<p>This is used when executing the DupFinder command line tool.  It provides a list of strings, which should be matched in the opening comments of a file, which should be excluded from the DupFinder analysis.</p>
-<p>Type: <code>string[]</code></p>
-<p>Default Value: <code>null</code></p>
-<h3 id="dupfinderdiscardcost">dupFinderDiscardCost</h3>
-<p>This is used when executing the DupFinder command line tool.  It allows setting a threshold for code complexity of the duplicated fragments. The fragments with lower complexity are discarded as non-duplicates.</p>
-<p>Type: <code>int?</code></p>
-<p>Default Value: <code>null</code></p>
-<h3 id="dupfinderthrowexceptiononfindingduplicates">dupFinderThrowExceptionOnFindingDuplicates</h3>
-<p>This is used when executing the DupFinder command line tool.  If set to true, an exception will be thrown is duplicates are found.</p>
-<p>Type: <code>bool?</code></p>
-<p>Default Value: <code>null</code></p>
 <h3 id="skipduplicatespackages">skipDuplicatesPackages</h3>
 <p>This is used to tell NuGet to ignore issues with trying to push package versions when the version already exist upstream, instead of failing the build.</p>
 <p>Type: <code>bool</code></p>

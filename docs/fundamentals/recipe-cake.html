@@ -235,7 +235,6 @@ BuildParameters.SetParameters(context: Context,
 BuildParameters.PrintParameters(Context);
 
 ToolSettings.SetToolSettings(context: Context,
-                            dupFinderExcludePattern: new string[] {
                             BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example.Tests/*.cs&quot;,
                             BuildParameters.RootDirectoryPath + &quot;/Source/Cake.Example/**/*.AssemblyInfo.cs&quot; },
                             testCoverageFilter: &quot;+[*]* -[xunit.*]* -[Cake.Core]* -[Cake.Testing]* -[*.Tests]* &quot;,
@@ -275,7 +274,7 @@ Build.RunDotNetCore();
 </li>
 <li>A call to the <a href="./set-tool-settings">ToolSettings.SetToolSettings</a> method
 <ul>
-<li>Cake.Recipe uses a number of different tools, for example, DupFinder.  When required, you can override the settings that are passed to these tools.  Cake.Recipe attempts to provide sensible defaults for these tools.</li>
+<li>Cake.Recipe uses a number of different tools, for example, InspectCode.  When required, you can override the settings that are passed to these tools.  Cake.Recipe attempts to provide sensible defaults for these tools.</li>
 </ul>
 </li>
 <li>A call to one of the three available <a href="./build">Build</a> methods
