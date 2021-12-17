@@ -11,7 +11,6 @@
 #addin nuget:?package=MimeTypesMap&version=1.0.8
 #addin nuget:?package=Cake.Email.Common&version=0.4.2
 #addin nuget:?package=Cake.Email&version=1.0.2
-#addin nuget:?package=Cake.Figlet&version=2.0.1
 #addin nuget:?package=Cake.Gitter&version=1.1.0
 #addin nuget:?package=Cake.Incubator&version=6.0.0
 #addin nuget:?package=Cake.Kudu&version=1.0.1
