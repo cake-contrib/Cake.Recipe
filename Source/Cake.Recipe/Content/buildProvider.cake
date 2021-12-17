@@ -72,7 +72,7 @@ public enum BuildProviderType
 
 public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)
 {
-    if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
+    if (buildSystem.IsRunningOnAzurePipelines || buildSystem.AzurePipelines.Environment.Agent.IsHosted)
     {
         context.Information("Using Azure DevOps Pipelines Provider...");
         return new AzurePipelinesBuildProvider(buildSystem.AzurePipelines, context.Environment, context);
