@@ -21,7 +21,7 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
         InspectCode(BuildParameters.SolutionFilePath, settings);
 
         // Pass path to InspectCode log file to Cake.Issues.Recipe
-        IssuesParameters.InputFiles.InspectCodeLogFilePath = inspectCodeLogFilePath;
+        IssuesParameters.InputFiles.AddInspectCodeLogFile(inspectCodeLogFilePath);
     })
 );
 
