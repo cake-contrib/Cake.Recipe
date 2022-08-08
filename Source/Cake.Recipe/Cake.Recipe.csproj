@@ -19,7 +19,7 @@
 
 https://cake-contrib.github.io/Cake.Recipe/docs/
 
-NOTE:  Currently, Cake.Recipe itself is built using 0.38.4, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 0.38.4 of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
+NOTE:  Currently, Cake.Recipe itself is built using 1.3.0, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 1.3.0 of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
     </Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/cake-contrib/Cake.Recipe/</PackageProjectUrl>
