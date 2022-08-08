@@ -198,7 +198,7 @@ BuildParameters.Tasks.BuildTask = Task("Build")
             MSBuild(BuildParameters.SolutionFilePath, msbuildSettings);
 
             // Pass path to MsBuild log file to Cake.Issues.Recipe
-            IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
+            IssuesParameters.InputFiles.AddMsBuildBinaryLogFile(BuildParameters.Paths.Files.BuildBinLogFilePath);
         }
         else
         {
@@ -240,7 +240,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
         });
 
         // We set this here, so we won't have a failure in case this task is never called
-        IssuesParameters.InputFiles.MsBuildBinaryLogFilePath = BuildParameters.Paths.Files.BuildBinLogFilePath;
+        IssuesParameters.InputFiles.AddMsBuildBinaryLogFile(BuildParameters.Paths.Files.BuildBinLogFilePath);
 
         CopyBuildOutput(buildVersion);
     });
