@@ -11,27 +11,27 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [windows-latest, ubuntu-18.04, macos-latest]
 
     steps:
-      - uses: actions/checkout@v2.3.2
+      - uses: actions/checkout@v2.4.0
       - name: Fetch all branches and tags
         run: git fetch --unshallow --prune
       - name: Tools caching
-        uses: actions/cache@v2
+        uses: actions/cache@v2.1.7
         with:
           path: tools
-          key: ${{ matrix.os }}-tools-${{ hashFiles('recipe.cake') }}
+          key: ${{ matrix.os }}-tools-${{ hashFiles('recipe.cake', 'Source/Cake.Recipe/Content/addins.cake', 'Source/Cake.Recipe/Content/tools.cake', 'Source/Cake.Recipe/Content/modules.cake') }}
       - name: Creating includes.cake file
         run: |
-          Get-ChildItem "./Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
+          Get-ChildItem "./Source/Cake.Recipe/Content/*.cake" -Exclude "version.cake" | % {
             "#load `"local:?path=$($_.FullName -replace '\\','/')`""
           } | Out-File "./includes.cake"
         shell: pwsh
       - name: Build Cake.Recipe
-        uses: cake-build/cake-action@v1
+        uses: cake-build/cake-action@v1.4.0
         with:
           script-path: recipe.cake
           target: CI
-          cake-version: 0.38.4
+          cake-version: 1.3.0
           cake-bootstrap: true

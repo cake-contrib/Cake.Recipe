@@ -70,7 +70,7 @@ BuildParameters.Tasks.CreateNuGetPackageTask = Task("Create-Nuget-Package")
     if (BuildParameters.NuSpecFilePath != null) {
         EnsureDirectoryExists(BuildParameters.Paths.Directories.NuGetPackages);
 
-        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget.exe" }, () => {
             // Create packages.
             NuGetPack(BuildParameters.NuSpecFilePath, new NuGetPackSettings {
                 Version = buildVersion.SemVersion,
@@ -112,7 +112,7 @@ BuildParameters.Tasks.CreateNuGetPackagesTask = Task("Create-NuGet-Packages")
         settings.ArgumentCustomization = args => args.AppendSwitch("-SymbolPackageFormat", "snupkg");
     }
 
-    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => { });
+    RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget.exe" }, () => { });
 
     foreach (var nuspecFile in nuspecFiles)
     {
@@ -151,7 +151,7 @@ BuildParameters.Tasks.PublishPreReleasePackagesTask = Task("Publish-PreRelease-P
     if (BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem)
     {
         var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == false).ToList();
-        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget.exe" }, () => {
             PushNuGetPackages(Context, false, nugetSources);
         });
     }
@@ -180,7 +180,7 @@ BuildParameters.Tasks.PublishReleasePackagesTask = Task("Publish-Release-Package
     if (BuildParameters.PreferredBuildAgentOperatingSystem == BuildParameters.BuildAgentOperatingSystem)
     {
         var nugetSources = BuildParameters.PackageSources.Where(p => p.Type == FeedType.NuGet && p.IsRelease == true).ToList();
-        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget", "nuget.exe" }, () => {
+        RequireToolNotRegistered(ToolSettings.NuGetTool, new[] { "nuget.exe" }, () => {
             PushNuGetPackages(Context, true, nugetSources);
         });
         // Only consider pushes to nuget and on the same Build Agent Operating System
@@ -271,7 +271,8 @@ public void PushNuGetPackages(ICakeContext context, bool isRelease, List<Package
 
             var nugetPushSettings = new NuGetPushSettings
                 {
-                    Source = nugetSource.PushUrl
+                    Source = nugetSource.PushUrl,
+                    SkipDuplicate = ToolSettings.SkipDuplicatePackages
                 };
 
             var canPushToNuGetSource = false;

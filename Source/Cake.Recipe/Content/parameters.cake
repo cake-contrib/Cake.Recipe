@@ -94,7 +94,6 @@ public static class BuildParameters
     public static DirectoryPath RootDirectoryPath { get; private set; }
     public static FilePath SolutionFilePath { get; private set; }
     public static DirectoryPath SourceDirectoryPath { get; private set; }
-    public static DirectoryPath SolutionDirectoryPath { get; private set; }
     public static DirectoryPath TestDirectoryPath { get; private set; }
     public static FilePath IntegrationTestScriptPath { get; private set; }
     public static string TestFilePattern { get; private set; }
@@ -122,7 +121,6 @@ public static class BuildParameters
     public static FilePath MilestoneReleaseNotesFilePath { get; private set; }
     public static FilePath FullReleaseNotesFilePath { get; private set; }
 
-    public static bool ShouldRunDupFinder { get; private set; }
     public static bool ShouldRunInspectCode { get; private set; }
     public static bool ShouldRunCoveralls { get; private set; }
     public static bool ShouldRunCodecov { get; private set; }
@@ -345,7 +343,6 @@ public static class BuildParameters
         DirectoryPath sourceDirectoryPath,
         string title,
         FilePath solutionFilePath = null,
-        DirectoryPath solutionDirectoryPath = null,
         DirectoryPath rootDirectoryPath = null,
         DirectoryPath testDirectoryPath = null,
         string testFilePattern = null,
@@ -371,7 +368,6 @@ public static class BuildParameters
         bool shouldPublishGitHub = true,
         bool shouldGenerateDocumentation = true,
         bool shouldDocumentSourceFiles = true,
-        bool shouldRunDupFinder = true,
         bool shouldRunInspectCode = true,
         bool shouldRunCoveralls = true,
         bool shouldRunCodecov = true,
@@ -433,7 +429,6 @@ public static class BuildParameters
         SourceDirectoryPath = sourceDirectoryPath;
         Title = title;
         SolutionFilePath = solutionFilePath ?? SourceDirectoryPath.CombineWithFilePath(Title + ".sln");
-        SolutionDirectoryPath = solutionDirectoryPath ?? SourceDirectoryPath.Combine(Title);
         RootDirectoryPath = rootDirectoryPath ?? context.MakeAbsolute(context.Environment.WorkingDirectory);
         TestDirectoryPath = testDirectoryPath ?? sourceDirectoryPath;
         TestFilePattern = testFilePattern;
@@ -442,7 +437,7 @@ public static class BuildParameters
         RepositoryOwner = repositoryOwner ?? string.Empty;
         RepositoryName = repositoryName ?? Title;
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
-        AppVeyorProjectSlug = appVeyorProjectSlug ?? Title.Replace(".", "-").ToLower();
+        AppVeyorProjectSlug = appVeyorProjectSlug ?? RepositoryName.Replace(".", "-").ToLower();
 
         TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository(context);
         TransifexPullMode = transifexPullMode;
@@ -460,7 +455,7 @@ public static class BuildParameters
         WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
         WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
         WebLinkRoot = webLinkRoot ?? RepositoryName;
-        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, title, developBranchName);
+        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
@@ -471,7 +466,6 @@ public static class BuildParameters
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
         ShouldDeleteCachedFiles = shouldDeleteCachedFiles;
-        ShouldRunDupFinder = shouldRunDupFinder;
         ShouldRunInspectCode = shouldRunInspectCode;
         ShouldRunCoveralls = shouldRunCoveralls;
         ShouldRunCodecov = shouldRunCodecov;

@@ -7,7 +7,7 @@
             "request": "launch",
             "program": "${workspaceRoot}/tools/Cake.CoreCLR/Cake.dll",
             "args": [
-                "${workspaceRoot}/build.cake",
+                "${workspaceRoot}/recipe.cake",
                 "--debug",
                 "--verbosity=diagnostic"
             ],

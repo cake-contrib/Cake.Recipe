@@ -13,11 +13,15 @@ var standardNotificationMessage = "Version {0} of {1} has just been released, th
 
 BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
-                            sourceDirectoryPath: "./src",
+                            sourceDirectoryPath: "./Source",
                             title: "Cake.Recipe",
                             repositoryOwner: "cake-contrib",
                             repositoryName: "Cake.Recipe",
                             appVeyorAccountName: "cakecontrib",
+                            shouldRunInspectCode: false,
+                            shouldRunCoveralls: false,
+                            shouldRunCodecov: false,
+                            shouldRunDotNetCorePack: true,
                             gitterMessage: "@/all " + standardNotificationMessage,
                             twitterMessage: standardNotificationMessage);
 
@@ -46,7 +50,7 @@ Task("Generate-Version-File")
    .ToString();
 
     System.IO.File.WriteAllText(
-        "./Cake.Recipe/Content/version.cake",
+        "./Source/Cake.Recipe/Content/version.cake",
         buildMetaDataCodeGen
         );
     });
@@ -62,4 +66,4 @@ Task("Run-Local-Integration-Tests")
             }});
 });
 
-Build.RunNuGet();
+Build.RunDotNetCore();

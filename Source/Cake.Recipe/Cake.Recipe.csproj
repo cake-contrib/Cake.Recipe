@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <StartYear>2016</StartYear>
+    <EndYear>$([System.DateTime]::Today.Year)</EndYear>
+    <FullYear Condition="'$(StartYear)'=='$(EndYear)'">$(StartYear)</FullYear>
+    <FullYear Condition="'$(StartYear)'!='$(EndYear)'">$(StartYear)-$(EndYear)</FullYear>
+
+    <!-- Properties related to packaging -->
+    <Authors>gep13</Authors>
+    <Copyright>Copyright (c) Cake Contributions $(FullYear)</Copyright>
+    <Description>
+    This NuGet package contains a set of re-usable scripts that can be added to your build using the load preprocessor directive.  As a result, it is possible to use the same set of build scripts across multiple projects, without having to duplicate the scripts.  All that is required is a small recipe build script, which sets the project specific information.  More information can be found about this project on the documentation page here:
+
+https://cake-contrib.github.io/Cake.Recipe/docs/
+
+NOTE:  Currently, Cake.Recipe itself is built using 0.38.4, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 0.38.4 of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
+    </Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/cake-contrib/Cake.Recipe/</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/cake-contrib/Cake.Recipe.git</RepositoryUrl>
+    <PackageTags>Cake;Build;Automation;Recipe;cake-recipe;cake-build;script</PackageTags>
+    <PackageReleaseNotes>https://github.com/cake-contrib/Cake.Recipe/releases/tag/$(Version)</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CakeContrib.Guidelines" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Content/*" PackagePath="/content" Pack="true" />
+  </ItemGroup>
+
+</Project>

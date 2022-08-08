@@ -27,7 +27,6 @@ public class BuildPaths
 
         var testResultsDirectory = buildDirectoryPath + "/TestResults";
         var inspectCodeResultsDirectory = testResultsDirectory + "/InspectCode";
-        var dupFinderResultsDirectory = testResultsDirectory + "/DupFinder";
         var NUnitTestResultsDirectory = testResultsDirectory + "/NUnit";
         var xUnitTestResultsDirectory = testResultsDirectory + "/xUnit";
         var MSTestTestResultsDirectory = testResultsDirectory + "/MSTest";
@@ -64,7 +63,6 @@ public class BuildPaths
             chocolateyNuspecDirectory,
             testResultsDirectory,
             inspectCodeResultsDirectory,
-            dupFinderResultsDirectory,
             NUnitTestResultsDirectory,
             xUnitTestResultsDirectory,
             MSTestTestResultsDirectory,
@@ -145,7 +143,6 @@ public class BuildDirectories
     public DirectoryPath ChocolateyNuspecDirectory { get; private set; }
     public DirectoryPath TestResults { get; private set; }
     public DirectoryPath InspectCodeTestResults { get; private set; }
-    public DirectoryPath DupFinderTestResults { get; private set; }
     public DirectoryPath NUnitTestResults { get; private set; }
     public DirectoryPath xUnitTestResults { get; private set; }
     public DirectoryPath MSTestTestResults { get; private set; }
@@ -171,7 +168,6 @@ public class BuildDirectories
         DirectoryPath chocolateyNuspecDirectory,
         DirectoryPath testResults,
         DirectoryPath inspectCodeTestResults,
-        DirectoryPath dupFinderTestResults,
         DirectoryPath nunitTestResults,
         DirectoryPath xunitTestResults,
         DirectoryPath msTestTestResults,
@@ -196,7 +192,6 @@ public class BuildDirectories
         ChocolateyNuspecDirectory = chocolateyNuspecDirectory;
         TestResults = testResults;
         InspectCodeTestResults = inspectCodeTestResults;
-        DupFinderTestResults = dupFinderTestResults;
         NUnitTestResults = nunitTestResults;
         xUnitTestResults = xunitTestResults;
         MSTestTestResults = msTestTestResults;

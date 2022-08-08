@@ -13,7 +13,6 @@ BuildParameters.SetParameters(context: Context,
                             buildSystem: BuildSystem,
                             sourceDirectoryPath: "./Source",
                             solutionFilePath: "./Source/ChocolateyGui.sln",
-                            solutionDirectoryPath: "./Source/ChocolateyGui",
                             resharperSettingsFileName: "ChocolateyGui.sln.DotSettings",
                             title: "Chocolatey GUI",
                             repositoryOwner: "chocolatey",
@@ -72,18 +71,6 @@ Default Value:
 
 ```csharp
 SourceDirectoryPath.CombineWithFilePath(Title + ".sln")
-```
-
-### solutionDirectoryPath
-
-This value is only used to feed into the default value for the DupFinderExcludePattern, which can be overridden in the SetToolSettings method.
-
-Type: `DirectoryPath`
-
-Default Value:
-
-```csharp
-SourceDirectoryPath.Combine(Title)
 ```
 
 ### rootDirectoryPath
@@ -373,18 +360,6 @@ true
 ### shouldDocumentSourceFiles
 
 This is used as a final control variable for whether or not Wyam should be executed against the source files for the project to generate additional documentation.
-
-Type: `bool`
-
-Default Value:
-
-```csharp
-true
-```
-
-### shouldRunDupFinder
-
-This is used as a final control variable for whether or not the DupFinder tool should be executed as part of the build.
 
 Type: `bool`
 

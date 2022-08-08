@@ -15,7 +15,7 @@ public void SendMessageToGitterRoom(string message)
 
         if (postMessageResult.Ok)
         {
-            Information("Message {0} succcessfully sent", postMessageResult.TimeStamp);
+            Information("Message {0} successfully sent", postMessageResult.TimeStamp);
         }
         else
         {
