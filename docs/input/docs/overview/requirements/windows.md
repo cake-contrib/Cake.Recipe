@@ -31,4 +31,4 @@ As a minimum, it is recommended that Cake.Recipe should be used in conjunction w
 | :-----------------: | :----------: |
 |         1.x         |    0.32.0    |
 |         2.x         |    0.38.4    |
-|         3.x         |    1.1.0     |
+|         3.x         |    1.3.0     |
