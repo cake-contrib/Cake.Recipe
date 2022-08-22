@@ -1,3 +1,5 @@
+using Spectre.Console;
+
 #if !CUSTOM_VERSIONING
 Setup<BuildVersion>(context =>
 {
@@ -36,7 +38,7 @@ Setup<BuildVersion>(context =>
 
 Setup<BuildData>(context =>
 {
-    Information(Figlet(BuildParameters.Title));
+    AnsiConsole.Write(new FigletText(BuildParameters.Title));
 
     Information("Starting Setup...");
 
