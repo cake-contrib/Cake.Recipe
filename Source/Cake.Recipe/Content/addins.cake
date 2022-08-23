@@ -13,7 +13,7 @@
 #addin nuget:?package=Cake.Email&version=2.0.0
 #addin nuget:?package=Cake.Gitter&version=2.0.0
 #addin nuget:?package=Cake.Incubator&version=7.0.0
-#addin nuget:?package=Cake.Kudu&version=1.0.1
+#addin nuget:?package=Cake.Kudu&version=2.0.0
 #addin nuget:?package=Cake.MicrosoftTeams&version=2.0.0
 #addin nuget:?package=Cake.Slack&version=2.0.0
 #addin nuget:?package=Cake.Transifex&version=1.0.1
