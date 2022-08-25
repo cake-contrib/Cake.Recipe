@@ -6,11 +6,7 @@
 #addin nuget:?package=Cake.Coveralls&version=1.1.0
 #addin nuget:?package=Cake.Coverlet&version=2.5.4
 #addin nuget:?package=Portable.BouncyCastle&version=1.8.5
-#addin nuget:?package=MimeKit&version=2.9.1
-#addin nuget:?package=MailKit&version=2.8.0
-#addin nuget:?package=MimeTypesMap&version=1.0.8
-#addin nuget:?package=Cake.Email.Common&version=0.4.2
-#addin nuget:?package=Cake.Email&version=2.0.0
+#addin nuget:?package=Cake.Email&version=2.0.0&loaddependencies=true
 #addin nuget:?package=Cake.Gitter&version=2.0.0
 #addin nuget:?package=Cake.Incubator&version=7.0.0
 #addin nuget:?package=Cake.Kudu&version=2.0.0
