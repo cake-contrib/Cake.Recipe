@@ -157,6 +157,7 @@ public static class BuildParameters
     public static DirectoryPath RestorePackagesDirectory { get; private set; }
 
     public static IBuildProvider BuildProvider { get; private set; }
+    public static Func<BuildVersion, object[]> MessageArguments { get; private set; }
 
     static BuildParameters()
     {
@@ -404,7 +405,8 @@ public static class BuildParameters
         DirectoryPath restorePackagesDirectory = null,
         List<PackageSourceData> packageSourceDatas = null,
         PlatformFamily preferredBuildAgentOperatingSystem = PlatformFamily.Windows,
-        BuildProviderType preferredBuildProviderType = BuildProviderType.AppVeyor
+        BuildProviderType preferredBuildProviderType = BuildProviderType.AppVeyor,
+        Func<BuildVersion, object[]> messageArguments = null
         )
     {
         if (context == null)
@@ -522,6 +524,7 @@ public static class BuildParameters
         IsPullRequest = BuildProvider.PullRequest.IsPullRequest;
         IsMainRepository = StringComparer.OrdinalIgnoreCase.Equals(string.Concat(repositoryOwner, "/", RepositoryName), BuildProvider.Repository.Name);
         IsPublicRepository = isPublicRepository;
+        MessageArguments = messageArguments ?? ((x) => new object[]{ x.Version, BuildParameters.Title });
 
         IsTagged = (
             BuildProvider.Repository.Tag.IsTag &&
