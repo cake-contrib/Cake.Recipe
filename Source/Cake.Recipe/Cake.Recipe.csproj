@@ -4,12 +4,13 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <IsPackable>true</IsPackable>
   </PropertyGroup>
-
+  
   <PropertyGroup>
     <StartYear>2016</StartYear>
     <EndYear>$([System.DateTime]::Today.Year)</EndYear>
     <FullYear Condition="'$(StartYear)'=='$(EndYear)'">$(StartYear)</FullYear>
     <FullYear Condition="'$(StartYear)'!='$(EndYear)'">$(StartYear)-$(EndYear)</FullYear>
+    <CakeVersion Condition="'$(CakeVersion)' == ''">Unknown!</CakeVersion>
 
     <!-- Properties related to packaging -->
     <Authors>gep13</Authors>
@@ -19,7 +20,7 @@
 
 https://cake-contrib.github.io/Cake.Recipe/docs/
 
-NOTE:  Currently, Cake.Recipe itself is built using 1.3.0, and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use 1.3.0 of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
+NOTE:  Currently, Cake.Recipe itself is built using $(CakeVersion), and as a result, there is an expectation that that any project that is built using Cake.Recipe should also use $(CakeVersion) of Cake.  Using a newer version of Cake may work, but there is no guarantee that it will.
     </Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/cake-contrib/Cake.Recipe/</PackageProjectUrl>
@@ -38,6 +39,6 @@ NOTE:  Currently, Cake.Recipe itself is built using 1.3.0, and as a result, ther
 
   <ItemGroup>
     <None Include="Content/*" PackagePath="/content" Pack="true" />
+    <None Include="cake-version.yml" PackagePath="/" Pack="true" />
   </ItemGroup>
-
 </Project>

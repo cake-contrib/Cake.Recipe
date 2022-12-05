@@ -1,3 +1,4 @@
+#addin nuget:?package=Cake.FileHelpers&version=3.2.0
 #load "./includes.cake"
 
 public class BuildMetaData
@@ -64,6 +65,25 @@ Task("Run-Local-Integration-Tests")
                 { "recipe-version", buildVersion.SemVersion },
                 { "verbosity", Context.Log.Verbosity.ToString("F") }
             }});
+});
+
+Task("Set-CakeVersion-InBuild")
+    .IsDependeeOf("DotNetCore-Build")
+    .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => 
+{
+    var cakeVersion = FileReadLines(File("./Source/Cake.Recipe/cake-version.yml"))
+        .Where(x => x.StartsWith("TargetCakeVersion:"))
+        .FirstOrDefault();
+    if(string.IsNullOrEmpty(cakeVersion))
+    {
+        cakeVersion = "NotSet";
+    }
+    else
+    {
+        cakeVersion = cakeVersion.Substring(18).Trim();
+    }
+    Information("Settings CakeVersion in build to: {0}", cakeVersion);
+    msBuildSettings.WithProperty("CakeVersion", cakeVersion);
 });
 
 Build.RunDotNetCore();
