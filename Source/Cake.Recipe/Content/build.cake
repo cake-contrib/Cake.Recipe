@@ -34,26 +34,27 @@ Teardown<BuildVersion>((context, buildVersion) =>
             BuildParameters.IsTagged &&
             !BuildParameters.IsRunningIntegrationTests)
         {
+            var messageArguments = BuildParameters.MessageArguments(buildVersion);
             if (BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
-                SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, buildVersion.Version, BuildParameters.Title));
+                SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, messageArguments));
             }
 
             if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
-                SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, buildVersion.Version, BuildParameters.Title));
+                SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, messageArguments));
             }
 
             if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
-                SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, buildVersion.Version, BuildParameters.Title));
+                SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, messageArguments));
             }
 
             if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
             {
                 var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
                 var message = new StringBuilder();
-                message.AppendLine(string.Format(BuildParameters.StandardMessage, buildVersion.Version, BuildParameters.Title) + "<br/>");
+                message.AppendLine(string.Format(BuildParameters.StandardMessage, messageArguments) + "<br/>");
                 message.AppendLine("<br/>");
                 message.AppendLine($"<strong>Name</strong>: {BuildParameters.Title}<br/>");
                 message.AppendLine($"<strong>Version</strong>: {buildVersion.SemVersion}<br/>");
