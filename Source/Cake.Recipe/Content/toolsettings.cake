@@ -54,7 +54,7 @@ public static class ToolSettings
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.13.0",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
-        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
+        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.13.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.6.7",
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
