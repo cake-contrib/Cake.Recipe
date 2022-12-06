@@ -43,7 +43,7 @@ public static class ToolSettings
         string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.18.0",
         // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
-        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2022.2.3",
+        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2024.1.4",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.4",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.2",
