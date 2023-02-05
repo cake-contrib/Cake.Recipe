@@ -11,7 +11,6 @@ public static class BuildParameters
 {
     private static string _gitterMessage;
     private static string _microsoftTeamsMessage;
-    private static string _twitterMessage;
     private static bool _shouldUseDeterministicBuilds;
 
     public static string Target { get; private set; }
@@ -74,18 +73,11 @@ public static class BuildParameters
         set { _microsoftTeamsMessage = value; }
     }
 
-    public static string TwitterMessage
-    {
-        get { return _twitterMessage ?? StandardMessage; }
-        set { _twitterMessage = value; }
-    }
-
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public static EmailCredentials Email { get; private set; }
     public static GitterCredentials Gitter { get; private set; }
     public static SlackCredentials Slack { get; private set; }
-    public static TwitterCredentials Twitter { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
@@ -112,7 +104,6 @@ public static class BuildParameters
     public static bool ShouldBuildNugetSourcePackage { get; private set; }
     public static bool ShouldPostToGitter { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
-    public static bool ShouldPostToTwitter { get; private set; }
     public static bool ShouldPostToMicrosoftTeams { get; private set; }
     public static bool ShouldSendEmail { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
@@ -200,17 +191,6 @@ public static class BuildParameters
         }
     }
 
-    public static bool CanPostToTwitter
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerKey) &&
-                !string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerSecret) &&
-                !string.IsNullOrEmpty(BuildParameters.Twitter.AccessToken) &&
-                !string.IsNullOrEmpty(BuildParameters.Twitter.AccessTokenSecret);
-        }
-    }
-
     public static bool CanPostToMicrosoftTeams
     {
         get
@@ -291,7 +271,7 @@ public static class BuildParameters
         context.Information("ShouldSendEmail: {0}", ShouldSendEmail);
         context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
-        context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
+        context.Information("ShouldPostToTwitter: {0}", SuccessReporters["Twitter"]?.ShouldBeUsed);
         context.Information("ShouldPostToMicrosoftTeams: {0}", ShouldPostToMicrosoftTeams);
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
@@ -449,7 +429,6 @@ public static class BuildParameters
 
         GitterMessage = gitterMessage;
         MicrosoftTeamsMessage = microsoftTeamsMessage;
-        TwitterMessage = twitterMessage;
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
@@ -463,7 +442,6 @@ public static class BuildParameters
 
         ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
-        ShouldPostToTwitter = shouldPostToTwitter;
         ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
         ShouldSendEmail = shouldSendEmail;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
@@ -610,7 +588,6 @@ public static class BuildParameters
         Email = GetEmailCredentials(context);
         Gitter = GetGitterCredentials(context);
         Slack = GetSlackCredentials(context);
-        Twitter = GetTwitterCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
@@ -702,5 +679,13 @@ public static class BuildParameters
         
         SuccessReporters = new SuccessReporterList();
         FailureReporters = new FailureReporterList();
+        SuccessReporters.Add(
+            new TwitterReporter(
+                GetTwitterCredentials(context),
+                twitterMessage ?? StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToTwitter
+            }
+        );
     }
 }

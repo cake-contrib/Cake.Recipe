@@ -43,11 +43,6 @@ Teardown<BuildVersion>((context, buildVersion) =>
                 }
             }
 
-            if (BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
-            {
-                SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, messageArguments));
-            }
-
             if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
             {
                 SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, messageArguments));
