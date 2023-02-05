@@ -43,11 +43,6 @@ Teardown<BuildVersion>((context, buildVersion) =>
                 }
             }
 
-            if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
-            {
-                SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, messageArguments));
-            }
-
             if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
                 SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, messageArguments));

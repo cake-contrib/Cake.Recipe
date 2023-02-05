@@ -9,7 +9,6 @@ public enum BranchType
 
 public static class BuildParameters
 {
-    private static string _gitterMessage;
     private static string _microsoftTeamsMessage;
     private static bool _shouldUseDeterministicBuilds;
 
@@ -61,12 +60,6 @@ public static class BuildParameters
         get { return "Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."; }
     }
 
-    public static string GitterMessage
-    {
-        get { return _gitterMessage ?? "@/all " + StandardMessage; }
-        set { _gitterMessage = value; }
-    }
-
     public static string MicrosoftTeamsMessage
     {
         get { return _microsoftTeamsMessage ?? StandardMessage; }
@@ -76,7 +69,6 @@ public static class BuildParameters
     public static GitHubCredentials GitHub { get; private set; }
     public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
     public static EmailCredentials Email { get; private set; }
-    public static GitterCredentials Gitter { get; private set; }
     public static SlackCredentials Slack { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
@@ -102,7 +94,6 @@ public static class BuildParameters
     public static int TransifexPullPercentage { get; private set; }
 
     public static bool ShouldBuildNugetSourcePackage { get; private set; }
-    public static bool ShouldPostToGitter { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldPostToMicrosoftTeams { get; private set; }
     public static bool ShouldSendEmail { get; private set; }
@@ -170,15 +161,6 @@ public static class BuildParameters
         get
         {
             return !string.IsNullOrEmpty(BuildParameters.Email.SmtpHost);
-        }
-    }
-
-    public static bool CanPostToGitter
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Gitter.Token) &&
-                !string.IsNullOrEmpty(BuildParameters.Gitter.RoomId);
         }
     }
 
@@ -269,7 +251,7 @@ public static class BuildParameters
         context.Information("BranchType: {0}", BranchType);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
         context.Information("ShouldSendEmail: {0}", ShouldSendEmail);
-        context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
+        context.Information("ShouldPostToGitter: {0}", SuccessReporters["Gitter"]?.ShouldBeUsed);
         context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
         context.Information("ShouldPostToTwitter: {0}", SuccessReporters["Twitter"]?.ShouldBeUsed);
         context.Information("ShouldPostToMicrosoftTeams: {0}", ShouldPostToMicrosoftTeams);
@@ -427,7 +409,6 @@ public static class BuildParameters
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
 
-        GitterMessage = gitterMessage;
         MicrosoftTeamsMessage = microsoftTeamsMessage;
 
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
@@ -440,7 +421,6 @@ public static class BuildParameters
         WebLinkRoot = webLinkRoot ?? RepositoryName;
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
-        ShouldPostToGitter = shouldPostToGitter;
         ShouldPostToSlack = shouldPostToSlack;
         ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
         ShouldSendEmail = shouldSendEmail;
@@ -536,7 +516,7 @@ public static class BuildParameters
             {
                 gitTool = context.Tools.Resolve("git.exe");
             }
-            
+
             if (gitTool != null)
             {
                 IEnumerable<string> redirectedStandardOutput;
@@ -586,7 +566,6 @@ public static class BuildParameters
         GitHub = GetGitHubCredentials(context);
         MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
         Email = GetEmailCredentials(context);
-        Gitter = GetGitterCredentials(context);
         Slack = GetSlackCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
@@ -676,7 +655,7 @@ public static class BuildParameters
                 PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
             }
         }
-        
+
         SuccessReporters = new SuccessReporterList();
         FailureReporters = new FailureReporterList();
         SuccessReporters.Add(
@@ -685,6 +664,14 @@ public static class BuildParameters
                 twitterMessage ?? StandardMessage)
             {
                 ShouldBeUsed = shouldPostToTwitter
+            }
+        );
+        SuccessReporters.Add(
+            new GitterReporter(
+                GetGitterCredentials(context),
+                gitterMessage ?? "@/all " + StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToGitter
             }
         );
     }
