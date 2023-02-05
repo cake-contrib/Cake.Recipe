@@ -43,6 +43,8 @@ public static class BuildParameters
     public static bool ForceContinuousIntegration { get; private set; }
     public static PlatformFamily PreferredBuildAgentOperatingSystem { get; private set;}
     public static BuildProviderType PreferredBuildProviderType { get; private set; }
+    public static SuccessReporterList SuccessReporters { get; private set; }
+    public static FailureReporterList FailureReporters { get; private set; }
 
     public static List<PackageSourceData> PackageSources { get; private set; }
 
@@ -697,5 +699,8 @@ public static class BuildParameters
                 PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
             }
         }
+        
+        SuccessReporters = new SuccessReporterList();
+        FailureReporters = new FailureReporterList();
     }
 }
