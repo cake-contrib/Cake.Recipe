@@ -60,7 +60,6 @@ public static class BuildParameters
     }
 
     public static GitHubCredentials GitHub { get; private set; }
-    public static SlackCredentials Slack { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
@@ -85,7 +84,6 @@ public static class BuildParameters
     public static int TransifexPullPercentage { get; private set; }
 
     public static bool ShouldBuildNugetSourcePackage { get; private set; }
-    public static bool ShouldPostToSlack { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
     public static bool ShouldNotifyBetaReleases { get; private set; }
@@ -142,15 +140,6 @@ public static class BuildParameters
         get
         {
             return !string.IsNullOrEmpty(BuildParameters.GitHub.Token);
-        }
-    }
-
-    public static bool CanPostToSlack
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Slack.Token) &&
-                !string.IsNullOrEmpty(BuildParameters.Slack.Channel);
         }
     }
 
@@ -225,7 +214,7 @@ public static class BuildParameters
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
         context.Information("ShouldSendEmail: {0}", SuccessReporters["EMail"]?.ShouldBeUsed);
         context.Information("ShouldPostToGitter: {0}", SuccessReporters["Gitter"]?.ShouldBeUsed);
-        context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
+        context.Information("ShouldPostToSlack: {0}", SuccessReporters["Slack"]?.ShouldBeUsed);
         context.Information("ShouldPostToTwitter: {0}", SuccessReporters["Twitter"]?.ShouldBeUsed);
         context.Information("ShouldPostToMicrosoftTeams: {0}", SuccessReporters["MicrosoftTeams"]?.ShouldBeUsed);
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
@@ -392,7 +381,6 @@ public static class BuildParameters
         WebLinkRoot = webLinkRoot ?? RepositoryName;
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
-        ShouldPostToSlack = shouldPostToSlack;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
@@ -533,7 +521,6 @@ public static class BuildParameters
         TreatWarningsAsErrors = treatWarningsAsErrors;
 
         GitHub = GetGitHubCredentials(context);
-        Slack = GetSlackCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
@@ -647,6 +634,13 @@ public static class BuildParameters
                 microsoftTeamsMessage ?? StandardMessage)
             {
                 ShouldBeUsed = shouldPostToMicrosoftTeams
+            }
+        );
+        FailureReporters.Add(
+            new SlackReporter(
+                GetSlackCredentials(context))
+            {
+                ShouldBeUsed = shouldPostToSlack
             }
         );
 
