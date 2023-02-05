@@ -60,7 +60,6 @@ public static class BuildParameters
     }
 
     public static GitHubCredentials GitHub { get; private set; }
-    public static EmailCredentials Email { get; private set; }
     public static SlackCredentials Slack { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
@@ -87,7 +86,6 @@ public static class BuildParameters
 
     public static bool ShouldBuildNugetSourcePackage { get; private set; }
     public static bool ShouldPostToSlack { get; private set; }
-    public static bool ShouldSendEmail { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
     public static bool ShouldNotifyBetaReleases { get; private set; }
@@ -144,14 +142,6 @@ public static class BuildParameters
         get
         {
             return !string.IsNullOrEmpty(BuildParameters.GitHub.Token);
-        }
-    }
-
-    public static bool CanSendEmail
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Email.SmtpHost);
         }
     }
 
@@ -397,7 +387,6 @@ public static class BuildParameters
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
         ShouldPostToSlack = shouldPostToSlack;
-        ShouldSendEmail = shouldSendEmail;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
@@ -538,7 +527,6 @@ public static class BuildParameters
         TreatWarningsAsErrors = treatWarningsAsErrors;
 
         GitHub = GetGitHubCredentials(context);
-        Email = GetEmailCredentials(context);
         Slack = GetSlackCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
@@ -647,5 +635,13 @@ public static class BuildParameters
                 ShouldBeUsed = shouldPostToMicrosoftTeams
             }
         );
+
+        var eMailReporter = new EmailReporter(
+                GetEmailCredentials(context))
+            {
+                ShouldBeUsed = shouldSendEmail
+            };
+        SuccessReporters.Add(eMailReporter);
+        FailureReporters.Add(eMailReporter);
     }
 }
