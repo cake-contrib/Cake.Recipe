@@ -1,21 +1,39 @@
-///////////////////////////////////////////////////////////////////////////////
-// HELPER METHODS
-///////////////////////////////////////////////////////////////////////////////
-
-public void SendMessageToMicrosoftTeams(string message)
+public class MsTeamsReporter : SuccessReporter
 {
-    try
+    private MicrosoftTeamsCredentials _credentials;
+    private string _messageTemplate;
+
+    public MsTeamsReporter(MicrosoftTeamsCredentials credentials, string messageTemplate)
     {
-        Information("Sending message to Microsoft Teams...");
-
-        MicrosoftTeamsPostMessage(message,
-            new MicrosoftTeamsSettings {
-                IncomingWebhookUrl = BuildParameters.MicrosoftTeams.WebHookUrl
-        });
-
+        _credentials = credentials;
+        _messageTemplate = messageTemplate;
     }
-    catch(Exception ex)
+
+    public override string Name { get; } = "MicrosoftTeams";
+
+    public override bool CanBeUsed
     {
-        Error("{0}", ex);
+        get => !string.IsNullOrEmpty(_credentials.WebHookUrl);
+    }
+
+    public override void ReportSuccess(ICakeContext context, BuildVersion buildVersion)
+    {
+        try
+        {
+            context.Information("Sending message to Microsoft Teams...");
+
+            var messageArguments = BuildParameters.MessageArguments(buildVersion);
+            var message = string.Format(_messageTemplate, messageArguments);
+
+            context.MicrosoftTeamsPostMessage(message,
+                new MicrosoftTeamsSettings {
+                    IncomingWebhookUrl = _credentials.WebHookUrl
+            });
+
+        }
+        catch(Exception ex)
+        {
+            context.Error("{0}", ex);
+        }
     }
 }

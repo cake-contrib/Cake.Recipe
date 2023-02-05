@@ -9,9 +9,6 @@ public enum BranchType
 
 public static class BuildParameters
 {
-    private static string _gitterMessage;
-    private static string _microsoftTeamsMessage;
-    private static string _twitterMessage;
     private static bool _shouldUseDeterministicBuilds;
 
     public static string Target { get; private set; }
@@ -43,6 +40,8 @@ public static class BuildParameters
     public static bool ForceContinuousIntegration { get; private set; }
     public static PlatformFamily PreferredBuildAgentOperatingSystem { get; private set;}
     public static BuildProviderType PreferredBuildProviderType { get; private set; }
+    public static SuccessReporterList SuccessReporters { get; private set; }
+    public static FailureReporterList FailureReporters { get; private set; }
 
     public static List<PackageSourceData> PackageSources { get; private set; }
 
@@ -60,30 +59,7 @@ public static class BuildParameters
         get { return "Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."; }
     }
 
-    public static string GitterMessage
-    {
-        get { return _gitterMessage ?? "@/all " + StandardMessage; }
-        set { _gitterMessage = value; }
-    }
-
-    public static string MicrosoftTeamsMessage
-    {
-        get { return _microsoftTeamsMessage ?? StandardMessage; }
-        set { _microsoftTeamsMessage = value; }
-    }
-
-    public static string TwitterMessage
-    {
-        get { return _twitterMessage ?? StandardMessage; }
-        set { _twitterMessage = value; }
-    }
-
     public static GitHubCredentials GitHub { get; private set; }
-    public static MicrosoftTeamsCredentials MicrosoftTeams { get; private set; }
-    public static EmailCredentials Email { get; private set; }
-    public static GitterCredentials Gitter { get; private set; }
-    public static SlackCredentials Slack { get; private set; }
-    public static TwitterCredentials Twitter { get; private set; }
     public static AppVeyorCredentials AppVeyor { get; private set; }
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
@@ -108,11 +84,6 @@ public static class BuildParameters
     public static int TransifexPullPercentage { get; private set; }
 
     public static bool ShouldBuildNugetSourcePackage { get; private set; }
-    public static bool ShouldPostToGitter { get; private set; }
-    public static bool ShouldPostToSlack { get; private set; }
-    public static bool ShouldPostToTwitter { get; private set; }
-    public static bool ShouldPostToMicrosoftTeams { get; private set; }
-    public static bool ShouldSendEmail { get; private set; }
     public static bool ShouldDownloadMilestoneReleaseNotes { get; private set;}
     public static bool ShouldDownloadFullReleaseNotes { get; private set;}
     public static bool ShouldNotifyBetaReleases { get; private set; }
@@ -169,51 +140,6 @@ public static class BuildParameters
         get
         {
             return !string.IsNullOrEmpty(BuildParameters.GitHub.Token);
-        }
-    }
-
-    public static bool CanSendEmail
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Email.SmtpHost);
-        }
-    }
-
-    public static bool CanPostToGitter
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Gitter.Token) &&
-                !string.IsNullOrEmpty(BuildParameters.Gitter.RoomId);
-        }
-    }
-
-    public static bool CanPostToSlack
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Slack.Token) &&
-                !string.IsNullOrEmpty(BuildParameters.Slack.Channel);
-        }
-    }
-
-    public static bool CanPostToTwitter
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerKey) &&
-                !string.IsNullOrEmpty(BuildParameters.Twitter.ConsumerSecret) &&
-                !string.IsNullOrEmpty(BuildParameters.Twitter.AccessToken) &&
-                !string.IsNullOrEmpty(BuildParameters.Twitter.AccessTokenSecret);
-        }
-    }
-
-    public static bool CanPostToMicrosoftTeams
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.MicrosoftTeams.WebHookUrl);
         }
     }
 
@@ -286,11 +212,11 @@ public static class BuildParameters
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("BranchType: {0}", BranchType);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
-        context.Information("ShouldSendEmail: {0}", ShouldSendEmail);
-        context.Information("ShouldPostToGitter: {0}", ShouldPostToGitter);
-        context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
-        context.Information("ShouldPostToTwitter: {0}", ShouldPostToTwitter);
-        context.Information("ShouldPostToMicrosoftTeams: {0}", ShouldPostToMicrosoftTeams);
+        context.Information("ShouldSendEmail: {0}", SuccessReporters["EMail"]?.ShouldBeUsed);
+        context.Information("ShouldPostToGitter: {0}", SuccessReporters["Gitter"]?.ShouldBeUsed);
+        context.Information("ShouldPostToSlack: {0}", SuccessReporters["Slack"]?.ShouldBeUsed);
+        context.Information("ShouldPostToTwitter: {0}", SuccessReporters["Twitter"]?.ShouldBeUsed);
+        context.Information("ShouldPostToMicrosoftTeams: {0}", SuccessReporters["MicrosoftTeams"]?.ShouldBeUsed);
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
         context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
@@ -406,7 +332,9 @@ public static class BuildParameters
         List<PackageSourceData> packageSourceDatas = null,
         PlatformFamily preferredBuildAgentOperatingSystem = PlatformFamily.Windows,
         BuildProviderType preferredBuildProviderType = BuildProviderType.AppVeyor,
-        Func<BuildVersion, object[]> messageArguments = null
+        Func<BuildVersion, object[]> messageArguments = null,
+        string mastodonMessage = null,
+        bool shouldPostToMastodon = true
         )
     {
         if (context == null)
@@ -445,10 +373,6 @@ public static class BuildParameters
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
 
-        GitterMessage = gitterMessage;
-        MicrosoftTeamsMessage = microsoftTeamsMessage;
-        TwitterMessage = twitterMessage;
-
         WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
         WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
         WyamConfigurationFile = wyamConfigurationFile ?? context.MakeAbsolute((FilePath)"config.wyam");
@@ -459,11 +383,6 @@ public static class BuildParameters
         WebLinkRoot = webLinkRoot ?? RepositoryName;
         WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
-        ShouldPostToGitter = shouldPostToGitter;
-        ShouldPostToSlack = shouldPostToSlack;
-        ShouldPostToTwitter = shouldPostToTwitter;
-        ShouldPostToMicrosoftTeams = shouldPostToMicrosoftTeams;
-        ShouldSendEmail = shouldSendEmail;
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
         ShouldNotifyBetaReleases = shouldNotifyBetaReleases;
@@ -556,7 +475,7 @@ public static class BuildParameters
             {
                 gitTool = context.Tools.Resolve("git.exe");
             }
-            
+
             if (gitTool != null)
             {
                 IEnumerable<string> redirectedStandardOutput;
@@ -604,11 +523,6 @@ public static class BuildParameters
         TreatWarningsAsErrors = treatWarningsAsErrors;
 
         GitHub = GetGitHubCredentials(context);
-        MicrosoftTeams = GetMicrosoftTeamsCredentials(context);
-        Email = GetEmailCredentials(context);
-        Gitter = GetGitterCredentials(context);
-        Slack = GetSlackCredentials(context);
-        Twitter = GetTwitterCredentials(context);
         AppVeyor = GetAppVeyorCredentials(context);
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
@@ -697,5 +611,55 @@ public static class BuildParameters
                 PackageSources.Add(new PackageSourceData(context, "GPR", gprUrl, FeedType.NuGet, false));
             }
         }
+
+        SuccessReporters = new SuccessReporterList();
+        FailureReporters = new FailureReporterList();
+        SuccessReporters.Add(
+            new TwitterReporter(
+                GetTwitterCredentials(context),
+                twitterMessage ?? StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToTwitter
+            }
+        );
+        SuccessReporters.Add(
+            new GitterReporter(
+                GetGitterCredentials(context),
+                gitterMessage ?? "@/all " + StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToGitter
+            }
+        );
+        SuccessReporters.Add(
+            new MsTeamsReporter(
+                GetMicrosoftTeamsCredentials(context),
+                microsoftTeamsMessage ?? StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToMicrosoftTeams
+            }
+        );
+        FailureReporters.Add(
+            new SlackReporter(
+                GetSlackCredentials(context))
+            {
+                ShouldBeUsed = shouldPostToSlack
+            }
+        );
+        SuccessReporters.Add(
+            new MastodonReporter(
+                GetMastodonCredentials(context),
+                mastodonMessage ?? StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToMastodon
+            }
+        );
+
+        var eMailReporter = new EmailReporter(
+                GetEmailCredentials(context))
+            {
+                ShouldBeUsed = shouldSendEmail
+            };
+        SuccessReporters.Add(eMailReporter);
+        FailureReporters.Add(eMailReporter);
     }
 }

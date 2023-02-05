@@ -1,30 +1,47 @@
-///////////////////////////////////////////////////////////////////////////////
-// HELPER METHODS
-///////////////////////////////////////////////////////////////////////////////
 
-public void SendMessageToSlackChannel(string message)
+public class SlackReporter : FailureReporter
 {
-    try
+    private SlackCredentials _credentials;
+
+    public SlackReporter(SlackCredentials credentials)
     {
-        Information("Sending message to Slack...");
-
-        var postMessageResult = Slack.Chat.PostMessage(
-                    token: BuildParameters.Slack.Token,
-                    channel: BuildParameters.Slack.Channel,
-                    text: message
-            );
-
-        if (postMessageResult.Ok)
-        {
-            Information("Message {0} successfully sent", postMessageResult.TimeStamp);
-        }
-        else
-        {
-            Error("Failed to send message: {0}", postMessageResult.Error);
-        }
+        _credentials = credentials;
     }
-    catch(Exception ex)
+
+    public override string Name { get; } = "Slack";
+
+    public override bool CanBeUsed
     {
-        Error("{0}", ex);
+        get => !string.IsNullOrEmpty(_credentials.Token) &&
+            !string.IsNullOrEmpty(_credentials.Channel);
+    }
+
+
+    public override void ReportFailure(ICakeContext context, BuildVersion _, Exception __)
+    {
+        try
+        {
+            context.Information("Sending message to Slack...");
+
+            var postMessageResult = context.Slack().Chat.PostMessage(
+                        token: _credentials.Token,
+                        channel: _credentials.Channel,
+                        text: "Continuous Integration Build of " + BuildParameters.Title + " just failed :-("
+                );
+
+            if (postMessageResult.Ok)
+            {
+                context.Information("Message {0} successfully sent", postMessageResult.TimeStamp);
+            }
+            else
+            {
+                context.Error("Failed to send message: {0}", postMessageResult.Error);
+            }
+        }
+        catch(Exception ex)
+        {
+            context.Error("{0}", ex);
+        }
     }
 }
+
