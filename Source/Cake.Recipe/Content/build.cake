@@ -35,6 +35,14 @@ Teardown<BuildVersion>((context, buildVersion) =>
             !BuildParameters.IsRunningIntegrationTests)
         {
             var messageArguments = BuildParameters.MessageArguments(buildVersion);
+            foreach(var reporter in BuildParameters.SuccessReporters)
+            {
+                if(reporter.ShouldBeUsed && reporter.CanBeUsed)
+                {
+                    reporter.ReportSuccess(context, buildVersion);
+                }
+            }
+
             if (BuildParameters.CanPostToTwitter && BuildParameters.ShouldPostToTwitter)
             {
                 SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, messageArguments));
@@ -69,6 +77,14 @@ Teardown<BuildVersion>((context, buildVersion) =>
             BuildParameters.IsMainRepository &&
             !BuildParameters.IsRunningIntegrationTests)
         {
+            foreach(var reporter in BuildParameters.FailureReporters)
+            {
+                if(reporter.ShouldBeUsed && reporter.CanBeUsed)
+                {
+                    reporter.ReportFailure(context, buildVersion, context.ThrownException);
+                }
+            }
+
             if (BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
             {
                 SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
