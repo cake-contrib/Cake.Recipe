@@ -58,11 +58,6 @@ Teardown<BuildVersion>((context, buildVersion) =>
                     reporter.ReportFailure(context, buildVersion, context.ThrownException);
                 }
             }
-
-            if (BuildParameters.CanPostToSlack && BuildParameters.ShouldPostToSlack)
-            {
-                SendMessageToSlackChannel("Continuous Integration Build of " + BuildParameters.Title + " just failed :-(");
-            }
         }
     }
 
