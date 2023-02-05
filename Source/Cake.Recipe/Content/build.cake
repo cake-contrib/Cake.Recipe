@@ -43,11 +43,6 @@ Teardown<BuildVersion>((context, buildVersion) =>
                 }
             }
 
-            if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
-            {
-                SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, messageArguments));
-            }
-
             if (BuildParameters.CanSendEmail && BuildParameters.ShouldSendEmail && !string.IsNullOrEmpty(BuildParameters.EmailRecipient))
             {
                 var subject = $"Continuous Integration Build of {BuildParameters.Title} completed successfully";
