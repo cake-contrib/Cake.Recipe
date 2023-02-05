@@ -228,6 +228,17 @@ Default Value:
 ```csharp
 true
 ```
+### shouldPostToMastodon
+
+This is used as a final control variable for whether or not notification messages should be posted to the fediverse via Mastodon when the a final release build (i.e. a tagged build) completes.
+
+Type: `bool`
+
+Default Value:
+
+```csharp
+true
+```
 
 ### shouldDownloadMilestoneReleaseNotes
 
@@ -509,6 +520,18 @@ Version {0} of the {1} Addin has just been released, this will be available here
 ### twitterMessage
 
 This is the message that is sent to Twitter at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.
+
+Type: `string`
+
+Default Value:
+
+```csharp
+Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."
+```
+
+### mastodonMessage
+
+This is the message that is sent to the fediverse via Mastodon at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.
 
 Type: `string`
 

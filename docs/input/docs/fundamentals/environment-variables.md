@@ -130,6 +130,24 @@ The username that should be used for authenticating to the SMTP server.
 
 The password that should be used for authenticating to the SMTP server.
 
+## Mastodon
+
+When a successful release build has been completed, Cake.Recipe can be configured to send out a notification (with configurable message) to the fediverse via Mastodon. There are two required environment variables that needs to be set to make this happen.  Further information about find this information can be found in the Cake.Mastodon [documentation](https://github.com/cake-contrib/Cake.Mastodon/blob/master/README.md#usage).
+
+:::{.alert .alert-info}
+**NOTE:**
+
+In addition to these environment variables being present, and correct, the control variable [shouldPostToMastodon](./set-parameters#shouldPostToMastodon) also needs to be set to true.  The default value for this parameter is true.
+:::
+
+### MASTODON_ACCESS_TOKEN
+
+The Access Token for the Mastodon application that is going to be used to send the toot.
+
+### MASTODON_INSTANCE_URL
+
+The URL to the Mastodon instance, where the application was registered.
+
 ## AppVeyor
 
 More information about what this is used for can be found in the [clean AppVeyor build cache](../usage/cleaning-cache) documentation.

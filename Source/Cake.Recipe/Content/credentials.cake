@@ -136,6 +136,18 @@ public class WyamCredentials
     }
 }
 
+public class MastodonCredentials
+{
+    public string AccessToken { get; private set; }
+    public string InstanceUrl { get; private set; }
+
+    public MastodonCredentials(string accessToken, string instanceUrl)
+    {
+        AccessToken = accessToken;
+        InstanceUrl = instanceUrl;
+    }
+}
+
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
     string token = null;
@@ -223,4 +235,11 @@ public static WyamCredentials GetWyamCredentials(ICakeContext context)
         context.EnvironmentVariable(Environment.WyamAccessTokenVariable),
         context.EnvironmentVariable(Environment.WyamDeployRemoteVariable),
         context.EnvironmentVariable(Environment.WyamDeployBranchVariable));
+}
+
+public static MastodonCredentials GetMastodonCredentials(ICakeContext context)
+{
+    return new MastodonCredentials(
+        context.EnvironmentVariable(Environment.MastodonAccessTokenVariable),
+        context.EnvironmentVariable(Environment.MastodonInstanceUrlVariable));
 }

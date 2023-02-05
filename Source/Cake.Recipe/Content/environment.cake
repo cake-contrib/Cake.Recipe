@@ -20,6 +20,8 @@ public static class Environment
     public static string WyamAccessTokenVariable { get; private set; }
     public static string WyamDeployRemoteVariable { get; private set; }
     public static string WyamDeployBranchVariable { get; private set; }
+    public static string MastodonAccessTokenVariable { get; private set; }
+    public static string MastodonInstanceUrlVariable { get; private set; }
 
     public static void SetVariableNames(
         string githubTokenVariable = null,
@@ -41,7 +43,9 @@ public static class Environment
         string transifexApiTokenVariable = null,
         string wyamAccessTokenVariable = null,
         string wyamDeployRemoteVariable = null,
-        string wyamDeployBranchVariable = null)
+        string wyamDeployBranchVariable = null,
+        string mastodonAccessTokenVariable = null,
+        string mastodonInstanceUrlVariable = null)
     {
         GithubTokenVariable = githubTokenVariable ?? "GITHUB_PAT";
         SlackTokenVariable = slackTokenVariable ?? "SLACK_TOKEN";
@@ -63,5 +67,7 @@ public static class Environment
         WyamAccessTokenVariable = wyamAccessTokenVariable ?? "WYAM_ACCESS_TOKEN";
         WyamDeployRemoteVariable = wyamDeployRemoteVariable ?? "WYAM_DEPLOY_REMOTE";
         WyamDeployBranchVariable = wyamDeployBranchVariable ?? "WYAM_DEPLOY_BRANCH";
+        MastodonAccessTokenVariable = mastodonAccessTokenVariable ?? "MASTODON_ACCESS_TOKEN";
+        MastodonInstanceUrlVariable = mastodonInstanceUrlVariable ?? "MASTODON_INSTANCE_URL";
     }
 }

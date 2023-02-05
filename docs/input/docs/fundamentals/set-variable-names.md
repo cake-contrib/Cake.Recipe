@@ -83,6 +83,14 @@ Default value: `EMAIL_USERNAME`
 
 Default value: `EMAIL_PASSWORD`
 
+### mastodonAccessTokenVariable
+
+Default value: `MASTODON_ACCESS_TOKEN`
+
+### mastodonInstanceUrlVariable
+
+Default value: `MASTODON_INSTANCE_URL`
+
 ### appVeyorApiTokenVariable
 
 Default value: `APPVEYOR_API_TOKEN`
