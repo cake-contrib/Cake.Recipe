@@ -332,7 +332,9 @@ public static class BuildParameters
         List<PackageSourceData> packageSourceDatas = null,
         PlatformFamily preferredBuildAgentOperatingSystem = PlatformFamily.Windows,
         BuildProviderType preferredBuildProviderType = BuildProviderType.AppVeyor,
-        Func<BuildVersion, object[]> messageArguments = null
+        Func<BuildVersion, object[]> messageArguments = null,
+        string mastodonMessage = null,
+        bool shouldPostToMastodon = true
         )
     {
         if (context == null)
@@ -641,6 +643,14 @@ public static class BuildParameters
                 GetSlackCredentials(context))
             {
                 ShouldBeUsed = shouldPostToSlack
+            }
+        );
+        SuccessReporters.Add(
+            new MastodonReporter(
+                GetMastodonCredentials(context),
+                mastodonMessage ?? StandardMessage)
+            {
+                ShouldBeUsed = shouldPostToMastodon
             }
         );
 
