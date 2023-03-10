@@ -18,7 +18,7 @@ jobs:
       - name: Fetch all branches and tags
         run: git fetch --unshallow --prune
       - name: Tools caching
-        uses: actions/cache@v3.0.11
+        uses: actions/cache@v3.3.0
         with:
           path: tools
           key: ${{ matrix.os }}-tools-${{ hashFiles('recipe.cake', 'Source/Cake.Recipe/Content/addins.cake', 'Source/Cake.Recipe/Content/tools.cake', 'Source/Cake.Recipe/Content/modules.cake') }}
