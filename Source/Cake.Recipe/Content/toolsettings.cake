@@ -47,7 +47,7 @@ public static class ToolSettings
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.2",
-        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.15.2",
+        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.16.0",
         string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.3.0",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.1221",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=5.1.10",
