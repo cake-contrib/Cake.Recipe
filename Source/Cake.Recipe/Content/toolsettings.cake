@@ -13,6 +13,7 @@ public static class ToolSettings
     public static int MaxCpuCount { get; private set; }
     public static string TargetFrameworkPathOverride { get; private set; }
     public static bool SkipDuplicatePackages { get; private set; }
+    public static string KuduSyncIgnore { get; private set; }
 
     public static string CodecovTool { get; private set; }
     public static string CoverallsTool { get; private set; }
@@ -93,7 +94,8 @@ public static class ToolSettings
         MSBuildToolVersion buildMSBuildToolVersion = MSBuildToolVersion.Default,
         int? maxCpuCount = null,
         DirectoryPath targetFrameworkPathOverride = null,
-        bool skipDuplicatePackages = false
+        bool skipDuplicatePackages = false,
+        string kuduSyncIgnore = null
     )
     {
         context.Information("Setting up tools...");
@@ -105,6 +107,7 @@ public static class ToolSettings
         BuildPlatformTarget = buildPlatformTarget ?? PlatformTarget.MSIL;
         BuildMSBuildToolVersion = buildMSBuildToolVersion;
         MaxCpuCount = maxCpuCount ?? 0;
+        KuduSyncIgnore = kuduSyncIgnore ?? ".git;CNAME";
         if (BuildParameters.ShouldUseTargetFrameworkPath && targetFrameworkPathOverride == null)
         {
             if (context.Environment.Runtime.IsCoreClr)
