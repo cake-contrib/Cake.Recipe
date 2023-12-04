@@ -353,7 +353,7 @@ public static class BuildParameters
         string repositoryName = null,
         string appVeyorAccountName = null,
         string appVeyorProjectSlug = null,
-        bool shouldPostToGitter = true,
+        bool shouldPostToGitter = false,
         bool shouldPostToSlack = true,
         bool shouldPostToTwitter = true,
         bool shouldPostToMicrosoftTeams = false,
