@@ -23,7 +23,6 @@ BuildParameters.SetParameters(context: Context,
                             shouldRunCoveralls: false,
                             shouldRunCodecov: false,
                             shouldRunDotNetCorePack: true,
-                            gitterMessage: "@/all " + standardNotificationMessage,
                             twitterMessage: standardNotificationMessage);
 
 BuildParameters.PrintParameters(Context);
