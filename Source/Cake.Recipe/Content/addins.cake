@@ -7,7 +7,6 @@
 #addin nuget:?package=Cake.Coverlet&version=2.5.4
 #addin nuget:?package=Portable.BouncyCastle&version=1.8.5
 #addin nuget:?package=Cake.Email&version=2.0.0&loaddependencies=true
-#addin nuget:?package=Cake.Gitter&version=2.0.0
 #addin nuget:?package=Cake.Incubator&version=7.0.0
 #addin nuget:?package=Cake.Kudu&version=2.0.0
 #addin nuget:?package=Cake.MicrosoftTeams&version=2.0.0

@@ -40,11 +40,6 @@ Teardown<BuildVersion>((context, buildVersion) =>
                 SendMessageToTwitter(string.Format(BuildParameters.TwitterMessage, messageArguments));
             }
 
-            if (BuildParameters.CanPostToGitter && BuildParameters.ShouldPostToGitter)
-            {
-                SendMessageToGitterRoom(string.Format(BuildParameters.GitterMessage, messageArguments));
-            }
-
             if (BuildParameters.CanPostToMicrosoftTeams && BuildParameters.ShouldPostToMicrosoftTeams)
             {
                 SendMessageToMicrosoftTeams(string.Format(BuildParameters.MicrosoftTeamsMessage, messageArguments));
