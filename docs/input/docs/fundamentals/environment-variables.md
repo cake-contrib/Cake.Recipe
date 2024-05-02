@@ -42,24 +42,6 @@ The Personal Access Token of the GitHub account to be used.
 If `GITHUB_PAT` is not set, the alternatives of `GH_TOKEN` and `GITHUB_TOKEN` are considered.
 :::
 
-## Gitter
-
-When a successful release build has been completed, Cake.Recipe can be configured to send out a notification (with configurable message) to a Gitter Room.  There are two required environment variables that needs to be set to make this happen.  Further information about find this information can be found in the Cake.Gitter [documentation](https://cake-contrib.github.io/Cake.Gitter/docs/usage/requiredinformation).
-
-:::{.alert .alert-info}
-**NOTE:**
-
-In addition to these environment variables being present, and correct, the control variable [shouldPostToGitter](./set-parameters#shouldPostToGitter) also needs to be set to true.  The default value for this parameter is true.
-:::
-
-### GITTER_TOKEN
-
-The authentication token for the user who should post to the room.
-
-### GITTER_ROOM_ID
-
-The room ID where you want the message to be sent.
-
 ## Slack
 
 When a release build fails, Cake.Recipe can be configured to send out a notification (with configurable message) to a Slack Channel.  There are two required environment variables that s to be set to make this happen.  Further information about find this information can be found in the Cake.Slack [documentation](https://github.com/cake-contrib/Cake.Slack).

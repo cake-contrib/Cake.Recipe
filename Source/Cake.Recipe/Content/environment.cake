@@ -1,8 +1,6 @@
 public static class Environment
 {
     public static string GithubTokenVariable { get; private set; }
-    public static string GitterTokenVariable { get; private set; }
-    public static string GitterRoomIdVariable { get; private set; }
     public static string SlackTokenVariable { get; private set; }
     public static string SlackChannelVariable { get; private set; }
     public static string TwitterConsumerKeyVariable { get; private set; }
@@ -25,8 +23,6 @@ public static class Environment
 
     public static void SetVariableNames(
         string githubTokenVariable = null,
-        string gitterTokenVariable = null,
-        string gitterRoomIdVariable = null,
         string slackTokenVariable = null,
         string slackChannelVariable = null,
         string twitterConsumerKeyVariable = null,
@@ -48,8 +44,6 @@ public static class Environment
         string wyamDeployBranchVariable = null)
     {
         GithubTokenVariable = githubTokenVariable ?? "GITHUB_PAT";
-        GitterTokenVariable = gitterTokenVariable ?? "GITTER_TOKEN";
-        GitterRoomIdVariable = gitterRoomIdVariable ?? "GITTER_ROOM_ID";
         SlackTokenVariable = slackTokenVariable ?? "SLACK_TOKEN";
         SlackChannelVariable = slackChannelVariable ?? "SLACK_CHANNEL";
         TwitterConsumerKeyVariable = twitterConsumerKeyVariable ?? "TWITTER_CONSUMER_KEY";

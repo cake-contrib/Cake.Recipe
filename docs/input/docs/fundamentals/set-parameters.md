@@ -177,14 +177,6 @@ Default Value:
 Title.Replace(".", "-").ToLower();
 ```
 
-### shouldPostToGitter
-
-This is used as a final control variable for whether or not notification messages should be posted to Gitter when the a final release build (i.e. a tagged build) completes.
-
-Type: `bool`
-
-Default Value:
-
 ```csharp
 true
 ```
@@ -500,18 +492,6 @@ Default Value:
 
 ```csharp
 60
-```
-
-### gitterMessage
-
-This is the message that is sent to Gitter at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.
-
-Type: `string`
-
-Default Value:
-
-```csharp
-@/all Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."
 ```
 
 ### microsoftTeamsMessage
