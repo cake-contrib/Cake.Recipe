@@ -200,6 +200,7 @@
                         
                 <li><a href="/Cake.Recipe/docs/upgrading/1.x-to-2.x">Upgrading from 1.x to 2.x</a></li>
                 <li><a href="/Cake.Recipe/docs/upgrading/2.x-to-3.x">Upgrading from 2.x to 3.x</a></li>
+                <li><a href="/Cake.Recipe/docs/upgrading/3.x-to-4.x">Upgrading from 3.x to 4.x</a></li>
 
                     </ul>
                 </li>
@@ -220,16 +221,16 @@
 		</section>
 	<section class="content">
 		<p>Cake.Recipe is driven by <a href="./environment-variables">environment variables</a>.  These are used to store the sensitive information that is required during the build process.  For example, the username and password needed to send email, or the token required to access GitHub.</p>
-<p>Cake.Recipe has default environment variable names for all the pieces of information that are required.  The expectation is that either locally on your own machine, or on the CI/CD pipeline that you are using, you set the values for all of the ones that you intend to use.  For example, if you want to send messages to Gitter when the build succeeds, you will need to set environment variables with the names required.</p>
-<p>However, it may be necessary to change these environment variable names.  One example of when this is required is when you might be using Cake.Recipe on two completely separate projects.  In this scenario, you might need to set the Gitter Environment variables for both projects, but they may require different values.</p>
-<p>As an example, lets say that you wanted to change the name of the environment variables that stored the Gitter credential information.  You could add something like the following to your <a href="./recipe-cake">recipe.cake</a> file:</p>
-<pre><code class="language-csharp">Environment.SetVariableNames(gitterTokenVariable: &quot;PROJECTA_GITTER_TOKEN&quot;, gitterRoomIdVariable: &quot;PROJECTA_GITTER_ROOM_ID&quot;);
+<p>Cake.Recipe has default environment variable names for all the pieces of information that are required.  The expectation is that either locally on your own machine, or on the CI/CD pipeline that you are using, you set the values for all of the ones that you intend to use.  For example, if you want to send messages to Slack when the build succeeds, you will need to set environment variables with the names required.</p>
+<p>However, it may be necessary to change these environment variable names.  One example of when this is required is when you might be using Cake.Recipe on two completely separate projects.  In this scenario, you might need to set the Slack Environment variables for both projects, but they may require different values.</p>
+<p>As an example, lets say that you wanted to change the name of the environment variables that stored the Slack credential information.  You could add something like the following to your <a href="./recipe-cake">recipe.cake</a> file:</p>
+<pre><code class="language-csharp">Environment.SetVariableNames(slackTokenVariable: &quot;PROJECTA_SLACK_TOKEN&quot;, slackChannelVariable: &quot;PROJECTA_SLACK_CHANNEL&quot;);
 </code></pre>
-<p>This would mean that when required, Cake.Recipe would check the machine which it is running on for environment variables names <code>PROJECTA_GITTER_TOKEN</code> and <code>PROJECTA_GITTER_ROOM_ID</code>, rather than the default of <code>GITTER_TOKEN</code> and <code>GITTER_ROOM_ID</code>.</p>
+<p>This would mean that when required, Cake.Recipe would check the machine which it is running on for environment variables names <code>PROJECTA_SLACK_TOKEN</code> and <code>PROJECTA_SLACK_CHANNEL</code>, rather than the default of <code>SLACK_TOKEN</code> and <code>SLACK_CHANNEL</code>.</p>
 <p>There is another scenario where you might want to override the environment variable names when running locally on your own machine, but you might want to use the default variable names when running on a CI/CD system.  To facilitate that, you can do something similar to the following:</p>
 <pre><code class="language-csharp">if (BuildSystem.IsLocalBuild)
 {
-    Environment.SetVariableNames(gitterTokenVariable: &quot;PROJECTA_GITTER_TOKEN&quot;, gitterRoomIdVariable: &quot;PROJECTA_GITTER_ROOM_ID&quot;);
+    Environment.SetVariableNames(slackTokenVariable: &quot;PROJECTA_SLACK_TOKEN&quot;, slackChannelVariable: &quot;PROJECTA_SLACK_CHANNEL&quot;);
 }
 else
 {
@@ -240,10 +241,6 @@ else
 <p>The <code>SetVariableNames</code> method uses the concept of optional parameters, in fact, all the parameters to the <code>SetVariableNames</code> method are optional.  To override a specific environment variable, you need to use a named parameter.  The following is a list of all the named parameters that can be used on the method.</p>
 <h3 id="githubtokenvariable">githubTokenVariable</h3>
 <p>Default value: <code>GITHUB_PAT</code></p>
-<h3 id="gittertokenvariable">gitterTokenVariable</h3>
-<p>Default value: <code>GITTER_ROOM_ID</code></p>
-<h3 id="gitterroomidvariable">gitterRoomIdVariable</h3>
-<p>Default value: <code>GITTER_ROOM_ID</code></p>
 <h3 id="slacktokenvariable">slackTokenVariable</h3>
 <p>Default value: <code>SLACK_TOKEN</code></p>
 <h3 id="slackchannelvariable">slackChannelVariable</h3>

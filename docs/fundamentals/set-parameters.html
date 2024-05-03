@@ -200,6 +200,7 @@
                         
                 <li><a href="/Cake.Recipe/docs/upgrading/1.x-to-2.x">Upgrading from 1.x to 2.x</a></li>
                 <li><a href="/Cake.Recipe/docs/upgrading/2.x-to-3.x">Upgrading from 2.x to 3.x</a></li>
+                <li><a href="/Cake.Recipe/docs/upgrading/3.x-to-4.x">Upgrading from 3.x to 4.x</a></li>
 
                     </ul>
                 </li>
@@ -314,10 +315,6 @@
 <p>Default Value:</p>
 <pre><code class="language-csharp">Title.Replace(&quot;.&quot;, &quot;-&quot;).ToLower();
 </code></pre>
-<h3 id="shouldposttogitter">shouldPostToGitter</h3>
-<p>This is used as a final control variable for whether or not notification messages should be posted to Gitter when the a final release build (i.e. a tagged build) completes.</p>
-<p>Type: <code>bool</code></p>
-<p>Default Value:</p>
 <pre><code class="language-csharp">true
 </code></pre>
 <h3 id="shouldposttoslack">shouldPostToSlack</h3>
@@ -476,12 +473,6 @@
 <p>Type: <code>int</code></p>
 <p>Default Value:</p>
 <pre><code class="language-csharp">60
-</code></pre>
-<h3 id="gittermessage">gitterMessage</h3>
-<p>This is the message that is sent to Gitter at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
-<p>Type: <code>string</code></p>
-<p>Default Value:</p>
-<pre><code class="language-csharp">&#64;/all Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.&quot;
 </code></pre>
 <h3 id="microsoftteamsmessage">microsoftTeamsMessage</h3>
 <p>This is the message that is sent to Microsoft Teams at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
