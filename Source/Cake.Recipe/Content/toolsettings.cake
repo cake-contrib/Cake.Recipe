@@ -3,6 +3,7 @@ public static class ToolSettings
     static ToolSettings()
     {
         SetToolPreprocessorDirectives();
+        CoverageTool = CoverageToolType.Auto;
     }
 
     public static string TestCoverageFilter { get; private set; }
@@ -16,6 +17,7 @@ public static class ToolSettings
 
     public static string CodecovTool { get; private set; }
     public static string CoverallsTool { get; private set; }
+    public static string CoverletGlobalTool { get; private set; }
     public static string GitReleaseManagerTool { get; private set; }
     public static string GitVersionTool { get; private set; }
     public static string ReSharperTools { get; private set; }
@@ -35,6 +37,9 @@ public static class ToolSettings
     public static string ReportGeneratorGlobalTool { get; private set; }
     public static string WyamGlobalTool { get; private set; }
     public static string KuduSyncGlobalTool { get; private set; }
+
+    public static CoverageToolType CoverageTool { get; private set; }
+    public static CoverletSettings Coverlet { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=codecov&version=1.13.0",
@@ -59,7 +64,8 @@ public static class ToolSettings
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
         // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
-        string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218"
+        string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218",
+        string coverletGlobalTool = "#tool dotnet:?package=coverlet.console&version=3.2.0"
     )
     {
         CodecovTool = codecovTool;
@@ -82,6 +88,35 @@ public static class ToolSettings
         CoverallsGlobalTool = coverallsGlobalTool;
         WyamGlobalTool = wyamGlobalTool;
         KuduSyncGlobalTool = kuduSyncGlobalTool;
+        CoverletGlobalTool = coverletGlobalTool;
+    }
+
+    public static void SetCoverletSettings(
+        ICakeContext context,
+        CoverletOutputFormat? outputFormat = null,
+        bool? useSourceLink = null,
+        bool? useDeterministicReport = null
+    )
+    {
+        if (Coverlet == null)
+        {
+            Coverlet = new CoverletSettings();
+        }
+
+        if (outputFormat.HasValue)
+        {
+            Coverlet.Format = outputFormat.Value;
+        }
+
+        if (useSourceLink.HasValue)
+        {
+            Coverlet.UseSourceLink = useSourceLink.Value;
+        }
+
+        if (useDeterministicReport.HasValue)
+        {
+            Coverlet.UseDeterministicReport = useDeterministicReport.Value;
+        }
     }
 
     public static void SetToolSettings(
@@ -90,10 +125,11 @@ public static class ToolSettings
         string testCoverageExcludeByAttribute = null,
         string testCoverageExcludeByFile = null,
         PlatformTarget? buildPlatformTarget = null,
-        MSBuildToolVersion buildMSBuildToolVersion = MSBuildToolVersion.Default,
+        MSBuildToolVersion buildMSBuildToolVersion = MSBuildToolVersion.VS2022,
         int? maxCpuCount = null,
         DirectoryPath targetFrameworkPathOverride = null,
-        bool skipDuplicatePackages = false
+        bool skipDuplicatePackages = false,
+        CoverageToolType coverageTool = CoverageToolType.Auto
     )
     {
         context.Information("Setting up tools...");
@@ -105,6 +141,14 @@ public static class ToolSettings
         BuildPlatformTarget = buildPlatformTarget ?? PlatformTarget.MSIL;
         BuildMSBuildToolVersion = buildMSBuildToolVersion;
         MaxCpuCount = maxCpuCount ?? 0;
+        if (coverageTool == CoverageToolType.Auto)
+        {
+            context.Warning("Coverage tool will be automatically detected, automatic detection will be removed in the future.");
+            context.Warning("It is recommended to explicitly set the type to use.");
+            context.Warning("  - For .NET project coverlet collector is recommended, and will require a reference in the test project on the package coverlet.collector");
+            context.Warning("  - For .NET Framework it is recommended to continue using OpenCover");
+        }
+        CoverageTool = coverageTool;
         if (BuildParameters.ShouldUseTargetFrameworkPath && targetFrameworkPathOverride == null)
         {
             if (context.Environment.Runtime.IsCoreClr)
@@ -121,6 +165,22 @@ public static class ToolSettings
         else
         {
             TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
+        }
+
+        if (CoverageTool != CoverageToolType.OpenCover)
+        {
+            var coverageFormat = CoverletOutputFormat.Cobertura;
+
+            if (BuildParameters.BuildProvider.Type == BuildProviderType.TeamCity)
+            {
+                coverageFormat |= CoverletOutputFormat.TeamCity;
+            }
+
+            SetCoverletSettings(
+                context: context,
+                outputFormat: coverageFormat,
+                useDeterministicReport: BuildParameters.IsLocalBuild && BuildParameters.BuildProvider.Type != BuildProviderType.TeamCity
+            );
         }
     }
 }

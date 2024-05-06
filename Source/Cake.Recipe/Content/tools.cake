@@ -29,8 +29,10 @@ Action<string, string[], Action> RequireToolNotRegistered = (tool, toolNames, ac
     }
 };
 
-Action<string, Action> RequireTool = (tool, action) => {
+Action<string[], Action> RequireTools = (tools, action) =>
+{
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
+
     try
     {
         var arguments = new Dictionary<string, string>();
@@ -43,7 +45,7 @@ Action<string, Action> RequireTool = (tool, action) => {
             arguments.Add("settings_skipverification", BuildParameters.CakeConfiguration.GetValue("Settings_SkipVerification"));
         }
 
-        System.IO.File.WriteAllText(script.FullPath, tool);
+        System.IO.File.WriteAllText(script.FullPath, string.Join(System.Environment.NewLine, tools));
         CakeExecuteScript(script,
             new CakeSettings
             {
@@ -59,4 +61,8 @@ Action<string, Action> RequireTool = (tool, action) => {
     }
 
     action();
+};
+
+Action<string, Action> RequireTool = (tool, action) => {
+    RequireTools(new[] { tool }, action);
 };
