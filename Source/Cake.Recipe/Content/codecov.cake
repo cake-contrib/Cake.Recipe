@@ -5,7 +5,7 @@
 BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
     .WithCriteria(() => BuildParameters.IsMainRepository, "Skipping because not running from the main repository")
     .WithCriteria(() => BuildParameters.ShouldRunCodecov, "Skipping because uploading to codecov is disabled")
-    .WithCriteria(() => BuildParameters.CanPublishToCodecov, "Skipping because repo token is missing, or not running on appveyor")
+    .WithCriteria(() => BuildParameters.CanPublishToCodecov, "Skipping because repo token is missing, or not running on GitHub CI")
     .Does<BuildVersion>((context, buildVersion) => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.CodecovGlobalTool : ToolSettings.CodecovTool, () => {
         var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
         if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
@@ -17,7 +17,8 @@ BuildParameters.Tasks.UploadCodecovReportTask = Task("Upload-Codecov-Report")
         {
             var settings = new CodecovSettings {
                 Files = coverageFiles.Select(f => f.FullPath),
-                Required = true
+                NonZero = true,
+                Token = BuildParameters.Codecov.RepoToken
             };
             if (buildVersion != null &&
                 !string.IsNullOrEmpty(buildVersion.FullSemVersion) &&

@@ -51,6 +51,7 @@ public interface IBuildProvider
 
     IBuildInfo Build { get; }
 
+    [System.Obsolete("Codecov CLI no longer officially supports tokenless uploads.")]
     bool SupportsTokenlessCodecov { get; }
 
     IEnumerable<string> PrintVariables { get; }

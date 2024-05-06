@@ -155,13 +155,7 @@ In addition to this environment variable being present, and correct, the control
 
 ### CODECOV_REPO_TOKEN
 
-API token for uploading coverage reports to codecov.io.
-
-:::{.alert .alert-info}
-**NOTE:**
-
-This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories*
-:::
+API token for uploading coverage reports to [Codecov](https://about.codecov.io/).
 
 ## Coveralls
 
@@ -175,7 +169,7 @@ In addition to this environment variable being present, and correct, the control
 
 ### COVERALLS_REPO_TOKEN
 
-API token for uploading coverage reports to codecov.io.
+API token for uploading coverage reports to [Coveralls](https://coveralls.io/).
 
 ## Transifex
 
