@@ -2,203 +2,169 @@
 // TASK DEFINITIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-BuildParameters.Tasks.InstallOpenCoverTask = Task("Install-OpenCover")
-    .WithCriteria(() => BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows, "Not running on windows")
-    .Does(() => RequireTool(ToolSettings.OpenCoverTool, () => {
-    }));
-
 BuildParameters.Tasks.TestNUnitTask = Task("Test-NUnit")
-    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedNUnitTests), "No published NUnit tests")
-    .Does(() => RequireTool(ToolSettings.NUnitTool, () => {
-        EnsureDirectoryExists(BuildParameters.Paths.Directories.NUnitTestResults);
-
-        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
+    .Does(() => RequireTool(ToolSettings.NUnitTool, () =>
+    {
+        var files = GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll"));
+        var settings = new NUnit3Settings
         {
-            OpenCover(tool => {
-                tool.NUnit3(GetFiles(BuildParameters.Paths.Directories.PublishedNUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new NUnit3Settings {
-                    NoResults = true
-                });
-            },
-            BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-            new OpenCoverSettings
-            {
-                OldStyle = true,
-                ReturnTargetCodeOffset = 0
-            }
-                .WithFilter(ToolSettings.TestCoverageFilter)
-                .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-                .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+            NoResults = true
+        };
+
+        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows && (ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.OpenCover))
+        {
+            RunOpenCover(Context, tool => tool.NUnit3(files, settings));
+        }
+        else if (ToolSettings.CoverageTool == CoverageToolType.CoverletConsole || ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.CoverletAuto)
+        {
+            RunCoverletConsole(Context, (tool, file) => tool.NUnit3(file.FullPath, settings), files);
+        }
+        else
+        {
+            NUnit3(files, settings);
         }
     })
 );
 
 BuildParameters.Tasks.TestxUnitTask = Task("Test-xUnit")
-    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedxUnitTests), "No published xUnit tests")
     .Does(() => RequireTool(ToolSettings.XUnitTool, () => {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.xUnitTestResults);
 
-        if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
-        {
-            OpenCover(tool => {
-                tool.XUnit2(GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new XUnit2Settings {
-                    OutputDirectory = BuildParameters.Paths.Directories.xUnitTestResults,
-                    XmlReport = true,
-                    NoAppDomain = true
-                });
-            },
-            BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-            new OpenCoverSettings
-            {
-                OldStyle = true,
-                ReturnTargetCodeOffset = 0
-            }
-                .WithFilter(ToolSettings.TestCoverageFilter)
-                .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-                .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
-        }
-    })
-);
+    var files = GetFiles(BuildParameters.Paths.Directories.PublishedxUnitTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll"));
+    var settings = new XUnit2Settings
+    {
+        OutputDirectory = BuildParameters.Paths.Directories.xUnitTestResults,
+        XmlReport = true,
+        NoAppDomain = true
+    };
+
+    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows && (ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.OpenCover))
+    {
+        RunOpenCover(Context, tool => tool.XUnit2(files, settings));
+    }
+    else if (ToolSettings.CoverageTool == CoverageToolType.CoverletConsole || ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.CoverletAuto)
+    {
+        RunCoverletConsole(Context, (tool, file) => tool.XUnit2(file.FullPath, settings), files);
+    }
+    else
+    {
+        XUnit2(files, settings);
+    }
+}));
 
 BuildParameters.Tasks.TestMSTestTask = Task("Test-MSTest")
-    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedMSTestTests), "No published MSTest tests")
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.MSTestTestResults);
-
-    // TODO: Need to add OpenCover here
-    MSTest(GetFiles(BuildParameters.Paths.Directories.PublishedMSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), new MSTestSettings() {
+    var files = GetFiles(BuildParameters.Paths.Directories.PublishedMSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll"));
+    var settings = new MSTestSettings
+    {
         NoIsolation = false
-    });
+    };
+
+    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows && (ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.OpenCover))
+    {
+        RunOpenCover(Context, tool => tool.MSTest(files, settings));
+    }
+    else if (ToolSettings.CoverageTool == CoverageToolType.CoverletConsole || ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.CoverletAuto)
+    {
+        RunCoverletConsole(Context, (tool, file) => tool.MSTest(file.FullPath, settings), files);
+    }
+    else
+    {
+        MSTest(files, settings);
+    }
 });
 
 BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
-    .IsDependentOn("Install-OpenCover")
     .WithCriteria(() => DirectoryExists(BuildParameters.Paths.Directories.PublishedVSTestTests), "No published VSTest tests")
     .Does(() =>
 {
     EnsureDirectoryExists(BuildParameters.Paths.Directories.VSTestTestResults);
 
-    var vsTestSettings = new VSTestSettings()
+    var files = GetFiles(BuildParameters.Paths.Directories.PublishedMSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll"));
+    var settings = new VSTestSettings()
     {
         InIsolation = true
     };
 
     if (AppVeyor.IsRunningOnAppVeyor)
     {
-        vsTestSettings.WithAppVeyorLogger();
+        settings.WithAppVeyorLogger();
     }
 
-    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
+    if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows && (ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.OpenCover))
     {
-        OpenCover(
-            tool => { tool.VSTest(GetFiles(BuildParameters.Paths.Directories.PublishedVSTestTests + (BuildParameters.TestFilePattern ?? "/**/*Tests.dll")), vsTestSettings); },
-            BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-            new OpenCoverSettings
-            {
-                OldStyle = true,
-                ReturnTargetCodeOffset = 0
-            }
-                .WithFilter(ToolSettings.TestCoverageFilter)
-                .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-                .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+        RunOpenCover(Context, tool => tool.VSTest(files, settings));
+    }
+    else if (ToolSettings.CoverageTool == CoverageToolType.CoverletConsole || ToolSettings.CoverageTool == CoverageToolType.Auto || ToolSettings.CoverageTool == CoverageToolType.CoverletAuto)
+    {
+        RunCoverletConsole(Context, (tool, file) => tool.VSTest(file.FullPath, settings), files);
+    }
+    else
+    {
+        VSTest(files, settings);
     }
 });
 
 BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
-    .IsDependentOn("Install-OpenCover")
     .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => {
 
-    var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
-    // We create the coverlet settings here so we don't have to create the filters several times
-    var coverletSettings = new CoverletSettings
-    {
-        CollectCoverage         = true,
-        // It is problematic to merge the reports into one, as such we use a custom directory for coverage results
-        CoverletOutputDirectory = BuildParameters.Paths.Directories.TestCoverage.Combine("coverlet"),
-        CoverletOutputFormat    = CoverletOutputFormat.opencover,
-        ExcludeByFile           = ToolSettings.TestCoverageExcludeByFile.Split(new [] {';' }, StringSplitOptions.None).ToList(),
-        ExcludeByAttribute      = ToolSettings.TestCoverageExcludeByAttribute.Split(new [] {';' }, StringSplitOptions.None).ToList()
-    };
+    CleanDirectory(BuildParameters.Paths.Directories.TestCoverage.Combine("coverlet"));
 
-    foreach (var filter in ToolSettings.TestCoverageFilter.Split(new [] {' ' }, StringSplitOptions.None))
+    if (ToolSettings.CoverageTool == CoverageToolType.None)
     {
-        if (filter[0] == '+')
+        var dotNetSettings = new DotNetCoreTestSettings
         {
-            coverletSettings.WithInclusion(filter.TrimStart('+'));
-        }
-        else if (filter[0] == '-')
-        {
-            coverletSettings.WithFilter(filter.TrimStart('-'));
-        }
+            Configuration = BuildParameters.Configuration,
+            NoBuild       = true,
+        };
+
+        DotNetCoreTest(BuildParameters.SolutionFilePath.FullPath, dotNetSettings);
+        return;
     }
+
+    var notRunProjects = new List<string>();
+
+    if (ToolSettings.CoverageTool != CoverageToolType.OpenCover)
+    {
+        notRunProjects = RunCoverlet(context, msBuildSettings).ToList();
+    }
+
+    if ((notRunProjects.Count == 1 && string.IsNullOrEmpty(notRunProjects[0])) || ToolSettings.CoverageTool == CoverageToolType.OpenCover)
+    {
+        notRunProjects = context.GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj")).Select(f => f.FullPath).ToList();
+    }
+
     var settings = new DotNetCoreTestSettings
     {
         Configuration = BuildParameters.Configuration,
-        NoBuild = true
+        NoBuild = true,
     };
 
-    foreach (var project in projects)
+    if (ToolSettings.CoverageTool == CoverageToolType.CoverletAuto || ToolSettings.CoverageTool == CoverageToolType.CoverletConsole)
     {
-        Action<ICakeContext> testAction = tool =>
+        RunCoverletConsole(Context, (tool, file) => tool.DotNetCoreTest(file.FullPath, settings), notRunProjects);
+    }
+    else
+    {
+        foreach (var project in notRunProjects)
         {
-            tool.DotNetCoreTest(project.FullPath, settings);
-        };
-
-        var parsedProject = ParseProject(project, BuildParameters.Configuration);
-
-        var coverletPackage = parsedProject.GetPackage("coverlet.msbuild");
-        bool shouldAddSourceLinkArgument = false; // Set it to false by default due to OpenCover
-        if (coverletPackage != null)
-        {
-            // If the version is a pre-release, we will assume that it is a later
-            // version than what we need, and thus TryParse will return false.
-            // If TryParse is successful we need to compare the coverlet version
-            // to ensure it is higher or equal to the version that includes the fix
-            // for using the SourceLink argument.
-            // https://github.com/coverlet-coverage/coverlet/issues/882
-            Version coverletVersion;
-            shouldAddSourceLinkArgument = !Version.TryParse(coverletPackage.Version, out coverletVersion)
-                || coverletVersion >= Version.Parse("2.9.1");
-        }
-
-        settings.ArgumentCustomization = args => {
-            args.AppendMSBuildSettings(msBuildSettings, context.Environment);
-            if (shouldAddSourceLinkArgument && parsedProject.HasPackage("Microsoft.SourceLink.GitHub"))
+            Action<ICakeContext> testAction = tool =>
             {
-                args.Append("/p:UseSourceLink=true");
-            }
-            return args;
-        };
+                tool.DotNetCoreTest(project, settings);
+            };
 
-        if (parsedProject.IsNetCore && coverletPackage != null)
-        {
-            coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
-            DotNetCoreTest(project.FullPath, settings, coverletSettings);
-        }
-        else if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
-        {
-            testAction(Context);
-        }
-        else
-        {
             if (BuildParameters.BuildAgentOperatingSystem == PlatformFamily.Windows)
             {
-                // We can not use msbuild properties together with opencover
-                settings.ArgumentCustomization = null;
-                OpenCover(testAction,
-                    BuildParameters.Paths.Files.TestCoverageOutputFilePath,
-                    new OpenCoverSettings {
-                        ReturnTargetCodeOffset = 0,
-                        OldStyle = true,
-                        Register = "user",
-                        MergeOutput = FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath)
-                    }
-                    .WithFilter(ToolSettings.TestCoverageFilter)
-                    .ExcludeByAttribute(ToolSettings.TestCoverageExcludeByAttribute)
-                    .ExcludeByFile(ToolSettings.TestCoverageExcludeByFile));
+                RunOpenCover(context, testAction, registerUser: true);
+            }
+            else
+            {
+                testAction(context);
             }
         }
     }
@@ -240,7 +206,7 @@ BuildParameters.Tasks.GenerateFriendlyTestReportTask = Task("Generate-FriendlyTe
 BuildParameters.Tasks.GenerateLocalCoverageReportTask = Task("Generate-LocalCoverageReport")
     .WithCriteria(() => BuildParameters.IsLocalBuild, "Skipping due to not running a local build")
     .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
-        var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
+        var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/**/*.*");
         if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
         {
             coverageFiles += BuildParameters.Paths.Files.TestCoverageOutputFilePath;
