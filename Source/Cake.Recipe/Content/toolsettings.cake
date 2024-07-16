@@ -122,5 +122,6 @@ public static class ToolSettings
         {
             TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
         }
+        SkipDuplicatePackages = skipDuplicatePackages;
     }
 }
