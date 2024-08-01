@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout the requested branch
-        uses: actions/checkout@v3.1.0
+        uses: actions/checkout@v4.1.7
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
       - name: Cache Tools
