@@ -96,6 +96,11 @@ public class CodecovCredentials : CoverallsCredentials
 
 public class CoverallsCredentials
 {
+    public bool HasCredentials
+    {
+        get { return !string.IsNullOrEmpty(RepoToken); }
+    }
+
     public string RepoToken { get; private set; }
 
     public CoverallsCredentials(string repoToken)
@@ -187,8 +192,16 @@ public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)
 
 public static CodecovCredentials GetCodecovCredentials(ICakeContext context)
 {
-    return new CodecovCredentials(
-        context.EnvironmentVariable(Environment.CodecovRepoTokenVariable));
+    var token = context.EnvironmentVariable(Environment.CodecovRepoTokenVariable);
+
+    if (string.IsNullOrEmpty(token))
+    {
+        // Fallback to attempt to check for the conventional CODECOV_TOKEN which
+        // the CLI tools read automatically.
+        token = context.EnvironmentVariable("CODECOV_TOKEN");
+    }
+
+    return new CodecovCredentials(token);
 }
 
 public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)

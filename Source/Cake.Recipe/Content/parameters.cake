@@ -213,10 +213,7 @@ public static class BuildParameters
     {
         get
         {
-            return ShouldRunCodecov && (
-                BuildProvider.SupportsTokenlessCodecov ||
-                !string.IsNullOrEmpty(Codecov.RepoToken)
-            );
+            return ShouldRunCodecov && Codecov.HasCredentials;
         }
     }
 
@@ -224,7 +221,7 @@ public static class BuildParameters
     {
         get
         {
-            return ShouldRunCoveralls && !string.IsNullOrEmpty(BuildParameters.Coveralls.RepoToken);
+            return ShouldRunCoveralls && Coveralls.HasCredentials;
         }
     }
 
