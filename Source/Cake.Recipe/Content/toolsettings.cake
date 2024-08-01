@@ -40,7 +40,7 @@ public static class ToolSettings
         string codecovTool = "#tool nuget:?package=codecov&version=1.13.0",
         // This is specifically pinned to 0.7.0 as later versions of same package publish .Net Global Tool, rather than full framework version
         string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
-        string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.13.0",
+        string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.18.0",
         // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2022.2.3",
@@ -54,7 +54,7 @@ public static class ToolSettings
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
         string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.13.0",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
-        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.13.0",
+        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.18.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.10.3",
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
