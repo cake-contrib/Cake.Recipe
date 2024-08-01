@@ -46,7 +46,7 @@ public static class ToolSettings
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2024.1.4",
         string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.4",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
-        string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.2",
+        string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.9.0",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.18.1",
         string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.10.1",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.1221",
