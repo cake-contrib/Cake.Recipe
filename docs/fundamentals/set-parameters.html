@@ -341,6 +341,12 @@
 <p>Default Value:</p>
 <pre><code class="language-csharp">true
 </code></pre>
+<h3 id="shouldposttomastodon">shouldPostToMastodon</h3>
+<p>This is used as a final control variable for whether or not notification messages should be posted to the fediverse via Mastodon when the a final release build (i.e. a tagged build) completes.</p>
+<p>Type: <code>bool</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">true
+</code></pre>
 <h3 id="shoulddownloadmilestonereleasenotes">shouldDownloadMilestoneReleaseNotes</h3>
 <p>When executing the <code>Export-Release-Notes</code> task, this variable controls whether or not the release notes for the current milestone is exported by GitReleaseManager.</p>
 <p>Type: <code>bool</code></p>
@@ -482,6 +488,12 @@
 </code></pre>
 <h3 id="twittermessage">twitterMessage</h3>
 <p>This is the message that is sent to Twitter at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
+<p>Type: <code>string</code></p>
+<p>Default Value:</p>
+<pre><code class="language-csharp">Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.&quot;
+</code></pre>
+<h3 id="mastodonmessage">mastodonMessage</h3>
+<p>This is the message that is sent to the fediverse via Mastodon at the end of a tagged build.  This is formatted with the calculated version number, as well as the Title parameter.</p>
 <p>Type: <code>string</code></p>
 <p>Default Value:</p>
 <pre><code class="language-csharp">Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete.&quot;

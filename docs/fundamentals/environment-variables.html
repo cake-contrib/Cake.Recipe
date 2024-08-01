@@ -283,6 +283,15 @@
 <p>The username that should be used for authenticating to the SMTP server.</p>
 <h3 id="email_password">EMAIL_PASSWORD</h3>
 <p>The password that should be used for authenticating to the SMTP server.</p>
+<h2 id="mastodon">Mastodon</h2>
+<p>When a successful release build has been completed, Cake.Recipe can be configured to send out a notification (with configurable message) to the fediverse via Mastodon. There are two required environment variables that needs to be set to make this happen.  Further information about find this information can be found in the Cake.Mastodon <a href="https://github.com/cake-contrib/Cake.Mastodon/blob/master/README.md#usage">documentation</a>.</p>
+<div class="alert alert-info"><p><strong>NOTE:</strong></p>
+<p>In addition to these environment variables being present, and correct, the control variable <a href="./set-parameters#shouldPostToMastodon">shouldPostToMastodon</a> also needs to be set to true.  The default value for this parameter is true.</p>
+</div>
+<h3 id="mastodon_access_token">MASTODON_ACCESS_TOKEN</h3>
+<p>The Access Token for the Mastodon application that is going to be used to send the toot.</p>
+<h3 id="mastodon_instance_url">MASTODON_INSTANCE_URL</h3>
+<p>The URL to the Mastodon instance, where the application was registered.</p>
 <h2 id="appveyor">AppVeyor</h2>
 <p>More information about what this is used for can be found in the <a href="../usage/cleaning-cache">clean AppVeyor build cache</a> documentation.</p>
 <div class="alert alert-info"><p><strong>NOTE:</strong></p>
