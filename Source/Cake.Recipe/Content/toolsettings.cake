@@ -48,7 +48,7 @@ public static class ToolSettings
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.2",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.15.2",
-        string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.3.0",
+        string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.10.1",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.1221",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=5.3.8",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
