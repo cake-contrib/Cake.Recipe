@@ -209,10 +209,6 @@ public static class BuildParameters
         context.Information("IsTagged: {0}", IsTagged);
         context.Information("BranchType: {0}", BranchType);
         context.Information("TreatWarningsAsErrors: {0}", TreatWarningsAsErrors);
-        context.Information("ShouldSendEmail: {0}", SuccessReporters["EMail"]?.ShouldBeUsed);
-        context.Information("ShouldPostToSlack: {0}", ShouldPostToSlack);
-        context.Information("ShouldPostToTwitter: {0}", SuccessReporters["Twitter"]?.ShouldBeUsed);
-        context.Information("ShouldPostToMicrosoftTeams: {0}", SuccessReporters["MicrosoftTeams"]?.ShouldBeUsed);
         context.Information("ShouldDownloadFullReleaseNotes: {0}", ShouldDownloadFullReleaseNotes);
         context.Information("ShouldDownloadMilestoneReleaseNotes: {0}", ShouldDownloadMilestoneReleaseNotes);
         context.Information("ShouldNotifyBetaReleases: {0}", ShouldNotifyBetaReleases);
