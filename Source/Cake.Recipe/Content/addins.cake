@@ -16,7 +16,7 @@
 #addin nuget:?package=Cake.Wyam&version=2.2.13
 #addin nuget:?package=Cake.Mastodon&version=1.1.0
 
-#load nuget:?package=Cake.Issues.Recipe&version=1.3.2
+#load nuget:?package=Cake.Issues.Recipe&version=1.3.4
 
 Action<string, IDictionary<string, string>> RequireAddin = (code, envVars) => {
     var script = MakeAbsolute(File(string.Format("./{0}.cake", Guid.NewGuid())));
