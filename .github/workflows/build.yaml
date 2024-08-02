@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [
           windows-latest,
-          ubuntu-latest,
+          ubuntu-22.04,
           # Cake.Recipe currently does not support macOS 14 (M1) due to usage of Cake.Git.
           macos-13]
 

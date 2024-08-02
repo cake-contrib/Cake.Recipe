@@ -7,7 +7,7 @@ jobs:
   draft-stable:
     env:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout the requested branch
