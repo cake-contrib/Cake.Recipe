@@ -359,7 +359,7 @@ public static class BuildParameters
         AppVeyorAccountName = appVeyorAccountName ?? RepositoryOwner.Replace("-", "").ToLower();
         AppVeyorProjectSlug = appVeyorProjectSlug ?? RepositoryName.Replace(".", "-").ToLower();
 
-        TransifexEnabled = transifexEnabled ?? TransifexIsConfiguredForRepository(context);
+        TransifexEnabled = transifexEnabled ?? context.FileExists("./.tx/config");
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
 
