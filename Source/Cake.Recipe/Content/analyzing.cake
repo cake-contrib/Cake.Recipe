@@ -10,7 +10,7 @@ BuildParameters.Tasks.InspectCodeTask = Task("InspectCode")
         var settings = new InspectCodeSettings() {
             SolutionWideAnalysis = true,
             OutputFile = inspectCodeLogFilePath,
-            ArgumentCustomization = x => x.Append("--no-build")
+            ArgumentCustomization = x => x.Append("--no-build").Append("-f=xml")
         };
 
         if (FileExists(BuildParameters.SourceDirectoryPath.CombineWithFilePath(BuildParameters.ResharperSettingsFileName)))
