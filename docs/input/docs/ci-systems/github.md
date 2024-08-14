@@ -54,6 +54,7 @@ on:
       - "feature/**"
       - "release/**"
       - "hotfix/**"
+      - "support/**"
     tags:
       - "*"
   pull_request:
