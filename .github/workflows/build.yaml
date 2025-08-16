@@ -33,7 +33,7 @@ jobs:
           } | Out-File "./includes.cake"
         shell: pwsh
       - name: Build Cake.Recipe
-        uses: cake-build/cake-action@v2.0.0
+        uses: cake-build/cake-action@v3.0.0
         with:
           script-path: recipe.cake
           target: CI
