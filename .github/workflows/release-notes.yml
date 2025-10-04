@@ -33,7 +33,7 @@ jobs:
         run: git switch -c release/${{ steps.gitversion.outputs.majorMinorPatch }}
       - name: Push new branch
         if: ${{ steps.gitversion.outputs.majorMinorPatch }}
-        uses: ad-m/github-push-action@v0.8.0
+        uses: ad-m/github-push-action@v1.0.0
         with:
           branch: "release/${{ steps.gitversion.outputs.majorMinorPatch }}"
           github_token: ${{ secrets.GH_TOKEN }}
