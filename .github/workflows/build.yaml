@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [
           windows-latest,
-          ubuntu-20.04,
+          ubuntu-22.04,
           # Cake.Recipe currently does not support macOS 14 (M1) due to usage of Cake.Git.
           macos-13]
 
@@ -32,6 +32,10 @@ jobs:
             "#load `"local:?path=$($_.FullName -replace '\\','/')`""
           } | Out-File "./includes.cake"
         shell: pwsh
+      # Ubuntu 24.04 does not have Mono installed, which is Required for Cake.Recipe
+      - name: Install Mono
+        if: ${{ matrix.os == 'ubuntu-24.04' }}
+        run: sudo apt-get install mono-complete
       - name: Build Cake.Recipe
         uses: cake-build/cake-action@v3.0.0
         with:
