@@ -28,7 +28,7 @@ ToolSettings.SetToolSettings(context: Context,
                             testCoverageExcludeByAttribute: "*.ExcludeFromCodeCoverage*",
                             testCoverageExcludeByFile: "*/*Designer.cs;*/*.g.cs;*/*.g.i.cs");
 
-Build.RunDotNetCore();
+Build.RunDotNet();
 ```
 
 The above content was generated using the [Cake.Recipe extension for VSCode](../vscode-extension), using the following input values:
@@ -51,4 +51,4 @@ This recipe.cake file is broken up to distinct sections, some of which have more
 * A call to the [ToolSettings.SetToolSettings](./set-tool-settings) method
   * Cake.Recipe uses a number of different tools, for example, InspectCode.  When required, you can override the settings that are passed to these tools.  Cake.Recipe attempts to provide sensible defaults for these tools.
 * A call to one of the three available [Build](./build) methods
-  * Cake.Recipe has three different build modes.  .NET Framework, .NET Core and NuGet.  Depending on what you are doing, you call the required one here.  This method is what causes the actual build to execute.
+  * Cake.Recipe has three different build modes.  .NET Framework, .NET and NuGet.  Depending on what you are doing, you call the required one here.  This method is what causes the actual build to execute.

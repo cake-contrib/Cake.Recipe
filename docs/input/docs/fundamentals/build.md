@@ -10,10 +10,10 @@ Cake.Recipe has three different entry points.  At the end of the recipe.cake fil
 Build.Run();
 ```
 
-which will execute the Cake.Recipe steps including executing MSBuild, and .Net Framework unit testing libraries such as Xunit, and NUnit.
+which will execute the Cake.Recipe steps including executing MSBuild, and .NET Framework unit testing libraries such as Xunit, and NUnit.
 
 ```csharp
-Build.RunDotNetCore();
+Build.RunDotNet();
 ```
 
 which will execute the Cake.Recipe steps including executing `dotnet build`, and `dotnet test`.

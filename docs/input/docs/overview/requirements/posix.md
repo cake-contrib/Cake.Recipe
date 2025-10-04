@@ -7,8 +7,8 @@ Description: Requirements for running Cake.Recipe on Posix
 ## Required Framework Version
 
 In order to run Cake.Recipe on a Posix machine (i.e. Mac or Linux) it is necessary to have, as a minimum, mono 5.16.x.
-If you will be building .NET Core project, Cake.Recipe will automatically use .NET Core editions of tools when possible.
-In these cases there is a requirement of having .NET Core 3.1 installed.
+If you will be building .NET project, Cake.Recipe will automatically use .NET editions of tools when possible.
+In these cases there is a requirement of having .NET 3.1 installed.
 
 :::::
 
@@ -33,7 +33,7 @@ To install the necessary requirements when running on Mac OSX, you can use homeb
 brew cask install mono-mdk
 ```
 
-For installing .NET Core on OSX, please see the [Microsoft documentation](https://docs.microsoft.com/nb-no/dotnet/core/install/macos)
+For installing .NET on OSX, please see the [Microsoft documentation](https://docs.microsoft.com/nb-no/dotnet/core/install/macos)
 
 :::
 
@@ -51,10 +51,10 @@ apt-get install mono-complete ca-certificates-mono
 
 _NOTE: The `ca-certificates-mono` package may be omitted on modern Ubuntu versions_.
 
-To install .NET Core on Ubuntu, please follow the [Microsoft documentation](https://docs.microsoft.com/nb-no/dotnet/core/install/macos) for how
+To install .NET on Ubuntu, please follow the [Microsoft documentation](https://docs.microsoft.com/nb-no/dotnet/core/install/macos) for how
 to add the necessary repository.
 
-After adding the repository, run the following command to install .NET Core.
+After adding the repository, run the following command to install .NET.
 
 ```shell
 apt-get install dotnet-runtime-3.1 dotnet-sdk-3.1
@@ -71,13 +71,13 @@ To install the necessary requirements for Arch Linux and Manjaro, run the follow
 pacman -S mono
 ```
 
-To install .NET Core on Arch Linux, you can install the 3.1 version with the following command
+To install .NET on Arch Linux, you can install the 3.1 version with the following command
 
 ```console
 pacman -S dotnet-runtime dotnet-sdk
 ```
 
-_NOTE: .NET Core sdk 2.1 is available in [AUR](https://aur.archlinux.org/packages/dotnet-sdk-2.1) under the name `dotnet-sdk-2.1`_.
+_NOTE: .NET sdk 2.1 is available in [AUR](https://aur.archlinux.org/packages/dotnet-sdk-2.1) under the name `dotnet-sdk-2.1`_.
 
 :::
 

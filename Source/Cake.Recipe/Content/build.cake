@@ -119,20 +119,20 @@ BuildParameters.Tasks.RestoreTask = Task("Restore")
     });
 });
 
-BuildParameters.Tasks.DotNetCoreRestoreTask = Task("DotNetCore-Restore")
+BuildParameters.Tasks.DotNetRestoreTask = Task("DotNet-Restore")
     .Does<BuildVersion>((context, buildVersion) =>
 {
     // We need to clone the settings class, so we don't
     // add additional properties to every other task.
-    var msBuildSettings = new DotNetCoreMSBuildSettings();
-    foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
+    var msBuildSettings = new DotNetMSBuildSettings();
+    foreach (var kv in context.Data.Get<DotNetMSBuildSettings>().Properties)
     {
         string value = string.Join(" ", kv.Value);
         msBuildSettings.WithProperty(kv.Key, value);
     }
     msBuildSettings.WithProperty("Configuration", BuildParameters.Configuration);
 
-    DotNetCoreRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreRestoreSettings
+    DotNetRestore(BuildParameters.SolutionFilePath.FullPath, new DotNetRestoreSettings
     {
         Sources = BuildParameters.NuGetSources,
         MSBuildSettings = msBuildSettings,
@@ -187,16 +187,16 @@ BuildParameters.Tasks.BuildTask = Task("Build")
     });
 
 
-BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
+BuildParameters.Tasks.DotNetBuildTask = Task("DotNet-Build")
     .IsDependentOn("Clean")
-    .IsDependentOn("DotNetCore-Restore")
+    .IsDependentOn("DotNet-Restore")
     .Does<BuildVersion>((context, buildVersion) => {
         Information("Building {0}", BuildParameters.SolutionFilePath);
 
         // We need to clone the settings class, so we don't
         // add additional properties to every other task.
-        var msBuildSettings = new DotNetCoreMSBuildSettings();
-        foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
+        var msBuildSettings = new DotNetMSBuildSettings();
+        foreach (var kv in context.Data.Get<DotNetMSBuildSettings>().Properties)
         {
             string value = string.Join(" ", kv.Value);
             msBuildSettings.WithProperty(kv.Key, value);
@@ -205,7 +205,7 @@ BuildParameters.Tasks.DotNetCoreBuildTask = Task("DotNetCore-Build")
             "",
             BuildParameters.Paths.Files.BuildBinLogFilePath.ToString());
 
-        DotNetCoreBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetCoreBuildSettings
+        DotNetBuild(BuildParameters.SolutionFilePath.FullPath, new DotNetBuildSettings
         {
             Configuration = BuildParameters.Configuration,
             MSBuildSettings = msBuildSettings,
@@ -262,11 +262,11 @@ public void CopyBuildOutput(BuildVersion buildVersion)
             // Otherwise just copy
             if (parsedProject.IsVS2017ProjectFormat)
             {
-                var msBuildSettings = Context.Data.Get<DotNetCoreMSBuildSettings>();
+                var msBuildSettings = Context.Data.Get<DotNetMSBuildSettings>();
 
                 foreach (var targetFramework in parsedProject.NetCore.TargetFrameworks)
                 {
-                    DotNetCorePublish(project.Path.FullPath, new DotNetCorePublishSettings {
+                    DotNetPublish(project.Path.FullPath, new DotNetPublishSettings {
                         OutputDirectory = outputFolder.Combine(targetFramework),
                         Framework = targetFramework,
                         Configuration = BuildParameters.Configuration,
@@ -286,13 +286,13 @@ public void CopyBuildOutput(BuildVersion buildVersion)
 
         // Now we need to test for whether this is a unit test project.
         // If this is found, move the output to the unit test folder, otherwise, simply copy to normal output folder
-        if (!BuildParameters.IsDotNetCoreBuild)
+        if (!BuildParameters.IsDotNetBuild)
         {
-            Information("Not a .Net Core Build");
+            Information("Not a .NET Build");
         }
         else
         {
-            Information("Is a .Net Core Build");
+            Information("Is a .NET Build");
         }
 
         if (parsedProject.IsLibrary() && (parsedProject.HasPackage("xunit") || parsedProject.HasReference("xunit.core")))
@@ -443,20 +443,20 @@ public class Builder
 
     public void Run()
     {
-        BuildParameters.IsDotNetCoreBuild = false;
+        BuildParameters.IsDotNetBuild = false;
         BuildParameters.IsNuGetBuild = false;
 
-        SetupTasks(BuildParameters.IsDotNetCoreBuild);
+        SetupTasks(BuildParameters.IsDotNetBuild);
 
         _action(BuildParameters.Target);
     }
 
-    public void RunDotNetCore()
+    public void RunDotNet()
     {
-        BuildParameters.IsDotNetCoreBuild = true;
+        BuildParameters.IsDotNetBuild = true;
         BuildParameters.IsNuGetBuild = false;
 
-        SetupTasks(BuildParameters.IsDotNetCoreBuild);
+        SetupTasks(BuildParameters.IsDotNetBuild);
 
         _action(BuildParameters.Target);
     }
@@ -464,15 +464,15 @@ public class Builder
     public void RunNuGet()
     {
         BuildParameters.Tasks.PackageTask.IsDependentOn("Create-NuGet-Package");
-        BuildParameters.IsDotNetCoreBuild = false;
+        BuildParameters.IsDotNetBuild = false;
         BuildParameters.IsNuGetBuild = true;
 
         _action(BuildParameters.Target);
     }
 
-    private static void SetupTasks(bool isDotNetCoreBuild)
+    private static void SetupTasks(bool isDotNetBuild)
     {
-        var prefix = isDotNetCoreBuild ? "DotNetCore-" : "";
+        var prefix = isDotNetBuild ? "DotNet-" : "";
         BuildParameters.Tasks.CreateNuGetPackagesTask.IsDependentOn(prefix + "Build");
         BuildParameters.Tasks.CreateChocolateyPackagesTask.IsDependentOn(prefix + "Build");
         BuildParameters.Tasks.TestTask.IsDependentOn(prefix + "Build");
@@ -485,7 +485,7 @@ public class Builder
         BuildParameters.Tasks.UploadCoverallsReportTask.IsDependentOn("Test");
         BuildParameters.Tasks.ContinuousIntegrationTask.IsDependentOn("Upload-Coverage-Report");
 
-        if (!isDotNetCoreBuild)
+        if (!isDotNetBuild)
         {
             if (BuildParameters.TransifexEnabled)
             {
@@ -507,7 +507,7 @@ public class Builder
         {
             if (BuildParameters.TransifexEnabled)
             {
-                BuildParameters.Tasks.DotNetCoreBuildTask.IsDependentOn("Transifex-Pull-Translations");
+                BuildParameters.Tasks.DotNetBuildTask.IsDependentOn("Transifex-Pull-Translations");
             }
             BuildParameters.Tasks.GenerateLocalCoverageReportTask.IsDependentOn(prefix + "Test");
             BuildParameters.Tasks.TestTask.IsDependentOn("Generate-LocalCoverageReport");

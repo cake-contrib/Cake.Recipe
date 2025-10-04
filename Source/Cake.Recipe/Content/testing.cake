@@ -107,9 +107,9 @@ BuildParameters.Tasks.TestVSTestTask = Task("Test-VSTest")
     }
 });
 
-BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
+BuildParameters.Tasks.DotNetTestTask = Task("DotNet-Test")
     .IsDependentOn("Install-OpenCover")
-    .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => {
+    .Does<DotNetMSBuildSettings>((context, msBuildSettings) => {
 
     var projects = GetFiles(BuildParameters.TestDirectoryPath + (BuildParameters.TestFilePattern ?? "/**/*Tests.csproj"));
     // We create the coverlet settings here so we don't have to create the filters several times
@@ -134,7 +134,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
             coverletSettings.WithFilter(filter.TrimStart('-'));
         }
     }
-    var settings = new DotNetCoreTestSettings
+    var settings = new DotNetTestSettings
     {
         Configuration = BuildParameters.Configuration,
         NoBuild = true
@@ -144,7 +144,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
     {
         Action<ICakeContext> testAction = tool =>
         {
-            tool.DotNetCoreTest(project.FullPath, settings);
+            tool.DotNetTest(project.FullPath, settings);
         };
 
         var parsedProject = ParseProject(project, BuildParameters.Configuration);
@@ -176,7 +176,7 @@ BuildParameters.Tasks.DotNetCoreTestTask = Task("DotNetCore-Test")
         if (parsedProject.IsNetCore && coverletPackage != null)
         {
             coverletSettings.CoverletOutputName = parsedProject.RootNameSpace.Replace('.', '-');
-            DotNetCoreTest(project.FullPath, settings, coverletSettings);
+            DotNetTest(project.FullPath, settings, coverletSettings);
         }
         else if (BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
         {
@@ -239,7 +239,7 @@ BuildParameters.Tasks.GenerateFriendlyTestReportTask = Task("Generate-FriendlyTe
 
 BuildParameters.Tasks.GenerateLocalCoverageReportTask = Task("Generate-LocalCoverageReport")
     .WithCriteria(() => BuildParameters.IsLocalBuild, "Skipping due to not running a local build")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.ReportGeneratorGlobalTool : ToolSettings.ReportGeneratorTool, () => {
         var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");
         if (FileExists(BuildParameters.Paths.Files.TestCoverageOutputFilePath))
         {
@@ -249,7 +249,7 @@ BuildParameters.Tasks.GenerateLocalCoverageReportTask = Task("Generate-LocalCove
         if (coverageFiles.Any())
         {
             var settings = new ReportGeneratorSettings();
-            if (BuildParameters.IsDotNetCoreBuild && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
+            if (BuildParameters.IsDotNetBuild && BuildParameters.BuildAgentOperatingSystem != PlatformFamily.Windows)
             {
                 // Workaround until 0.38.5+ version of cake is released
                 // https://github.com/cake-build/cake/pull/2824

@@ -7,11 +7,11 @@ public class BuildTasks
     public CakeTaskBuilder ClearAppVeyorCacheTask { get; set; }
     public CakeTaskBuilder ShowInfoTask { get; set; }
     public CakeTaskBuilder CleanTask { get; set; }
-    public CakeTaskBuilder DotNetCoreCleanTask { get; set; }
+    public CakeTaskBuilder DotNetCleanTask { get; set; }
     public CakeTaskBuilder RestoreTask { get; set; }
-    public CakeTaskBuilder DotNetCoreRestoreTask { get; set; }
+    public CakeTaskBuilder DotNetRestoreTask { get; set; }
     public CakeTaskBuilder BuildTask { get; set; }
-    public CakeTaskBuilder DotNetCoreBuildTask { get; set; }
+    public CakeTaskBuilder DotNetBuildTask { get; set; }
     public CakeTaskBuilder PackageTask { get; set; }
     public CakeTaskBuilder DefaultTask { get; set; }
     public CakeTaskBuilder ContinuousIntegrationTask { get; set; }
@@ -28,7 +28,7 @@ public class BuildTasks
     public CakeTaskBuilder ExportReleaseNotesTask { get; set; }
     public CakeTaskBuilder PublishGitHubReleaseTask { get; set; }
     public CakeTaskBuilder CreateDefaultLabelsTask { get; set; }
-    public CakeTaskBuilder DotNetCorePackTask { get; set; }
+    public CakeTaskBuilder DotNetPackTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackageTask { get; set; }
     public CakeTaskBuilder CreateNuGetPackagesTask { get; set; }
     public CakeTaskBuilder PublishPreReleasePackagesTask { get; set; }
@@ -41,7 +41,7 @@ public class BuildTasks
     public CakeTaskBuilder TransifexPullTranslations { get; set; }
     public CakeTaskBuilder TransifexPushSourceResource { get; set; }
     public CakeTaskBuilder TransifexPushTranslations { get; set; }
-    public CakeTaskBuilder DotNetCoreTestTask { get; set; }
+    public CakeTaskBuilder DotNetTestTask { get; set; }
     public CakeTaskBuilder IntegrationTestTask { get;set; }
     public CakeTaskBuilder GenerateFriendlyTestReportTask { get; set; }
     public CakeTaskBuilder GenerateLocalCoverageReportTask { get; set; }

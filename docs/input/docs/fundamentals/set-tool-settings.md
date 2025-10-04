@@ -61,7 +61,7 @@ Default Value:
 
 ### buildPlatformTarget
 
-This is passed into the execution of MSBuild when doing a full .Net Framework build.
+This is passed into the execution of MSBuild when doing a full .NET Framework build.
 
 Type: `PlatformTarget?`
 
@@ -73,7 +73,7 @@ PlatformTarget.MSIL
 
 ### buildMSBuildToolVersion
 
-This is passed into the execution of MSBuild when doing a full .Net Framework build.
+This is passed into the execution of MSBuild when doing a full .NET Framework build.
 
 Type: `MSBuildToolVersion`
 
@@ -85,7 +85,7 @@ MSBuildToolVersion.Default
 
 ### maxCpuCount
 
-This is passed into the execution of MSBuild when doing a full .Net Framework build.
+This is passed into the execution of MSBuild when doing a full .NET Framework build.
 
 Type: `int?`
 
@@ -93,13 +93,13 @@ Default Value: 0
 
 ### targetFrameworkPathOverride
 
-This is passed into the execution of any .Net Core build operation.
+This is passed into the execution of any .NET build operation.
 
 Type: `DirectoryPath`
 
 Depending on what sort of build Cake.Recipe is executing, the default value changes.
 
-If `BuildParameters.ShouldUseTargetFrameworkPath` is true, and the `targetFrameworkPathOverride` is null, and it is a .Net Core build, then the default value is:
+If `BuildParameters.ShouldUseTargetFrameworkPath` is true, and the `targetFrameworkPathOverride` is null, and it is a .NET build, then the default value is:
 
 ```csharp
 var path = context.Tools.Resolve("mono").GetDirectory();
@@ -107,7 +107,7 @@ path = path.Combine("../lib/mono/4.5");
 TargetFrameworkPathOverride = path.FullPath + "/"
 ```
 
-If `BuildParameters.ShouldUseTargetFrameworkPath` is true, and the `targetFrameworkPathOverride` is null, and it is _NOT_ a .Net Core build, then the default value is:
+If `BuildParameters.ShouldUseTargetFrameworkPath` is true, and the `targetFrameworkPathOverride` is null, and it is _NOT_ a .NET build, then the default value is:
 
 ```csharp
 TargetFrameworkPathOverride = new FilePath(typeof(object).Assembly.Location).GetDirectory().FullPath + "/"

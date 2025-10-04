@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Restoring .NET Core tools"
+echo "Restoring .NET tools"
 dotnet tool restore
 
 if [ -f "./includes.cake" ]; then

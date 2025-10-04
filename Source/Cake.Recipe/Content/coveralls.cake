@@ -6,7 +6,7 @@ BuildParameters.Tasks.UploadCoverallsReportTask = Task("Upload-Coveralls-Report"
     .WithCriteria(() => !BuildParameters.IsLocalBuild)
     .WithCriteria(() => !BuildParameters.IsPullRequest)
     .WithCriteria(() => BuildParameters.IsMainRepository)
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.CoverallsGlobalTool : ToolSettings.CoverallsTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.CoverallsGlobalTool : ToolSettings.CoverallsTool, () => {
         if (BuildParameters.CanPublishToCoveralls)
         {
             var coverageFiles = GetFiles(BuildParameters.Paths.Directories.TestCoverage + "/coverlet/*.xml");

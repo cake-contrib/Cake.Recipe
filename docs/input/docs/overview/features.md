@@ -6,7 +6,7 @@ Description: Overview about core features
 
 Cake.Recipe is a set of convention based build scripts, which are delivered as a NuGet Package, which can then be consumed by Cake, via the `#load` preprocessor directive.
 
-Cake.Recipe runs under both .Net Framework and .Net Core.
+Cake.Recipe runs under both .NET Framework and .NET.
 
 ## Recipe Functionality
 
