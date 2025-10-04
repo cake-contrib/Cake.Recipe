@@ -1,5 +1,5 @@
-#addin nuget:?package=Cake.FileHelpers&version=3.2.0
-#addin nuget:?package=Cake.Git&version=0.19.0
+#addin nuget:?package=Cake.FileHelpers&version=6.1.3
+#addin nuget:?package=Cake.Git&version=3.0.0
 
 ////////////////////////////////////////////////////////
 /// Global variables

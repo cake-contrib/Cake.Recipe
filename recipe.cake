@@ -1,4 +1,4 @@
-#addin nuget:?package=Cake.FileHelpers&version=3.2.0
+#addin nuget:?package=Cake.FileHelpers&version=6.1.3
 #load "./includes.cake"
 
 public class BuildMetaData
