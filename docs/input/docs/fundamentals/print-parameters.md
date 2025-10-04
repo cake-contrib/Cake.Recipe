@@ -26,7 +26,6 @@ IsTagged: False
 BranchType: Develop
 TreatWarningsAsErrors: True
 ShouldSendEmail: True
-ShouldPostToGitter: True
 ShouldPostToSlack: True
 ShouldPostToTwitter: True
 ShouldPostToMicrosoftTeams: False

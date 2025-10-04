@@ -42,24 +42,6 @@ The Personal Access Token of the GitHub account to be used.
 If `GITHUB_PAT` is not set, the alternatives of `GH_TOKEN` and `GITHUB_TOKEN` are considered.
 :::
 
-## Gitter
-
-When a successful release build has been completed, Cake.Recipe can be configured to send out a notification (with configurable message) to a Gitter Room.  There are two required environment variables that needs to be set to make this happen.  Further information about find this information can be found in the Cake.Gitter [documentation](https://cake-contrib.github.io/Cake.Gitter/docs/usage/requiredinformation).
-
-:::{.alert .alert-info}
-**NOTE:**
-
-In addition to these environment variables being present, and correct, the control variable [shouldPostToGitter](./set-parameters#shouldPostToGitter) also needs to be set to true.  The default value for this parameter is true.
-:::
-
-### GITTER_TOKEN
-
-The authentication token for the user who should post to the room.
-
-### GITTER_ROOM_ID
-
-The room ID where you want the message to be sent.
-
 ## Slack
 
 When a release build fails, Cake.Recipe can be configured to send out a notification (with configurable message) to a Slack Channel.  There are two required environment variables that s to be set to make this happen.  Further information about find this information can be found in the Cake.Slack [documentation](https://github.com/cake-contrib/Cake.Slack).
@@ -148,6 +130,24 @@ The username that should be used for authenticating to the SMTP server.
 
 The password that should be used for authenticating to the SMTP server.
 
+## Mastodon
+
+When a successful release build has been completed, Cake.Recipe can be configured to send out a notification (with configurable message) to the fediverse via Mastodon. There are two required environment variables that needs to be set to make this happen.  Further information about find this information can be found in the Cake.Mastodon [documentation](https://github.com/cake-contrib/Cake.Mastodon/blob/master/README.md#usage).
+
+:::{.alert .alert-info}
+**NOTE:**
+
+In addition to these environment variables being present, and correct, the control variable [shouldPostToMastodon](./set-parameters#shouldPostToMastodon) also needs to be set to true.  The default value for this parameter is true.
+:::
+
+### MASTODON_ACCESS_TOKEN
+
+The Access Token for the Mastodon application that is going to be used to send the toot.
+
+### MASTODON_INSTANCE_URL
+
+The URL to the Mastodon instance, where the application was registered.
+
 ## AppVeyor
 
 More information about what this is used for can be found in the [clean AppVeyor build cache](../usage/cleaning-cache) documentation.
@@ -173,13 +173,7 @@ In addition to this environment variable being present, and correct, the control
 
 ### CODECOV_REPO_TOKEN
 
-API token for uploading coverage reports to codecov.io.
-
-:::{.alert .alert-info}
-**NOTE:**
-
-This token is entirely optional for public repositories building on AppVeyor, and is recommended to only be used on private repositories*
-:::
+API token for uploading coverage reports to [Codecov](https://about.codecov.io/).
 
 ## Coveralls
 
@@ -193,7 +187,7 @@ In addition to this environment variable being present, and correct, the control
 
 ### COVERALLS_REPO_TOKEN
 
-API token for uploading coverage reports to codecov.io.
+API token for uploading coverage reports to [Coveralls](https://coveralls.io/).
 
 ## Transifex
 

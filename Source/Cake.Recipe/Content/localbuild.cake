@@ -160,6 +160,7 @@ public class LocalBuildBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
+    [System.Obsolete("Codecov CLI no longer officially supports tokenless uploads.")]
     public bool SupportsTokenlessCodecov { get; } = false;
 
     public BuildProviderType Type { get; } = BuildProviderType.Local;

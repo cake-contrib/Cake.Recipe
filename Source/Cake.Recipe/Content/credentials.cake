@@ -36,18 +36,6 @@ public class EmailCredentials
     }
 }
 
-public class GitterCredentials
-{
-    public string Token { get; private set; }
-    public string RoomId { get; private set; }
-
-    public GitterCredentials(string token, string roomId)
-    {
-        Token = token;
-        RoomId = roomId;
-    }
-}
-
 public class SlackCredentials
 {
     public string Token { get; private set; }
@@ -108,6 +96,11 @@ public class CodecovCredentials : CoverallsCredentials
 
 public class CoverallsCredentials
 {
+    public bool HasCredentials
+    {
+        get { return !string.IsNullOrEmpty(RepoToken); }
+    }
+
     public string RepoToken { get; private set; }
 
     public CoverallsCredentials(string repoToken)
@@ -143,6 +136,18 @@ public class WyamCredentials
     }
 }
 
+public class MastodonCredentials
+{
+    public string AccessToken { get; private set; }
+    public string InstanceUrl { get; private set; }
+
+    public MastodonCredentials(string accessToken, string instanceUrl)
+    {
+        AccessToken = accessToken;
+        InstanceUrl = instanceUrl;
+    }
+}
+
 public static GitHubCredentials GetGitHubCredentials(ICakeContext context)
 {
     string token = null;
@@ -175,13 +180,6 @@ public static MicrosoftTeamsCredentials GetMicrosoftTeamsCredentials(ICakeContex
         context.EnvironmentVariable(Environment.MicrosoftTeamsWebHookUrlVariable));
 }
 
-public static GitterCredentials GetGitterCredentials(ICakeContext context)
-{
-    return new GitterCredentials(
-        context.EnvironmentVariable(Environment.GitterTokenVariable),
-        context.EnvironmentVariable(Environment.GitterRoomIdVariable));
-}
-
 public static SlackCredentials GetSlackCredentials(ICakeContext context)
 {
     return new SlackCredentials(
@@ -206,8 +204,16 @@ public static AppVeyorCredentials GetAppVeyorCredentials(ICakeContext context)
 
 public static CodecovCredentials GetCodecovCredentials(ICakeContext context)
 {
-    return new CodecovCredentials(
-        context.EnvironmentVariable(Environment.CodecovRepoTokenVariable));
+    var token = context.EnvironmentVariable(Environment.CodecovRepoTokenVariable);
+
+    if (string.IsNullOrEmpty(token))
+    {
+        // Fallback to attempt to check for the conventional CODECOV_TOKEN which
+        // the CLI tools read automatically.
+        token = context.EnvironmentVariable("CODECOV_TOKEN");
+    }
+
+    return new CodecovCredentials(token);
 }
 
 public static CoverallsCredentials GetCoverallsCredentials(ICakeContext context)
@@ -229,4 +235,11 @@ public static WyamCredentials GetWyamCredentials(ICakeContext context)
         context.EnvironmentVariable(Environment.WyamAccessTokenVariable),
         context.EnvironmentVariable(Environment.WyamDeployRemoteVariable),
         context.EnvironmentVariable(Environment.WyamDeployBranchVariable));
+}
+
+public static MastodonCredentials GetMastodonCredentials(ICakeContext context)
+{
+    return new MastodonCredentials(
+        context.EnvironmentVariable(Environment.MastodonAccessTokenVariable),
+        context.EnvironmentVariable(Environment.MastodonInstanceUrlVariable));
 }

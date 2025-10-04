@@ -141,7 +141,8 @@ public class AzurePipelinesBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
-    public bool SupportsTokenlessCodecov { get; } = true;
+    [System.Obsolete("Codecov CLI no longer officially supports tokenless uploads.")]
+    public bool SupportsTokenlessCodecov { get; } = false;
 
     public BuildProviderType Type { get; } = BuildProviderType.AzurePipelines;
 

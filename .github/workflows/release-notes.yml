@@ -7,33 +7,33 @@ jobs:
   draft-stable:
     env:
       GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Checkout the requested branch
-        uses: actions/checkout@v2.4.0
+        uses: actions/checkout@v5.0.0
       - name: Fetch all tags and branches
         run: git fetch --prune --unshallow
       - name: Cache Tools
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v4.2.4
         with:
           path: tools
           key: ${{ runner.os }}-tools-${{ hashFiles('recipe.cake', 'Source/Cake.Recipe/Content/addins.cake', 'Source/Cake.Recipe/Content/tools.cake', 'Source/Cake.Recipe/Content/modules.cake') }}
       - name: Set up git version
         if: ${{ !contains(github.ref, '/hotfix/') && !contains(github.ref, '/release/') }}
-        uses: gittools/actions/gitversion/setup@v0.9.11
+        uses: gittools/actions/gitversion/setup@v4.1.0
         with:
           versionSpec: "5.x"
       - name: Run git version
         if: ${{ !contains(github.ref, '/hotfix/') && !contains(github.ref, '/release/') }}
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.11
+        uses: gittools/actions/gitversion/execute@v4.1.0
       - name: Create release branch ${{ github.event.inputs.version }}
         if: ${{ steps.gitversion.outputs.majorMinorPatch }}
         run: git switch -c release/${{ steps.gitversion.outputs.majorMinorPatch }}
       - name: Push new branch
         if: ${{ steps.gitversion.outputs.majorMinorPatch }}
-        uses: ad-m/github-push-action@v0.6.0
+        uses: ad-m/github-push-action@v0.8.0
         with:
           branch: "release/${{ steps.gitversion.outputs.majorMinorPatch }}"
           github_token: ${{ secrets.GH_TOKEN }}
@@ -44,7 +44,7 @@ jobs:
           } | Out-File "./includes.cake"
         shell: pwsh
       - name: Drafting Release Notes
-        uses: cake-build/cake-action@v1.4.0
+        uses: cake-build/cake-action@v3.0.0
         with:
           script-path: recipe.cake
           target: releasenotes

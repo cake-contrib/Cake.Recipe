@@ -10,54 +10,58 @@ public static string GetTransifexUserSettingsPath()
     return path;
 }
 
-public static bool TransifexIsConfiguredForRepository(ICakeContext context)
-{
-    return context.FileExists("./.tx/config");
-}
-
-// Before we do anything with transifex, we must make sure that it has been properly
-// Initialized, this is mostly related to running on appveyor or other CI.
-// Because we expect the repository to already be configured to use
-// transifex, we cannot run tx init, or it would replace the repository configuration file.
-BuildParameters.Tasks.TransifexSetupTask = Task("Transifex-Setup")
-    .WithCriteria(() => BuildParameters.TransifexEnabled, "Transifex is not enabled")
-    .WithCriteria(() => !TransifexUserSettingsExists(Context), "Transifex user settings already exist")
-    .WithCriteria(() => BuildParameters.Transifex.HasCredentials, "Missing transifex credentials")
-    .Does(() =>
-    {
-        var path = GetTransifexUserSettingsPath();
-        var encoding = new System.Text.UTF8Encoding(false);
-        var text = string.Format("[https://www.transifex.com]\r\nhostname = https://www.transifex.com\r\npassword = {0}\r\nusername = api", BuildParameters.Transifex.ApiToken);
-        System.IO.File.WriteAllText(path, text, encoding);
-    });
-
 BuildParameters.Tasks.TransifexPushSourceResource = Task("Transifex-Push-SourceFiles")
     .WithCriteria(() => BuildParameters.CanPushTranslations)
-    .IsDependentOn("Transifex-Setup")
+    .WithCriteria((ctx) => BuildParameters.Transifex.HasCredentials || TransifexUserSettingsExists(ctx), "No transifex credentials specified")
     .Does(() =>
     {
-        TransifexPush(new TransifexPushSettings {
+        var settings = new TransifexPushSettings
+        {
             UploadSourceFiles = true,
-            Force = string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase)
-        });
+            Force             = string.Equals(BuildParameters.Target, "Transifex-Push-SourceFiles", StringComparison.OrdinalIgnoreCase)
+        };
+
+        if (!TransifexUserSettingsExists(Context))
+        {
+            settings.ArgumentCustomization = (args) => args.PrependSwitchQuoted("--token", BuildParameters.Transifex.ApiToken);
+        }
+
+        TransifexPush(settings);
     });
 
 BuildParameters.Tasks.TransifexPullTranslations = Task("Transifex-Pull-Translations")
     .WithCriteria(() => BuildParameters.CanPullTranslations)
+    .WithCriteria((ctx) => BuildParameters.Transifex.HasCredentials || TransifexUserSettingsExists(ctx), "No transifex credentials specified")
     .IsDependentOn("Transifex-Push-SourceFiles")
     .Does(() =>
     {
-        TransifexPull(new TransifexPullSettings {
-            All = true,
-            Mode = BuildParameters.TransifexPullMode,
+        var settings = new TransifexPullSettings
+        {
+            All               = true,
+            Mode              = BuildParameters.TransifexPullMode,
             MinimumPercentage = BuildParameters.TransifexPullPercentage
-        });
+        };
+
+        if (BuildParameters.Transifex.HasCredentials)
+        {
+            settings.ArgumentCustomization = (args) => args.PrependSwitchQuoted("--token", BuildParameters.Transifex.ApiToken);
+        }
+
+        TransifexPull(settings);
     });
 
 BuildParameters.Tasks.TransifexPushTranslations = Task("Transifex-Push-Translations")
     .Does(() =>
     {
-        TransifexPush(new TransifexPushSettings {
+        var settings = new TransifexPushSettings
+        {
             UploadTranslations = true
-        });
+        };
+
+        if (BuildParameters.Transifex.HasCredentials)
+        {
+            settings.ArgumentCustomization = (args) => args.PrependSwitchQuoted("--token", BuildParameters.Transifex.ApiToken);
+        }
+
+        TransifexPush(settings);
     });

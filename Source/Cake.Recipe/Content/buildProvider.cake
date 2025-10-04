@@ -51,6 +51,7 @@ public interface IBuildProvider
 
     IBuildInfo Build { get; }
 
+    [System.Obsolete("Codecov CLI no longer officially supports tokenless uploads.")]
     bool SupportsTokenlessCodecov { get; }
 
     IEnumerable<string> PrintVariables { get; }
@@ -72,7 +73,7 @@ public enum BuildProviderType
 
 public static IBuildProvider GetBuildProvider(ICakeContext context, BuildSystem buildSystem)
 {
-    if (buildSystem.IsRunningOnAzurePipelines || buildSystem.IsRunningOnAzurePipelinesHosted)
+    if (buildSystem.IsRunningOnAzurePipelines)
     {
         context.Information("Using Azure DevOps Pipelines Provider...");
         return new AzurePipelinesBuildProvider(buildSystem.AzurePipelines, context.Environment, context);

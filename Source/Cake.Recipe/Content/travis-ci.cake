@@ -60,7 +60,8 @@ public class TravisCiBuildProvider : IBuildProvider
     public IPullRequestInfo PullRequest { get; }
     public IRepositoryInfo Repository { get; }
 
-    public bool SupportsTokenlessCodecov { get; } = true;
+    [System.Obsolete("Codecov CLI no longer officially supports tokenless uploads.")]
+    public bool SupportsTokenlessCodecov { get; } = false;
 
     public BuildProviderType Type { get; } = BuildProviderType.Travis;
 

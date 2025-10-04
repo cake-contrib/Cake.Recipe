@@ -4,7 +4,7 @@
 
 BuildParameters.Tasks.ClearAppVeyorCacheTask = Task("Clear-AppVeyor-Cache")
     .Does(() =>
-        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=5.0.1&loaddependencies=true
+        RequireAddin(@"#addin nuget:?package=Cake.AppVeyor&version=6.0.0&loaddependencies=true
         AppVeyorClearCache(new AppVeyorSettings() { ApiToken = EnvironmentVariable(""TEMP_APPVEYOR_TOKEN"") },
             EnvironmentVariable(""TEMP_APPVEYOR_ACCOUNT_NAME""),
             EnvironmentVariable(""TEMP_APPVEYOR_PROJECT_SLUG""));
@@ -84,7 +84,8 @@ public class AppVeyorBuildProvider : IBuildProvider
 
     public IBuildInfo Build { get; }
 
-    public bool SupportsTokenlessCodecov { get; } = true;
+    [System.Obsolete("Codecov CLI no longer officially supports tokenless uploads.")]
+    public bool SupportsTokenlessCodecov { get; } = false;
 
     public BuildProviderType Type { get; } = BuildProviderType.AppVeyor;
 

@@ -6,24 +6,24 @@ Description: Override the default names of the environment variables used by Cak
 
 Cake.Recipe is driven by [environment variables](./environment-variables).  These are used to store the sensitive information that is required during the build process.  For example, the username and password needed to send email, or the token required to access GitHub.
 
-Cake.Recipe has default environment variable names for all the pieces of information that are required.  The expectation is that either locally on your own machine, or on the CI/CD pipeline that you are using, you set the values for all of the ones that you intend to use.  For example, if you want to send messages to Gitter when the build succeeds, you will need to set environment variables with the names required.
+Cake.Recipe has default environment variable names for all the pieces of information that are required.  The expectation is that either locally on your own machine, or on the CI/CD pipeline that you are using, you set the values for all of the ones that you intend to use.  For example, if you want to send messages to Slack when the build succeeds, you will need to set environment variables with the names required.
 
-However, it may be necessary to change these environment variable names.  One example of when this is required is when you might be using Cake.Recipe on two completely separate projects.  In this scenario, you might need to set the Gitter Environment variables for both projects, but they may require different values.
+However, it may be necessary to change these environment variable names.  One example of when this is required is when you might be using Cake.Recipe on two completely separate projects.  In this scenario, you might need to set the Slack Environment variables for both projects, but they may require different values.
 
-As an example, lets say that you wanted to change the name of the environment variables that stored the Gitter credential information.  You could add something like the following to your [recipe.cake](./recipe-cake) file:
+As an example, lets say that you wanted to change the name of the environment variables that stored the Slack credential information.  You could add something like the following to your [recipe.cake](./recipe-cake) file:
 
 ```csharp
-Environment.SetVariableNames(gitterTokenVariable: "PROJECTA_GITTER_TOKEN", gitterRoomIdVariable: "PROJECTA_GITTER_ROOM_ID");
+Environment.SetVariableNames(slackTokenVariable: "PROJECTA_SLACK_TOKEN", slackChannelVariable: "PROJECTA_SLACK_CHANNEL");
 ```
 
-This would mean that when required, Cake.Recipe would check the machine which it is running on for environment variables names `PROJECTA_GITTER_TOKEN` and `PROJECTA_GITTER_ROOM_ID`, rather than the default of `GITTER_TOKEN` and `GITTER_ROOM_ID`.
+This would mean that when required, Cake.Recipe would check the machine which it is running on for environment variables names `PROJECTA_SLACK_TOKEN` and `PROJECTA_SLACK_CHANNEL`, rather than the default of `SLACK_TOKEN` and `SLACK_CHANNEL`.
 
 There is another scenario where you might want to override the environment variable names when running locally on your own machine, but you might want to use the default variable names when running on a CI/CD system.  To facilitate that, you can do something similar to the following:
 
 ```csharp
 if (BuildSystem.IsLocalBuild)
 {
-    Environment.SetVariableNames(gitterTokenVariable: "PROJECTA_GITTER_TOKEN", gitterRoomIdVariable: "PROJECTA_GITTER_ROOM_ID");
+    Environment.SetVariableNames(slackTokenVariable: "PROJECTA_SLACK_TOKEN", slackChannelVariable: "PROJECTA_SLACK_CHANNEL");
 }
 else
 {
@@ -38,14 +38,6 @@ The `SetVariableNames` method uses the concept of optional parameters, in fact, 
 ### githubTokenVariable
 
 Default value: `GITHUB_PAT`
-
-### gitterTokenVariable
-
-Default value: `GITTER_ROOM_ID`
-
-### gitterRoomIdVariable
-
-Default value: `GITTER_ROOM_ID`
 
 ### slackTokenVariable
 
@@ -90,6 +82,14 @@ Default value: `EMAIL_USERNAME`
 ### emailPassword
 
 Default value: `EMAIL_PASSWORD`
+
+### mastodonAccessTokenVariable
+
+Default value: `MASTODON_ACCESS_TOKEN`
+
+### mastodonInstanceUrlVariable
+
+Default value: `MASTODON_INSTANCE_URL`
 
 ### appVeyorApiTokenVariable
 

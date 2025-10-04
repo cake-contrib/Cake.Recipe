@@ -28,6 +28,7 @@ public static class ToolSettings
     public static string ReportGeneratorTool { get; private set; }
     public static string ReportUnitTool { get; private set; }
 
+    [System.Obsolete("The Global Tool of Codecov is no longer supported. Use the Normal codecovTool going forward.")]
     public static string CodecovGlobalTool { get; private set; }
     public static string CoverallsGlobalTool { get; private set; }
     public static string GitReleaseManagerGlobalTool { get; private set; }
@@ -37,25 +38,25 @@ public static class ToolSettings
     public static string KuduSyncGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
-        string codecovTool = "#tool nuget:?package=codecov&version=1.13.0",
+        string codecovTool = "#tool nuget:?package=CodecovUploader&version=0.8.0",
         // This is specifically pinned to 0.7.0 as later versions of same package publish .Net Global Tool, rather than full framework version
         string coverallsTool = "#tool nuget:?package=coveralls.net&version=0.7.0",
-        string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.11.0",
+        string gitReleaseManagerTool = "#tool nuget:?package=GitReleaseManager&version=0.19.0",
         // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
-        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2021.2.1",
-        string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.3",
+        string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2024.1.4",
+        string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.4",
         string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
-        string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.4.1",
-        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.12.0",
-        string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=5.8.1",
-        string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.922",
-        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=4.8.7",
+        string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.9.0",
+        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.18.1",
+        string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.10.1",
+        string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.1221",
+        string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=5.3.8",
         string reportUnitTool = "#tool nuget:?package=ReportUnit&version=1.2.1",
-        string codecovGlobalTool = "#tool dotnet:?package=Codecov.Tool&version=1.13.0",
+        string codecovGlobalTool = "#tool nuget:?package=CodecovUploader&version=0.8.0",
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
-        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.11.0",
-        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.6.7",
+        string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.19.0",
+        string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.12.0",
         string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5",
         string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
         // This is using an unofficial build of kudusync so that we can have a .Net Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
@@ -122,5 +123,6 @@ public static class ToolSettings
         {
             TargetFrameworkPathOverride = targetFrameworkPathOverride?.FullPath;
         }
+        SkipDuplicatePackages = skipDuplicatePackages;
     }
 }
