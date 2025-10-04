@@ -34,10 +34,10 @@ As set out in the introduction [Cake.Recipe is a set of convention based build s
 
 * Building class library
 
-  When you are writing a reusable library, you are going to want to publish your code as a NuGet package for reuse. Whether you are writing .Net Framework based or .Net Standard based code, the recipe's intent will be to build your code, package using your nuspec file and publish. Best practices demand that your tests succeed and you meet your basic code quality criteria. All of these are turned on by default, may be turned off in the above `SetParameters` argument list.
+  When you are writing a reusable library, you are going to want to publish your code as a NuGet package for reuse. Whether you are writing .NET Framework based or .NET Standard based code, the recipe's intent will be to build your code, package using your nuspec file and publish. Best practices demand that your tests succeed and you meet your basic code quality criteria. All of these are turned on by default, may be turned off in the above `SetParameters` argument list.
 
-  * To build a .Net Core package, the command `Build.RunDotNetCore()`
-  * To build a .Net framework package, the command `Build.Run()` is followed with `Build.RunNuGet()`, to do a NuGet package and publish.
+  * To build a .NET package, the command `Build.RunDotNet()`
+  * To build a .NET framework package, the command `Build.Run()` is followed with `Build.RunNuGet()`, to do a NuGet package and publish.
 
 * Building MSI
 

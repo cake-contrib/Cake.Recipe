@@ -2,7 +2,7 @@
 
 $SCRIPT_NAME = "recipe.cake"
 
-Write-Host "Restoring .NET Core tools"
+Write-Host "Restoring .NET tools"
 dotnet tool restore
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

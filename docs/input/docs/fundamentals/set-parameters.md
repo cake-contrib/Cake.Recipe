@@ -63,7 +63,7 @@ The SetParameters method uses the concept of optional parameters, in fact, all b
 
 ### solutionFilePath
 
-Cake.Recipe assumes that it is only building a single .Net solution file, and it needs to know the location of it.  It will attempt to form that location using the SourceDirectoryPath and the Title that are passed into SetParameters.
+Cake.Recipe assumes that it is only building a single .NET solution file, and it needs to know the location of it.  It will attempt to form that location using the SourceDirectoryPath and the Title that are passed into SetParameters.
 
 Type: `FilePath`
 
@@ -103,7 +103,7 @@ This is the pattern that is used to determine what files/projects should be run 
 
 Type: `string`
 
-Default Value: `"/**/*Tests.dll"` or `"/**/*Tests.csproj"` depending on whether it is a .Net Framework or .Net Core execution.
+Default Value: `"/**/*Tests.dll"` or `"/**/*Tests.csproj"` depending on whether it is a .NET Framework or .NET execution.
 
 ### integrationTestScriptPath
 
@@ -290,7 +290,7 @@ false
 
 ### shouldUseDeterministicBuilds
 
-If this parameter is set to true, then during the execution of either MSBuild or the .Net Core CLI, a build property called `ContinuousIntegrationBuild` with the value of `true` will be added.
+If this parameter is set to true, then during the execution of either MSBuild or the .NET CLI, a build property called `ContinuousIntegrationBuild` with the value of `true` will be added.
 
 Type: `bool`
 
@@ -408,9 +408,9 @@ Default Value:
 true
 ```
 
-### shouldRunDotNetCorePack
+### shouldRunDotNetPack
 
-By default, Cake.Recipe assumes that any NuGet packages are generated via the presence of nuspec files in correct folder.  However, it is possible to force the execution of .Net Core pack by setting this parameter to true.
+By default, Cake.Recipe assumes that any NuGet packages are generated via the presence of nuspec files in correct folder.  However, it is possible to force the execution of .NET pack by setting this parameter to true.
 
 Type: `bool`
 
@@ -422,8 +422,8 @@ false
 
 ### shouldBuildNugetSourcePackage
 
-When this is set to true, a number of different settings are enabled, for example, during the execution of the .Net Core CLI or NuGet, a build property called
-`SymbolPackageFormat` is set to `true`, and also the DotNetCorePackSettings properties IncludeSource and IncludeSymbols are set to true, and finally the NuGetPackSettings property Symbols is set to true.
+When this is set to true, a number of different settings are enabled, for example, during the execution of the .NET CLI or NuGet, a build property called
+`SymbolPackageFormat` is set to `true`, and also the DotNetPackSettings properties IncludeSource and IncludeSymbols are set to true, and finally the NuGetPackSettings property Symbols is set to true.
 
 Type: `bool`
 
