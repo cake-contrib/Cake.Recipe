@@ -5,7 +5,7 @@ Setup<BuildVersion>(context =>
 {
     BuildVersion buildVersion = null;
 
-    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
+    RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.GitVersionGlobalTool : ToolSettings.GitVersionTool, () => {
         buildVersion = BuildVersion.CalculatingSemanticVersion(
                 context: Context
             );
@@ -64,12 +64,12 @@ Setup<BuildData>(context =>
     return new BuildData(context);
 });
 
-Setup<DotNetCoreMSBuildSettings>(context =>
+Setup<DotNetMSBuildSettings>(context =>
 {
     var buildVersion = context.Data.Get<BuildVersion>();
     var data = context.Data.Get<BuildData>(); // Future use
 
-    var settings = new DotNetCoreMSBuildSettings()
+    var settings = new DotNetMSBuildSettings()
                     .WithProperty("Version", buildVersion.SemVersion)
                     .WithProperty("AssemblyVersion", buildVersion.Version)
                     .WithProperty("FileVersion", buildVersion.Version)
@@ -81,7 +81,7 @@ Setup<DotNetCoreMSBuildSettings>(context =>
     }
     if (BuildParameters.ShouldUseTargetFrameworkPath)
     {
-        context.Information("Will use FrameworkPathOverride={0} on .NET Core build related tasks since not building on Windows.", ToolSettings.TargetFrameworkPathOverride);
+        context.Information("Will use FrameworkPathOverride={0} on .NET build related tasks since not building on Windows.", ToolSettings.TargetFrameworkPathOverride);
         settings.WithProperty("FrameworkPathOverride", ToolSettings.TargetFrameworkPathOverride);
     }
 

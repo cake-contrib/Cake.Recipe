@@ -23,9 +23,9 @@ BuildParameters.Tasks.CreateChocolateyPackagesTask = Task("Create-Chocolatey-Pac
     }
 });
 
-BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
-    .IsDependentOn("DotNetCore-Build")
-    .WithCriteria(() => BuildParameters.ShouldRunDotNetCorePack, "Packaging through .NET Core is disabled")
+BuildParameters.Tasks.DotNetPackTask = Task("DotNet-Pack")
+    .IsDependentOn("DotNet-Build")
+    .WithCriteria(() => BuildParameters.ShouldRunDotNetPack, "Packaging through .NET is disabled")
     .Does<BuildVersion>((context, buildVersion) =>
 {
     var projects = GetFiles(BuildParameters.SourceDirectoryPath + "/**/*.csproj")
@@ -35,8 +35,8 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
 
     // We need to clone the settings class, so we don't
     // add additional properties to every other task.
-    var msBuildSettings = new DotNetCoreMSBuildSettings();
-    foreach (var kv in context.Data.Get<DotNetCoreMSBuildSettings>().Properties)
+    var msBuildSettings = new DotNetMSBuildSettings();
+    foreach (var kv in context.Data.Get<DotNetMSBuildSettings>().Properties)
     {
         string value = string.Join(" ", kv.Value);
         msBuildSettings.WithProperty(kv.Key, value);
@@ -47,7 +47,7 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
         msBuildSettings.WithProperty("SymbolPackageFormat", "snupkg");
     }
 
-    var settings = new DotNetCorePackSettings {
+    var settings = new DotNetPackSettings {
         NoBuild = true,
         NoRestore = true,
         Configuration = BuildParameters.Configuration,
@@ -59,7 +59,7 @@ BuildParameters.Tasks.DotNetCorePackTask = Task("DotNetCore-Pack")
 
     foreach (var project in projects)
     {
-        DotNetCorePack(project.ToString(), settings);
+        DotNetPack(project.ToString(), settings);
     }
 });
 

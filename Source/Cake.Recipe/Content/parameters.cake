@@ -26,7 +26,7 @@ public static class BuildParameters
     public static bool IsPublishBuild { get; private set; }
     public static bool IsReleaseBuild { get; private set; }
     public static BranchType BranchType { get; private set; }
-    public static bool IsDotNetCoreBuild { get; set; }
+    public static bool IsDotNetBuild { get; set; }
     public static bool IsNuGetBuild { get; set; }
     public static bool TransifexEnabled { get; set; }
     public static bool PrepareLocalRelease { get; set; }
@@ -95,7 +95,7 @@ public static class BuildParameters
     public static bool ShouldRunInspectCode { get; private set; }
     public static bool ShouldRunCoveralls { get; private set; }
     public static bool ShouldRunCodecov { get; private set; }
-    public static bool ShouldRunDotNetCorePack { get; private set; }
+    public static bool ShouldRunDotNetPack { get; private set; }
     public static bool ShouldRunChocolatey { get; private set; }
     public static bool ShouldPublishGitHub { get; private set; }
     public static bool ShouldGenerateDocumentation { get; private set; }
@@ -289,7 +289,7 @@ public static class BuildParameters
         bool shouldRunInspectCode = true,
         bool shouldRunCoveralls = true,
         bool shouldRunCodecov = true,
-        bool shouldRunDotNetCorePack = false,
+        bool shouldRunDotNetPack = false,
         bool shouldBuildNugetSourcePackage = false,
         bool shouldRunIntegrationTests = false,
         bool shouldCalculateVersion = true,
@@ -380,7 +380,7 @@ public static class BuildParameters
         ShouldRunInspectCode = shouldRunInspectCode;
         ShouldRunCoveralls = shouldRunCoveralls;
         ShouldRunCodecov = shouldRunCodecov;
-        ShouldRunDotNetCorePack = shouldRunDotNetCorePack;
+        ShouldRunDotNetPack = shouldRunDotNetPack;
         ShouldBuildNugetSourcePackage = shouldBuildNugetSourcePackage;
         ShouldCalculateVersion = shouldCalculateVersion;
         _shouldUseDeterministicBuilds = shouldUseDeterministicBuilds;

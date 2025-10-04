@@ -22,7 +22,7 @@ BuildParameters.SetParameters(context: Context,
                             shouldRunInspectCode: false,
                             shouldRunCoveralls: false,
                             shouldRunCodecov: false,
-                            shouldRunDotNetCorePack: true,
+                            shouldRunDotNetPack: true,
                             twitterMessage: standardNotificationMessage,
                             shouldGenerateDocumentation: false);
 
@@ -68,8 +68,8 @@ Task("Run-Local-Integration-Tests")
 });
 
 Task("Set-CakeVersion-InBuild")
-    .IsDependeeOf("DotNetCore-Build")
-    .Does<DotNetCoreMSBuildSettings>((context, msBuildSettings) => 
+    .IsDependeeOf("DotNet-Build")
+    .Does<DotNetMSBuildSettings>((context, msBuildSettings) => 
 {
     var cakeVersion = FileReadLines(File("./Source/Cake.Recipe/cake-version.yml"))
         .Where(x => x.StartsWith("TargetCakeVersion:"))
@@ -86,4 +86,4 @@ Task("Set-CakeVersion-InBuild")
     msBuildSettings.WithProperty("CakeVersion", cakeVersion);
 });
 
-Build.RunDotNetCore();
+Build.RunDotNet();

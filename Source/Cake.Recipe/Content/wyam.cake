@@ -12,7 +12,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => BuildParameters.ShouldGenerateDocumentation, "Wyam documentation has been disabled")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
         // Check to see if any documentation has changed
         var sourceCommit = GitLogTip("./");
         Information("Source Commit Sha: {0}", sourceCommit.Sha);
@@ -94,7 +94,7 @@ BuildParameters.Tasks.PublishDocumentationTask = Task("Publish-Documentation")
 
 BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
         var settings = new Dictionary<string, object>
         {
             { "Host",  BuildParameters.WebHost },
@@ -127,7 +127,7 @@ BuildParameters.Tasks.PreviewDocumentationTask = Task("Preview-Documentation")
 BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Documentation")
     .IsDependentOn("Clean-Documentation")
     .WithCriteria(() => DirectoryExists(BuildParameters.WyamRootDirectoryPath), "Wyam documentation directory is missing")
-    .Does(() => RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
+    .Does(() => RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.WyamGlobalTool : ToolSettings.WyamTool, () => {
         var settings = new Dictionary<string, object>
         {
             { "Host",  BuildParameters.WebHost },
@@ -159,7 +159,7 @@ BuildParameters.Tasks.ForcePublishDocumentationTask = Task("Force-Publish-Docume
 
 public void PublishDocumentation()
 {
-    RequireTool(BuildParameters.IsDotNetCoreBuild ? ToolSettings.KuduSyncGlobalTool : ToolSettings.KuduSyncTool, () => {
+    RequireTool(BuildParameters.IsDotNetBuild ? ToolSettings.KuduSyncGlobalTool : ToolSettings.KuduSyncTool, () => {
         if (BuildParameters.CanUseWyam)
         {
             var sourceCommit = GitLogTip("./");
