@@ -204,37 +204,3 @@ In addition to these environment variables being present, and correct, there are
 :::
 
 ### TRANSIFEX_API_TOKEN
-
-## Wyam
-
-During the execution of Cake.Recipe, a documentation site can also be generated (both for project source code files, and documentation files), using the Wyam Tool.  Further information about [publishing documentation](../usage/publishing-documentation) can be found in the docs.
-
-:::{.alert .alert-info}
-**NOTE:**
-
-In addition to these environment variables being present, and correct, there are a number of parameters that also need to be set correctly:
-
-* [wyamRootDirectoryPath](./set-parameters#wyamRootDirectoryPath)
-* [wyamPublishDirectoryPath](./set-parameters#wyamPublishDirectoryPath)
-* [wyamPublishDirectoryPath](./set-parameters#wyamPublishDirectoryPath)
-* [wyamRecipe](./set-parameters#wyamRecipe)
-* [wyamTheme](./set-parameters#wyamTheme)
-* [wyamSourceFiles](./set-parameters#wyamSourceFiles)
-* [webHost](./set-parameters#webHost)
-* [webLinkRoot](./set-parameters#webLinkRoot)
-* [webBaseEditUrl](./set-parameters#webBaseEditUrl)
-* [shouldGenerateDocumentation](./set-parameters#shouldGenerateDocumentation)
-* [shouldDocumentSourceFiles](./set-parameters#shouldDocumentSourceFiles)
-:::
-
-### WYAM_ACCESS_TOKEN
-
-Access token to use to publish the Wyam documentation.
-
-### WYAM_DEPLOY_REMOTE
-
-URI of the remote repository where the Wyam documentation is published to.
-
-### WYAM_DEPLOY_BRANCH
-
-Branch into which the Wyam documentation should be published.

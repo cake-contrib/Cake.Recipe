@@ -9,7 +9,7 @@ This document describes how to preview the documentation in a local webserver us
 1. Run:
    - On Windows: `.\build.ps1 --target=preview`
    - On MacOS/Linux: `./build.sh --target=preview`.
-2. Open your browser at `http:\\localhost:5080\<BuildParameters.WebLinkRoot>`
+2. Open your browser at `http:\\localhost:5080\`
 
 :::{.alert .alert-info}
 The scripts supports watching for changes and automatically rebuilds the documentation without requiring to restart the build task.

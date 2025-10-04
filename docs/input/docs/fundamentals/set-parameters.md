@@ -24,9 +24,7 @@ BuildParameters.SetParameters(context: Context,
                             shouldPublishChocolatey: false,
                             shouldPublishNuGet: false,
                             shouldPublishGitHub: false,
-                            shouldCalculateVersion: true,
-                            webLinkRoot: "ChocolateyGUI",
-                            webBaseEditUrl: "https://github.com/chocolatey/ChocolateyGUI/tree/develop/docs/input/");
+                            shouldCalculateVersion: true);
 ```
 
 ## Required Parameters
@@ -350,7 +348,7 @@ true
 
 ### shouldGenerateDocumentation
 
-This is used as a final control variable for whether or not Wyam should be executed to generate documentation for the project.
+This is used as a final control variable for whether or not to generate documentation for the project.
 
 Type: `bool`
 
@@ -362,7 +360,7 @@ true
 
 ### shouldDocumentSourceFiles
 
-This is used as a final control variable for whether or not Wyam should be executed against the source files for the project to generate additional documentation.
+This is used as a final control variable for whether or not the source files for the project should be used to generate additional documentation.
 
 Type: `bool`
 
@@ -539,113 +537,6 @@ Default Value:
 
 ```csharp
 Version {0} of the {1} Addin has just been released, this will be available here https://www.nuget.org/packages/{1}, once package indexing is complete."
-```
-
-### wyamRootDirectoryPath
-
-This is the directory that stores the documentation files that will be passed to the Wyam tool.
-
-Type: `DirectoryPath`
-
-Default Value:
-
-```csharp
-context.MakeAbsolute(context.Directory("docs"));
-```
-
-### wyamPublishDirectoryPath
-
-This is the directory that will be passed to Wyam for where the output documentation should be published to.
-
-Type: `DirectoryPath`
-
-Default Value:
-
-```csharp
-context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
-```
-
-### wyamConfigurationFile
-
-This is the location of the configuration file that will be passed to the Wyam tool.
-
-Type: `FilePath`
-
-Default Value:
-
-```csharp
-context.MakeAbsolute((FilePath)"config.wyam")
-```
-
-### wyamRecipe
-
-This is the name of the recipe that should be used by the Wyam tool.
-
-Type: `string`
-
-Default Value:
-
-```csharp
-Docs
-```
-
-### wyamTheme
-
-This is the name of the them that should be used by the Wyam tool.
-Type: `string`
-
-Default Value:
-
-```csharp
-Samson
-```
-
-### wyamSourceFiles
-
-This is the location of all the source files that should be used to generate documentation by the Wyam tool.
-
-Type: `string`
-
-Default Value:
-
-```csharp
-"../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
-```
-
-### webHost
-
-The root URL for generating documentation via the Wyam tool.
-
-Type: `string`
-
-Default Value:
-
-```csharp
-string.Format("{0}.github.io", repositoryOwner)
-```
-
-### webLinkRoot
-
-A value which is concatenated to the WebLinkRoot when generating documentation via the Wyam tool.
-
-Type: `string`
-
-Default Value:
-
-```csharp
-RepositoryName
-```
-
-### webBaseEditUrl
-
-When generating documentation via Wyam, this value is used to create a clickable link for editing the documentation when published.
-
-Type: `string`
-
-Default Value:
-
-```csharp
-string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, title, developBranchName)
 ```
 
 ### nuspecFilePath

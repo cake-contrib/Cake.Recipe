@@ -23,8 +23,7 @@ BuildParameters.SetParameters(context: Context,
                             shouldRunCoveralls: false,
                             shouldRunCodecov: false,
                             shouldRunDotNetPack: true,
-                            twitterMessage: standardNotificationMessage,
-                            shouldGenerateDocumentation: false);
+                            twitterMessage: standardNotificationMessage);
 
 BuildParameters.PrintParameters(Context);
 

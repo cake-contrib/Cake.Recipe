@@ -19,8 +19,6 @@ public static class ToolSettings
     public static string GitReleaseManagerTool { get; private set; }
     public static string GitVersionTool { get; private set; }
     public static string ReSharperTools { get; private set; }
-    public static string KuduSyncTool { get; private set; }
-    public static string WyamTool { get; private set; }
     public static string XUnitTool { get; private set; }
     public static string NUnitTool { get; private set; }
     public static string NuGetTool { get; private set; }
@@ -34,8 +32,6 @@ public static class ToolSettings
     public static string GitReleaseManagerGlobalTool { get; private set; }
     public static string GitVersionGlobalTool { get; private set; }
     public static string ReportGeneratorGlobalTool { get; private set; }
-    public static string WyamGlobalTool { get; private set; }
-    public static string KuduSyncGlobalTool { get; private set; }
 
     public static void SetToolPreprocessorDirectives(
         string codecovTool = "#tool nuget:?package=CodecovUploader&version=0.8.0",
@@ -45,8 +41,6 @@ public static class ToolSettings
         // This is specifically pinned to 5.0.1 as later versions break compatibility with Unix.
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2025.2.2.1",
-        string kuduSyncTool = "#tool nuget:?package=KuduSync.NET&version=1.5.4",
-        string wyamTool = "#tool nuget:?package=Wyam&version=2.2.9",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.9.3",
         string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.20.1",
         string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.14.0",
@@ -57,10 +51,7 @@ public static class ToolSettings
         string coverallsGlobalTool = "#tool dotnet:?package=coveralls.net&version=1.0.0",
         string gitReleaseManagerGlobalTool = "#tool dotnet:?package=GitReleaseManager.Tool&version=0.20.0",
         string gitVersionGlobalTool = "#tool dotnet:?package=GitVersion.Tool&version=5.12.0",
-        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5",
-        string wyamGlobalTool = "#tool dotnet:?package=Wyam.Tool&version=2.2.9",
-        // This is using an unofficial build of kudusync so that we can have a .NET Global tool version.  This was generated from this PR: https://github.com/projectkudu/KuduSync.NET/pull/27
-        string kuduSyncGlobalTool = "#tool dotnet:https://www.myget.org/F/cake-contrib/api/v3/index.json?package=KuduSync.Tool&version=1.5.4-g3916ad7218"
+        string reportGeneratorGlobalTool = "#tool dotnet:?package=dotnet-reportgenerator-globaltool&version=4.8.5"
     )
     {
         CodecovTool = codecovTool;
@@ -68,8 +59,6 @@ public static class ToolSettings
         GitReleaseManagerTool = gitReleaseManagerTool;
         GitVersionTool = gitVersionTool;
         ReSharperTools = reSharperTools;
-        KuduSyncTool = kuduSyncTool;
-        WyamTool = wyamTool;
         XUnitTool = xunitTool;
         NUnitTool = nunitTool;
         NuGetTool = nugetTool;
@@ -81,8 +70,6 @@ public static class ToolSettings
         GitReleaseManagerGlobalTool = gitReleaseManagerGlobalTool;
         CodecovGlobalTool = codecovGlobalTool;
         CoverallsGlobalTool = coverallsGlobalTool;
-        WyamGlobalTool = wyamGlobalTool;
-        KuduSyncGlobalTool = kuduSyncGlobalTool;
     }
 
     public static void SetToolSettings(

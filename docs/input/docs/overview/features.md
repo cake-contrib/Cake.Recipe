@@ -28,8 +28,6 @@ Cake.Recipe combines the usage of a number of different tools to provide its fea
 * GiReleaseManager
 * GitVersion
 * ReSharperTools
-* KuduSync
-* Wyam
 * Xunit
 * NUnit
 * OpenCover

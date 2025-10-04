@@ -110,15 +110,3 @@ Default value: `MICROSOFTTEAMS_WEBHOOKURL`
 ### transifexApiTokenVariable
 
 Default value: `TRANSIFEX_API_TOKEN`
-
-### wyamAccessTokenVariable
-
-Default value: `WYAM_ACCESS_TOKEN`
-
-### wyamDeployRemoteVariable
-
-Default value: `WYAM_DEPLOY_REMOTE`
-
-### wyamDeployBranchVariable
-
-Default value: `WYAM_DEPLOY_BRANCH`

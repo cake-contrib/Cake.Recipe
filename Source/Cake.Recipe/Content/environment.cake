@@ -17,9 +17,6 @@ public static class Environment
     public static string CoverallsRepoTokenVariable { get; private set; }
     public static string MicrosoftTeamsWebHookUrlVariable { get; private set; }
     public static string TransifexApiTokenVariable { get; private set; }
-    public static string WyamAccessTokenVariable { get; private set; }
-    public static string WyamDeployRemoteVariable { get; private set; }
-    public static string WyamDeployBranchVariable { get; private set; }
     public static string MastodonAccessTokenVariable { get; private set; }
     public static string MastodonInstanceUrlVariable { get; private set; }
 
@@ -41,9 +38,6 @@ public static class Environment
         string coverallsRepoTokenVariable = null,
         string microsoftTeamsWebHookUrlVariable = null,
         string transifexApiTokenVariable = null,
-        string wyamAccessTokenVariable = null,
-        string wyamDeployRemoteVariable = null,
-        string wyamDeployBranchVariable = null,
         string mastodonAccessTokenVariable = null,
         string mastodonInstanceUrlVariable = null)
     {
@@ -64,9 +58,6 @@ public static class Environment
         CoverallsRepoTokenVariable = coverallsRepoTokenVariable ?? "COVERALLS_REPO_TOKEN";
         MicrosoftTeamsWebHookUrlVariable = microsoftTeamsWebHookUrlVariable ?? "MICROSOFTTEAMS_WEBHOOKURL";
         TransifexApiTokenVariable = transifexApiTokenVariable ?? "TRANSIFEX_API_TOKEN";
-        WyamAccessTokenVariable = wyamAccessTokenVariable ?? "WYAM_ACCESS_TOKEN";
-        WyamDeployRemoteVariable = wyamDeployRemoteVariable ?? "WYAM_DEPLOY_REMOTE";
-        WyamDeployBranchVariable = wyamDeployBranchVariable ?? "WYAM_DEPLOY_BRANCH";
         MastodonAccessTokenVariable = mastodonAccessTokenVariable ?? "MASTODON_ACCESS_TOKEN";
         MastodonInstanceUrlVariable = mastodonInstanceUrlVariable ?? "MASTODON_INSTANCE_URL";
     }

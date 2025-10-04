@@ -47,16 +47,6 @@ CanPushTranslations: False
 PrepareLocalRelease: False
 BuildAgentOperatingSystem: Windows
 ForceContinuousIntegration: False
-WyamRootDirectoryPath: C:/projects/gitreleasemanager/docs
-WyamPublishDirectoryPath: C:/projects/gitreleasemanager/BuildArtifacts/temp/_PublishedDocumentation
-WyamConfigurationFile: C:/projects/gitreleasemanager/config.wyam
-WyamRecipe: Docs
-WyamTheme: Samson
-Wyam Deploy Branch: gh-pages
-Wyam Deploy Remote: https://github.com/GitTools/GitReleaseManager
-WebHost: GitTools.github.io
-WebLinkRoot: GitReleaseManager
-WebBaseEditUrl: https://github.com/GitTools/GitReleaseManager/tree/develop/docs/input/
 NuSpecFilePath: C:/projects/gitreleasemanager/Cake.Recipe/Cake.Recipe.nuspec
 NugetConfig: C:/projects/gitreleasemanager/NuGet.Config (False)
 NuGetSources: https://api.nuget.org/v3/index.json, https://www.myget.org/F/cake-contrib/api/v3/index.json

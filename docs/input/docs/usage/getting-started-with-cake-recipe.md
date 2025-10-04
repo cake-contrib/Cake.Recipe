@@ -51,4 +51,4 @@ Cake.Recipe will not suit everyone out of the box, but it has been designed in a
 
 # 6. Next steps
 
-Try configuring the additional tasks by including configuration files for the tools that have been added, i.e. AppVeyor, GitVersion, Wyam, etc, and be sure to look around the [Cake.Recipe](../) site for more information.
+Try configuring the additional tasks by including configuration files for the tools that have been added, i.e. AppVeyor, GitVersion, etc, and be sure to look around the [Cake.Recipe](../) site for more information.

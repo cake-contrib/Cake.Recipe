@@ -122,20 +122,6 @@ public class TransifexCredentials : AppVeyorCredentials
     }
 }
 
-public class WyamCredentials
-{
-    public string AccessToken { get; private set; }
-    public string DeployRemote { get; private set; }
-    public string DeployBranch { get; private set; }
-
-    public WyamCredentials(string accessToken, string deployRemote, string deployBranch)
-    {
-        AccessToken = accessToken;
-        DeployRemote = deployRemote;
-        DeployBranch = deployBranch;
-    }
-}
-
 public class MastodonCredentials
 {
     public string AccessToken { get; private set; }
@@ -227,14 +213,6 @@ public static TransifexCredentials GetTransifexCredentials(ICakeContext context)
     return new TransifexCredentials(
         context.EnvironmentVariable(Environment.TransifexApiTokenVariable)
     );
-}
-
-public static WyamCredentials GetWyamCredentials(ICakeContext context)
-{
-    return new WyamCredentials(
-        context.EnvironmentVariable(Environment.WyamAccessTokenVariable),
-        context.EnvironmentVariable(Environment.WyamDeployRemoteVariable),
-        context.EnvironmentVariable(Environment.WyamDeployBranchVariable));
 }
 
 public static MastodonCredentials GetMastodonCredentials(ICakeContext context)
