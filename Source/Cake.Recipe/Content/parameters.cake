@@ -64,7 +64,6 @@ public static class BuildParameters
     public static CodecovCredentials Codecov { get; private set; }
     public static CoverallsCredentials Coveralls { get; private set; }
     public static TransifexCredentials Transifex { get; private set; }
-    public static WyamCredentials Wyam { get; private set; }
     public static BuildPaths Paths { get; private set; }
     public static BuildTasks Tasks { get; set; }
     public static DirectoryPath RootDirectoryPath { get; private set; }
@@ -111,16 +110,6 @@ public static class BuildParameters
         }
     }
 
-    public static DirectoryPath WyamRootDirectoryPath { get; private set; }
-    public static DirectoryPath WyamPublishDirectoryPath { get; private set; }
-    public static FilePath WyamConfigurationFile { get; private set; }
-    public static string WyamRecipe { get; private set; }
-    public static string WyamTheme { get; private set; }
-    public static string WyamSourceFiles { get; private set; }
-    public static string WebHost { get; private set; }
-    public static string WebLinkRoot { get; private set; }
-    public static string WebBaseEditUrl { get; private set; }
-
     public static FilePath NuSpecFilePath { get; private set; }
 
     public static FilePath NugetConfig { get; private set; }
@@ -140,16 +129,6 @@ public static class BuildParameters
         get
         {
             return !string.IsNullOrEmpty(BuildParameters.GitHub.Token);
-        }
-    }
-
-    public static bool CanUseWyam
-    {
-        get
-        {
-            return !string.IsNullOrEmpty(BuildParameters.Wyam.AccessToken) &&
-                !string.IsNullOrEmpty(BuildParameters.Wyam.DeployRemote) &&
-                !string.IsNullOrEmpty(BuildParameters.Wyam.DeployBranch);
         }
     }
 
@@ -236,17 +215,6 @@ public static class BuildParameters
             context.Information("TransifexPullPercentage: {0}", TransifexPullPercentage);
         }
 
-        context.Information("WyamRootDirectoryPath: {0}", WyamRootDirectoryPath);
-        context.Information("WyamPublishDirectoryPath: {0}", WyamPublishDirectoryPath);
-        context.Information("WyamConfigurationFile: {0}", WyamConfigurationFile);
-        context.Information("WyamRecipe: {0}", WyamRecipe);
-        context.Information("WyamTheme: {0}", WyamTheme);
-        context.Information("WyamSourceFiles: {0}", WyamSourceFiles);
-        context.Information("Wyam Deploy Branch: {0}", Wyam.DeployBranch);
-        context.Information("Wyam Deploy Remote: {0}", Wyam.DeployRemote);
-        context.Information("WebHost: {0}", WebHost);
-        context.Information("WebLinkRoot: {0}", WebLinkRoot);
-        context.Information("WebBaseEditUrl: {0}", WebBaseEditUrl);
         context.Information("NuSpecFilePath: {0}", NuSpecFilePath);
         context.Information("NugetConfig: {0} ({1})", NugetConfig, context.FileExists(NugetConfig));
         context.Information("NuGetSources: {0}", string.Join(", ", NuGetSources));
@@ -299,15 +267,6 @@ public static class BuildParameters
         int transifexPullPercentage = 60,
         string microsoftTeamsMessage = null,
         string twitterMessage = null,
-        DirectoryPath wyamRootDirectoryPath = null,
-        DirectoryPath wyamPublishDirectoryPath = null,
-        FilePath wyamConfigurationFile = null,
-        string wyamRecipe = null,
-        string wyamTheme = null,
-        string wyamSourceFiles = null,
-        string webHost = null,
-        string webLinkRoot = null,
-        string webBaseEditUrl = null,
         FilePath nuspecFilePath = null,
         bool isPublicRepository = true,
         FilePath nugetConfig = null,
@@ -362,16 +321,6 @@ public static class BuildParameters
         TransifexEnabled = transifexEnabled ?? context.FileExists("./.tx/config");
         TransifexPullMode = transifexPullMode;
         TransifexPullPercentage = transifexPullPercentage;
-
-        WyamRootDirectoryPath = wyamRootDirectoryPath ?? context.MakeAbsolute(context.Directory("docs"));
-        WyamPublishDirectoryPath = wyamPublishDirectoryPath ?? context.MakeAbsolute(context.Directory("BuildArtifacts/temp/_PublishedDocumentation"));
-        WyamConfigurationFile = wyamConfigurationFile ?? context.MakeAbsolute((FilePath)"config.wyam");
-        WyamRecipe = wyamRecipe ?? "Docs";
-        WyamTheme = wyamTheme ?? "Samson";
-        WyamSourceFiles = wyamSourceFiles ?? "../../" + SourceDirectoryPath.FullPath + "/**/{!bin,!obj,!packages,!*.Tests,}/**/*.cs";
-        WebHost = webHost ?? string.Format("{0}.github.io", repositoryOwner);
-        WebLinkRoot = webLinkRoot ?? RepositoryName;
-        WebBaseEditUrl = webBaseEditUrl ?? string.Format("https://github.com/{0}/{1}/tree/{2}/docs/input/", repositoryOwner, RepositoryName, developBranchName);
 
         ShouldDownloadFullReleaseNotes = shouldDownloadFullReleaseNotes;
         ShouldDownloadMilestoneReleaseNotes = shouldDownloadMilestoneReleaseNotes;
@@ -517,7 +466,6 @@ public static class BuildParameters
         Codecov = GetCodecovCredentials(context);
         Coveralls = GetCoverallsCredentials(context);
         Transifex = GetTransifexCredentials(context);
-        Wyam = GetWyamCredentials(context);
         IsPublishBuild = new [] {
             "Create-Release-Notes"
         }.Any(
