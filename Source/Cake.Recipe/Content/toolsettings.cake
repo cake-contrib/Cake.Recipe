@@ -42,7 +42,7 @@ public static class ToolSettings
         string gitVersionTool = "#tool nuget:?package=GitVersion.CommandLine&version=5.0.1&addindiscoignore=true",
         string reSharperTools = "#tool nuget:?package=JetBrains.ReSharper.CommandLineTools&version=2025.2.2.1",
         string xunitTool = "#tool nuget:?package=xunit.runner.console&version=2.9.3",
-        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.20.1",
+        string nunitTool = "#tool nuget:?package=NUnit.ConsoleRunner&version=3.20.2",
         string nugetTool = "#tool nuget:?package=NuGet.CommandLine&version=6.14.0",
         string openCoverTool = "#tool nuget:?package=OpenCover&version=4.7.1221",
         string reportGeneratorTool = "#tool nuget:?package=ReportGenerator&version=5.4.16",
